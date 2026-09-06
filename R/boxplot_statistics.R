@@ -149,15 +149,25 @@ calculate_boxplot_statistics <- function(
     ,
     drop = FALSE
   ]
+  if (any(!is.finite(display[[y_variable]]))) {
+    cli::cli_abort("The selected Y variable must contain only finite values")
+  }
   if (nrow(display)) {
     treatment_order <- match(as.character(display[[treatment_variable]]), facet_levels)
     visit_order <- match(as.character(display$AVISIT), visit_levels)
     ordering <- order(treatment_order, visit_order, as.character(display$USUBJID), method = "radix")
     display <- display[ordering, , drop = FALSE]
     row.names(display) <- NULL
-    group_key <- paste(display[[treatment_variable]], display$AVISIT, sep = "\u001f")
+    group_start <- c(
+      TRUE,
+      as.character(display[[treatment_variable]][-1L]) !=
+        as.character(display[[treatment_variable]][-nrow(display)]) |
+        as.character(display$AVISIT[-1L]) !=
+          as.character(display$AVISIT[-nrow(display)])
+    )
+    group_id <- cumsum(group_start)
     summaries <- lapply(
-      split(seq_len(nrow(display)), group_key),
+      split(seq_len(nrow(display)), group_id),
       .summarize_box_indices,
       data = display,
       treatment_variable = treatment_variable,

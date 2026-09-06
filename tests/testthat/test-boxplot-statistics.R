@@ -87,8 +87,54 @@ test_that("row order does not change the analytical object or hash", {
     low_n_policy = governed_low_n_policy()
   )
   first <- do.call(calculate_boxplot_statistics, c(list(data = data), arguments))
-  second <- do.call(calculate_boxplot_statistics, c(list(data = data[sample.int(nrow(data)), ]), arguments))
+  second <- do.call(
+    calculate_boxplot_statistics,
+    c(list(data = data[rev(seq_len(nrow(data))), ]), arguments)
+  )
 
   expect_identical(first, second)
   expect_identical(canonical_hash(first), canonical_hash(second))
+})
+
+test_that("treatment and visit values cannot collide as grouping keys", {
+  separator <- intToUtf8(31L)
+  data <- data.frame(
+    USUBJID = c("SUBJ-01", "SUBJ-02"),
+    AVISIT = c(paste0("B", separator, "C"), "C"),
+    AVISITN = c(1, 2),
+    TRT01A = c("A", paste0("A", separator, "B")),
+    AVAL = c(1, 9),
+    stringsAsFactors = FALSE
+  )
+
+  analysis <- calculate_boxplot_statistics(
+    data,
+    treatment_variable = "TRT01A",
+    y_variable = "AVAL",
+    facet_levels = c("A", paste0("A", separator, "B")),
+    visit_levels = c(paste0("B", separator, "C"), "C"),
+    low_n_policy = governed_low_n_policy()
+  )
+
+  expect_equal(nrow(analysis$boxes), 2L)
+  expect_identical(analysis$boxes$treatment, c("A", paste0("A", separator, "B")))
+  expect_identical(analysis$boxes$visit, c(paste0("B", separator, "C"), "C"))
+  expect_identical(analysis$boxes$middle, c(1, 9))
+})
+
+test_that("selected non-finite Y values are rejected", {
+  data <- synthetic_bds_fixture()
+  data$AVAL[[1]] <- Inf
+
+  expect_error(
+    calculate_boxplot_statistics(
+      data,
+      treatment_variable = "TRT01A",
+      y_variable = "AVAL",
+      facet_levels = c("Active", "Placebo"),
+      visit_levels = c("Baseline", "Week 4", "Week 8"),
+      low_n_policy = governed_low_n_policy()
+    ),
+    "selected Y variable must contain only finite values"
+  )
 })

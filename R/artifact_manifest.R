@@ -27,6 +27,37 @@ new_artifact_manifest <- function(
       !all(vapply(expected_contract, checkmate::test_string, logical(1), min.chars = 1L))) {
     cli::cli_abort("The artifact manifest requires confirmed, complete U4 inputs")
   }
+
+  authentic_spec_hash <- canonical_hash(list(
+    fields = spec$fields,
+    provenance = spec$provenance
+  ))
+  if (!identical(spec$hash, authentic_spec_hash)) {
+    cli::cli_abort("The confirmed plot specification hash does not match its contents")
+  }
+
+  analytical_metadata <- list(
+    treatment_variable = spec$fields$treatment_variable,
+    y_variable = spec$fields$y_variable,
+    facet_levels = spec$fields$treatment_levels,
+    visit_levels = spec$fields$visits
+  )
+  analytical_mismatch <- vapply(
+    names(analytical_metadata),
+    function(field) !identical(analysis[[field]], analytical_metadata[[field]]),
+    logical(1)
+  )
+  if (any(analytical_mismatch)) {
+    cli::cli_abort(
+      "The analytical result does not match the confirmed specification for {.field {names(analytical_metadata)[analytical_mismatch]}}"
+    )
+  }
+
+  expected_script <- compile_boxplot_script(spec, analysis$low_n_policy)
+  if (!identical(script, expected_script)) {
+    cli::cli_abort("The compiled script does not match the confirmed specification and analytical policy")
+  }
+
   structure(
     list(
       manifest_version = "boxplot-artifact-manifest-v1",
