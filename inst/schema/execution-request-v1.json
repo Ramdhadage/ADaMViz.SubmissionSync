@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["manifest_version", "spec_hash", "script_hash", "snapshot_id", "snapshot_hash", "harness_version"],
+  "properties": {
+    "manifest_version": {"const": "execution-request-v1"},
+    "spec_hash": {"type": "string"},
+    "script_hash": {"type": "string"},
+    "snapshot_id": {"type": "string"},
+    "snapshot_hash": {"type": "string"},
+    "harness_version": {"type": "string"}
+  }
+}

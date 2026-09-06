@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["manifest_version", "spec_hash", "script_hash", "snapshot_id", "snapshot_hash", "harness_version", "analytical_hash", "image_hash", "environment_fingerprint"],
+  "properties": {
+    "manifest_version": {"const": "execution-result-v1"},
+    "spec_hash": {"type": "string"},
+    "script_hash": {"type": "string"},
+    "snapshot_id": {"type": "string"},
+    "snapshot_hash": {"type": "string"},
+    "harness_version": {"type": "string"},
+    "analytical_hash": {"type": "string"},
+    "image_hash": {"type": "string"},
+    "environment_fingerprint": {"type": "string"}
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Plot specification v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "state", "fields", "provenance", "hash"],
+  "properties": {
+    "schema_version": {"const": "plot-spec-v1"},
+    "state": {"enum": ["candidate", "confirmed"]},
+    "fields": {"type": "object"},
+    "provenance": {"type": "object"},
+    "hash": {"type": "string"}
+  }
+}
