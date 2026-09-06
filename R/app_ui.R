@@ -4,7 +4,6 @@
 #'     DO NOT REMOVE.
 #' @param runtime_config Injected runtime configuration.
 #' @import shiny
-#' @noRd
 #' @importFrom bslib page_fillable card card_header card_body
 #' @noRd
 app_ui <- function(request, runtime_config = new_runtime_config()) {
@@ -12,6 +11,7 @@ app_ui <- function(request, runtime_config = new_runtime_config()) {
     golem_add_external_resources(),
     bslib::page_fillable(
       title = "ADaMViz SubmissionSync",
+      theme = app_theme(),
       fillable = FALSE,
       bslib::card(
         bslib::card_header("Plot-Pattern Assurance Cell"),
