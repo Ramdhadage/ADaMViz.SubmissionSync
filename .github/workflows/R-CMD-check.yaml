@@ -23,7 +23,10 @@ jobs:
       - uses: r-lib/actions/setup-renv@v2
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          dependencies: "local, any::rcmdcheck"
+          dependencies: '"all"'
+          extra-packages: |
+            local::.
+            any::rcmdcheck
       - name: Document package
         run: Rscript -e 'roxygen2::roxygenise()'
       - name: Run tests
