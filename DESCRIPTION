@@ -1,13 +1,14 @@
 Package: ADaMViz.SubmissionSync
-Title: From Clinical Questions to Review-Ready Figures and
-Reproducible R Code
-Version: 0.0.0.9000
+Title: From Clinical Questions to Review-Ready Figures and Reproducible R Code
+Version: 0.1.0
 Authors@R:
     person("Ramnath", "Dhadage", role = c("aut", "cre"), email = "ram.dhadage123@gmail.com")
 Description: Generates and conversationally refines ggplot2 visualizations from Analysis Data Model (ADaM) datasets and other permitted tabular data. Executes generated R code in a controlled environment and records input metadata, code, package versions, outputs, and review status to support reproducibility, traceability, and validation of clinical reporting workflows.
 License: MIT + file LICENSE
 Imports:
     bslib,
+    checkmate,
+    cli,
     config,
     DBI,
     digest,
@@ -34,4 +35,4 @@ Suggests:
 Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.2
+Config/roxygen2/version: 8.1.0

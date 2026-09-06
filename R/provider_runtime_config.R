@@ -11,6 +11,7 @@
 #'   its value, or `NULL` when unavailable.
 #' @param required_secret_references Character vector of required references.
 #' @return An object of class `submission_sync_runtime_config`.
+#' @importFrom cli cli_abort
 #' @export
 new_runtime_config <- function(
   profile = Sys.getenv("ADAMVIZ_PROFILE", "local"),
@@ -19,22 +20,28 @@ new_runtime_config <- function(
   secret_provider = NULL,
   required_secret_references = character()
 ) {
-  profile <- match.arg(profile, c("local", "test", "production"))
-  if (!is.character(prompt_provider) || length(prompt_provider) != 1L ||
-      !nzchar(prompt_provider)) {
-    stop("prompt_provider must be one non-empty identifier", call. = FALSE)
+  profiles <- c("local", "test", "production")
+  if (!checkmate::test_choice(profile, choices = profiles)) {
+    cli::cli_abort("{.arg profile} must be one of {.val {profiles}}")
   }
-  if (!is.character(workspace) || length(workspace) != 1L || !nzchar(workspace)) {
-    stop("workspace must be one non-empty identifier", call. = FALSE)
+  if (!checkmate::test_string(prompt_provider, min.chars = 1)) {
+    cli::cli_abort("{.arg prompt_provider} must be one non-empty identifier")
+  }
+  if (!checkmate::test_string(workspace, min.chars = 1)) {
+    cli::cli_abort("{.arg workspace} must be one non-empty identifier")
   }
   if (profile != "production" && identical(prompt_provider, "production")) {
-    stop("A production provider cannot be selected outside the production profile", call. = FALSE)
+    cli::cli_abort(c(
+      "A production provider cannot be selected outside the production profile",
+      "i" = "Use {.val mock} for local and test profiles."
+    ))
   }
-  if (!is.null(secret_provider) && !is.function(secret_provider)) {
-    stop("secret_provider must be a function or NULL", call. = FALSE)
+  if (!checkmate::test_null(secret_provider) &&
+      !checkmate::test_function(secret_provider)) {
+    cli::cli_abort("{.arg secret_provider} must be a function or {.val NULL}")
   }
-  if (!is.character(required_secret_references) || anyNA(required_secret_references)) {
-    stop("required_secret_references must be character values", call. = FALSE)
+  if (!checkmate::test_character(required_secret_references, any.missing = FALSE)) {
+    cli::cli_abort("{.arg required_secret_references} must contain character values")
   }
 
   config <- structure(
@@ -50,11 +57,11 @@ new_runtime_config <- function(
 
   for (reference in config$required_secret_references) {
     if (is.null(config$secret_provider)) {
-      stop(sprintf("Secret reference '%s' is not configured", reference), call. = FALSE)
+      cli::cli_abort("Secret reference {.val {reference}} is not configured")
     }
     value <- config$secret_provider(reference)
     if (is.null(value) || length(value) != 1L || !nzchar(value)) {
-      stop(sprintf("Secret reference '%s' is not configured", reference), call. = FALSE)
+      cli::cli_abort("Secret reference {.val {reference}} is not configured")
     }
   }
 
@@ -68,18 +75,18 @@ new_runtime_config <- function(
 #' @return The resolved secret value.
 #' @export
 resolve_runtime_secret <- function(runtime_config, reference) {
-  if (!inherits(runtime_config, "submission_sync_runtime_config")) {
-    stop("runtime_config must be a submission_sync_runtime_config", call. = FALSE)
+  if (!checkmate::test_class(runtime_config, classes = "submission_sync_runtime_config")) {
+    cli::cli_abort("{.arg runtime_config} must be a {.cls submission_sync_runtime_config}")
   }
-  if (!is.character(reference) || length(reference) != 1L || !nzchar(reference)) {
-    stop("reference must be one non-empty identifier", call. = FALSE)
+  if (!checkmate::test_string(reference, min.chars = 1)) {
+    cli::cli_abort("{.arg reference} must be one non-empty identifier")
   }
   if (is.null(runtime_config$secret_provider)) {
-    stop(sprintf("Secret reference '%s' is not configured", reference), call. = FALSE)
+    cli::cli_abort("Secret reference {.val {reference}} is not configured")
   }
   value <- runtime_config$secret_provider(reference)
   if (is.null(value) || length(value) != 1L || !nzchar(value)) {
-    stop(sprintf("Secret reference '%s' is not configured", reference), call. = FALSE)
+    cli::cli_abort("Secret reference {.val {reference}} is not configured")
   }
   value
 }
