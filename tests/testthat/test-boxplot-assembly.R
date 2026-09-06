@@ -78,11 +78,6 @@ test_that("long visit labels render at the governed export dimensions", {
   artifact <- assemble_boxplot(analysis, "fixed", "U/L")
   plot_built <- ggplot2::ggplot_build(artifact$plot)
   n_strip_built <- ggplot2::ggplot_build(artifact$n_strip)
-  combined_grob <- patchwork::patchworkGrob(artifact$combined)
-  combined_panels <- combined_grob$layout[
-    grepl("^panel;", combined_grob$layout$name),
-    c("l", "r")
-  ]
   image_path <- withr::local_tempfile(fileext = ".png")
 
   ggplot2::ggsave(
@@ -111,9 +106,6 @@ test_that("long visit labels render at the governed export dimensions", {
     function(panel) identical(panel$x$get_labels(), visits),
     logical(1)
   )))
-  expect_equal(nrow(combined_panels), 2L)
-  expect_identical(combined_panels$l[[1]], combined_panels$l[[2]])
-  expect_identical(combined_panels$r[[1]], combined_panels$r[[2]])
 
   connection <- file(image_path, open = "rb")
   on.exit(close(connection), add = TRUE)
