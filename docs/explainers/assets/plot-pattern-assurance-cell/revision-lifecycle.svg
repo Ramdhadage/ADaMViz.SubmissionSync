@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="ppac-state-title ppac-state-desc">
+  <title id="ppac-state-title">Plot revision lifecycle</title>
+  <desc id="ppac-state-desc">A generated plot starts in Draft. Passing mandatory checks produces Verified. Two approvals produce Reviewed; rejection or a requested change creates a corrected successor that returns to Draft. Free Y scales create an Experimental Draft.</desc>
+  <defs>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');</style>
+
+    <marker id="ppac-state-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4f5d75"/>
+    </marker>
+  </defs>
+  <rect width="1280" height="720" fill="#f5f5f5"/>
+  <text x="48" y="64" fill="#2d3142" font-family="'Instrument Serif', Georgia, serif" font-size="28">One plot record, immutable revisions</text>
+  <text x="48" y="92" fill="#4f5d75" font-family="Geist, Arial, sans-serif" font-size="12">Status belongs to a specific plot-and-code revision; changes create a successor instead of rewriting reviewed evidence.</text>
+
+  <!-- transitions -->
+  <g fill="none" stroke="#4f5d75" stroke-width="1.5" marker-end="url(#ppac-state-arrow)">
+    <line x1="72" y1="276" x2="124" y2="276"/>
+    <line x1="300" y1="276" x2="380" y2="276"/>
+    <path d="M 556 260 C 620 224, 652 196, 716 180"/>
+    <path d="M 556 292 C 620 328, 652 356, 716 372"/>
+    <path d="M 212 312 C 224 384, 284 432, 380 452"/>
+    <line x1="892" y1="404" x2="972" y2="404"/>
+    <path d="M 1060 368 C 1060 232, 968 172, 892 164"/>
+    <path d="M 1060 440 C 1060 552, 860 580, 548 540 C 356 516, 220 444, 212 312"/>
+  </g>
+
+  <!-- transition labels with masks -->
+  <g font-family="'Geist Mono', Consolas, monospace" font-size="8" fill="#4f5d75" text-anchor="middle">
+    <rect x="72" y="248" width="120" height="18" rx="3" fill="#f5f5f5"/><text x="132" y="260">PLOT + CODE GENERATED</text>
+    <rect x="304" y="248" width="96" height="18" rx="3" fill="#f5f5f5"/><text x="352" y="260">CHECKS PASS</text>
+    <rect x="600" y="192" width="112" height="18" rx="3" fill="#f5f5f5"/><text x="656" y="204">TWO APPROVALS</text>
+    <rect x="600" y="332" width="112" height="18" rx="3" fill="#f5f5f5"/><text x="656" y="344">REVIEWER REJECTS</text>
+    <rect x="224" y="368" width="132" height="18" rx="3" fill="#f5f5f5"/><text x="290" y="380">FREE Y SCALES SELECTED</text>
+    <rect x="896" y="376" width="84" height="18" rx="3" fill="#f5f5f5"/><text x="938" y="388">CORRECTION</text>
+    <rect x="944" y="220" width="136" height="18" rx="3" fill="#f5f5f5"/><text x="1012" y="232">CHANGE REQUESTED</text>
+    <rect x="608" y="552" width="104" height="18" rx="3" fill="#f5f5f5"/><text x="660" y="564">NEW DRAFT REVISION</text>
+  </g>
+
+  <!-- states -->
+  <circle cx="64" cy="276" r="6" fill="#2d3142"/>
+  <g font-family="Geist, Arial, sans-serif" text-anchor="middle">
+    <rect x="124" y="240" width="176" height="72" rx="8" fill="#fff" stroke="#bfc0c0"/>
+    <text x="212" y="280" fill="#2d3142" font-size="12" font-weight="600">Draft</text>
+
+    <rect x="380" y="240" width="176" height="72" rx="8" fill="#fff" stroke="#bfc0c0"/>
+    <text x="468" y="272" fill="#2d3142" font-size="12" font-weight="600">Verified</text>
+    <text x="468" y="290" fill="#7a8399" font-family="'Geist Mono', Consolas, monospace" font-size="9">awaiting approval</text>
+
+    <rect x="716" y="128" width="176" height="72" rx="8" fill="#fff3ed" stroke="#eb6c36" stroke-width="1.4"/>
+    <text x="804" y="168" fill="#2d3142" font-size="12" font-weight="600">Reviewed</text>
+
+    <rect x="716" y="368" width="176" height="72" rx="8" fill="#fff" stroke="#bfc0c0"/>
+    <text x="804" y="408" fill="#2d3142" font-size="12" font-weight="600">Rejected</text>
+
+    <rect x="972" y="368" width="176" height="72" rx="8" fill="#fff" stroke="#bfc0c0"/>
+    <text x="1060" y="400" fill="#2d3142" font-size="12" font-weight="600">Draft successor</text>
+    <text x="1060" y="418" fill="#7a8399" font-family="'Geist Mono', Consolas, monospace" font-size="9">documented correction</text>
+
+    <rect x="380" y="432" width="176" height="72" rx="8" fill="#ececec" stroke="#bfc0c0"/>
+    <text x="468" y="464" fill="#2d3142" font-size="12" font-weight="600">Experimental/Draft</text>
+    <text x="468" y="482" fill="#7a8399" font-family="'Geist Mono', Consolas, monospace" font-size="9">free-scale view</text>
+  </g>
+
+  <line x1="48" y1="660" x2="1232" y2="660" stroke="#bfc0c0" stroke-width="1"/>
+  <circle cx="64" cy="688" r="5" fill="#eb6c36"/>
+  <text x="80" y="692" fill="#4f5d75" font-family="Geist, Arial, sans-serif" font-size="10">Reviewed is the approved, locked revision. Later changes create a new Draft successor.</text>
+</svg>

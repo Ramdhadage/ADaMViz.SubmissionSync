@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 960 1040" role="img"
+       aria-labelledby="study-summary-flow-title study-summary-flow-desc"
+       xmlns="http://www.w3.org/2000/svg">
+    <title id="study-summary-flow-title">Display study summary flowchart</title>
+    <desc id="study-summary-flow-desc">The application uses the same processing flow locally and in the validated environment. An injected provider selects either a synthetic-data mock for local development and continuous integration or the production study-data API inside the validated GxP environment, both returning the same response contract.</desc>
+    <defs>
+      <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#18384c"/>
+      </marker>
+      <marker id="arrow-link" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#117abd"/>
+      </marker>
+    </defs>
+
+    <rect width="960" height="1040" fill="#ffffff"/>
+    <rect x="16" y="16" width="928" height="48" fill="#17384d"/>
+    <text x="32" y="48" fill="#ffffff" font-size="20" font-weight="700">Flowchart: Display study summary</text>
+
+    <rect x="40" y="96" width="400" height="840" fill="#eaf5fc" stroke="#0798e8" stroke-width="2"/>
+    <line x1="40" y1="136" x2="440" y2="136" stroke="#0798e8" stroke-width="2"/>
+    <text x="240" y="124" fill="#17384d" font-size="12" font-weight="700" text-anchor="middle">App layer</text>
+
+    <rect x="520" y="176" width="400" height="560" fill="#edf2f6" stroke="#117abd" stroke-width="2"/>
+    <line x1="520" y1="216" x2="920" y2="216" stroke="#117abd" stroke-width="2"/>
+    <text x="720" y="204" fill="#17384d" font-size="12" font-weight="700" text-anchor="middle">Provider layer</text>
+
+    <rect x="552" y="520" width="336" height="184" fill="none" stroke="#0798e8" stroke-width="2" stroke-dasharray="6 6"/>
+
+    <!-- Connectors are drawn before their endpoint nodes. -->
+    <line x1="212" y1="228" x2="212" y2="276" stroke="#18384c" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="212" y1="348" x2="212" y2="620" stroke="#18384c" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="212" y1="692" x2="212" y2="744" stroke="#18384c" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="212" y1="816" x2="212" y2="848" stroke="#18384c" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <path d="M328 300 H472 Q480 300 480 292 V284 Q480 276 488 276 H592"
+          fill="none" stroke="#117abd" stroke-width="2" marker-end="url(#arrow-link)"/>
+    <path d="M328 324 H488 Q496 324 496 332 V584 Q496 592 504 592 H592"
+          fill="none" stroke="#117abd" stroke-width="2" marker-end="url(#arrow-link)"/>
+    <line x1="720" y1="312" x2="720" y2="540" stroke="#0798e8" stroke-width="2" stroke-dasharray="4 4"/>
+
+    <rect x="128" y="156" width="200" height="72" fill="#0798e8"/>
+    <text x="228" y="188" fill="#ffffff" font-size="12" text-anchor="middle">
+      <tspan x="228" dy="0">1. Parse input</tspan>
+      <tspan x="228" dy="16">parameters</tspan>
+    </text>
+    <text x="348" y="196" fill="#117abd" font-size="8">
+      <tspan x="348" dy="0">No external</tspan>
+      <tspan x="348" dy="12">dependency</tspan>
+    </text>
+
+    <rect x="96" y="276" width="232" height="72" fill="#117abd"/>
+    <text x="212" y="316" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">2. Pull study data</text>
+    <text x="340" y="376" fill="#117abd" font-size="8">
+      <tspan x="340" dy="0">Calls the injected client;</tspan>
+      <tspan x="340" dy="12">does not know which one</tspan>
+    </text>
+
+    <rect x="592" y="240" width="256" height="72" fill="#56abe0"/>
+    <text x="720" y="280" fill="#ffffff" font-size="12" text-anchor="middle">Mock study data service</text>
+    <rect x="656" y="328" width="128" height="32" fill="#ffffff" stroke="#0798e8" stroke-width="1" stroke-dasharray="4 4"/>
+    <text x="720" y="348" fill="#117abd" font-size="10" text-anchor="middle">APP_ENV=local</text>
+    <text x="720" y="384" fill="#117abd" font-size="10" text-anchor="middle">
+      <tspan x="720" dy="0">Runs on the developer machine and in CI.</tspan>
+      <tspan x="720" dy="14">Returns synthetic data in the same shape as</tspan>
+      <tspan x="720" dy="14">the real response. The agent can start it,</tspan>
+      <tspan x="720" dy="14">call it, and iterate on errors unattended.</tspan>
+    </text>
+    <rect x="728" y="448" width="168" height="28" fill="#edf2f6"/>
+    <text x="736" y="468" fill="#17384d" font-size="10" font-weight="700">Same response contract</text>
+
+    <rect x="592" y="556" width="256" height="72" fill="#117abd"/>
+    <text x="720" y="596" fill="#ffffff" font-size="12" text-anchor="middle">Production study data API</text>
+    <rect x="656" y="644" width="128" height="32" fill="#ffffff" stroke="#0798e8" stroke-width="1" stroke-dasharray="4 4"/>
+    <text x="720" y="664" fill="#117abd" font-size="10" text-anchor="middle">APP_ENV=validated</text>
+    <text x="720" y="688" fill="#117abd" font-size="10" font-weight="700" text-anchor="middle">Validated (GxP) environment</text>
+
+    <rect x="448" y="260" width="64" height="24" fill="#ffffff"/>
+    <text x="480" y="276" fill="#17384d" font-size="8" text-anchor="middle">local run</text>
+    <rect x="456" y="356" width="72" height="24" fill="#ffffff"/>
+    <text x="492" y="372" fill="#17384d" font-size="8" text-anchor="middle">validated run</text>
+    <rect x="164" y="460" width="96" height="40" fill="#ffffff"/>
+    <text x="212" y="476" fill="#17384d" font-size="10" text-anchor="middle">
+      <tspan x="212" dy="0">same shape</tspan>
+      <tspan x="212" dy="14">either way</tspan>
+    </text>
+
+    <rect x="96" y="620" width="232" height="72" fill="#0798e8"/>
+    <text x="212" y="660" fill="#ffffff" font-size="12" text-anchor="middle">3. Aggregate metrics</text>
+    <text x="348" y="652" fill="#117abd" font-size="8">
+      <tspan x="348" dy="0">No external</tspan>
+      <tspan x="348" dy="12">dependency</tspan>
+    </text>
+
+    <rect x="96" y="744" width="232" height="72" fill="#0798e8"/>
+    <text x="212" y="784" fill="#ffffff" font-size="12" text-anchor="middle">4. Prepare diagrams</text>
+    <text x="348" y="776" fill="#117abd" font-size="8">
+      <tspan x="348" dy="0">No external</tspan>
+      <tspan x="348" dy="12">dependency</tspan>
+    </text>
+
+    <rect x="96" y="848" width="232" height="72" fill="#56abe0"/>
+    <text x="212" y="888" fill="#ffffff" font-size="12" text-anchor="middle">5. Display</text>
+    <text x="348" y="880" fill="#117abd" font-size="8">
+      <tspan x="348" dy="0">No external</tspan>
+      <tspan x="348" dy="12">dependency</tspan>
+    </text>
+
+    <line x1="40" y1="976" x2="920" y2="976" stroke="#d9e3ea" stroke-width="1"/>
+    <text x="40" y="1000" fill="#17384d" font-size="12" font-style="italic">Example application flow for a study summary view.</text>
+    <text x="40" y="1020" fill="#17384d" font-size="12" font-style="italic">Most logic runs unchanged locally. Only the GxP service needs a mock.</text>
+  </svg>

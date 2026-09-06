@@ -1,0 +1,20 @@
+default:
+  golem_name: ADaMViz.SubmissionSync
+  golem_version: 0.0.0.9000
+  app_prod: no
+  runtime_profile: local
+  prompt_provider: mock
+  workspace: local
+
+production:
+  app_prod: yes
+  runtime_profile: production
+  prompt_provider: external
+  workspace: controlled
+
+dev:
+  golem_wd: !expr golem::pkg_path()
+  runtime_profile: local
+  prompt_provider: mock
+  workspace: local
+

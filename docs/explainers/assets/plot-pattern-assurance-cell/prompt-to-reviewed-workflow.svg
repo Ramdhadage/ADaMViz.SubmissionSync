@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="ppac-flow-title ppac-flow-desc">
+  <title id="ppac-flow-title">Prompt-to-reviewed plot workflow</title>
+  <desc id="ppac-flow-desc">A user prompt becomes a confirmed plot specification. Data and rule checks either stop with an explanation or proceed through deterministic R generation, exact execution, evidence recording, two-person review, and controlled export.</desc>
+  <defs>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');</style>
+
+    <marker id="ppac-flow-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4f5d75"/>
+    </marker>
+  </defs>
+  <rect width="1280" height="720" fill="#f5f5f5"/>
+  <text x="48" y="64" fill="#2d3142" font-family="'Instrument Serif', Georgia, serif" font-size="28">From prompt to controlled export</text>
+  <text x="48" y="92" fill="#4f5d75" font-family="Geist, Arial, sans-serif" font-size="12">The model structures intent; deterministic application logic owns data checks, R generation, execution, and evidence.</text>
+
+  <!-- connectors are drawn before nodes -->
+  <g fill="none" stroke="#4f5d75" stroke-width="1.6" marker-end="url(#ppac-flow-arrow)">
+    <line x1="224" y1="208" x2="276" y2="208"/>
+    <line x1="440" y1="208" x2="500" y2="208"/>
+    <line x1="660" y1="208" x2="724" y2="208"/>
+    <line x1="900" y1="208" x2="948" y2="208"/>
+    <path d="M 1036 244 V 380 Q 1036 388 1028 388 H 900"/>
+    <line x1="724" y1="424" x2="536" y2="424"/>
+    <line x1="360" y1="424" x2="304" y2="424"/>
+    <path d="M 580 256 V 416 a 8,8 0 0,0 0,16 V 548" stroke="#eb6c36"/>
+  </g>
+
+  <!-- branch labels -->
+  <rect x="676" y="190" width="52" height="18" rx="3" fill="#f5f5f5"/>
+  <text x="702" y="202" text-anchor="middle" fill="#4f5d75" font-family="'Geist Mono', Consolas, monospace" font-size="8">PASS</text>
+  <rect x="588" y="352" width="100" height="18" rx="3" fill="#f5f5f5"/>
+  <text x="638" y="364" text-anchor="middle" fill="#eb6c36" font-family="'Geist Mono', Consolas, monospace" font-size="8">BLOCKING PROBLEM</text>
+
+  <!-- nodes -->
+  <g font-family="Geist, Arial, sans-serif" text-anchor="middle">
+    <rect x="48" y="172" width="176" height="72" rx="20" fill="#ececec" stroke="#bfc0c0"/>
+    <text x="136" y="212" fill="#2d3142" font-size="12" font-weight="600">User prompt</text>
+
+    <rect x="276" y="172" width="164" height="72" rx="6" fill="#fff" stroke="#bfc0c0"/>
+    <text x="358" y="204" fill="#2d3142" font-size="12" font-weight="600">Confirmed PlotSpec</text>
+    <text x="358" y="222" fill="#7a8399" font-family="'Geist Mono', Consolas, monospace" font-size="9">structured request</text>
+
+    <polygon points="580,160 660,208 580,256 500,208" fill="#fff" stroke="#2d3142" stroke-width="1.4"/>
+    <text x="580" y="204" fill="#2d3142" font-size="12" font-weight="600">Data and rule</text>
+    <text x="580" y="220" fill="#2d3142" font-size="12" font-weight="600">checks</text>
+
+    <rect x="724" y="172" width="176" height="72" rx="6" fill="#fff" stroke="#bfc0c0"/>
+    <text x="812" y="204" fill="#2d3142" font-size="12" font-weight="600">Generate</text>
+    <text x="812" y="220" fill="#2d3142" font-size="12" font-weight="600">deterministic R</text>
+
+    <rect x="948" y="172" width="176" height="72" rx="6" fill="#fff" stroke="#bfc0c0"/>
+    <text x="1036" y="204" fill="#2d3142" font-size="12" font-weight="600">Execute exact script</text>
+    <text x="1036" y="222" fill="#7a8399" font-family="'Geist Mono', Consolas, monospace" font-size="9">governed runtime</text>
+
+    <rect x="724" y="388" width="176" height="72" rx="6" fill="#fff" stroke="#bfc0c0"/>
+    <text x="812" y="420" fill="#2d3142" font-size="12" font-weight="600">Record checks</text>
+    <text x="812" y="436" fill="#2d3142" font-size="12" font-weight="600">and evidence</text>
+
+    <rect x="360" y="388" width="176" height="72" rx="6" fill="#fff" stroke="#bfc0c0"/>
+    <text x="448" y="420" fill="#2d3142" font-size="12" font-weight="600">Two-person</text>
+    <text x="448" y="436" fill="#2d3142" font-size="12" font-weight="600">human review</text>
+
+    <rect x="128" y="388" width="176" height="72" rx="20" fill="#fff3ed" stroke="#eb6c36" stroke-width="1.4"/>
+    <text x="216" y="420" fill="#2d3142" font-size="12" font-weight="600">Controlled plot</text>
+    <text x="216" y="436" fill="#2d3142" font-size="12" font-weight="600">and code export</text>
+
+    <rect x="492" y="548" width="176" height="72" rx="20" fill="#ececec" stroke="#eb6c36" stroke-width="1.4"/>
+    <text x="580" y="580" fill="#2d3142" font-size="12" font-weight="600">Explain problem</text>
+    <text x="580" y="596" fill="#2d3142" font-size="12" font-weight="600">and stop</text>
+  </g>
+
+  <line x1="48" y1="660" x2="1232" y2="660" stroke="#bfc0c0" stroke-width="1"/>
+  <circle cx="64" cy="688" r="5" fill="#eb6c36"/>
+  <text x="80" y="692" fill="#4f5d75" font-family="Geist, Arial, sans-serif" font-size="10">Coral marks the controlled outcome and the blocking exit.</text>
+</svg>
