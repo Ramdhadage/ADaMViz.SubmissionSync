@@ -78,3 +78,12 @@ default_profile_selections <- function(...) {
   )
   utils::modifyList(selections, list(...), keep.null = TRUE)
 }
+
+governed_low_n_policy <- function() {
+  list(
+    value = 5,
+    rationale = "Default governed threshold",
+    authority = "product-contract",
+    version = "low-n-policy-v1"
+  )
+}
