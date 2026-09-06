@@ -1,6 +1,6 @@
 ---
 name: ADaMViz SubmissionSync
-last_updated: 2026-09-05
+last_updated: 2026-09-06
 ---
 
 # ADaMViz SubmissionSync Strategy
@@ -51,11 +51,16 @@ interface.
 - **First-pass quality** — At least 80% of outputs pass statistical-programmer
   and biostatistician review without material correction, measured through a
   versioned evaluation harness and recorded reviewer decisions.
-- **Exact reproducibility** — At least 80% of approved outputs reproduce from
+- **Exact reproducibility** — At least 80% of Reviewed outputs reproduce from
   recorded inputs, code, package versions, and execution environment, measured
   through controlled re-execution.
-- **Speed** — Median time from prompt to reviewed output is under one minute,
-  measured through application telemetry and review timestamps.
+- **Automated turnaround** — Median time from prompt submission to a Verified
+  plot and reproducible R code is under one minute, measured through application
+  telemetry and automated-check completion timestamps.
+- **Human-review turnaround** — Median time from Verified to Reviewed is
+  measured separately through the recorded decisions and timestamps of both
+  required reviewers. Set its target after the pilot establishes a defensible
+  baseline.
 
 ## Tracks
 
