@@ -18,3 +18,7 @@ transition_revision_status <- function(status, next_status) {
   }
   next_status
 }
+
+.initial_revision_status <- function(scale_mode) {
+  if (identical(scale_mode, "free")) "Experimental/Draft" else "Draft"
+}

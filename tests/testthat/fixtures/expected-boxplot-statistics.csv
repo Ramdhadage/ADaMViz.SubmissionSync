@@ -1,0 +1,8 @@
+scenario,values,n,q1,median,q3,lower_whisker,upper_whisker,outliers,low_n,review_status
+n1,10,1,10,10,10,10,10,,TRUE,pending_human_review
+n2,10;20,2,12.5,15,17.5,10,20,,TRUE,pending_human_review
+n3,10;20;100,3,15,20,60,10,100,,TRUE,pending_human_review
+n4,1;2;3;20,4,1.75,2.5,7.25,1,3,20,TRUE,pending_human_review
+n5,1;2;3;4;100,5,2,3,4,1,4,100,FALSE,pending_human_review
+zero_iqr,5;5;5;5;10,5,5,5,5,5,5,10,FALSE,pending_human_review
+negative, -20;-10;0;10;100,5,-10,0,10,-20,10,100,FALSE,pending_human_review
