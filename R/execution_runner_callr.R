@@ -24,7 +24,7 @@ run_execution_callr <- function(
     work_dir,
     source_root
   ) {
-    if (!is.null(source_root)) {
+    if (!is.null(source_root) && file.exists(file.path(source_root, "DESCRIPTION"))) {
       devtools::load_all(source_root, quiet = TRUE)
     }
     run_locally <- get(
