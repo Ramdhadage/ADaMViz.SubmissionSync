@@ -35,8 +35,24 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     invisible(executed)
   }
 
+  create_correction <- function(fields, rationale, provenance) {
+    corrected <- .execute_correction_revision(
+      state = current_revision(),
+      fields = fields,
+      rationale = rationale,
+      provenance = provenance
+    )
+    current_revision(corrected)
+    invisible(corrected)
+  }
+
   mod_prompt_server("prompt", catalog, create_revision)
-  mod_specification_server("specification", current_revision, execute_revision)
+  mod_specification_server(
+    "specification",
+    current_revision,
+    execute_revision,
+    create_correction
+  )
   mod_run_status_server("run_status", current_revision)
   mod_plot_preview_server("plot_preview", current_revision)
   mod_evidence_server("evidence", current_revision)
@@ -52,6 +68,9 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     review_service = NULL,
     revision = NULL,
     spec = NULL,
+    snapshot = NULL,
+    prompt = NULL,
+    choices = NULL,
     profile = NULL,
     script = NULL,
     artifact = NULL,
@@ -93,6 +112,9 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     review_service = NULL,
     revision = NULL,
     spec = spec,
+    snapshot = snapshot,
+    prompt = prompt,
+    choices = choices,
     profile = NULL,
     script = NULL,
     artifact = NULL,
@@ -129,6 +151,41 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
   .materialize_revision(snapshot, prompt, spec, profile)
 }
 
+.execute_correction_revision <- function(state, fields, rationale, provenance) {
+  if (is.null(state$repository) || is.null(state$revision) ||
+      is.null(state$snapshot)) {
+    cli::cli_abort("Create a revision before starting a correction")
+  }
+  parent <- state$repository$get_revision(state$revision$revision_id)
+  if (!parent$status %in% c("Rejected", "Reviewed")) {
+    cli::cli_abort("Only a Rejected or Reviewed revision can start a correction")
+  }
+  if (!checkmate::test_string(rationale, min.chars = 1L) ||
+      !checkmate::test_string(provenance, min.chars = 1L)) {
+    cli::cli_abort("Correction rationale and provenance are required")
+  }
+  spec <- .confirmed_spec_from_fields(state$snapshot$dataset_id, fields)
+  profile <- validate_bds_profile(
+    state$snapshot,
+    spec$fields[setdiff(.plot_spec_fields, c("dataset_id", "scale_mode"))]
+  )
+  if (profile$blocked) {
+    diagnostic <- profile$blocking_diagnostics[[1]]
+    cli::cli_abort(c(
+      "The selected records are outside the supported BDS profile",
+      "x" = "{diagnostic$code}: {diagnostic$message}"
+    ))
+  }
+
+  .materialize_correction_revision(
+    state,
+    spec,
+    profile,
+    rationale,
+    provenance
+  )
+}
+
 .create_assurance_revision <- function(provider, dataset_id, prompt, confirm_free_scale) {
   snapshot <- pin_study_snapshot(provider, dataset_id)
   context <- build_prompt_context(snapshot)
@@ -154,7 +211,10 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
       !checkmate::test_character(fields$visits, min.len = 1L, any.missing = FALSE, unique = TRUE)) {
     cli::cli_abort("Confirm one parameter, one Y variable, one unit, one treatment facet, and at least one treatment level and visit")
   }
-  provenance <- stats::setNames(rep("user_confirmed", length(.plot_spec_fields)), .plot_spec_fields)
+  provenance <- as.list(stats::setNames(
+    rep("user_confirmed", length(.plot_spec_fields)),
+    .plot_spec_fields
+  ))
   provenance$dataset_id <- "metadata"
   spec <- new_plot_spec(
     dataset_id = dataset_id,
@@ -263,6 +323,7 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     scale_mode = spec$fields$scale_mode,
     unit = spec$fields$unit
   )
+  context <- build_prompt_context(snapshot)
 
   list(
     pending = NULL,
@@ -271,9 +332,98 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     review_service = new_review_service(repository, identities),
     revision = repository$get_revision(revision_id),
     spec = spec,
+    snapshot = snapshot,
+    prompt = prompt,
+    choices = .spec_choices_from_context(context),
     profile = profile,
     script = script,
     artifact = artifact,
     verification = verification
   )
+}
+
+.materialize_correction_revision <- function(
+  state,
+  spec,
+  profile,
+  rationale,
+  provenance
+) {
+  script <- compile_boxplot_script(spec, profile$low_n_policy)
+  request <- new_execution_request(
+    spec = spec,
+    script_hash = canonical_hash(script),
+    snapshot_id = profile$snapshot_id,
+    snapshot_hash = canonical_hash(profile$selected_data),
+    harness_version = "execution-harness-v1"
+  )
+  runner_result <- run_execution_locally(
+    request = request,
+    script = script,
+    analysis_data = profile$selected_data,
+    data_classification = state$snapshot$classification
+  )
+  if (!identical(runner_result$status, "succeeded")) {
+    cli::cli_abort(c(
+      "The generated R script did not complete",
+      "x" = runner_result$diagnostics$stderr
+    ))
+  }
+
+  artifact_store <- state$repository$artifact_store
+  if (is.null(artifact_store)) {
+    cli::cli_abort("Correction revisions require an artifact store")
+  }
+  parent <- state$repository$get_revision(state$revision$revision_id)
+  revisions <- state$repository$list_revisions(parent$plot_id)
+  revision_number <- max(revisions$revision_number) + 1L
+  revision_id <- paste0("rev-", substr(canonical_hash(list(
+    parent$revision_id,
+    spec$hash,
+    revision_number,
+    Sys.time()
+  )), 1L, 12L))
+  code_hash <- artifact_store$put(charToRaw(canonical_serialize(enc2utf8(script))))
+  image_hash <- artifact_store$put(readBin(
+    runner_result$image_path,
+    what = "raw",
+    n = fs::file_size(runner_result$image_path)
+  ))
+  lifecycle <- new_lifecycle_service(state$repository)
+  lifecycle$create_correction(
+    parent_revision_id = parent$revision_id,
+    revision_id = revision_id,
+    creator_id = "creator",
+    spec_hash = spec$hash,
+    code_hash = code_hash,
+    image_hash = image_hash,
+    analytical_hash = runner_result$result$analytical_hash,
+    rationale = rationale,
+    provenance = provenance,
+    idempotency_key = paste0("correct:", revision_id),
+    initial_status = .initial_revision_status(spec$fields$scale_mode)
+  )
+
+  analysis <- calculate_boxplot_statistics(
+    profile$display_data,
+    treatment_variable = spec$fields$treatment_variable,
+    y_variable = spec$fields$y_variable,
+    facet_levels = profile$facet_levels,
+    visit_levels = profile$visit_levels,
+    low_n_policy = profile$low_n_policy
+  )
+  artifact <- assemble_boxplot(
+    analysis,
+    scale_mode = spec$fields$scale_mode,
+    unit = spec$fields$unit
+  )
+
+  state$pending <- NULL
+  state$revision <- state$repository$get_revision(revision_id)
+  state$spec <- spec
+  state$profile <- profile
+  state$script <- script
+  state$artifact <- artifact
+  state$verification <- NULL
+  state
 }

@@ -12,7 +12,12 @@ mod_specification_ui <- function(id) {
   )
 }
 
-mod_specification_server <- function(id, current_revision, execute_revision = NULL) {
+mod_specification_server <- function(
+  id,
+  current_revision,
+  execute_revision = NULL,
+  create_correction = NULL
+) {
   shiny::moduleServer(id, function(input, output, session) {
     message <- shiny::reactiveVal(NULL)
 
@@ -50,8 +55,10 @@ mod_specification_server <- function(id, current_revision, execute_revision = NU
 
     output$controls <- shiny::renderUI({
       state <- current_revision()
-      if (is.null(state$pending)) return(NULL)
-      choices <- state$pending$choices
+      if (is.null(state$pending) && !.can_create_correction(state)) {
+        return(NULL)
+      }
+      choices <- .specification_choices(state)
       fields <- state$spec$fields
       treatment_variable <- input$treatment_variable %||%
         fields$treatment_variable %||% choices$treatment_variables[[1]]
@@ -106,7 +113,30 @@ mod_specification_server <- function(id, current_revision, execute_revision = NU
           "I understand free Y scales create an Experimental/Draft revision",
           value = FALSE
         ),
-        .assurance_task_button(session$ns("execute"), "Execute confirmed specification", class = "btn-primary")
+        if (.can_create_correction(state)) {
+          tagList(
+            shiny::textAreaInput(
+              session$ns("correction_rationale"),
+              "Correction rationale",
+              rows = 2
+            ),
+            shiny::textInput(
+              session$ns("correction_provenance"),
+              "Correction provenance"
+            ),
+            .assurance_task_button(
+              session$ns("correct"),
+              "Create correction revision",
+              class = "btn-primary"
+            )
+          )
+        } else {
+          .assurance_task_button(
+            session$ns("execute"),
+            "Execute confirmed specification",
+            class = "btn-primary"
+          )
+        }
       )
     })
 
@@ -133,11 +163,36 @@ mod_specification_server <- function(id, current_revision, execute_revision = NU
         }
       )
     }, ignoreInit = TRUE)
+
+    shiny::observeEvent(input$correct, {
+      message(NULL)
+      if (!is.function(create_correction)) {
+        message("Correction is unavailable in this context.")
+        return()
+      }
+      if (identical(input$scale_mode, "free") && !isTRUE(input$confirm_free_scale)) {
+        message("Free Y scales require confirmation before correction.")
+        return()
+      }
+      tryCatch(
+        {
+          create_correction(
+            .current_spec_input_fields(input, current_revision()),
+            input$correction_rationale,
+            input$correction_provenance
+          )
+          message("Created correction revision.")
+        },
+        error = function(error) {
+          message(conditionMessage(error))
+        }
+      )
+    }, ignoreInit = TRUE)
   })
 }
 
 .current_spec_input_fields <- function(input, state) {
-  choices <- state$pending$choices
+  choices <- .specification_choices(state)
   fields <- state$spec$fields
   treatment_variable <- input$treatment_variable %||%
     fields$treatment_variable %||% choices$treatment_variables[[1]]
@@ -157,6 +212,20 @@ mod_specification_server <- function(id, current_revision, execute_revision = NU
     visits = visits,
     scale_mode = input$scale_mode %||% fields$scale_mode %||% "fixed"
   )
+}
+
+.specification_choices <- function(state) {
+  choices <- state$pending$choices %||% state$choices
+  if (is.null(choices)) {
+    cli::cli_abort("Specification choices are unavailable")
+  }
+  choices
+}
+
+.can_create_correction <- function(state) {
+  !is.null(state$revision) &&
+    state$revision$status %in% c("Rejected", "Reviewed") &&
+    !is.null(state$choices)
 }
 
 .display_value <- function(value) {

@@ -115,7 +115,10 @@ test_that("specification module blocks unconfirmed free-scale execution", {
 
   shiny::testServer(
     mod_specification_server,
-    args = list(current_revision = current_revision, execute_revision = execute_revision),
+    args = list(
+      current_revision = current_revision,
+      execute_revision = execute_revision
+    ),
     {
       session$flushReact()
       session$setInputs(scale_mode = "free", confirm_free_scale = FALSE)
@@ -134,6 +137,64 @@ test_that("specification module blocks unconfirmed free-scale execution", {
 
       expect_length(requests, 1L)
       expect_identical(requests[[1]]$scale_mode, "free")
+    }
+  )
+})
+
+test_that("specification module creates corrections from closed revisions", {
+  spec <- new_plot_spec(
+    dataset_id = "fixture-adlb",
+    paramcd = "ALT",
+    y_variable = "AVAL",
+    unit = "U/L",
+    treatment_variable = "TRT01A",
+    treatment_levels = c("Active", "Placebo"),
+    visits = c("Baseline", "Week 4", "Week 8"),
+    provenance = stats::setNames(rep("user_confirmed", 8L), .plot_spec_fields),
+    state = "confirmed"
+  )
+  current_revision <- shiny::reactiveVal(list(
+    spec = spec,
+    revision = list(status = "Reviewed"),
+    choices = list(
+      parameters = "ALT",
+      units = list(ALT = "U/L"),
+      y_variables = c("AVAL", "CHG", "PCHG"),
+      treatment_variables = "TRT01A",
+      treatment_levels = list(TRT01A = c("Active", "Placebo")),
+      visits = c("Baseline", "Week 4", "Week 8"),
+      scale_modes = c("fixed", "free")
+    )
+  ))
+  corrections <- list()
+  create_correction <- function(fields, rationale, provenance) {
+    corrections[[length(corrections) + 1L]] <<- list(
+      fields = fields,
+      rationale = rationale,
+      provenance = provenance
+    )
+  }
+
+  shiny::testServer(
+    mod_specification_server,
+    args = list(
+      current_revision = current_revision,
+      create_correction = create_correction
+    ),
+    {
+      session$flushReact()
+      session$setInputs(
+        visits = c("Baseline", "Week 4"),
+        correction_rationale = "Refine reviewed visit scope",
+        correction_provenance = "Reviewer change request"
+      )
+      session$setInputs(correct = 1)
+      session$flushReact()
+
+      expect_length(corrections, 1L)
+      expect_identical(corrections[[1]]$fields$visits, c("Baseline", "Week 4"))
+      expect_identical(corrections[[1]]$rationale, "Refine reviewed visit scope")
+      expect_identical(corrections[[1]]$provenance, "Reviewer change request")
     }
   )
 })
