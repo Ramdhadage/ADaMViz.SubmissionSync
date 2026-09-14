@@ -503,6 +503,27 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
     invisible(bundle_id)
   }
 
+  get_artifact_bundle <- function(revision_id) {
+    .with_evidence_connection(database_path, function(con) {
+      .current_revision(con, revision_id)
+      result <- DBI::dbGetQuery(
+        con,
+        paste(
+          "SELECT * FROM artifact_bundles WHERE revision_id = ?",
+          "ORDER BY accepted_at DESC LIMIT 1"
+        ),
+        params = list(revision_id)
+      )
+      if (!nrow(result)) {
+        cli::cli_abort(
+          "Revision {.val {revision_id}} has no accepted artifact bundle"
+        )
+      }
+      as.list(result[1, , drop = FALSE]) |>
+        lapply(\(value) value[[1]])
+    })
+  }
+
   mark_verified <- function(revision_id, expected_version, idempotency_key) {
     command <- list(
       revision_id = revision_id,
@@ -929,6 +950,7 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
     record_attempt = record_attempt, list_attempts = list_attempts, complete_attempt = complete_attempt,
     record_evidence = record_evidence, list_evidence = list_evidence,
     accept_artifact_bundle = accept_artifact_bundle,
+    get_artifact_bundle = get_artifact_bundle,
     mark_verified = mark_verified,
     record_review_decision = record_review_decision,
     list_review_decisions = list_review_decisions, record_export_receipt = record_export_receipt,

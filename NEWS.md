@@ -11,3 +11,9 @@
 - Added deterministic type-7 boxplot statistics, explicit plot layers, an
   aligned low-N strip, reproducible R compilation, and pre-execution artifact
   hashes for the first governed plot pattern.
+
+## U9 controlled export
+
+- Added a controlled export service with logical workspace destinations,
+  accepted-bundle hash checks, no-overwrite local pair publication,
+  staged-export reconciliation, and internal export receipts.

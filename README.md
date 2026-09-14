@@ -8,9 +8,10 @@ FDA validated or FDA approved.
 ## Development status
 
 The first Plot-Pattern Assurance Cell is being implemented incrementally. The
-current application shell uses an injected local runtime configuration and a
-deterministic empty state. Only public, synthetic, or properly de-identified
-data may be used during this proof of concept.
+current application shell uses injected local providers for runtime
+configuration, study data, identity, evidence storage, artifacts, and controlled
+workspace export. Only public, synthetic, or properly de-identified data may be
+used during this proof of concept.
 
 ## Run locally
 
@@ -24,3 +25,8 @@ ADaMViz.SubmissionSync::run_app()
 
 Provider credentials and secret values must remain outside source files,
 prompts, logs, generated scripts, and retained evidence.
+
+Controlled exports are addressed by logical workspace identifiers. A local POC
+workspace export writes a detached `plot.png` and `script.R` pair only after the
+accepted artifact hashes, acting user, revision token, destination, and final
+file hashes are rechecked. The receipt stays inside the internal evidence store.
