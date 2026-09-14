@@ -7,8 +7,44 @@
   "properties": {
     "schema_version": {"const": "plot-spec-v1"},
     "state": {"enum": ["candidate", "confirmed"]},
-    "fields": {"type": "object"},
-    "provenance": {"type": "object"},
+    "fields": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dataset_id",
+        "paramcd",
+        "y_variable",
+        "unit",
+        "treatment_variable",
+        "treatment_levels",
+        "visits",
+        "scale_mode"
+      ],
+      "properties": {
+        "dataset_id": {"type": "string", "minLength": 1},
+        "paramcd": {"type": "string", "minLength": 1},
+        "y_variable": {"enum": ["AVAL", "CHG", "PCHG"]},
+        "unit": {"type": "string", "minLength": 1},
+        "treatment_variable": {"type": "string", "minLength": 1},
+        "treatment_levels": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "visits": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "scale_mode": {"enum": ["fixed", "free"]}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": {"enum": ["prompt", "metadata", "default", "user_confirmed"]}
+    },
     "hash": {"type": "string"}
   }
 }

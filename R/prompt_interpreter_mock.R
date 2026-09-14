@@ -26,16 +26,11 @@ mock_prompt_interpreter <- function() {
   }
   units <- parameters[[paramcd]]$units
   unit <- .mock_match_value(prompt, units)
-  if (length(units) > 1L && is.null(unit)) {
-    return(list(
-      status = "clarification",
-      clarifications = list(field = "unit", choices = units)
-    ))
-  }
   if (is.null(unit) && length(units) == 1L) unit <- units[[1]]
 
   treatment_variable <- profile$treatment_variables[[1]]
   treatment_levels <- profile$treatment_levels[[treatment_variable]]
+  included_treatment_levels <- .mock_exclude_values(prompt, treatment_levels)
   visits <- vapply(profile$visits, `[[`, "", "label")
   included_visits <- .mock_exclude_values(prompt, visits)
   scale_mode <- if (grepl("free[- ]?scale|free y|separate scale", prompt, ignore.case = TRUE)) {
@@ -48,6 +43,11 @@ mock_prompt_interpreter <- function() {
   } else {
     list()
   }
+  clarifications <- if (length(units) > 1L && is.null(unit)) {
+    list(field = "unit", choices = units)
+  } else {
+    list()
+  }
 
   list(
     status = "candidate",
@@ -56,10 +56,11 @@ mock_prompt_interpreter <- function() {
       y_variable = .mock_y_variable(prompt, profile$y_variables),
       unit = unit,
       treatment_variable = treatment_variable,
-      treatment_levels = treatment_levels,
+      treatment_levels = included_treatment_levels,
       visits = included_visits,
       scale_mode = scale_mode
     ),
+    clarifications = clarifications,
     required_confirmations = required_confirmations,
     metadata = list(prompt_template = "mock-prompt-template-v1")
   )

@@ -14,6 +14,8 @@ create_standard_revision <- function(app) {
     `prompt-prompt` = "Create a boxplot of ALT AVAL by treatment over all visits."
   )
   app$click("prompt-submit")
+  app$wait_for_value(output = "specification-fields")
+  app$click("specification-execute")
   app$wait_for_value(output = "run_status-status")
   app$wait_for_value(output = "specification-fields")
   app$wait_for_value(output = "plot_preview-code")

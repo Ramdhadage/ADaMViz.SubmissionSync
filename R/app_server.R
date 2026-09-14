@@ -12,18 +12,31 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
   current_revision <- shiny::reactiveVal(.empty_assurance_state())
 
   create_revision <- function(dataset_id, prompt, confirm_free_scale) {
-    state <- .create_assurance_revision(
+    state <- .create_assurance_candidate(
       provider = provider,
       dataset_id = dataset_id,
-      prompt = prompt,
-      confirm_free_scale = confirm_free_scale
+      prompt = prompt
     )
     current_revision(state)
     invisible(state)
   }
 
+  execute_revision <- function(fields) {
+    state <- current_revision()
+    if (is.null(state$pending)) {
+      cli::cli_abort("Create an inspectable specification before execution")
+    }
+    executed <- .execute_assurance_revision(
+      snapshot = state$pending$snapshot,
+      prompt = state$pending$prompt,
+      fields = fields
+    )
+    current_revision(executed)
+    invisible(executed)
+  }
+
   mod_prompt_server("prompt", catalog, create_revision)
-  mod_specification_server("specification", current_revision)
+  mod_specification_server("specification", current_revision, execute_revision)
   mod_run_status_server("run_status", current_revision)
   mod_plot_preview_server("plot_preview", current_revision)
   mod_evidence_server("evidence", current_revision)
@@ -33,6 +46,7 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
 
 .empty_assurance_state <- function() {
   list(
+    pending = NULL,
     plot_id = NULL,
     repository = NULL,
     review_service = NULL,
@@ -45,31 +59,62 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
   )
 }
 
-.create_assurance_revision <- function(provider, dataset_id, prompt, confirm_free_scale) {
+.create_assurance_candidate <- function(provider, dataset_id, prompt) {
   if (!checkmate::test_string(dataset_id, min.chars = 1L)) {
     cli::cli_abort("Select one authorized synthetic BDS scenario")
   }
   snapshot <- pin_study_snapshot(provider, dataset_id)
+  context <- build_prompt_context(snapshot)
   interpretation <- interpret_prompt(
     prompt,
-    build_prompt_context(snapshot),
+    context,
     mock_prompt_interpreter(),
     snapshot = NULL
   )
-  if (is.null(interpretation$candidate)) {
+  if (is.null(interpretation$candidate) &&
+      !identical(interpretation$status, "clarification")) {
     cli::cli_abort(c(
       "The prompt could not create an executable candidate",
       "i" = "Reason: {.val {interpretation$clarifications$reason %||% interpretation$status}}"
     ))
   }
-  if (identical(interpretation$candidate$fields$scale_mode, "free") &&
-      !isTRUE(confirm_free_scale)) {
-    cli::cli_abort(
-      "Free Y scales require confirmation because they create an Experimental/Draft revision"
-    )
-  }
 
-  spec <- confirm_plot_spec(interpretation$candidate)
+  spec <- interpretation$candidate %||% new_plot_spec(dataset_id = dataset_id)
+  choices <- .spec_choices_from_context(context)
+  list(
+    pending = list(
+      snapshot = snapshot,
+      prompt = prompt,
+      interpretation = interpretation,
+      choices = choices
+    ),
+    plot_id = NULL,
+    repository = NULL,
+    review_service = NULL,
+    revision = NULL,
+    spec = spec,
+    profile = NULL,
+    script = NULL,
+    artifact = NULL,
+    verification = NULL
+  )
+}
+
+.spec_choices_from_context <- function(context) {
+  profile <- context$aggregate_profile
+  list(
+    parameters = names(profile$parameters),
+    units = lapply(profile$parameters, `[[`, "units"),
+    y_variables = profile$y_variables,
+    treatment_variables = profile$treatment_variables,
+    treatment_levels = profile$treatment_levels,
+    visits = vapply(profile$visits, `[[`, "", "label"),
+    scale_modes = profile$scale_modes
+  )
+}
+
+.execute_assurance_revision <- function(snapshot, prompt, fields) {
+  spec <- .confirmed_spec_from_fields(snapshot$dataset_id, fields)
   profile <- validate_bds_profile(
     snapshot,
     spec$fields[setdiff(.plot_spec_fields, c("dataset_id", "scale_mode"))]
@@ -81,7 +126,52 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
       "x" = "{diagnostic$code}: {diagnostic$message}"
     ))
   }
+  .materialize_revision(snapshot, prompt, spec, profile)
+}
 
+.create_assurance_revision <- function(provider, dataset_id, prompt, confirm_free_scale) {
+  snapshot <- pin_study_snapshot(provider, dataset_id)
+  context <- build_prompt_context(snapshot)
+  interpretation <- interpret_prompt(prompt, context, mock_prompt_interpreter(), snapshot = NULL)
+  if (is.null(interpretation$candidate)) {
+    cli::cli_abort("The prompt could not create an executable candidate")
+  }
+  fields <- interpretation$candidate$fields
+  if (identical(fields$scale_mode, "free") && !isTRUE(confirm_free_scale)) {
+    cli::cli_abort(
+      "Free Y scales require confirmation because they create an Experimental/Draft revision"
+    )
+  }
+  .execute_assurance_revision(snapshot, prompt, fields)
+}
+
+.confirmed_spec_from_fields <- function(dataset_id, fields) {
+  if (!checkmate::test_string(fields$paramcd, min.chars = 1L) ||
+      !checkmate::test_choice(fields$y_variable, c("AVAL", "CHG", "PCHG")) ||
+      !checkmate::test_string(fields$unit, min.chars = 1L) ||
+      !checkmate::test_string(fields$treatment_variable, min.chars = 1L) ||
+      !checkmate::test_character(fields$treatment_levels, min.len = 1L, any.missing = FALSE, unique = TRUE) ||
+      !checkmate::test_character(fields$visits, min.len = 1L, any.missing = FALSE, unique = TRUE)) {
+    cli::cli_abort("Confirm one parameter, one Y variable, one unit, one treatment facet, and at least one treatment level and visit")
+  }
+  provenance <- stats::setNames(rep("user_confirmed", length(.plot_spec_fields)), .plot_spec_fields)
+  provenance$dataset_id <- "metadata"
+  spec <- new_plot_spec(
+    dataset_id = dataset_id,
+    paramcd = fields$paramcd,
+    y_variable = fields$y_variable,
+    unit = fields$unit,
+    treatment_variable = fields$treatment_variable,
+    treatment_levels = fields$treatment_levels,
+    visits = fields$visits,
+    scale_mode = fields$scale_mode %||% "fixed",
+    provenance = as.list(provenance),
+    state = "candidate"
+  )
+  confirm_plot_spec(spec)
+}
+
+.materialize_revision <- function(snapshot, prompt, spec, profile) {
   script <- compile_boxplot_script(spec, profile$low_n_policy)
   request <- new_execution_request(
     spec = spec,
@@ -175,6 +265,7 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
   )
 
   list(
+    pending = NULL,
     plot_id = plot_id,
     repository = repository,
     review_service = new_review_service(repository, identities),

@@ -32,6 +32,39 @@ test_that("mock interpreter preserves explicit visit exclusions", {
   expect_identical(result$candidate$fields$visits, c("Baseline", "Week 4"))
 })
 
+test_that("mock interpreter preserves explicit treatment exclusions", {
+  snapshot <- make_test_snapshot()
+  context <- build_prompt_context(snapshot)
+  result <- interpret_prompt(
+    "Create an ALT AVAL boxplot by treatment but exclude Placebo.",
+    context,
+    mock_prompt_interpreter(),
+    snapshot = snapshot
+  )
+
+  expect_identical(result$status, "candidate")
+  expect_identical(result$candidate$fields$treatment_levels, "Active")
+})
+
+test_that("mock interpreter returns a candidate for unresolved unit choices", {
+  data <- synthetic_bds_fixture()
+  data$AVALU[data$USUBJID == "SYNTH001-006"] <- "ukat/L"
+  snapshot <- make_test_snapshot(data)
+  context <- build_prompt_context(snapshot)
+  result <- interpret_prompt(
+    "Create an ALT AVAL boxplot by treatment.",
+    context,
+    mock_prompt_interpreter(),
+    snapshot = NULL
+  )
+
+  expect_identical(result$status, "clarification")
+  expect_s3_class(result$candidate, "plot_spec")
+  expect_identical(result$candidate$fields$paramcd, "ALT")
+  expect_null(result$candidate$fields$unit)
+  expect_equal(result$clarifications$missing_fields, "unit")
+})
+
 test_that("mock interpreter requires confirmation for free scales", {
   snapshot <- make_test_snapshot()
   context <- build_prompt_context(snapshot)
