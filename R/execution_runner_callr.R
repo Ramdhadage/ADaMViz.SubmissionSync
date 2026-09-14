@@ -27,7 +27,11 @@ run_execution_callr <- function(
     if (!is.null(source_root)) {
       devtools::load_all(source_root, quiet = TRUE)
     }
-    ADaMViz.SubmissionSync:::run_execution_locally(
+    run_locally <- get(
+      "run_execution_locally",
+      envir = asNamespace("ADaMViz.SubmissionSync")
+    )
+    run_locally(
       request = request,
       script = script,
       analysis_data = analysis_data,

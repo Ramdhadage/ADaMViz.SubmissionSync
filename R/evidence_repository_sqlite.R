@@ -290,7 +290,7 @@
       revision_id = revision_id,
       status = status,
       version = as.integer(nrow(revision_events)),
-      updated_at = tail(revision_events$created_at, 1L)
+      updated_at = utils::tail(revision_events$created_at, 1L)
     )
   })
   result <- do.call(rbind, projections)

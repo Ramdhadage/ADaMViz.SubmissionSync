@@ -1,0 +1,13 @@
+utils::globalVariables(c(
+  "fontface",
+  "label",
+  "lower",
+  "median",
+  "middle",
+  "treatment",
+  "upper",
+  "value",
+  "visit",
+  "ymax",
+  "ymin"
+))

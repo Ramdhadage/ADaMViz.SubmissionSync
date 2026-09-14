@@ -6,6 +6,9 @@
 \usage{
 ellmer_prompt_interpreter(...)
 }
+\arguments{
+\item{...}{Reserved for future provider-specific configuration.}
+}
 \value{
 This function always aborts in the local POC.
 }
