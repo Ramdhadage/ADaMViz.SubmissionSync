@@ -30,7 +30,8 @@ app_ui <- function(request, runtime_config = new_runtime_config()) {
             class = "assurance-stack",
             mod_plot_preview_ui("plot_preview"),
             mod_evidence_ui("evidence"),
-            mod_revision_history_ui("revision_history")
+            mod_revision_history_ui("revision_history"),
+            mod_export_ui("export")
           )
         ),
         tags$small(

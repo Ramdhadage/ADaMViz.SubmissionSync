@@ -12,7 +12,7 @@ test_that("execution service promotes only a complete passing attempt", {
     1L,
     "creator",
     fixture$spec$hash,
-    canonical_hash(fixture$script),
+    .execution_hash_text(fixture$script),
     runner_result$result$image_hash,
     runner_result$result$analytical_hash,
     "create"
@@ -57,7 +57,7 @@ test_that("failed verification records terminal failure without promotion", {
     1L,
     "creator",
     fixture$spec$hash,
-    canonical_hash(fixture$script),
+    .execution_hash_text(fixture$script),
     paste(rep("0", 64L), collapse = ""),
     paste(rep("1", 64L), collapse = ""),
     "create"
@@ -92,7 +92,7 @@ test_that("experimental drafts cannot inherit governed verification", {
     1L,
     "creator",
     fixture$spec$hash,
-    canonical_hash(fixture$script),
+    .execution_hash_text(fixture$script),
     runner_result$result$image_hash,
     runner_result$result$analytical_hash,
     "create",

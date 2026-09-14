@@ -63,7 +63,7 @@ new_artifact_manifest <- function(
       manifest_version = "boxplot-artifact-manifest-v1",
       status = .initial_revision_status(spec$fields$scale_mode),
       spec_hash = spec$hash,
-      script_hash = canonical_hash(script),
+      script_hash = .execution_hash_text(script),
       analytical_hash = canonical_hash(analysis),
       expected_contract_version = expected_contract$version,
       expected_contract_review_status = expected_contract$review_status,

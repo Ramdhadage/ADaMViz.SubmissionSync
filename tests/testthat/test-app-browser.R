@@ -35,6 +35,18 @@ test_that("browser prompt journey creates a Verified draft with evidence", {
   expect_match(body, "Analytical output", fixed = TRUE)
 })
 
+test_that("browser prompt journey exports verified image and code", {
+  app <- local_submission_sync_app("prompt-to-export")
+
+  create_standard_revision(app)
+  app$click("export-export")
+  app$wait_for_value(output = "export-message")
+
+  body <- app$get_text(selector = "body")
+  expect_match(body, "Exported receipt-", fixed = TRUE)
+  expect_match(body, "rev-", fixed = TRUE)
+})
+
 test_that("browser review journey reaches Reviewed with two distinct approvals", {
   app <- local_submission_sync_app("two-person-review")
 

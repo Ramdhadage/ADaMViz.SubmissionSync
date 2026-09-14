@@ -20,6 +20,7 @@ fake_correction_runner <- function(request, script, analysis_data, ...) {
       analytical_output = environment$boxplot_analysis,
       image_path = image_path,
       code_hash = request$script_hash,
+      environment = .execution_environment_details(),
       diagnostics = list(stdout = "", stderr = "")
     ),
     class = "execution_runner_result"

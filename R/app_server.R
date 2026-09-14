@@ -8,6 +8,15 @@
 app_server <- function(input, output, session, runtime_config = new_runtime_config()) {
   output$runtime_profile <- renderText(runtime_config$profile)
   provider <- local_study_data_provider()
+  workspace_root <- fs::path(
+    fs::path_temp(),
+    "adamviz-submissionsync-workspace",
+    runtime_config$workspace
+  )
+  fs::dir_create(workspace_root, recurse = TRUE)
+  workspace_provider <- local_workspace_provider(
+    stats::setNames(workspace_root, runtime_config$workspace)
+  )
   catalog <- shiny::reactive(list_study_catalog(provider))
   current_revision <- shiny::reactiveVal(.empty_assurance_state())
 
@@ -57,6 +66,7 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
   mod_plot_preview_server("plot_preview", current_revision)
   mod_evidence_server("evidence", current_revision)
   mod_revision_history_server("revision_history", current_revision)
+  mod_export_server("export", current_revision, workspace_provider)
   mod_review_server("review", current_revision, current_revision)
 }
 
@@ -65,6 +75,7 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     pending = NULL,
     plot_id = NULL,
     repository = NULL,
+    identity_provider = NULL,
     review_service = NULL,
     revision = NULL,
     spec = NULL,
@@ -109,6 +120,7 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     ),
     plot_id = NULL,
     repository = NULL,
+    identity_provider = NULL,
     review_service = NULL,
     revision = NULL,
     spec = spec,
@@ -235,7 +247,7 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
   script <- compile_boxplot_script(spec, profile$low_n_policy)
   request <- new_execution_request(
     spec = spec,
-    script_hash = canonical_hash(script),
+    script_hash = .execution_hash_text(script),
     snapshot_id = profile$snapshot_id,
     snapshot_hash = canonical_hash(profile$selected_data),
     harness_version = "execution-harness-v1"
@@ -268,7 +280,7 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     "Draft"
   }
 
-  code_hash <- artifact_store$put(charToRaw(canonical_serialize(enc2utf8(script))))
+  code_hash <- artifact_store$put(.execution_text_bytes(script))
   image_hash <- artifact_store$put(readBin(
     runner_result$image_path,
     what = "raw",
@@ -325,10 +337,11 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
   )
   context <- build_prompt_context(snapshot)
 
-  list(
+  state <- list(
     pending = NULL,
     plot_id = plot_id,
     repository = repository,
+    identity_provider = identities,
     review_service = new_review_service(repository, identities),
     revision = repository$get_revision(revision_id),
     spec = spec,
@@ -340,6 +353,12 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     artifact = artifact,
     verification = verification
   )
+  .record_revision_context_evidence(
+    state,
+    request = request,
+    runner_result = runner_result
+  )
+  state
 }
 
 .materialize_correction_revision <- function(
@@ -352,7 +371,7 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
   script <- compile_boxplot_script(spec, profile$low_n_policy)
   request <- new_execution_request(
     spec = spec,
-    script_hash = canonical_hash(script),
+    script_hash = .execution_hash_text(script),
     snapshot_id = profile$snapshot_id,
     snapshot_hash = canonical_hash(profile$selected_data),
     harness_version = "execution-harness-v1"
@@ -383,7 +402,7 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     revision_number,
     Sys.time()
   )), 1L, 12L))
-  code_hash <- artifact_store$put(charToRaw(canonical_serialize(enc2utf8(script))))
+  code_hash <- artifact_store$put(.execution_text_bytes(script))
   image_hash <- artifact_store$put(readBin(
     runner_result$image_path,
     what = "raw",
@@ -425,5 +444,10 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
   state$script <- script
   state$artifact <- artifact
   state$verification <- NULL
+  .record_revision_context_evidence(
+    state,
+    request = request,
+    runner_result = runner_result
+  )
   state
 }

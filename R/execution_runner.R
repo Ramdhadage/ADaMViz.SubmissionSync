@@ -1,5 +1,9 @@
 .execution_hash_text <- function(value) {
-  canonical_hash(enc2utf8(value))
+  digest::digest(.execution_text_bytes(value), algo = "sha256", serialize = FALSE)
+}
+
+.execution_text_bytes <- function(value) {
+  charToRaw(enc2utf8(paste(value, collapse = "\n")))
 }
 
 .execution_hash_file <- function(path) {
@@ -12,18 +16,27 @@
   paste0(substr(value, 1L, limit), "\n[truncated]")
 }
 
-.execution_environment_fingerprint <- function() {
+.execution_environment_details <- function() {
   packages <- c(
     ADaMViz.SubmissionSync = utils::packageVersion("ADaMViz.SubmissionSync"),
     ggplot2 = utils::packageVersion("ggplot2"),
     patchwork = utils::packageVersion("patchwork")
   )
-  canonical_hash(list(
-    version = "execution-environment-fingerprint-v1",
+  list(
+    version = "execution-environment-details-v1",
     r_version = as.character(getRversion()),
     platform = R.version$platform,
-    packages = lapply(packages, as.character)
-  ))
+    os = Sys.info()[["sysname"]],
+    release = Sys.info()[["release"]],
+    packages = lapply(packages, as.character),
+    graphics_device = "png",
+    image_width = NA_integer_,
+    image_height = NA_integer_
+  )
+}
+
+.execution_environment_fingerprint <- function() {
+  canonical_hash(.execution_environment_details())
 }
 
 .validate_execution_input <- function(request, script, analysis_data, data_classification) {
@@ -118,7 +131,10 @@ run_execution_locally <- function(
 
   analytical_hash <- canonical_hash(env$boxplot_analysis)
   image_hash <- .execution_hash_file(image_path)
-  environment_fingerprint <- .execution_environment_fingerprint()
+  environment <- .execution_environment_details()
+  environment$image_width <- image_width
+  environment$image_height <- image_height
+  environment_fingerprint <- canonical_hash(environment)
   manifest <- new_execution_result(
     request,
     analytical_hash = analytical_hash,
@@ -133,6 +149,7 @@ run_execution_locally <- function(
       analytical_output = env$boxplot_analysis,
       image_path = image_path,
       code_hash = request$script_hash,
+      environment = environment,
       diagnostics = list(
         stdout = .bounded_text(stdout, diagnostics_limit),
         stderr = ""

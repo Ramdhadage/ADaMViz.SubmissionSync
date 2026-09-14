@@ -90,7 +90,7 @@ test_that("artifact manifest binds only U4 reproducibility evidence", {
   expect_identical(manifest$manifest_version, "boxplot-artifact-manifest-v1")
   expect_identical(manifest$status, "Experimental/Draft")
   expect_identical(manifest$spec_hash, spec$hash)
-  expect_identical(manifest$script_hash, canonical_hash(script))
+  expect_identical(manifest$script_hash, .execution_hash_text(script))
   expect_identical(manifest$analytical_hash, canonical_hash(analysis))
   expect_identical(manifest$expected_contract_hash, canonical_hash(expected_contract))
   expect_identical(manifest$expected_contract_review_status, "pending_human_review")

@@ -22,7 +22,7 @@ execution_fixture <- function() {
   script <- compile_boxplot_script(spec, profile$low_n_policy)
   request <- new_execution_request(
     spec = spec,
-    script_hash = canonical_hash(script),
+    script_hash = .execution_hash_text(script),
     snapshot_id = profile$snapshot_id,
     snapshot_hash = canonical_hash(profile$selected_data),
     harness_version = "execution-harness-v1"
@@ -78,6 +78,7 @@ fake_successful_runner_result <- function(fixture, image_hash = paste(rep("a", 6
       analytical_output = env$boxplot_analysis,
       image_path = tempfile(fileext = ".png"),
       code_hash = fixture$request$script_hash,
+      environment = .execution_environment_details(),
       diagnostics = list(stdout = "", stderr = "")
     ),
     class = "execution_runner_result"

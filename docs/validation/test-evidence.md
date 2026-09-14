@@ -7,7 +7,7 @@ development results to validation evidence.
 | --- | --- | --- | --- | --- | --- |
 | 2026-09-14 | Local Windows R 4.6.0 | `testthat::test_file()` focused U3 files | R9-R15 BDS envelope, governed synthetic scenarios, local study-data provider | Passed locally | Console output |
 | 2026-09-14 | Local Windows R 4.6.0 | `testthat::test_file()` focused R25-R28 files | Free-scale downgrade, arbitrary-transformation deferral, governed compiler surface, no-verification guard | Passed locally | Console output |
-| 2026-09-14 | Local Windows R 4.6.0 | `testthat::test_file()` focused U9 files | Controlled export service, workspace provider, reconciliation | Passed locally | Console output |
+| 2026-09-14 | Local Windows R 4.6.0 | `testthat::test_file()` focused U9 files | Revision evidence, reproducibility rerun, controlled export service, app export module, workspace provider, reconciliation | Passed locally | Console output |
 
 ## Focused U3 commands
 
@@ -35,6 +35,8 @@ testthat::test_file("tests/testthat/test-execution-service.R")
 ```r
 devtools::load_all(quiet = TRUE)
 testthat::test_file("tests/testthat/test-provider-workspace-contract.R")
+testthat::test_file("tests/testthat/test-revision-evidence.R")
+testthat::test_file("tests/testthat/test-mod-export.R")
 testthat::test_file("tests/testthat/test-export-service.R")
 testthat::test_file("tests/testthat/test-export-reconciliation.R")
 ```
@@ -42,6 +44,7 @@ testthat::test_file("tests/testthat/test-export-reconciliation.R")
 ## Required later evidence
 
 - Full `devtools::test()` and `devtools::check(error_on = "warning")` results.
-- Browser export workflow evidence when `test-app-export-browser.R` is added.
+- Browser export workflow evidence when Chromote is available for
+  `test-app-export-browser.R`.
 - Target-environment protocol execution with qualified identity, storage, ACLs,
   backup, and recovery controls.

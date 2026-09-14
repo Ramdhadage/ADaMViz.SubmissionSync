@@ -78,6 +78,10 @@ new_execution_service <- function(
       details = list(
         attempt_id = attempt_id,
         verification = unclass(verification),
+        execution_result = unclass(runner_result$result %||% list()),
+        environment = runner_result$environment %||% list(
+          fingerprint = runner_result$result$environment_fingerprint %||% NA_character_
+        ),
         diagnostics = runner_result$diagnostics
       )
     )
@@ -96,7 +100,7 @@ new_execution_service <- function(
     }
 
     if (!is.null(artifact_store)) {
-      artifact_store$put(charToRaw(canonical_serialize(enc2utf8(script))))
+      artifact_store$put(.execution_text_bytes(script))
       artifact_store$put(readBin(
         runner_result$image_path,
         what = "raw",
