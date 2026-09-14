@@ -13,21 +13,29 @@ app_ui <- function(request, runtime_config = new_runtime_config()) {
       title = "ADaMViz SubmissionSync",
       theme = app_theme(),
       fillable = FALSE,
-      bslib::card(
-        bslib::card_header("Plot-Pattern Assurance Cell"),
-        bslib::card_body(
-          h1("Plot-Pattern Assurance Cell"),
-          p("A governed workspace for review-ready clinical visualizations."),
+      div(
+        class = "assurance-shell",
+        h1("Plot-Pattern Assurance Cell"),
+        p("A governed workspace for review-ready clinical visualizations."),
+        div(
+          class = "assurance-grid",
           div(
-            class = "alert alert-secondary",
-            role = "status",
-            h2("No plot revision selected", class = "h5"),
-            p("Start with a natural-language plotting request or select a permitted dataset.")
+            class = "assurance-stack",
+            mod_prompt_ui("prompt"),
+            mod_specification_ui("specification"),
+            mod_run_status_ui("run_status"),
+            mod_review_ui("review")
           ),
-          tags$small(
-            sprintf("Runtime profile: %s", runtime_config$profile),
-            class = "text-body-secondary"
+          div(
+            class = "assurance-stack",
+            mod_plot_preview_ui("plot_preview"),
+            mod_evidence_ui("evidence"),
+            mod_revision_history_ui("revision_history")
           )
+        ),
+        tags$small(
+          sprintf("Runtime profile: %s", runtime_config$profile),
+          class = "text-body-secondary"
         )
       )
     )

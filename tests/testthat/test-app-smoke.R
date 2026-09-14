@@ -4,7 +4,8 @@ test_that("the app exposes a labeled empty-state shell", {
 
   expect_s3_class(ui, "shiny.tag.list")
   expect_match(as.character(ui), "Plot-Pattern Assurance Cell")
-  expect_match(as.character(ui), "No plot revision selected")
+  expect_match(as.character(ui), "Prompt and Dataset")
+  expect_match(as.character(ui), "Two-Person Review")
 })
 
 test_that("the app server accepts injected runtime configuration", {

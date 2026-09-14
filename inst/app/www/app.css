@@ -1,0 +1,89 @@
+.assurance-shell {
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.assurance-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.8fr) minmax(420px, 1.2fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.assurance-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.assurance-panel {
+  border-radius: 8px;
+}
+
+.assurance-message {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border-left: 4px solid #946200;
+  background: #fff8e1;
+  color: #553d00;
+}
+
+.status-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0 0.65rem;
+  border: 1px solid #637083;
+  font-weight: 700;
+}
+
+.status-draft {
+  background: #eef2f7;
+  color: #1f2937;
+}
+
+.status-verified {
+  background: #e7f6ed;
+  color: #0d5c2f;
+  border-color: #58a875;
+}
+
+.status-reviewed {
+  background: #e6f2ff;
+  color: #074b83;
+  border-color: #5d9fd8;
+}
+
+.status-rejected {
+  background: #fdeceb;
+  color: #8a1f17;
+  border-color: #d66f68;
+}
+
+.status-experimental {
+  background: #fff3cd;
+  color: #664d03;
+  border-color: #d9b64c;
+}
+
+.warning-list {
+  margin-bottom: 0;
+}
+
+.review-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 900px) {
+  .assurance-grid {
+    grid-template-columns: 1fr;
+  }
+}
