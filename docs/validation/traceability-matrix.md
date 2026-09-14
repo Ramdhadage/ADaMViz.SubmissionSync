@@ -6,10 +6,31 @@ implemented. A local test or package check is development evidence only.
 | Requirement area | Planned unit | Objective evidence | Status |
 | --- | --- | --- | --- |
 | R1-R8 prompt and specification | U2, U7, U8 | Schema, prompt, clarification, and UI tests | Planned |
-| R9-R15 BDS envelope | U3, U6, U8 | Governed fixtures and blocking diagnostics | Planned |
+| R9-R15 BDS envelope | U3, U6, U8 | Governed fixtures, blocking diagnostics, no-hidden-filter assertions, missing-value display exclusions | Development evidence in progress |
 | R16-R24 statistics and display | U4, U8 | Independent oracle and plot-layer tests | Planned |
+| R25-R28 experimental and deferred behavior | U2, U4, U7, U8 | Free-scale downgrade tests, arbitrary-transformation deferral, compiler allowlist, no-verification guard | Development evidence in progress |
 | R29-R35 lifecycle and review | U2, U5, U8 | Transition, authorization, and immutability tests | Planned |
 | R36-R40 evidence and export | U2, U5, U9 | Hash, persistence, export, and reconciliation tests | Development evidence in progress |
+
+## U3 development evidence checkpoint
+
+| Requirement or example | Control or implementation surface | Development evidence |
+| --- | --- | --- |
+| R9 permitted BDS source and required variables | `pin_study_snapshot()` hash-verified catalog metadata; `validate_bds_profile()` source metadata and required-column gates | `test-provider-study-data.R`; `test-bds-profile.R` |
+| R10 no silent analysis-flag filtering | Explicit parameter, unit, treatment-level, and visit selections are the only profile filters before display-time missing-Y removal | `test-bds-profile.R` |
+| R11-R12 duplicate subject-parameter-visit stop | Duplicate selected `USUBJID`/`PARAMCD`/visit keys return blocking diagnostics and no display rows; authorized duplicate detail is kept out of durable diagnostics | `test-bds-profile.R`; `test-synthetic-scenarios.R` |
+| R13 deterministic visit order | Invalid, missing, conflicting, or reused `AVISIT`/`AVISITN` mappings block before plot generation | `test-bds-profile.R`; `test-synthetic-scenarios.R` |
+| R14 missing selected Y exclusion | `display_data` and distinct-subject `N` exclude missing selected Y values while `selected_data` retains the stored selected records | `test-bds-profile.R`; downstream `test-boxplot-statistics.R` |
+| R15 empty treatment-visit display omission | Empty treatment-visit combinations produce no box, median, or N row and are retained as structured warnings | `test-bds-profile.R`; `test-synthetic-scenarios.R` |
+
+## R25-R28 development evidence checkpoint
+
+| Requirement or example | Control or implementation surface | Development evidence |
+| --- | --- | --- |
+| R25 free-scale downgrade | Free-scale prompt interpretation requires confirmation; unconfirmed UI execution is blocked; confirmed free-scale artifacts and manifests are `Experimental/Draft` with reduced-comparability warning | `test-prompt-interpreter-mock.R`; `test-mod-specification.R`; `test-boxplot-assembly.R`; `test-boxplot-compiler.R` |
+| R26 arbitrary transformations deferred | Prompt guard blocks code-generation and transformation intents before provider calls and returns no candidate or executable code | `test-prompt-interpreter-contract.R` |
+| R27 governed operations only | The compiler emits only the canonical boxplot statistics and assembly calls and rejects executable/path-like generated code surfaces | `test-boxplot-compiler.R` |
+| R28 future sandbox boundary | No arbitrary transformation path is accepted; `Experimental/Draft` revisions cannot be submitted for governed verification | `test-prompt-interpreter-contract.R`; `test-execution-service.R` |
 
 ## U9 development evidence checkpoint
 

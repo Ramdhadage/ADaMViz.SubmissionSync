@@ -1,3 +1,42 @@
+test_that("profile requires permitted BDS source metadata and required variables", {
+  public_snapshot <- make_test_snapshot()
+  public_snapshot$classification <- "confidential"
+  public_snapshot$adam_designation <- "OCCDS"
+  public_result <- validate_bds_profile(public_snapshot, default_profile_selections())
+  expect_true(public_result$blocked)
+  expect_identical(
+    public_result$blocking_diagnostics[[1]]$code,
+    "unsupported_source_metadata"
+  )
+
+  missing_visit <- synthetic_bds_fixture()
+  missing_visit$AVISITN <- NULL
+  missing_result <- validate_bds_profile(
+    make_test_snapshot(missing_visit),
+    default_profile_selections()
+  )
+  expect_true(missing_result$blocked)
+  expect_identical(
+    missing_result$blocking_diagnostics[[1]]$code,
+    "missing_required_variables"
+  )
+})
+
+test_that("profile does not silently filter by analysis flags", {
+  data <- synthetic_bds_fixture()
+  data$SAFFL <- rep(c("Y", "N"), length.out = nrow(data))
+  data$ANL01FL <- "N"
+  result <- validate_bds_profile(
+    make_test_snapshot(data),
+    default_profile_selections()
+  )
+
+  expect_false(result$blocked)
+  expect_identical(nrow(result$selected_data), nrow(data))
+  expect_identical(unique(result$selected_data$ANL01FL), "N")
+  expect_setequal(unique(result$selected_data$SAFFL), c("Y", "N"))
+})
+
 test_that("profile keeps stored selected records and counts distinct nonmissing subjects", {
   result <- validate_bds_profile(
     make_test_snapshot(),

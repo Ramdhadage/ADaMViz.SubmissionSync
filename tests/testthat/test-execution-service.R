@@ -77,3 +77,40 @@ test_that("failed verification records terminal failure without promotion", {
   expect_identical(repo$list_attempts("rev-1")$outcome, "failed")
   expect_identical(repo$list_evidence("rev-1")$outcome, "failed")
 })
+
+test_that("experimental drafts cannot inherit governed verification", {
+  fixture <- execution_fixture()
+  runner_result <- fake_successful_runner_result(fixture)
+  root <- withr::local_tempdir()
+  repo <- sqlite_evidence_repository(
+    fs::path(root, "db.sqlite"),
+    fs::path(root, "chain-root.json")
+  )
+  repo$create_revision(
+    "plot-1",
+    "rev-1",
+    1L,
+    "creator",
+    fixture$spec$hash,
+    canonical_hash(fixture$script),
+    runner_result$result$image_hash,
+    runner_result$result$analytical_hash,
+    "create",
+    initial_status = "Experimental/Draft"
+  )
+  runner <- new_execution_runner(function(...) runner_result)
+  service <- new_execution_service(repo, runner = runner, artifact_store = NULL)
+
+  expect_error(
+    service$submit(
+      revision_id = "rev-1",
+      request = fixture$request,
+      script = fixture$script,
+      analysis_data = fixture$profile$selected_data,
+      idempotency_key = "execute-1"
+    ),
+    "Only Draft revisions"
+  )
+  expect_identical(repo$get_revision("rev-1")$status, "Experimental/Draft")
+  expect_equal(nrow(repo$list_attempts("rev-1")), 0L)
+})

@@ -29,6 +29,46 @@ test_that("arbitrary R requests are deferred before provider calls", {
   expect_null(result$candidate)
 })
 
+test_that("arbitrary transformation requests are deferred before provider calls", {
+  snapshot <- make_test_snapshot()
+  context <- build_prompt_context(snapshot)
+  prompts <- c(
+    "Log-transform AVAL and create an ALT boxplot by treatment.",
+    "Derive AVAL as AVAL * 2 then create an ALT boxplot.",
+    "Mutate CHG before plotting ALT.",
+    "Create an ALT boxplot after normalizing PCHG."
+  )
+
+  results <- lapply(
+    prompts,
+    interpret_prompt,
+    context = context,
+    interpreter = mock_prompt_interpreter(),
+    snapshot = snapshot
+  )
+
+  expect_identical(
+    vapply(results, `[[`, "", "status"),
+    rep("manual_selection", length(prompts))
+  )
+  expect_identical(
+    vapply(results, function(result) result$metadata$provider_called, logical(1)),
+    rep(FALSE, length(prompts))
+  )
+  expect_identical(
+    vapply(results, function(result) result$clarifications$reason, character(1)),
+    rep("arbitrary_r_deferred", length(prompts))
+  )
+  expect_identical(
+    vapply(results, function(result) is.null(result$candidate), logical(1)),
+    rep(TRUE, length(prompts))
+  )
+  expect_identical(
+    vapply(results, function(result) is.null(result$executable_code), logical(1)),
+    rep(TRUE, length(prompts))
+  )
+})
+
 test_that("extra provider and candidate fields fail closed", {
   snapshot <- make_test_snapshot()
   context <- build_prompt_context(snapshot)

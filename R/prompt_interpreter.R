@@ -49,7 +49,14 @@ interpret_prompt <- function(prompt, context, interpreter, snapshot = NULL) {
 
 .detect_blocked_prompt <- function(prompt) {
   checks <- c(
-    arbitrary_r_deferred = "\\b(run|write|execute|compile)\\b.*\\b(r|code|script)\\b|library\\s*\\(|ggplot\\s*\\(|system\\s*\\(",
+    arbitrary_r_deferred = paste(
+      "\\b(run|write|execute|compile)\\b.*\\b(r|code|script)\\b",
+      "\\b(log[- ]?transform|transform|derive|calculate|compute|mutate|normaliz\\w*|standardiz\\w*)\\b",
+      "\\b(AVAL|CHG|PCHG)\\b\\s*[-+*/^]",
+      "[-+*/^]\\s*\\b(AVAL|CHG|PCHG)\\b",
+      "library\\s*\\(|ggplot\\s*\\(|system\\s*\\(",
+      sep = "|"
+    ),
     prompt_injection = "ignore (all )?(previous|system)|developer message|tool instruction",
     path_or_url = "https?://|[A-Za-z]:[\\\\/]|\\\\\\\\|\\.rds\\b|\\.csv\\b",
     sensitive_content = "USUBJID|patient|secret|credential|workspace"
