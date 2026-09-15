@@ -1,13 +1,25 @@
-test_that("async task service records completion and idempotent status", {
-  tasks <- new_async_task_service(max_active = 1L)
+test_that("async task service uses Shiny ExtendedTask", {
+  task <- new_async_task_service()
 
-  result <- tasks$submit("task-1", function(value) value + 1L, 1L)
+  expect_s3_class(task, "ExtendedTask")
+})
 
-  expect_identical(result$status, "succeeded")
-  expect_identical(result$result, 2L)
-  expect_identical(tasks$status("task-1")$result, 2L)
-  expect_identical(
-    tasks$submit("task-1", function(value) value + 2L, 1L)$result,
-    2L
-  )
+test_that("async task service returns a mirai result", {
+  server <- function(input, output, session) {
+    task <- new_async_task_service()
+    task$invoke(list(
+      function_name = ".execution_attempt_id",
+      args = list(idempotency_key = "execute-1")
+    ))
+    deadline <- Sys.time() + 10
+    while (identical(task$status(), "running") && Sys.time() < deadline) {
+      getFromNamespace("run_now", "later")(0.1)
+    }
+
+    expect_identical(task$status(), "success")
+    expect_match(task$result(), "^attempt-")
+  }
+  shiny::testServer(server, {
+    expect_true(TRUE)
+  })
 })

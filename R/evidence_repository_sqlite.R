@@ -354,8 +354,10 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
       \(x) .validate_identifier(x, "identifier"))
     checkmate::assert_int(revision_number, lower = 1L)
     if (!initial_status %in% c("Draft", "Experimental/Draft")) cli::cli_abort("Invalid initial revision status")
-    if (!is.null(artifact_store)) {
+    if (!is.null(artifact_store) && !is.null(code_hash)) {
       artifact_store$verify(code_hash)
+    }
+    if (!is.null(artifact_store) && !is.null(image_hash)) {
       artifact_store$verify(image_hash)
     }
     command <- list(
@@ -405,8 +407,8 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
         "correction_rationale, correction_provenance, spec_hash, code_hash, image_hash, analytical_hash, initial_status, created_at)",
         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
       ), params = list(revision_id, plot_id, revision_number, creator_id, nullable(parent_revision_id),
-        nullable(correction_rationale), nullable(correction_provenance), spec_hash, code_hash, image_hash,
-        analytical_hash, initial_status, created_at))
+        nullable(correction_rationale), nullable(correction_provenance), spec_hash, code_hash,
+        nullable(image_hash), nullable(analytical_hash), initial_status, created_at))
       DBI::dbExecute(con, "INSERT INTO revision_projection(revision_id, status, version, updated_at) VALUES (?, ?, 1, ?)",
         params = list(revision_id, initial_status, created_at))
       revision <- list(plot_id = plot_id, revision_id = revision_id)
@@ -478,6 +480,22 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
       command <- list(bundle_id = bundle_id, revision_id = revision_id, code_hash = code_hash, image_hash = image_hash, analytical_hash = analytical_hash)
       if (!.register_command(con, idempotency_key, command)) return(invisible(NULL))
       revision <- .current_revision(con, revision_id)
+      if (is.na(revision$image_hash) && is.na(revision$analytical_hash)) {
+        if (!is.null(artifact_store)) {
+          artifact_store$verify(code_hash)
+          artifact_store$verify(image_hash)
+        }
+        DBI::dbExecute(
+          con,
+          paste(
+            "UPDATE revisions SET image_hash = ?, analytical_hash = ?",
+            "WHERE revision_id = ? AND image_hash IS NULL AND analytical_hash IS NULL"
+          ),
+          params = list(image_hash, analytical_hash, revision_id)
+        )
+        revision$image_hash <- image_hash
+        revision$analytical_hash <- analytical_hash
+      }
       expected_hashes <- unlist(
         revision[c("code_hash", "image_hash", "analytical_hash")]
       )

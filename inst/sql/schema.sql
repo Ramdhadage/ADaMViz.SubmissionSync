@@ -7,8 +7,9 @@ CREATE TABLE IF NOT EXISTS revisions(
  revision_number INTEGER NOT NULL CHECK(revision_number > 0), creator_id TEXT NOT NULL,
  parent_revision_id TEXT REFERENCES revisions(revision_id), correction_rationale TEXT,
  correction_provenance TEXT, spec_hash TEXT NOT NULL, code_hash TEXT NOT NULL,
- image_hash TEXT NOT NULL, analytical_hash TEXT NOT NULL, initial_status TEXT NOT NULL CHECK(initial_status IN ('Draft','Experimental/Draft')),
- created_at TEXT NOT NULL, UNIQUE(plot_id, revision_number)
+ initial_status TEXT NOT NULL CHECK(initial_status IN ('Draft','Experimental/Draft')),
+ created_at TEXT NOT NULL, image_hash TEXT, analytical_hash TEXT,
+ UNIQUE(plot_id, revision_number)
 );
 CREATE TABLE IF NOT EXISTS lifecycle_events(
  event_id TEXT PRIMARY KEY NOT NULL, plot_id TEXT NOT NULL REFERENCES plots(plot_id),

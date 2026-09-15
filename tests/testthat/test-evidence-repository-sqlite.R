@@ -361,3 +361,27 @@ test_that("writes, projection rebuilds, and integrity checks serialize", {
   expect_identical(repo$get_revision("rev-1")$status, "Verified")
   expect_identical(repo$verify_integrity(), TRUE)
 })
+test_that("artifact acceptance binds pending revision hashes once", {
+  root <- withr::local_tempdir()
+  repo <- sqlite_evidence_repository(
+    fs::path(root, "db.sqlite"),
+    fs::path(root, "chain-root.json")
+  )
+  repo$create_revision(
+    "plot-1", "rev-1", 1L, "creator", "spec", "code", NULL, NULL, "create"
+  )
+
+  repo$accept_artifact_bundle(
+    "bundle-1", "rev-1", "code", "image", "analysis", "accept"
+  )
+
+  revision <- repo$get_revision("rev-1")
+  expect_identical(revision$image_hash, "image")
+  expect_identical(revision$analytical_hash, "analysis")
+  expect_error(
+    repo$accept_artifact_bundle(
+      "bundle-2", "rev-1", "code", "other-image", "analysis", "accept-2"
+    ),
+    "do not match"
+  )
+})

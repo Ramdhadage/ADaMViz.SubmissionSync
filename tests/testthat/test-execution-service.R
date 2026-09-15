@@ -114,3 +114,28 @@ test_that("experimental drafts cannot inherit governed verification", {
   expect_identical(repo$get_revision("rev-1")$status, "Experimental/Draft")
   expect_equal(nrow(repo$list_attempts("rev-1")), 0L)
 })
+
+test_that("runner errors leave one terminal failed attempt", {
+  fixture <- execution_fixture()
+  root <- withr::local_tempdir()
+  repo <- sqlite_evidence_repository(
+    fs::path(root, "db.sqlite"),
+    fs::path(root, "chain-root.json")
+  )
+  repo$create_revision(
+    "plot-1", "rev-1", 1L, "creator", fixture$spec$hash,
+    fixture$request$script_hash, NULL, NULL, "create"
+  )
+  service <- new_execution_service(
+    repo,
+    runner = new_execution_runner(\(...) stop("worker disconnected"))
+  )
+
+  result <- service$submit(
+    "rev-1", fixture$request, fixture$script,
+    fixture$profile$selected_data, "execute-1"
+  )
+
+  expect_identical(result$status, "failed")
+  expect_identical(repo$list_attempts("rev-1")$outcome, "failed")
+})

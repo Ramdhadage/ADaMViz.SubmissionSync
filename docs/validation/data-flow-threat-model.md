@@ -27,6 +27,10 @@ controls are separately qualified.
 6. The export service rechecks authorization, version, revision hashes, final
    file hashes, and then records the internal receipt.
 
+The bundled local workspace provider exercises this flow for development only.
+It does not implement the open-handle identity, volume, ACL, junction-race,
+supported-filesystem, or atomic-publication guarantees required for AE11.
+
 ## Export threat checks
 
 | Threat | Control |

@@ -35,7 +35,9 @@ test_that("app revisions persist complete context evidence for R36", {
   profile <- validate_bds_profile(snapshot, default_profile_selections())
   spec <- execution_spec()
   testthat::local_mocked_bindings(
-    run_execution_locally = fake_revision_context_runner
+    new_callr_execution_runner = function(...) {
+      new_execution_runner(fake_revision_context_runner)
+    }
   )
 
   state <- .materialize_revision(
@@ -67,7 +69,9 @@ test_that("reproducibility service reruns retained evidence exactly", {
   profile <- validate_bds_profile(snapshot, default_profile_selections())
   spec <- execution_spec()
   testthat::local_mocked_bindings(
-    run_execution_locally = fake_revision_context_runner
+    new_callr_execution_runner = function(...) {
+      new_execution_runner(fake_revision_context_runner)
+    }
   )
   state <- .materialize_revision(
     snapshot,

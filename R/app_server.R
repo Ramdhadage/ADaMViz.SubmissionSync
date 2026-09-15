@@ -19,6 +19,24 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
   )
   catalog <- shiny::reactive(list_study_catalog(provider))
   current_revision <- shiny::reactiveVal(.empty_assurance_state())
+  execution_task <- new_async_task_service() |>
+    bslib::bind_task_button("specification-execute") |>
+    bslib::bind_task_button("specification-correct")
+
+  shiny::observe({
+    status <- execution_task$status()
+    if (identical(status, "success")) {
+      current_revision(execution_task$result())
+    } else if (identical(status, "error")) {
+      tryCatch(
+        execution_task$result(),
+        error = \(error) shiny::showNotification(
+          conditionMessage(error),
+          type = "error"
+        )
+      )
+    }
+  })
 
   create_revision <- function(dataset_id, prompt, confirm_free_scale) {
     state <- .create_assurance_candidate(
@@ -35,24 +53,30 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     if (is.null(state$pending)) {
       cli::cli_abort("Create an inspectable specification before execution")
     }
-    executed <- .execute_assurance_revision(
-      snapshot = state$pending$snapshot,
-      prompt = state$pending$prompt,
-      fields = fields
-    )
-    current_revision(executed)
-    invisible(executed)
+    execution_task$invoke(list(
+      function_name = ".execute_assurance_revision",
+      args = list(
+        snapshot = state$pending$snapshot,
+        prompt = state$pending$prompt,
+        fields = fields,
+        repository_root = fs::file_temp(pattern = "assurance-session-")
+      )
+    ))
+    invisible(state)
   }
 
   create_correction <- function(fields, rationale, provenance) {
-    corrected <- .execute_correction_revision(
-      state = current_revision(),
-      fields = fields,
-      rationale = rationale,
-      provenance = provenance
-    )
-    current_revision(corrected)
-    invisible(corrected)
+    state <- current_revision()
+    execution_task$invoke(list(
+      function_name = ".execute_correction_revision",
+      args = list(
+        state = state,
+        fields = fields,
+        rationale = rationale,
+        provenance = provenance
+      )
+    ))
+    invisible(state)
   }
 
   mod_prompt_server("prompt", catalog, create_revision)
@@ -147,7 +171,12 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
   )
 }
 
-.execute_assurance_revision <- function(snapshot, prompt, fields) {
+.execute_assurance_revision <- function(
+  snapshot,
+  prompt,
+  fields,
+  repository_root = NULL
+) {
   spec <- .confirmed_spec_from_fields(snapshot$dataset_id, fields)
   profile <- validate_bds_profile(
     snapshot,
@@ -160,7 +189,7 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
       "x" = "{diagnostic$code}: {diagnostic$message}"
     ))
   }
-  .materialize_revision(snapshot, prompt, spec, profile)
+  .materialize_revision(snapshot, prompt, spec, profile, repository_root)
 }
 
 .execute_correction_revision <- function(state, fields, rationale, provenance) {
@@ -243,7 +272,13 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
   confirm_plot_spec(spec)
 }
 
-.materialize_revision <- function(snapshot, prompt, spec, profile) {
+.materialize_revision <- function(
+  snapshot,
+  prompt,
+  spec,
+  profile,
+  repository_root = NULL
+) {
   script <- compile_boxplot_script(spec, profile$low_n_policy)
   request <- new_execution_request(
     spec = spec,
@@ -252,20 +287,7 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     snapshot_hash = canonical_hash(profile$selected_data),
     harness_version = "execution-harness-v1"
   )
-  runner_result <- run_execution_locally(
-    request = request,
-    script = script,
-    analysis_data = profile$selected_data,
-    data_classification = snapshot$classification
-  )
-  if (!identical(runner_result$status, "succeeded")) {
-    cli::cli_abort(c(
-      "The generated R script did not complete",
-      "x" = runner_result$diagnostics$stderr
-    ))
-  }
-
-  root <- fs::file_temp(pattern = "assurance-session-")
+  root <- repository_root %||% fs::file_temp(pattern = "assurance-session-")
   artifact_store <- local_artifact_store(fs::path(root, "artifacts"))
   repository <- sqlite_evidence_repository(
     fs::path(root, "evidence.sqlite"),
@@ -281,11 +303,6 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
   }
 
   code_hash <- artifact_store$put(.execution_text_bytes(script))
-  image_hash <- artifact_store$put(readBin(
-    runner_result$image_path,
-    what = "raw",
-    n = fs::file_size(runner_result$image_path)
-  ))
   repository$create_revision(
     plot_id = plot_id,
     revision_id = revision_id,
@@ -293,8 +310,8 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     creator_id = "creator",
     spec_hash = spec$hash,
     code_hash = code_hash,
-    image_hash = image_hash,
-    analytical_hash = runner_result$result$analytical_hash,
+    image_hash = NULL,
+    analytical_hash = NULL,
     idempotency_key = paste0("create:", revision_id),
     initial_status = initial_status
   )
@@ -303,7 +320,6 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
   if (identical(initial_status, "Draft")) {
     execution_service <- new_execution_service(
       repository,
-      runner = new_execution_runner(function(...) runner_result),
       artifact_store = artifact_store
     )
     execution <- execution_service$submit(
@@ -315,6 +331,7 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
       data_classification = snapshot$classification
     )
     verification <- execution$verification
+    runner_result <- execution$runner_result
   }
 
   identities <- local_identity_provider(list(
@@ -353,11 +370,13 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     artifact = artifact,
     verification = verification
   )
-  .record_revision_context_evidence(
-    state,
-    request = request,
-    runner_result = runner_result
-  )
+  if (!is.null(verification)) {
+    .record_revision_context_evidence(
+      state,
+      request = request,
+      runner_result = runner_result
+    )
+  }
   state
 }
 
@@ -376,19 +395,6 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     snapshot_hash = canonical_hash(profile$selected_data),
     harness_version = "execution-harness-v1"
   )
-  runner_result <- run_execution_locally(
-    request = request,
-    script = script,
-    analysis_data = profile$selected_data,
-    data_classification = state$snapshot$classification
-  )
-  if (!identical(runner_result$status, "succeeded")) {
-    cli::cli_abort(c(
-      "The generated R script did not complete",
-      "x" = runner_result$diagnostics$stderr
-    ))
-  }
-
   artifact_store <- state$repository$artifact_store
   if (is.null(artifact_store)) {
     cli::cli_abort("Correction revisions require an artifact store")
@@ -403,11 +409,6 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     Sys.time()
   )), 1L, 12L))
   code_hash <- artifact_store$put(.execution_text_bytes(script))
-  image_hash <- artifact_store$put(readBin(
-    runner_result$image_path,
-    what = "raw",
-    n = fs::file_size(runner_result$image_path)
-  ))
   lifecycle <- new_lifecycle_service(state$repository)
   lifecycle$create_correction(
     parent_revision_id = parent$revision_id,
@@ -415,13 +416,30 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     creator_id = "creator",
     spec_hash = spec$hash,
     code_hash = code_hash,
-    image_hash = image_hash,
-    analytical_hash = runner_result$result$analytical_hash,
+    image_hash = NULL,
+    analytical_hash = NULL,
     rationale = rationale,
     provenance = provenance,
     idempotency_key = paste0("correct:", revision_id),
     initial_status = .initial_revision_status(spec$fields$scale_mode)
   )
+
+  verification <- NULL
+  if (identical(spec$fields$scale_mode, "fixed")) {
+    execution <- new_execution_service(
+      state$repository,
+      artifact_store = artifact_store
+    )$submit(
+      revision_id = revision_id,
+      request = request,
+      script = script,
+      analysis_data = profile$selected_data,
+      idempotency_key = paste0("execute:", revision_id),
+      data_classification = state$snapshot$classification
+    )
+    verification <- execution$verification
+    runner_result <- execution$runner_result
+  }
 
   analysis <- calculate_boxplot_statistics(
     profile$display_data,
@@ -443,11 +461,13 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
   state$profile <- profile
   state$script <- script
   state$artifact <- artifact
-  state$verification <- NULL
-  .record_revision_context_evidence(
-    state,
-    request = request,
-    runner_result = runner_result
-  )
+  state$verification <- verification
+  if (!is.null(verification)) {
+    .record_revision_context_evidence(
+      state,
+      request = request,
+      runner_result = runner_result
+    )
+  }
   state
 }

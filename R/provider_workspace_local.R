@@ -180,6 +180,7 @@ local_workspace_provider <- function(destinations) {
 
   structure(
     list(
+      assurance_class = "development-only",
       destinations = roots,
       list_destinations = function() names(roots),
       stage_bundle = stage_bundle,
@@ -188,7 +189,7 @@ local_workspace_provider <- function(destinations) {
       quarantine_staged = quarantine_staged,
       reconcile = reconcile
     ),
-    class = "local_workspace_provider"
+    class = c("development_only_workspace_provider", "local_workspace_provider")
   )
 }
 

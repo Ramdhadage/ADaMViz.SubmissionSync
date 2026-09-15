@@ -1,3 +1,10 @@
+test_that("local workspace provider is explicitly development-only", {
+  provider <- local_workspace_provider(c(local = withr::local_tempdir()))
+
+  expect_identical(provider$assurance_class, "development-only")
+  expect_s3_class(provider, "development_only_workspace_provider")
+})
+
 test_that("local workspace provider publishes only complete image and script pairs", {
   root <- withr::local_tempdir()
   provider <- local_workspace_provider(c(controlled = root))

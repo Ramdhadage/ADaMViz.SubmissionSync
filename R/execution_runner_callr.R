@@ -1,6 +1,10 @@
 .execution_source_root <- function() {
-  root <- normalizePath(".", winslash = "/", mustWork = FALSE)
-  if (file.exists(file.path(root, "DESCRIPTION"))) root else NULL
+  roots <- c(
+    normalizePath(".", winslash = "/", mustWork = FALSE),
+    getNamespaceInfo(asNamespace("ADaMViz.SubmissionSync"), "path")
+  )
+  root <- roots[file.exists(file.path(roots, "DESCRIPTION"))][1]
+  if (length(root)) root else NULL
 }
 
 run_execution_callr <- function(

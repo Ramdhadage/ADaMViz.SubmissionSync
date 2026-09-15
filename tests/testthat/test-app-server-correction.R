@@ -5,7 +5,6 @@ fake_correction_runner <- function(request, script, analysis_data, ...) {
   withr::defer(close(connection), envir = parent.frame())
   source(connection, local = environment, keep.source = FALSE)
   image_path <- tempfile(fileext = ".png")
-  withr::defer(unlink(image_path), envir = parent.frame())
   writeBin(charToRaw("png bytes"), image_path)
   structure(
     list(
@@ -14,7 +13,7 @@ fake_correction_runner <- function(request, script, analysis_data, ...) {
       result = new_execution_result(
         request,
         analytical_hash = canonical_hash(environment$boxplot_analysis),
-        image_hash = paste(rep("a", 64L), collapse = ""),
+        image_hash = digest::digest(file = image_path, algo = "sha256"),
         environment_fingerprint = .execution_environment_fingerprint()
       ),
       analytical_output = environment$boxplot_analysis,
@@ -70,8 +69,17 @@ test_that("app correction creates child Draft and preserves reviewed parent", {
   fields <- as.list(execution_spec()$fields)
   fields$visits <- c("Baseline", "Week 4")
 
+  runner_calls <- 0L
   testthat::local_mocked_bindings(
-    run_execution_locally = fake_correction_runner
+    new_callr_execution_runner = function(...) {
+      new_execution_runner(function(...) {
+        runner_calls <<- runner_calls + 1L
+        child_id <- repo$list_revisions("plot-1")$revision_id[[2]]
+        expect_equal(nrow(repo$list_attempts(child_id)), 1L)
+        expect_true(is.na(repo$list_attempts(child_id)$outcome))
+        fake_correction_runner(...)
+      })
+    }
   )
   corrected <- .execute_correction_revision(
     state,
@@ -81,10 +89,15 @@ test_that("app correction creates child Draft and preserves reviewed parent", {
   )
 
   expect_identical(repo$get_revision("rev-1")$status, "Reviewed")
-  expect_identical(corrected$revision$status, "Draft")
+  expect_identical(corrected$revision$status, "Verified")
   expect_identical(corrected$revision$parent_revision_id, "rev-1")
   expect_identical(corrected$revision$plot_id, "plot-1")
   expect_identical(corrected$spec$fields$visits, c("Baseline", "Week 4"))
   expect_equal(nrow(repo$list_revisions("plot-1")), 2L)
-  expect_identical(corrected$verification, NULL)
+  expect_identical(corrected$verification$status, "passed")
+  expect_identical(runner_calls, 1L)
+  expect_identical(
+    repo$list_attempts(corrected$revision$revision_id)$outcome,
+    "succeeded"
+  )
 })

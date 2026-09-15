@@ -33,14 +33,7 @@ new_execution_service <- function(
     cli::cli_abort("Verification service must provide {.fn verify}")
   }
 
-  submit <- function(
-    revision_id,
-    request,
-    script,
-    analysis_data,
-    idempotency_key,
-    data_classification = "synthetic"
-  ) {
+  start <- function(revision_id, request, script, analysis_data, idempotency_key) {
     revision <- repository$get_revision(revision_id)
     if (!identical(revision$status, "Draft")) {
       cli::cli_abort("Only Draft revisions can be submitted for verification")
@@ -53,30 +46,34 @@ new_execution_service <- function(
       cli::cli_abort("A revision can have only one active execution attempt")
     }
     repository$record_attempt(attempt_id, revision_id, fingerprint)
+    invisible(list(
+      revision_id = revision_id,
+      revision_version = as.integer(revision$version),
+      attempt_id = attempt_id,
+      idempotency_key = idempotency_key,
+      request = request,
+      script = script,
+      analysis_data = analysis_data,
+      work_dir = fs::file_temp(pattern = paste0(attempt_id, "-"))
+    ))
+  }
 
-    work_dir <- fs::file_temp(pattern = paste0(attempt_id, "-"))
-    runner_result <- runner$run(
-      request = request,
-      script = script,
-      analysis_data = analysis_data,
-      data_classification = data_classification,
-      work_dir = work_dir
-    )
+  complete <- function(attempt, runner_result) {
     verification <- verification_service$verify(
-      request = request,
-      script = script,
-      analysis_data = analysis_data,
+      request = attempt$request,
+      script = attempt$script,
+      analysis_data = attempt$analysis_data,
       runner_result = runner_result
     )
-    evidence_id <- .execution_id("evidence", attempt_id, "verification")
+    evidence_id <- .execution_id("evidence", attempt$attempt_id, "verification")
     repository$record_evidence(
       evidence_id = evidence_id,
-      revision_id = revision_id,
+      revision_id = attempt$revision_id,
       evidence_type = "execution_verification",
       outcome = verification$status,
-      idempotency_key = paste0(idempotency_key, ":evidence"),
+      idempotency_key = paste0(attempt$idempotency_key, ":evidence"),
       details = list(
-        attempt_id = attempt_id,
+        attempt_id = attempt$attempt_id,
         verification = unclass(verification),
         execution_result = unclass(runner_result$result %||% list()),
         environment = runner_result$environment %||% list(
@@ -85,22 +82,21 @@ new_execution_service <- function(
         diagnostics = runner_result$diagnostics
       )
     )
-
     if (!identical(verification$status, "passed")) {
       repository$complete_attempt(
-        attempt_id,
+        attempt$attempt_id,
         "failed",
-        paste0(idempotency_key, ":terminal")
+        paste0(attempt$idempotency_key, ":terminal")
       )
       return(invisible(list(
-        attempt_id = attempt_id,
+        attempt_id = attempt$attempt_id,
         status = "failed",
-        verification = verification
+        verification = verification,
+        runner_result = runner_result
       )))
     }
-
     if (!is.null(artifact_store)) {
-      artifact_store$put(.execution_text_bytes(script))
+      artifact_store$put(.execution_text_bytes(attempt$script))
       artifact_store$put(readBin(
         runner_result$image_path,
         what = "raw",
@@ -108,30 +104,63 @@ new_execution_service <- function(
       ))
     }
     repository$accept_artifact_bundle(
-      bundle_id = .execution_id("bundle", attempt_id, "accepted"),
-      revision_id = revision_id,
-      code_hash = request$script_hash,
+      bundle_id = .execution_id("bundle", attempt$attempt_id, "accepted"),
+      revision_id = attempt$revision_id,
+      code_hash = attempt$request$script_hash,
       image_hash = runner_result$result$image_hash,
       analytical_hash = runner_result$result$analytical_hash,
-      idempotency_key = paste0(idempotency_key, ":bundle")
+      idempotency_key = paste0(attempt$idempotency_key, ":bundle")
     )
     repository$complete_attempt(
-      attempt_id,
+      attempt$attempt_id,
       "succeeded",
-      paste0(idempotency_key, ":terminal")
+      paste0(attempt$idempotency_key, ":terminal")
     )
     repository$mark_verified(
-      revision_id,
-      as.integer(revision$version),
-      paste0(idempotency_key, ":verified")
+      attempt$revision_id,
+      attempt$revision_version,
+      paste0(attempt$idempotency_key, ":verified")
     )
     invisible(list(
-      attempt_id = attempt_id,
+      attempt_id = attempt$attempt_id,
       status = "verified",
       verification = verification,
-      result = runner_result$result
+      result = runner_result$result,
+      runner_result = runner_result
     ))
   }
 
-  structure(list(submit = submit), class = "execution_service")
+  submit <- function(
+    revision_id,
+    request,
+    script,
+    analysis_data,
+    idempotency_key,
+    data_classification = "synthetic"
+  ) {
+    attempt <- start(revision_id, request, script, analysis_data, idempotency_key)
+    runner_result <- tryCatch(
+      runner$run(
+        request = request,
+        script = script,
+        analysis_data = analysis_data,
+        data_classification = data_classification,
+        work_dir = attempt$work_dir
+      ),
+      error = \(error) structure(
+        list(
+          status = "failed",
+          manifest_version = "execution-runner-result-v1",
+          diagnostics = list(stdout = "", stderr = conditionMessage(error))
+        ),
+        class = "execution_runner_result"
+      )
+    )
+    complete(attempt, runner_result)
+  }
+
+  structure(
+    list(submit = submit, start = start, complete = complete),
+    class = "execution_service"
+  )
 }

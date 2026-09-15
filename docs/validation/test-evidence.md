@@ -7,7 +7,7 @@ development results to validation evidence.
 | --- | --- | --- | --- | --- | --- |
 | 2026-09-14 | Local Windows R 4.6.0 | `testthat::test_file()` focused U3 files | R9-R15 BDS envelope, governed synthetic scenarios, local study-data provider | Passed locally | Console output |
 | 2026-09-14 | Local Windows R 4.6.0 | `testthat::test_file()` focused R25-R28 files | Free-scale downgrade, arbitrary-transformation deferral, governed compiler surface, no-verification guard | Passed locally | Console output |
-| 2026-09-14 | Local Windows R 4.6.0 | `testthat::test_file()` focused U9 files | Revision evidence, reproducibility rerun, controlled export service, app export module, workspace provider, reconciliation | Passed locally | Console output |
+| 2026-09-14 | Local Windows R 4.6.0 | `testthat::test_file()` focused U9 files | Revision evidence, reproducibility rerun, export service, app export module, development-only workspace mechanics, reconciliation | Passed locally; not AE11 qualification evidence | Console output |
 
 ## Focused U3 commands
 
