@@ -7,6 +7,14 @@
 - Within platform, safety, and security constraints, the user's current explicit request overrides this file and skill guidance. More specific nested `AGENTS.md` guidance overrides broader repository guidance.
 - Make small, focused changes; preserve unrelated and uncommitted work. Ask before changing requirements, business logic, interfaces, target environments, dependencies, or error-handling policy.
 
+## UX Context
+
+- UX stack: R/Shiny, pharmaverse, and clinical-trial workflows.
+- Primary user: clinical scientist (non-developer); supporting reviewers: statistical programmer and biostatistician.
+- Design for GxP-compliant workflows with required traceability; do not use patient-level data in the POC.
+- UX spec: `docs/ux/F001-plot-generation.md` (current repository path).
+- Follow the eight-step UX process: Define → Research → Analysis → Design → Prototype → Test → Launch → Iterate.
+
 ## R Engineering
 
 - Use only R packages for AI and LLM implementation unless the user explicitly changes this requirement. Prefer `ellmer` for model interaction, `vitals` for evaluation, `ragnar` for retrieval-augmented generation, `shinychat` for chat UI, and `mcptools` for Model Context Protocol integration.

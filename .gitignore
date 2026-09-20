@@ -11,3 +11,5 @@ docs/**/*.png
 .assurance-workspace/
 execution-workspace/
 artifacts/
+
+/.quarto/
