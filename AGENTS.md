@@ -42,3 +42,5 @@
 ## Reporting
 
 - Report the files changed, checks run, results observed, and anything unverified. Use official OpenAI documentation for OpenAI product or API claims and authoritative primary sources for requested clinical or regulatory research.
+- `docs/solutions/` contains searchable learnings organized by category and YAML frontmatter (`module`, `tags`, `problem_type`); relevant when working in documented areas.
+- `CONCEPTS.md` defines shared project-specific vocabulary; relevant when orienting to the codebase or discussing domain concepts.
