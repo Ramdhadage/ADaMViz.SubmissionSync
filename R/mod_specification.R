@@ -2,12 +2,30 @@ mod_specification_ui <- function(id) {
   ns <- shiny::NS(id)
   bslib::card(
     class = "assurance-panel",
-    bslib::card_header("Resolved Specification"),
+    bslib::card_header("Confirm plot choices"),
     bslib::card_body(
-      shiny::uiOutput(ns("summary")),
-      shiny::tableOutput(ns("fields")),
-      shiny::uiOutput(ns("controls")),
-      shiny::uiOutput(ns("message"))
+      tags$details(
+        class = "f001-panel",
+        open = NA,
+        tags$summary("Plot type"),
+        tags$div(
+          class = "f001-panel-body",
+          tags$p("Longitudinal numeric BDS boxplot"),
+          tags$p(class = "text-body-secondary", "This is the plot pattern supported by the current POC.")
+        )
+      ),
+      tags$details(
+        class = "f001-panel",
+        open = NA,
+        tags$summary("Variables and settings"),
+        tags$div(
+          class = "f001-panel-body",
+          shiny::uiOutput(ns("summary")),
+          shiny::tableOutput(ns("fields")),
+          shiny::uiOutput(ns("controls")),
+          shiny::uiOutput(ns("message"))
+        )
+      )
     )
   )
 }
@@ -64,14 +82,28 @@ mod_specification_server <- function(
         fields$treatment_variable %||% choices$treatment_variables[[1]]
       paramcd <- input$paramcd %||% fields$paramcd %||% choices$parameters[[1]]
       units <- choices$units[[paramcd]] %||% character()
-      selected_unit <- if (!is.null(fields$unit) && fields$unit %in% units) {
-        fields$unit
+      current_unit <- input$unit %||% fields$unit
+      selected_unit <- if (length(current_unit) == 1L && current_unit %in% units) {
+        current_unit
       } else if (length(units) == 1L) {
         units[[1]]
       } else {
         character()
       }
       treatment_levels <- choices$treatment_levels[[treatment_variable]]
+      current_treatment_levels <- input$treatment_levels %||% fields$treatment_levels
+      selected_treatment_levels <- if (length(current_treatment_levels) &&
+        all(current_treatment_levels %in% treatment_levels)) {
+        current_treatment_levels
+      } else {
+        treatment_levels
+      }
+      current_visits <- input$visits %||% fields$visits
+      selected_visits <- if (length(current_visits) && all(current_visits %in% choices$visits)) {
+        current_visits
+      } else {
+        choices$visits
+      }
 
       tags$div(
         class = "specification-controls",
@@ -93,13 +125,13 @@ mod_specification_server <- function(
           session$ns("treatment_levels"),
           "Included treatment levels",
           treatment_levels,
-          selected = fields$treatment_levels %||% treatment_levels
+          selected = selected_treatment_levels
         ),
         shiny::checkboxGroupInput(
           session$ns("visits"),
           "Included visits",
           choices$visits,
-          selected = fields$visits %||% choices$visits
+          selected = selected_visits
         ),
         shiny::radioButtons(
           session$ns("scale_mode"),
@@ -133,7 +165,7 @@ mod_specification_server <- function(
         } else {
           .assurance_task_button(
             session$ns("execute"),
-            "Execute confirmed specification",
+            "Confirm and generate",
             class = "btn-primary"
           )
         }
@@ -170,19 +202,21 @@ mod_specification_server <- function(
         message("Correction is unavailable in this context.")
         return()
       }
+      if (!checkmate::test_string(input$correction_rationale, min.chars = 1L) ||
+          !checkmate::test_string(input$correction_provenance, min.chars = 1L)) {
+        message("Enter the correction rationale and provenance before continuing.")
+        return()
+      }
       if (identical(input$scale_mode, "free") && !isTRUE(input$confirm_free_scale)) {
         message("Free Y scales require confirmation before correction.")
         return()
       }
       tryCatch(
-        {
-          create_correction(
-            .current_spec_input_fields(input, current_revision()),
-            input$correction_rationale,
-            input$correction_provenance
-          )
-          message("Created correction revision.")
-        },
+        create_correction(
+          .current_spec_input_fields(input, current_revision()),
+          input$correction_rationale,
+          input$correction_provenance
+        ),
         error = function(error) {
           message(conditionMessage(error))
         }

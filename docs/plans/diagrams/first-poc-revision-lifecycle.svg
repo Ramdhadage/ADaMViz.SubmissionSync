@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1360" height="760" viewBox="0 0 1360 760" role="img" aria-labelledby="lifecycle-title lifecycle-desc">
+  <title id="lifecycle-title">First POC revision lifecycle</title>
+  <desc id="lifecycle-desc">Draft revisions become Verified after mandatory checks, then Reviewed after two eligible approvals. Rejections and refinements create linked successor Drafts; Experimental Drafts cannot be exported.</desc>
+  <defs>
+    <pattern id="lifecycle-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="0.8" fill="rgba(45,49,66,0.10)"/></pattern>
+    <marker id="lifecycle-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+  </defs>
+  <style>
+    .paper { fill: #f5f5f5; }
+    .ink { fill: #2d3142; }
+    .muted { fill: #4f5d75; }
+    .soft { fill: #7a8399; }
+    .rule { stroke: rgba(45,49,66,0.12); stroke-width: 1; }
+    .state { fill: #fff; stroke: rgba(45,49,66,0.25); stroke-width: 1.2; }
+    .state-focus { fill: rgba(235,108,54,0.08); stroke: #eb6c36; stroke-width: 1.6; }
+    .state-name { font: 600 13px Geist, system-ui, sans-serif; text-anchor: middle; }
+    .state-sub { font: 400 9px 'Geist Mono', ui-monospace, monospace; text-anchor: middle; }
+    .edge-label { font: 400 8px 'Geist Mono', ui-monospace, monospace; text-anchor: middle; fill: #4f5d75; }
+    .legend { font: 500 8px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.06em; fill: #4f5d75; }
+  </style>
+  <rect width="1360" height="760" class="paper"/>
+  <rect width="1360" height="760" fill="url(#lifecycle-dots)" opacity="0.55"/>
+
+  <g class="transitions" fill="none" stroke="#4f5d75" stroke-width="1.2">
+    <line x1="72" y1="180" x2="150" y2="180" marker-end="url(#lifecycle-arrow)"/>
+    <line x1="330" y1="180" x2="430" y2="180" marker-end="url(#lifecycle-arrow)"/>
+    <path d="M210 140V112Q210 104 218 104H262Q270 104 270 112V140" marker-end="url(#lifecycle-arrow)"/>
+    <path d="M240 220V292Q240 300 248 300H397Q405 300 405 308V560" marker-end="url(#lifecycle-arrow)"/>
+    <line x1="630" y1="180" x2="760" y2="180" marker-end="url(#lifecycle-arrow)"/>
+    <path d="M530 220V292Q530 300 538 300H792Q800 300 800 308V390" marker-end="url(#lifecycle-arrow)"/>
+    <line x1="900" y1="430" x2="1030" y2="430" marker-end="url(#lifecycle-arrow)"/>
+    <path d="M860 220V292Q860 300 868 300H1137Q1145 300 1145 308V390" marker-end="url(#lifecycle-arrow)"/>
+    <line x1="960" y1="180" x2="1190" y2="180" marker-end="url(#lifecycle-arrow)"/>
+    <line x1="530" y1="600" x2="690" y2="600" marker-end="url(#lifecycle-arrow)"/>
+  </g>
+
+  <g class="transition-labels">
+    <rect x="76" y="156" width="70" height="16" rx="3" fill="#f5f5f5"/><text x="111" y="167" class="edge-label">validated</text>
+    <rect x="336" y="156" width="88" height="16" rx="3" fill="#f5f5f5"/><text x="380" y="167" class="edge-label">same revision</text>
+    <rect x="180" y="84" width="120" height="16" rx="3" fill="#f5f5f5"/><text x="240" y="95" class="edge-label">infrastructure retry</text>
+    <rect x="286" y="276" width="72" height="16" rx="3" fill="#f5f5f5"/><text x="322" y="288" class="edge-label">free Y scales</text>
+    <rect x="656" y="156" width="86" height="16" rx="3" fill="#f5f5f5"/><text x="699" y="167" class="edge-label">two approvals</text>
+    <rect x="617" y="276" width="130" height="16" rx="3" fill="#f5f5f5"/><text x="682" y="288" class="edge-label">either reviewer rejects</text>
+    <rect x="933" y="406" width="64" height="16" rx="3" fill="#f5f5f5"/><text x="965" y="417" class="edge-label">correction</text>
+    <rect x="992" y="276" width="70" height="16" rx="3" fill="#f5f5f5"/><text x="1027" y="288" class="edge-label">refinement</text>
+    <rect x="1019" y="156" width="112" height="16" rx="3" fill="#f5f5f5"/><text x="1075" y="167" class="edge-label">source retained</text>
+    <rect x="575" y="576" width="70" height="16" rx="3" fill="#f5f5f5"/><text x="610" y="587" class="edge-label">export refused</text>
+  </g>
+
+  <g class="states">
+    <circle cx="64" cy="180" r="6" fill="#2d3142"/>
+    <rect x="150" y="140" width="180" height="80" rx="8" class="state"/>
+    <text x="240" y="174" class="state-name ink">Draft</text><text x="240" y="194" class="state-sub muted">revision + attempt</text>
+    <rect x="430" y="140" width="200" height="80" rx="8" class="state-focus"/>
+    <text x="530" y="174" class="state-name ink">Verified</text><text x="530" y="194" class="state-sub muted">automated checks passed</text>
+    <rect x="760" y="140" width="200" height="80" rx="8" class="state"/>
+    <text x="860" y="174" class="state-name ink">Reviewed</text><text x="860" y="194" class="state-sub muted">two distinct eligible roles</text>
+    <circle cx="1200" cy="180" r="9" fill="none" stroke="#2d3142" stroke-width="1.2"/><circle cx="1200" cy="180" r="5" fill="#2d3142"/>
+    <rect x="700" y="390" width="200" height="80" rx="8" class="state"/>
+    <text x="800" y="424" class="state-name ink">Rejected</text><text x="800" y="444" class="state-sub muted">source revision preserved</text>
+    <rect x="1030" y="390" width="230" height="80" rx="8" class="state"/>
+    <text x="1145" y="424" class="state-name ink">Successor Draft</text><text x="1145" y="444" class="state-sub muted">new revision linked to source</text>
+    <rect x="280" y="560" width="250" height="80" rx="8" class="state"/>
+    <text x="405" y="594" class="state-name ink">Experimental Draft</text><text x="405" y="614" class="state-sub muted">free Y scale · not exportable</text>
+    <circle cx="700" cy="600" r="9" fill="none" stroke="#2d3142" stroke-width="1.2"/><circle cx="700" cy="600" r="5" fill="#2d3142"/>
+  </g>
+
+  <path d="M40 690H1320" class="rule" fill="none"/>
+  <g class="legend">
+    <rect x="54" y="710" width="30" height="18" rx="6" class="state"/><text x="94" y="723">LIFECYCLE STATE</text>
+    <rect x="250" y="710" width="30" height="18" rx="6" class="state-focus"/><text x="290" y="723">AUTOMATED VERIFICATION COMPLETE</text>
+    <circle cx="590" cy="719" r="5" fill="#2d3142"/><text x="606" y="723">START</text>
+    <circle cx="700" cy="719" r="8" fill="none" stroke="#2d3142" stroke-width="1.2"/><circle cx="700" cy="719" r="4" fill="#2d3142"/><text x="718" y="723">TERMINAL OUTCOME</text>
+    <line x1="890" y1="719" x2="930" y2="719" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#lifecycle-arrow)"/><text x="940" y="723">EVENT / GUARD</text>
+  </g>
+</svg>

@@ -24,8 +24,10 @@ Imports:
     mirai,
     patchwork,
     processx,
+    readxl,
     RSQLite,
-    shiny
+    shiny,
+    waiter
 Suggests:
     callr,
     devtools,

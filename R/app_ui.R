@@ -15,25 +15,9 @@ app_ui <- function(request, runtime_config = new_runtime_config()) {
       fillable = FALSE,
       div(
         class = "assurance-shell",
-        h1("Plot-Pattern Assurance Cell"),
-        p("A governed workspace for review-ready clinical visualizations."),
-        div(
-          class = "assurance-grid",
-          div(
-            class = "assurance-stack",
-            mod_prompt_ui("prompt"),
-            mod_specification_ui("specification"),
-            mod_run_status_ui("run_status"),
-            mod_review_ui("review")
-          ),
-          div(
-            class = "assurance-stack",
-            mod_plot_preview_ui("plot_preview"),
-            mod_evidence_ui("evidence"),
-            mod_revision_history_ui("revision_history"),
-            mod_export_ui("export")
-          )
-        ),
+        h1("Create plot"),
+        p("A governed workflow from permitted clinical data to a review-ready plot and reproducible R code."),
+        mod_plot_generation_ui("plot_generation"),
         tags$small(
           sprintf("Runtime profile: %s", runtime_config$profile),
           class = "text-body-secondary"

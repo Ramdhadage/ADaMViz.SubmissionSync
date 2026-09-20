@@ -2,11 +2,17 @@ mod_plot_preview_ui <- function(id) {
   ns <- shiny::NS(id)
   bslib::card(
     class = "assurance-panel",
-    bslib::card_header("Plot and Code"),
+    bslib::card_header("Plot preview"),
     bslib::card_body(
       shiny::plotOutput(ns("plot"), height = "520px"),
-      tags$h3("Executed R script", class = "h6 mt-3"),
-      shiny::verbatimTextOutput(ns("code"), placeholder = TRUE)
+      tags$details(
+        class = "f001-panel",
+        tags$summary("Executed R script"),
+        tags$div(
+          class = "f001-panel-body",
+          shiny::verbatimTextOutput(ns("code"), placeholder = TRUE)
+        )
+      )
     )
   )
 }

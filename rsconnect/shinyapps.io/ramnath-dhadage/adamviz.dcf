@@ -1,0 +1,10 @@
+name: adamviz
+title:
+username: ramnath-dhadage
+account: ramnath-dhadage
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 17959280
+bundleId:
+url: https://ramnath-dhadage.shinyapps.io/adamviz/
+version: 1

@@ -40,6 +40,7 @@
       content_hash = snapshot$content_hash,
       metadata_version = snapshot$metadata_version,
       classification = snapshot$classification,
+      source_metadata = snapshot$source_metadata %||% NULL,
       selected_data_columns = names(profile$selected_data),
       selected_data_classes = as.list(
         stats::setNames(

@@ -7,7 +7,6 @@
 #' @noRd
 app_server <- function(input, output, session, runtime_config = new_runtime_config()) {
   output$runtime_profile <- renderText(runtime_config$profile)
-  provider <- local_study_data_provider()
   workspace_root <- fs::path(
     fs::path_temp(),
     "adamviz-submissionsync-workspace",
@@ -17,11 +16,10 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
   workspace_provider <- local_workspace_provider(
     stats::setNames(workspace_root, runtime_config$workspace)
   )
-  catalog <- shiny::reactive(list_study_catalog(provider))
   current_revision <- shiny::reactiveVal(.empty_assurance_state())
   execution_task <- new_async_task_service() |>
-    bslib::bind_task_button("specification-execute") |>
-    bslib::bind_task_button("specification-correct")
+    bslib::bind_task_button("plot_generation-specification-execute") |>
+    bslib::bind_task_button("plot_generation-specification-correct")
 
   shiny::observe({
     status <- execution_task$status()
@@ -37,16 +35,6 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
       )
     }
   })
-
-  create_revision <- function(dataset_id, prompt, confirm_free_scale) {
-    state <- .create_assurance_candidate(
-      provider = provider,
-      dataset_id = dataset_id,
-      prompt = prompt
-    )
-    current_revision(state)
-    invisible(state)
-  }
 
   execute_revision <- function(fields) {
     state <- current_revision()
@@ -79,19 +67,14 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     invisible(state)
   }
 
-  mod_prompt_server("prompt", catalog, create_revision)
-  mod_specification_server(
-    "specification",
-    current_revision,
-    execute_revision,
-    create_correction
+  mod_plot_generation_server(
+    "plot_generation",
+    current_revision = current_revision,
+    execute_revision = execute_revision,
+    create_correction = create_correction,
+    execution_status = execution_task$status,
+    workspace_provider = workspace_provider
   )
-  mod_run_status_server("run_status", current_revision)
-  mod_plot_preview_server("plot_preview", current_revision)
-  mod_evidence_server("evidence", current_revision)
-  mod_revision_history_server("revision_history", current_revision)
-  mod_export_server("export", current_revision, workspace_provider)
-  mod_review_server("review", current_revision, current_revision)
 }
 
 .empty_assurance_state <- function() {
@@ -113,20 +96,22 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
   )
 }
 
-.create_assurance_candidate <- function(provider, dataset_id, prompt) {
+.create_assurance_candidate <- function(provider, dataset_id, prompt, suggest = TRUE) {
   if (!checkmate::test_string(dataset_id, min.chars = 1L)) {
-    cli::cli_abort("Select one authorized synthetic BDS scenario")
+    cli::cli_abort("Select one authorized BDS dataset")
   }
   snapshot <- pin_study_snapshot(provider, dataset_id)
+  if (!is.null(provider$source_metadata)) {
+    snapshot$source_metadata <- provider$source_metadata
+  }
   context <- build_prompt_context(snapshot)
-  interpretation <- interpret_prompt(
-    prompt,
-    context,
-    mock_prompt_interpreter(),
-    snapshot = NULL
-  )
+  interpretation <- if (isTRUE(suggest)) {
+    interpret_prompt(prompt, context, mock_prompt_interpreter(), snapshot = NULL)
+  } else {
+    list(status = "manual_selection", candidate = NULL, clarifications = list(), metadata = list())
+  }
   if (is.null(interpretation$candidate) &&
-      !identical(interpretation$status, "clarification")) {
+      !interpretation$status %in% c("clarification", "manual_selection")) {
     cli::cli_abort(c(
       "The prompt could not create an executable candidate",
       "i" = "Reason: {.val {interpretation$clarifications$reason %||% interpretation$status}}"
