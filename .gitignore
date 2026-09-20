@@ -13,3 +13,6 @@ execution-workspace/
 artifacts/
 
 /.quarto/
+
+# Tracked source prototype in docs/ux.
+!docs/ux/F001-plot-generation-prototype.html
