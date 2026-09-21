@@ -1,14 +1,13 @@
 ---
 title: "Task-first layout for clinical plot generation"
-date: 2026-09-20
+date: 2026-09-21
 category: design-patterns
 module: F001 Plot Generation workflow
 problem_type: design_pattern
 component: frontend
 severity: low
 applies_when:
-  - "A clinical scientist moves through data upload, a visualization question, proposal confirmation, and results."
-  - "Dataset and profile context must stay accessible while the current task remains the focus."
+  - "Implementing or revising the F001 clinical plot-generation workbench."
 tags:
   - clinical-ux
   - plot-generation
@@ -21,7 +20,7 @@ tags:
 
 ## Context
 
-F001 defines the data-to-plot workflow and its clinical controls, but leaves screen layout and control placement open. The final wireframe resolves that gap for clinical scientists who need to scan the current task while retaining access to dataset context. See the [F001 workflow](../../ux/F001-plot-generation.md) and the [final wireframe](../../ux/F001-plot-generation-prototype.html).
+The user-designated final prototype is the source of truth for F001 screen content and interactions. It shows the four-step flow, a CSV/Excel upload on Data, and a closed-by-default Data & Profile drawer attached to the screen edge. The user also clarified that this POC uses synthetic data only. The workflow prose and older implementation notes provide context, but do not override the prototype where they differ.
 
 ## Guidance
 
@@ -31,6 +30,9 @@ F001 defines the data-to-plot workflow and its clinical controls, but leaves scr
 - Put required-input cues beside the inputs. Use contextual tooltips for secondary explanations, such as the question and proposed choices or the meaning of review status.
 - Show automated-check details on demand. This changes their visibility only; required checks still run and their evidence remains linked to the revision. Specific checks and pass thresholds remain to be defined.
 - Keep blocking validation results, required actions, and clinical boundaries visible when they matter. A compact layout must not obscure a stop condition or imply that an unchecked result is approved.
+- Keep the prototype's CSV/Excel upload and file-readiness gate when removing the classification dropdown, consent checkbox, and upload warning. Removing those controls does not mean disabling the upload path.
+- Keep the synthetic-only POC boundary without storing an uploaded-file classification. Format and BDS checks establish file compatibility, not synthetic provenance or identifier removal.
+- Match the prototype's attached drawer: closed initially, with an edge tab users can click or drag to open.
 
 ## Why This Matters
 
@@ -45,6 +47,8 @@ This layout aims to keep the current task prominent while preserving direct acce
 ## Examples
 
 The F001 wireframe shows Data → Ask → Confirm → Result, keeps dataset/profile context in a hidden-by-default side drawer, removes the duplicate active-dataset card, and uses collapsible panels. It places help for proposed choices and review status in tooltips and makes automated-check details optional to open. The underlying workflow still blocks the full selected input before code generation and execution if any selected record is unsupported, and still performs automated checks. See [F001 workflow requirements](../../ux/F001-plot-generation.md) and the [wireframe](../../ux/F001-plot-generation-prototype.html).
+
+In the current implementation, [`R/mod_plot_generation.R`](../../../R/mod_plot_generation.R) retains CSV/Excel parsing and supported BDS checks without putting a classification on uploaded snapshots. [`R/bds_profile.R`](../../../R/bds_profile.R) permits this classless direct-upload path while still enforcing BDS structure and selected-record checks. Execution uses the synthetic-only POC default; revision input evidence omits the classification field for uploads. None of these checks verifies data provenance or removes identifiers.
 
 ## Related
 

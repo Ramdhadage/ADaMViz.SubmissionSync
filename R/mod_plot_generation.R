@@ -1,82 +1,115 @@
 mod_plot_generation_ui <- function(id) {
   ns <- shiny::NS(id)
-  steps <- c("Data", "Ask", "Confirm", "Result")
 
   tags$div(
     waiter::use_waiter(),
-    waiter::use_waitress(),
     tags$style(shiny::HTML("\
-      .f001-workbench { position: relative; padding-left: 2.5rem; }
-      .f001-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: .4rem; margin-bottom: 1rem; }
-      .f001-stepmark { padding: .45rem; border: 1px solid #c7d1d9; border-radius: .3rem; background: #f7f9fa; text-align: center; color: #52616d; }
+      .f001-screen { position: relative; min-width: 0; min-height: 385px; border: 1px solid #aebbc5; border-radius: .5rem; background: white; overflow: hidden; }
+      .f001-appbar { height: 45px; padding: .5rem .75rem; border-bottom: 1px solid #c7d1d9; display: flex; align-items: center; justify-content: space-between; background: white; }
+      .f001-brand { font-weight: 700; }
+      .f001-stepmark { color: #344754; font-size: .78rem; }
+      .f001-step-status { color: #344754; font-size: .78rem; }
+      .f001-workbench { position: relative; padding: 12px 14px 13px 40px; }
+      .f001-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-bottom: 11px; }
+      .f001-stepmark { padding: 6px 5px; border: 1px solid #c7d1d9; border-radius: 4px; background: #f7f9fa; text-align: center; color: #52616d; font-size: .75rem; }
       .f001-stepmark.current { border-color: #7492a6; background: #edf4f8; color: #173f59; font-weight: 700; }
       .f001-stepmark.done { color: #245b46; }
-      .f001-data-drawer { --drawer-width: min(18rem, calc(100vw - 4rem)); position: absolute; z-index: 10; top: 7.5rem; left: 0; }
-      .f001-data-drawer > summary { display: flex; width: 2rem; height: 9rem; padding: .6rem .35rem; align-items: center; justify-content: space-between; border: 1px solid #8fa2b0; border-radius: 0 .4rem .4rem 0; background: white; color: #1c4259; cursor: pointer; list-style: none; writing-mode: vertical-rl; transform: rotate(180deg); }
+      .f001-data-drawer { position: static; }
+      .f001-data-drawer > summary { position: absolute; z-index: 5; top: 57px; left: 0; display: flex; flex-direction: column; width: 28px; height: 148px; padding: 9px 5px; align-items: center; justify-content: space-between; border: 1px solid #8fa2b0; border-left: 0; border-radius: 0 6px 6px 0; background: white; color: #1c4259; cursor: pointer; list-style: none; box-shadow: 1px 2px 5px #18293612; }
       .f001-data-drawer > summary::-webkit-details-marker, .f001-panel > summary::-webkit-details-marker { display: none; }
-      .f001-data-drawer[open] > summary { position: absolute; top: 0; left: var(--drawer-width); border-radius: .4rem 0 0 .4rem; background: #edf3f6; }
-      .f001-drawer-body { display: none; width: var(--drawer-width); min-height: 9rem; padding: 1rem; border: 1px solid #8fa2b0; border-radius: 0 .4rem .4rem 0; background: white; box-shadow: 4px 0 14px #18293616; }
-      .f001-data-drawer[open] .f001-drawer-body { display: block; }
-      .f001-profile-hash { overflow-wrap: anywhere; }
-      .f001-panel { margin-bottom: .75rem; border: 1px solid #c7d1d9; border-radius: .35rem; background: white; }
-      .f001-panel > summary { padding: .65rem .8rem; cursor: pointer; font-weight: 650; }
-      .f001-panel-body { padding: 0 .8rem .8rem; }
+      .f001-trigger-label { writing-mode: vertical-rl; transform: rotate(180deg); font-size: .75rem; font-weight: 650; white-space: nowrap; }
+      .f001-drawer-grip { color: #688091; font-size: 1rem; line-height: 1; letter-spacing: -2px; }
+      .f001-data-drawer[open] > summary { left: 250px; border-left: 1px solid #8fa2b0; border-radius: 6px 0 0 6px; background: #edf3f6; box-shadow: none; }
+      .f001-drawer-body { position: absolute; z-index: 4; top: 45px; bottom: 0; left: 0; width: 250px; padding: 15px 14px; border-right: 1px solid #8fa2b0; background: white; box-shadow: 4px 0 14px #18293616; }
+      .f001-drawer-body h3 { margin: 0 0 3px; font-size: 1rem; }
+      .f001-drawer-body p { margin: 0 0 12px; color: #52616d; font-size: .82rem; }
+      .f001-drawer-section { padding: 10px 0; border-top: 1px solid #e0e6ea; }
+      .f001-drawer-section b { display: block; }
+      .f001-drawer-tag { display: inline-block; padding: 2px 7px; border: 1px solid #a6b6c0; border-radius: 12px; background: #f4f7f8; color: #334b5a; font-size: .72rem; }
+      .f001-screen h2 { margin: 0; font-size: 1.05rem; }
+      .f001-panel { margin-bottom: 8px; border: 1px solid #c7d1d9; border-radius: 5px; background: white; }
+      .f001-panel > summary { display: flex; align-items: center; justify-content: space-between; padding: .5rem .65rem; cursor: pointer; font-weight: 650; list-style: none; }
+      .f001-panel > summary::after { content: '+'; color: #31556b; font-weight: 500; }
+      .f001-panel[open] > summary::after { content: '−'; }
+      .f001-panel-body { padding: 0 .65rem .65rem; }
       .f001-caption { margin-top: .75rem; color: #52616d; font-size: .9rem; }
-      .f001-page-title { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+      .f001-page-title { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin: 0 0 8px; }
+      .f001-page-title > span { color: #52616d; font-size: .78rem; }
+      .f001-required { display: inline-block; margin-left: 5px; padding: 1px 5px; border: 1px solid #e1c38a; border-radius: 3px; background: #fff4df; color: #6d4400; font-size: .7rem; font-weight: 700; }
+      .f001-drop { margin-top: 8px; padding: 13px 10px; border: 1px dashed #91a1ac; border-radius: 4px; background: #fbfcfd; }
+      .f001-drop .shiny-input-container { width: 100%; margin: 0; }
+      .f001-drop .form-group { margin: 0; }
+      .f001-drop input[type=file] { width: 100%; }
+      .f001-drop-caption { color: #52616d; font-size: .8rem; }
+      .f001-upload-status { margin-top: .5rem; font-size: .82rem; }
+      .f001-footer-action { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin-top: 9px; }
+      .f001-footer-action > span { font-size: .8rem; }
+      .f001-footer-action .btn { margin: 0; }
       .f001-review-info { width: 1.5rem; height: 1.5rem; margin-left: .35rem; border: 1px solid #96a8b3; border-radius: 50%; background: white; color: #23485f; }
       .f001-result-content { position: relative; }
-      @media (max-width: 575.98px) { .f001-workbench { padding-left: 2.25rem; } .f001-stepmark { padding: .35rem .1rem; font-size: .75rem; } }
+      .f001-screen-caption { padding: 7px 12px 8px 40px; border-top: 1px solid #e3e8eb; background: #fafbfc; color: #50606a; font-size: .78rem; }
+      @media (max-width: 575.98px) { .f001-workbench { padding-right: 10px; } .f001-stepmark { padding: .35rem .1rem; font-size: .75rem; } }
     ")),
     tags$div(
-      style = "display: none;",
-      shiny::textInput(ns("step_signal"), NULL, value = "data")
-    ),
-    shiny::uiOutput(ns("stepper")),
-    tags$details(
-      class = "f001-data-drawer",
-      tags$summary("Data & profile", `aria-label` = "Open active data and profile"),
-      tags$div(class = "f001-drawer-body", shiny::uiOutput(ns("data_profile")))
-    ),
-    tags$div(
-      class = "f001-workbench",
-      tags$div(id = ns("wizard-progress"), class = "f001-progress-line"),
+      class = "f001-screen",
+      tags$div(
+        class = "f001-appbar",
+        tags$span(class = "f001-brand", "Create plot"),
+        shiny::uiOutput(ns("step_mark"))
+      ),
+      tags$div(
+        style = "display: none;",
+        shiny::textInput(ns("step_signal"), NULL, value = "data")
+      ),
+      tags$details(
+        id = ns("data_drawer"),
+        class = "f001-data-drawer",
+        tags$summary(
+          tags$span(class = "f001-trigger-label", "Data & profile"),
+          tags$span(class = "f001-drawer-grip", "•••"),
+          `aria-label` = "Open active data and profile drawer"
+        ),
+        tags$div(class = "f001-drawer-body", shiny::uiOutput(ns("data_profile")))
+      ),
+      tags$div(
+        class = "f001-workbench",
+        shiny::uiOutput(ns("stepper")),
       shiny::conditionalPanel(
         sprintf("input['%s'] === 'data'", ns("step_signal")),
         tags$section(
           `aria-labelledby` = ns("data-heading"),
-          tags$h2(id = ns("data-heading"), "Start with your data"),
-          tags$p("Upload is required before the plot question."),
+          tags$div(
+            class = "f001-page-title",
+            tags$h2(id = ns("data-heading"), "Start with your data"),
+            tags$span("Upload is required to continue")
+          ),
           tags$details(
             class = "f001-panel",
             open = NA,
-            tags$summary("Upload a dataset · Required"),
+            tags$summary("Upload a dataset ", tags$span(class = "f001-required", "Required")),
             tags$div(
               class = "f001-panel-body",
-              tags$p("Only synthetic or properly de-identified data may be uploaded. This prototype does not detect or remove identifiers."),
-              shiny::selectInput(
-                ns("classification"),
-                "Data classification",
-                choices = c("Select classification" = "", "Synthetic" = "synthetic", "De-identified" = "deidentified"),
-                selected = ""
+              tags$div(class = "f001-drop-caption", "Choose a supported CSV or Excel file."),
+              tags$div(
+                class = "f001-drop",
+                shiny::fileInput(
+                  ns("data_file"),
+                  NULL,
+                  accept = c(".csv", ".xls", ".xlsx"),
+                  multiple = FALSE,
+                  buttonLabel = "Choose file",
+                  placeholder = "or drag and drop it here"
+                ),
+                tags$div(class = "f001-drop-caption", "CSV or Excel")
               ),
-              shiny::checkboxInput(
-                ns("permitted_data"),
-                "I confirm this file is permitted for the POC and contains no confidential or directly identifying information.",
-                value = FALSE
-              ),
-              shiny::fileInput(
-                ns("data_file"),
-                "CSV or Excel file",
-                accept = c(".csv", ".xls", ".xlsx"),
-                multiple = FALSE
-              ),
-              tags$p(class = "text-body-secondary", "For Excel workbooks, the first worksheet is used."),
-              shiny::actionButton(ns("load_data"), "Validate and load data", class = "btn-primary"),
-              shiny::uiOutput(ns("upload_status"))
+              tags$div(class = "f001-upload-status", shiny::uiOutput(ns("upload_status")))
             )
           ),
-          tags$div(class = "d-flex justify-content-end", shiny::uiOutput(ns("continue_data"))),
-          tags$p(class = "f001-caption", "Continue becomes available after the selected file passes the supported BDS structure check and the data boundary is confirmed.")
+          tags$div(
+            class = "f001-footer-action",
+            tags$span(class = "text-body-secondary", "Next: describe the visualization question"),
+            shiny::uiOutput(ns("continue_data"))
+          )
         )
       ),
       shiny::conditionalPanel(
@@ -159,7 +192,38 @@ mod_plot_generation_ui <- function(id) {
           tags$div(class = "d-flex justify-content-start", shiny::actionButton(ns("back_to_confirm"), "Back to confirm", class = "btn-outline-secondary")),
           tags$p(class = "f001-caption", "Review decisions are pending until both independent reviewers approve. The exact R script and check evidence remain linked to this revision.")
         )
+      ),
+      shiny::conditionalPanel(
+        sprintf("input['%s'] === 'data'", ns("step_signal")),
+        tags$div(class = "f001-screen-caption", "Data comes first. Continue becomes available when a permitted CSV or Excel file is ready.")
       )
+    ),
+    tags$script(shiny::HTML(sprintf("\
+      (() => {
+        const drawer = document.getElementById('%s');
+        const handle = drawer && drawer.querySelector('summary');
+        if (!handle) return;
+        let startX = 0;
+        let dragged = false;
+        handle.addEventListener('pointerdown', (event) => {
+          startX = event.clientX;
+          dragged = false;
+          handle.setPointerCapture(event.pointerId);
+        });
+        handle.addEventListener('pointermove', (event) => {
+          if (event.buttons && event.clientX - startX > 48) {
+            drawer.open = true;
+            dragged = true;
+          }
+        });
+        handle.addEventListener('click', (event) => {
+          if (dragged) {
+            event.preventDefault();
+            dragged = false;
+          }
+        });
+      })();\n", ns("data_drawer")))
+    )
     )
   )
 }
@@ -181,42 +245,31 @@ mod_plot_generation_server <- function(
     question_attempted <- shiny::reactiveVal(FALSE)
     confirm_message <- shiny::reactiveVal(NULL)
 
-    progress <- waiter::Waitress$new(
-      selector = paste0("#", session$ns("wizard-progress")),
-      theme = "line",
-      min = 0,
-      max = length(step_ids)
-    )
-    progress$start()
-    progress$set(1)
     result_waiter <- waiter::Waiter$new(
       id = session$ns("result-body"),
       html = waiter::spin_fading_circles(),
       color = "rgba(255, 255, 255, 0.85)"
     )
 
-    upload_inputs_valid <- function() {
-      file <- input$data_file
-      is.data.frame(file) && nrow(file) == 1L &&
-        all(c("name", "datapath") %in% names(file)) &&
-        !is.na(file$name[[1]]) &&
-        tolower(tools::file_ext(file$name[[1]])) %in% c("csv", "xls", "xlsx") &&
-        (identical(input$classification, "synthetic") ||
-          identical(input$classification, "deidentified")) &&
-        isTRUE(input$permitted_data)
-    }
     question_is_valid <- function() {
       is.character(input$question) && length(input$question) == 1L &&
         !is.na(input$question) && nzchar(trimws(input$question))
     }
 
+    upload_inputs_valid <- function() {
+      file <- input$data_file
+      is.data.frame(file) && nrow(file) == 1L &&
+        all(c("name", "datapath") %in% names(file)) &&
+        checkmate::test_string(file$name[[1]], min.chars = 1L) &&
+        tolower(tools::file_ext(file$name[[1]])) %in% c("csv", "xls", "xlsx") &&
+        checkmate::test_file_exists(file$datapath[[1]], access = "r")
+    }
+
     is_current_upload <- shiny::reactive({
       loaded <- loaded_file()
       file <- input$data_file
-      !is.null(loaded) && !is.null(file) &&
-        identical(loaded$path, file$datapath[[1]]) &&
-        identical(loaded$classification, input$classification) &&
-        isTRUE(input$permitted_data)
+      !is.null(loaded) && is.data.frame(file) && nrow(file) == 1L &&
+        identical(loaded$path, file$datapath[[1]])
     })
 
     output$stepper <- shiny::renderUI({
@@ -232,52 +285,64 @@ mod_plot_generation_server <- function(
           } else {
             "f001-stepmark"
           }
-          tags$div(class = class, paste(index, "·", step_labels[[index]]))
+          label <- if (index < current_index) {
+            paste("✓", "·", step_labels[[index]])
+          } else {
+            paste(index, "·", step_labels[[index]])
+          }
+          tags$div(class = class, label)
         })
       )
     })
+    output$step_mark <- shiny::renderUI({
+      tags$span(class = "f001-step-status", paste("Step", match(active_step(), step_ids), "of 4"))
+    })
+
     output$data_profile <- shiny::renderUI({
       loaded <- loaded_file()
-      shiny::validate(
-        shiny::need(!is.null(loaded), upload_error() %||% "No permitted file has been validated yet."),
-        shiny::need(is_current_upload(), "The file or classification changed. Validate the selected file again."),
-        shiny::need(isTRUE(input$permitted_data), "Confirm the permitted-data boundary to view this profile.")
-      )
-      tags$dl(
-        tags$dt("Active data"), tags$dd(loaded$file_name),
-        tags$dt("Classification"), tags$dd(loaded$classification_label),
-        tags$dt("Data profile"), tags$dd(paste(loaded$rows, "rows ×", loaded$columns, "columns")),
-        tags$dt("Supported structure"), tags$dd("Visit-based numeric BDS"),
-        tags$dt("Worksheet"), tags$dd(loaded$sheet_name %||% "Not applicable"),
-        tags$dt("Source-file hash"), tags$dd(tags$code(class = "f001-profile-hash", loaded$source_file_hash)),
-        tags$dt("Content hash"), tags$dd(tags$code(class = "f001-profile-hash", loaded$content_hash))
+      tags$div(
+        tags$h3("Active data"),
+        tags$p(
+          if (is.null(loaded)) "No dataset uploaded" else loaded$file_name,
+          if (!is.null(loaded)) tags$span(class = "f001-drawer-tag", "Ready")
+        ),
+        tags$div(
+          class = "f001-drawer-section",
+          tags$b("Data profile"),
+          tags$span(
+            class = "text-body-secondary",
+            if (is.null(loaded)) "Available after upload" else paste(loaded$rows, "rows ×", loaded$columns, "columns")
+          )
+        ),
+        tags$div(
+          class = "f001-drawer-section",
+          tags$b("File check"),
+          tags$span(
+            class = "f001-drawer-tag",
+            if (!is.null(loaded)) "Passed" else if (!is.null(upload_error())) "Needs attention" else "Waiting for file"
+          )
+        ),
+        if (is.null(loaded)) tags$p(class = "text-body-secondary", "Drawer starts closed. Click the tab or drag it to open.")
       )
     })
 
     output$upload_status <- shiny::renderUI({
       if (!is.null(upload_error())) {
-        return(tags$div(class = "alert alert-danger mt-2", role = "alert", upload_error()))
+        return(tags$div(class = "text-danger", role = "alert", upload_error()))
       }
       if (is_current_upload()) {
-        return(tags$div(class = "alert alert-success mt-2", role = "status", "Passed: supported BDS structure and permitted-data attestation recorded."))
+        return(tags$div(class = "text-success", role = "status", "File ready"))
       }
-      if (isTRUE(input$load_data > 0)) {
-        file <- input$data_file
-        has_one_file <- is.data.frame(file) && nrow(file) == 1L &&
-          all(c("name", "datapath") %in% names(file)) && !is.na(file$name[[1]])
-        file_type <- if (has_one_file) tolower(tools::file_ext(file$name[[1]])) else ""
-        shiny::validate(
-          shiny::need(has_one_file, "Choose one CSV or Excel file."),
-          shiny::need(file_type %in% c("csv", "xls", "xlsx"), "Choose a CSV or Excel file."),
-          shiny::need(
-            identical(input$classification, "synthetic") ||
-              identical(input$classification, "deidentified"),
-            "Choose Synthetic or De-identified."
-          ),
-          shiny::need(isTRUE(input$permitted_data), "Confirm the permitted-data boundary before loading the file.")
-        )
-      }
-      tags$p(class = "text-body-secondary mt-2", "Choose a file, classify it, confirm the data boundary, then validate it.")
+      NULL
+    })
+
+    output$continue_data <- shiny::renderUI({
+      shiny::actionButton(
+        session$ns("to_ask"),
+        "Continue",
+        class = "btn-primary",
+        disabled = !is_current_upload()
+      )
     })
 
     output$question_validation <- shiny::renderUI({
@@ -286,15 +351,6 @@ mod_plot_generation_server <- function(
         shiny::need(question_is_valid(), "Enter a visualization question before continuing.")
       )
       NULL
-    })
-
-    output$continue_data <- shiny::renderUI({
-      shiny::actionButton(
-        session$ns("to_ask"),
-        "Continue to ask",
-        class = "btn-primary",
-        disabled = !is_current_upload()
-      )
     })
 
     output$suggestion <- shiny::renderUI({
@@ -375,34 +431,26 @@ mod_plot_generation_server <- function(
       if (identical(active_step(), next_step)) return(invisible(next_step))
       active_step(next_step)
       shiny::updateTextInput(session, "step_signal", value = next_step)
-      progress$set(match(next_step, step_ids))
-      progress$notify(
-        html = tags$span(paste("Step", match(next_step, step_ids), "of 4 ·", step_labels[[match(next_step, step_ids)]])),
-        background_color = "#edf4f8",
-        text_color = "#173f59",
-        position = "tr"
-      )
       invisible(next_step)
     }
 
-    shiny::observeEvent(input$load_data, {
+    shiny::observeEvent(input$data_file, {
       upload_error(NULL)
-      if (!upload_inputs_valid()) return()
+      loaded_file(NULL)
+      if (!upload_inputs_valid()) {
+        if (!is.null(input$data_file)) upload_error("Choose one readable CSV or Excel file.")
+        return()
+      }
       file <- input$data_file
       loaded <- tryCatch(
         {
-          provider <- .uploaded_study_data_provider(file, input$classification)
+          provider <- .uploaded_study_data_provider(file)
           snapshot <- pin_study_snapshot(provider, provider$manifest$scenarios[[1]]$dataset_id)
           snapshot$source_metadata <- provider$source_metadata
           data <- snapshot$data
           list(
             path = file$datapath[[1]],
             file_name = provider$source_metadata$file_name,
-            source_file_hash = provider$source_metadata$source_file_hash,
-            classification = input$classification,
-            classification_label = if (identical(input$classification, "synthetic")) "Synthetic" else "De-identified",
-            sheet_name = provider$source_metadata$sheet_name,
-            content_hash = snapshot$content_hash,
             rows = nrow(data),
             columns = ncol(data),
             provider = provider,
@@ -417,7 +465,6 @@ mod_plot_generation_server <- function(
       if (is.null(loaded)) return()
       loaded_file(loaded)
       current_revision(.empty_assurance_state())
-      shiny::showNotification("File validated for the supported BDS profile.", type = "message")
     }, ignoreInit = TRUE)
 
     shiny::observeEvent(input$to_ask, {
@@ -426,6 +473,7 @@ mod_plot_generation_server <- function(
     }, ignoreInit = TRUE)
 
     shiny::observeEvent(input$suggest, {
+      if (!is_current_upload()) return()
       question_attempted(TRUE)
       if (!question_is_valid()) return()
       loaded <- loaded_file()
@@ -445,6 +493,7 @@ mod_plot_generation_server <- function(
     }, ignoreInit = TRUE)
 
     shiny::observeEvent(input$to_confirm, {
+      if (!is_current_upload()) return()
       question_attempted(TRUE)
       if (!question_is_valid()) return()
       state <- current_revision()
@@ -552,10 +601,7 @@ mod_plot_generation_server <- function(
   })
 }
 
-.uploaded_study_data_provider <- function(file, classification) {
-  if (!checkmate::test_choice(classification, c("synthetic", "deidentified"))) {
-    cli::cli_abort("Select Synthetic or De-identified before loading data")
-  }
+.uploaded_study_data_provider <- function(file) {
   if (!checkmate::test_data_frame(file, min.rows = 1L) || nrow(file) != 1L ||
       !checkmate::test_string(file$name[[1]], min.chars = 1L) ||
       !checkmate::test_file_exists(file$datapath[[1]], access = "r")) {
@@ -571,7 +617,10 @@ mod_plot_generation_server <- function(
     sheets <- readxl::excel_sheets(file$datapath[[1]])
     if (!length(sheets)) cli::cli_abort("The Excel workbook contains no worksheet")
     sheet_name <- sheets[[1]]
-    as.data.frame(readxl::read_excel(file$datapath[[1]], sheet = sheet_name, .name_repair = "minimal"), optional = TRUE)
+    as.data.frame(
+      readxl::read_excel(file$datapath[[1]], sheet = sheet_name, .name_repair = "minimal"),
+      optional = TRUE
+    )
   } else {
     cli::cli_abort("Choose a CSV or Excel file")
   }
@@ -613,11 +662,11 @@ mod_plot_generation_server <- function(
   content_hash <- study_data_content_hash(data)
   source_hash <- digest::digest(file = file$datapath[[1]], algo = "sha256")
   snapshot_key <- canonical_hash(list(
-    classification = classification,
     content_hash = content_hash,
     source_file_hash = source_hash
   ))
   source_metadata <- list(
+    source = "direct_upload",
     file_name = file_name,
     file_type = file_type,
     sheet_name = sheet_name,
@@ -626,7 +675,6 @@ mod_plot_generation_server <- function(
   dataset_id <- paste0("upload-", substr(snapshot_key, 1L, 16L))
   metadata <- list(
     dataset_id = dataset_id,
-    classification = classification,
     adam_designation = "BDS",
     declared_keys = as.list(c("USUBJID", "PARAMCD", "AVISIT")),
     metadata_version = "uploaded-bds-v1",

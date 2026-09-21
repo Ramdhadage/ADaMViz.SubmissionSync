@@ -121,7 +121,12 @@ validate_bds_profile <- function(snapshot, selections, low_n_threshold = 5) {
   )
   result <- .profile_result(snapshot, selections, choices, policy)
 
-  if (!snapshot$classification %in% c("public", "synthetic", "deidentified") ||
+  classification_allowed <- if (is.null(snapshot$classification)) {
+    identical(snapshot$source_metadata$source, "direct_upload")
+  } else {
+    snapshot$classification %in% c("public", "synthetic", "deidentified")
+  }
+  if (!classification_allowed ||
       !identical(snapshot$adam_designation, "BDS")) {
     return(.block_profile(result, .new_profile_diagnostic(
       "unsupported_source_metadata",

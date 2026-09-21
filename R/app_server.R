@@ -6,7 +6,6 @@
 #' @import shiny
 #' @noRd
 app_server <- function(input, output, session, runtime_config = new_runtime_config()) {
-  output$runtime_profile <- renderText(runtime_config$profile)
   workspace_root <- fs::path(
     fs::path_temp(),
     "adamviz-submissionsync-workspace",
@@ -312,8 +311,7 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
       request = request,
       script = script,
       analysis_data = profile$selected_data,
-      idempotency_key = paste0("execute:", revision_id),
-      data_classification = snapshot$classification
+      idempotency_key = paste0("execute:", revision_id)
     )
     verification <- execution$verification
     runner_result <- execution$runner_result
@@ -419,8 +417,7 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
       request = request,
       script = script,
       analysis_data = profile$selected_data,
-      idempotency_key = paste0("execute:", revision_id),
-      data_classification = state$snapshot$classification
+      idempotency_key = paste0("execute:", revision_id)
     )
     verification <- execution$verification
     runner_result <- execution$runner_result

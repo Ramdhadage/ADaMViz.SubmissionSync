@@ -28,18 +28,18 @@
   snapshot <- state$snapshot
   environment <- runner_result$environment %||% .execution_environment_details()
   environment$fingerprint <- runner_result$result$environment_fingerprint
-  list(
-    evidence_version = "revision-context-evidence-v1",
-    revision = unclass(revision),
-    prompt = state$prompt,
-    specification = unclass(state$spec),
-    input_data = list(
+  input_data <- c(
+    list(
       dataset_id = snapshot$dataset_id,
       snapshot_id = snapshot$snapshot_id,
       snapshot_hash = request$snapshot_hash,
       content_hash = snapshot$content_hash,
-      metadata_version = snapshot$metadata_version,
-      classification = snapshot$classification,
+      metadata_version = snapshot$metadata_version
+    ),
+    if (!is.null(snapshot$classification)) {
+      list(classification = snapshot$classification)
+    },
+    list(
       source_metadata = snapshot$source_metadata %||% NULL,
       selected_data_columns = names(profile$selected_data),
       selected_data_classes = as.list(
@@ -53,7 +53,14 @@
         )
       ),
       selected_data = as.list(profile$selected_data)
-    ),
+    )
+  )
+  list(
+    evidence_version = "revision-context-evidence-v1",
+    revision = unclass(revision),
+    prompt = state$prompt,
+    specification = unclass(state$spec),
+    input_data = input_data,
     generated_r_code = state$script,
     request = unclass(request),
     execution_result = unclass(runner_result$result),

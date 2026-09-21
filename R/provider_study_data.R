@@ -61,7 +61,11 @@ list_study_catalog <- function(provider) {
   scenarios <- provider$manifest$scenarios
   catalog <- data.frame(
     dataset_id = vapply(scenarios, `[[`, "", "dataset_id"),
-    classification = vapply(scenarios, `[[`, "", "classification"),
+    classification = vapply(
+      scenarios,
+      function(scenario) scenario$classification %||% NA_character_,
+      ""
+    ),
     adam_designation = vapply(scenarios, `[[`, "", "adam_designation"),
     metadata_version = vapply(scenarios, `[[`, "", "metadata_version"),
     content_hash = vapply(scenarios, `[[`, "", "content_hash"),
@@ -115,22 +119,20 @@ pin_study_snapshot <- function(provider, dataset_id) {
     cli::cli_abort("The authorized snapshot content hash does not match its catalog entry")
   }
 
-  structure(
-    list(
-      snapshot_contract_version = "study-snapshot-v1",
-      snapshot_id = metadata$snapshot_id,
-      dataset_id = metadata$dataset_id,
-      classification = metadata$classification,
-      adam_designation = metadata$adam_designation,
-      declared_keys = unlist(metadata$declared_keys, use.names = FALSE),
-      metadata_version = metadata$metadata_version,
-      content_hash = metadata$content_hash,
-      permitted_treatment_variables = unlist(
-        metadata$permitted_treatment_variables,
-        use.names = FALSE
-      ),
-      data = .normalize_study_data(data)
+  snapshot <- list(
+    snapshot_contract_version = "study-snapshot-v1",
+    snapshot_id = metadata$snapshot_id,
+    dataset_id = metadata$dataset_id,
+    adam_designation = metadata$adam_designation,
+    declared_keys = unlist(metadata$declared_keys, use.names = FALSE),
+    metadata_version = metadata$metadata_version,
+    content_hash = metadata$content_hash,
+    permitted_treatment_variables = unlist(
+      metadata$permitted_treatment_variables,
+      use.names = FALSE
     ),
-    class = "study_data_snapshot"
+    data = .normalize_study_data(data)
   )
+  if (!is.null(metadata$classification)) snapshot$classification <- metadata$classification
+  structure(snapshot, class = "study_data_snapshot")
 }

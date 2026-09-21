@@ -85,7 +85,7 @@ new_reproducibility_service <- function(
       request = request,
       script = script,
       analysis_data = analysis_data,
-      data_classification = details$input_data$classification
+      data_classification = details$input_data$classification %||% "synthetic"
     )
     verification <- verification_service$verify(
       request = request,

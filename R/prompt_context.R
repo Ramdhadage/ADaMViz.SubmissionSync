@@ -18,13 +18,15 @@ build_prompt_context <- function(snapshot) {
   })
   names(treatment_levels) <- snapshot$permitted_treatment_variables
 
+  labels <- list(
+    dataset_id = snapshot$dataset_id,
+    adam_designation = snapshot$adam_designation
+  )
+  if (!is.null(snapshot$classification)) labels$classification <- snapshot$classification
+
   new_prompt_context(
     dataset_id = snapshot$dataset_id,
-    labels = list(
-      dataset_id = snapshot$dataset_id,
-      adam_designation = snapshot$adam_designation,
-      classification = snapshot$classification
-    ),
+    labels = labels,
     aggregate_profile = list(
       parameters = parameters,
       y_variables = intersect(c("AVAL", "CHG", "PCHG"), names(data)),

@@ -15,13 +15,7 @@ app_ui <- function(request, runtime_config = new_runtime_config()) {
       fillable = FALSE,
       div(
         class = "assurance-shell",
-        h1("Create plot"),
-        p("A governed workflow from permitted clinical data to a review-ready plot and reproducible R code."),
-        mod_plot_generation_ui("plot_generation"),
-        tags$small(
-          sprintf("Runtime profile: %s", runtime_config$profile),
-          class = "text-body-secondary"
-        )
+        mod_plot_generation_ui("plot_generation")
       )
     )
   )
