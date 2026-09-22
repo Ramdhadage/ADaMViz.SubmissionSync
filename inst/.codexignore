@@ -1,0 +1,20 @@
+.Rproj.user
+
+# Generated documentation support files; controlled Markdown and SVG remain tracked.
+docs/**/*_files/
+docs/**/site_libs/
+docs/**/libs/
+docs/**/*.html
+docs/**/*.png
+
+# Local execution and evidence workspaces.
+.assurance-workspace/
+execution-workspace/
+artifacts/
+
+/.quarto/
+LICENSE
+NEWS.md
+rsconnect/
+dev/
+man/
