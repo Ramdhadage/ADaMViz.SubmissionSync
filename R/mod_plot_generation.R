@@ -127,7 +127,7 @@ mod_plot_generation_ui <- function(id) {
               shiny::textAreaInput(
                 ns("question"),
                 "Question",
-                value = "How does mean change from baseline vary by visit and treatment arm?",
+                value = "Create a boxplot of ALT AVAL by visit, split by treatment. Include all visits and treatment groups, show the number of subjects below each box, and connect the medians.",
                 width = "100%",
                 rows = 3
               ),
