@@ -15,15 +15,27 @@
 - UX spec: `docs/ux/F001-plot-generation.md` (current repository path).
 - Follow the eight-step UX process: Define → Research → Analysis → Design → Prototype → Test → Launch → Iterate.
 
+## Compound Engineering Workflow
+
+- Use the installed [Compound Engineering plugin](https://github.com/EveryInc/compound-engineering-plugin) for applicable tasks. Read the selected skill's `SKILL.md`; use the skills available in this session rather than assuming upstream additions are installed. Codex invocation uses `$ce-plan`, for example.
+- Match the workflow to the task: `ce-brainstorm` for unclear requirements, `ce-plan` for implementation planning, and `ce-work` for an agreed plan. Small, explicit edits do not need the full cycle.
+- Use `ce-debug` for failures, `ce-explain` for evidence-based explanations, and `ce-pov` for evaluating approaches. Pair these workflows with the relevant R/Shiny skills below.
+- For substantial code changes, use `ce-simplify-code` before `ce-code-review`; use `ce-doc-review` for plans and `ce-test-browser` for requested browser verification. Review findings and test evidence remain separate.
+- Search relevant `docs/solutions/` before planning or debugging. Use `ce-compound` after a verified, non-obvious solution to capture reusable learning; skip routine changes already explained by their diff.
+- Keep plans aligned with `STRATEGY.md` and the current approved requirement. Preserve requested checkpoints and manual-testing handoffs; plugin workflows do not broaden authorization.
+- Use `ce-commit` or `ce-commit-push-pr` when committing or shipping is requested. Use `lfg` only for explicitly requested autonomous delivery, since it can commit, push, and open a PR.
+
 ## R Engineering
 
 - Use only R packages for AI and LLM implementation unless the user explicitly changes this requirement. Prefer `ellmer` for model interaction, `vitals` for evaluation, `ragnar` for retrieval-augmented generation, `shinychat` for chat UI, and `mcptools` for Model Context Protocol integration.
 - Use modern R and tidyverse style: native `|>`, snake_case names, clear reactive boundaries, small functions, and namespace-qualified calls where ambiguity or background execution matters.
 - Use `checkmate` for function-parameter and structured-spec validation. Use `cli` for user-facing errors, warnings, status messages, and progress.
 - Use `golem` for production-grade Shiny application structure. Keep package code under `R/`, tests under `tests/testthat/`, and the `app.R` composition root readable; move substantial UI, server, plotting, validation, and LLM logic into focused functions or Shiny modules.
+- After package development is complete, install the active checkout from the RStudio Console at the repository root with `devtools::install()` before running `app.R`; it calls `ADaMViz.SubmissionSync::run_app()` from the installed namespace. Restart R first if that namespace is already loaded.
 - Build the UI with `bslib` and Bootstrap 5 components. Centralize branding in a reusable `bs_theme()` or `_brand.yml`, minimize custom CSS, verify contrast and accessibility, and make plots visually consistent with the application theme.
 - Use `mirai` only for work that would otherwise block Shiny or benefits materially from parallelism. Pass dependencies explicitly, namespace-qualify package calls on daemons, apply backpressure where needed, and clean up daemon pools.
-- Apply the relevant installed skills: `tidy-r`, `cli`, `r-package-development`, `testing-r-packages`, `shiny-bslib`, `shiny-bslib-theming`, `mirai`, `cran-extrachecks`, and `openai-docs`.
+- For Shiny app work, use the installed `shiny-for-r` skill: read its `SKILL.md` index, then only the linked reference(s) relevant to the task. Invoke it as `$shiny-for-r`; keep this repository's scope and approved requirements authoritative.
+- Apply other relevant installed skills: `tidy-r`, `cli`, `r-package-development`, `testing-r-packages`, `shiny-bslib`, `shiny-bslib-theming`, `mirai`, `cran-extrachecks`, and `openai-docs`.
 
 ## Testing and Verification
 
