@@ -245,12 +245,6 @@ mod_plot_generation_server <- function(
     question_attempted <- shiny::reactiveVal(FALSE)
     confirm_message <- shiny::reactiveVal(NULL)
 
-    result_waiter <- waiter::Waiter$new(
-      id = session$ns("result-body"),
-      html = waiter::spin_fading_circles(),
-      color = "rgba(255, 255, 255, 0.85)"
-    )
-
     question_is_valid <- function() {
       is.character(input$question) && length(input$question) == 1L &&
         !is.na(input$question) && nzchar(trimws(input$question))
@@ -544,7 +538,6 @@ mod_plot_generation_server <- function(
         return(invisible(NULL))
       }
       confirm_message(NULL)
-      result_waiter$show()
       set_step("result")
       tryCatch(
         if (isTRUE(correction)) {
@@ -553,7 +546,6 @@ mod_plot_generation_server <- function(
           execute_revision(fields)
         },
         error = function(error) {
-          result_waiter$hide()
           set_step("confirm")
           confirm_message(conditionMessage(error))
         }
@@ -577,7 +569,7 @@ mod_plot_generation_server <- function(
       correct_current
     )
     mod_run_status_server("run_status", current_revision)
-    mod_plot_preview_server("plot_preview", current_revision)
+    mod_plot_preview_server("plot_preview", current_revision, execution_status)
     mod_evidence_server("evidence", current_revision)
     mod_revision_history_server("revision_history", current_revision)
     mod_export_server("export", current_revision, workspace_provider)
@@ -585,19 +577,11 @@ mod_plot_generation_server <- function(
 
     shiny::observeEvent(execution_status(), {
       if (identical(execution_status(), "error")) {
-        result_waiter$hide()
         confirm_message("Plot generation failed. Review the run status and try again.")
         set_step("confirm")
       }
     }, ignoreInit = TRUE)
 
-    shiny::observe({
-      state <- current_revision()
-      if (identical(execution_status(), "success") &&
-          !is.null(state$revision) && is.null(state$pending)) {
-        result_waiter$hide()
-      }
-    })
   })
 }
 

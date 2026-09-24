@@ -17,13 +17,22 @@ test_that("plot preview exposes the exact compiled script", {
     script = script,
     artifact = artifact
   ))
+  execution_status <- shiny::reactiveVal("initial")
 
   shiny::testServer(
     mod_plot_preview_server,
-    args = list(current_revision = current_revision),
+    args = list(
+      current_revision = current_revision,
+      execution_status = execution_status
+    ),
     {
       expect_match(output$code, "calculate_boxplot_statistics", fixed = TRUE)
       expect_match(output$code, "assemble_boxplot", fixed = TRUE)
+
+      execution_status("running")
+      session$flushReact()
+      execution_status("success")
+      session$flushReact()
     }
   )
 })
