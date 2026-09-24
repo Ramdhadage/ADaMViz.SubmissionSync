@@ -1,5 +1,5 @@
 ---
-title: "Use a linear four-step plot workflow"
+title: "Use a linear five-step plot workflow"
 date: 2026-09-20
 category: design-patterns
 module: F001 Plot Generation workflow
@@ -7,7 +7,7 @@ problem_type: design_pattern
 component: frontend
 severity: low
 applies_when:
-  - "Plot workflows share data upload, question entry, choice confirmation, and a result."
+  - "Plot workflows share data upload, question entry, choice confirmation, a result, and export actions."
 tags:
   - clinical-ux
   - plot-generation
@@ -15,17 +15,18 @@ tags:
   - navigation
 ---
 
-# Use a linear four-step plot workflow
+# Use a linear five-step plot workflow
 
 ## Context
 
-F001 fixes the main sequence as Data → Ask → Confirm → Result. The design also sets how users return to earlier work, refine choices, and proceed after data validation. These are target interaction rules; the current static prototype shows Back links on Ask and Confirm but not on Result, and its disabled Continue only illustrates the Step 1 gate.
+F001 uses the main sequence Data → Ask → Confirm → Result → Export. The design also sets how users return to earlier work, refine choices, and proceed after data validation. The original static prototype stops at Result; the implemented workflow adds Export so traceability, independent review, and controlled export remain separate from the generated result.
 
 ## Guidance
 
-- Keep the sequence Data → Ask → Confirm → Result.
-- Provide Back navigation from every step with a predecessor: Ask to Data, Confirm to Ask, and Result to Confirm. Data is the entry step.
+- Keep the sequence Data → Ask → Confirm → Result → Export.
+- Provide Back navigation from every step with a predecessor: Ask to Data, Confirm to Ask, Result to Confirm, and Export to Result. Data is the entry step.
 - Keep Continue on Data disabled until file validation passes.
+- Keep plot output and automated checks on Result; keep revision history, review, and controlled export on Export.
 - Keep refinement linear: return to an earlier step, revise the input or choices, then continue forward. Do not create in-page branches for refinement.
 
 ## Why This Matters
@@ -39,7 +40,7 @@ A stable sequence keeps users oriented, and returning to a prior step gives them
 
 ## Examples
 
-In the [F001 prototype](../ux/F001-plot-generation-prototype.html), Ask links back to Data and Confirm links back to Ask. Add a Result-to-Confirm Back action to meet the navigation rule. The Data screen shows Continue disabled until a permitted file is ready; the design rule gates it on file validation passing. Within the workflow, refining an earlier input replaces the current proposal instead of creating a separately versioned proposal; this interaction rule does not define audit history or retention. Exact validation criteria and audit-history requirements remain open in the [F001 workflow spec](../ux/F001-plot-generation.md).
+In the implemented F001 workflow, each step after Data links back to its predecessor, Result continues to Export, and Export contains the existing traceability, review, and export panel. The Data screen keeps Continue disabled until a permitted file is ready. Within the workflow, refining an earlier input replaces the current proposal instead of creating a separately versioned proposal; this interaction rule does not define audit history or retention. Exact validation criteria and audit-history requirements remain governed by the [F001 workflow spec](../ux/F001-plot-generation.md).
 
 ## Related
 
