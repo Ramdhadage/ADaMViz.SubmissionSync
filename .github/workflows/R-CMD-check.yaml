@@ -25,7 +25,6 @@ jobs:
         with:
           dependencies: '"all"'
           extra-packages: |
-            local::.
             any::rcmdcheck
       - name: Document package
         run: Rscript -e 'roxygen2::roxygenise()'
