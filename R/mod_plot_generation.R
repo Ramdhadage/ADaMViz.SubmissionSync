@@ -10,7 +10,7 @@ mod_plot_generation_ui <- function(id) {
       .f001-stepmark { color: #344754; font-size: .78rem; }
       .f001-step-status { color: #344754; font-size: .78rem; }
       .f001-workbench { position: relative; padding: 12px 14px 13px 40px; }
-      .f001-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-bottom: 11px; }
+      .f001-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 11px; }
       .f001-stepmark { padding: 6px 5px; border: 1px solid #c7d1d9; border-radius: 4px; background: #f7f9fa; text-align: center; color: #52616d; font-size: .75rem; }
       .f001-stepmark.current { border-color: #7492a6; background: #edf4f8; color: #173f59; font-weight: 700; }
       .f001-stepmark.done { color: #245b46; }
@@ -177,19 +177,34 @@ mod_plot_generation_ui <- function(id) {
               class = "f001-panel",
               tags$summary("Optional: view automated checks"),
               tags$div(class = "f001-panel-body", mod_evidence_ui(ns("evidence")))
-            ),
-            tags$details(
-              class = "f001-panel",
-              tags$summary("Traceability, review, and export"),
-              tags$div(
-                class = "f001-panel-body",
-                mod_revision_history_ui(ns("revision_history")),
-                mod_review_ui(ns("review")),
-                mod_export_ui(ns("export"))
-              )
             )
           ),
-          tags$div(class = "d-flex justify-content-start", shiny::actionButton(ns("back_to_confirm"), "Back to confirm", class = "btn-outline-secondary")),
+          tags$div(
+            class = "d-flex justify-content-between",
+            shiny::actionButton(ns("back_to_confirm"), "Back to confirm", class = "btn-outline-secondary"),
+            shiny::actionButton(ns("to_export"), "Continue to export", class = "btn-primary")
+          )
+        )
+      ),
+      shiny::conditionalPanel(
+        sprintf("input['%s'] === 'export'", ns("step_signal")),
+        tags$section(
+          `aria-labelledby` = ns("export-heading"),
+          tags$h2(id = ns("export-heading"), "Export"),
+          tags$details(
+            class = "f001-panel",
+            tags$summary("Traceability, review, and export"),
+            tags$div(
+              class = "f001-panel-body",
+              mod_revision_history_ui(ns("revision_history")),
+              mod_review_ui(ns("review")),
+              mod_export_ui(ns("export"))
+            )
+          ),
+          tags$div(
+            class = "d-flex justify-content-start",
+            shiny::actionButton(ns("back_to_result"), "Back to result", class = "btn-outline-secondary")
+          ),
           tags$p(class = "f001-caption", "Review decisions are pending until both independent reviewers approve. The exact R script and check evidence remain linked to this revision.")
         )
       ),
@@ -237,8 +252,8 @@ mod_plot_generation_server <- function(
   workspace_provider
 ) {
   shiny::moduleServer(id, function(input, output, session) {
-    step_ids <- c("data", "ask", "confirm", "result")
-    step_labels <- c("Data", "Ask", "Confirm", "Result")
+    step_ids <- c("data", "ask", "confirm", "result", "export")
+    step_labels <- c("Data", "Ask", "Confirm", "Result", "Export")
     active_step <- shiny::reactiveVal("data")
     loaded_file <- shiny::reactiveVal(NULL)
     upload_error <- shiny::reactiveVal(NULL)
@@ -289,7 +304,10 @@ mod_plot_generation_server <- function(
       )
     })
     output$step_mark <- shiny::renderUI({
-      tags$span(class = "f001-step-status", paste("Step", match(active_step(), step_ids), "of 4"))
+      tags$span(
+        class = "f001-step-status",
+        paste("Step", match(active_step(), step_ids), "of", length(step_ids))
+      )
     })
 
     output$data_profile <- shiny::renderUI({
@@ -507,6 +525,8 @@ mod_plot_generation_server <- function(
     shiny::observeEvent(input$back_to_data, set_step("data"), ignoreInit = TRUE)
     shiny::observeEvent(input$back_to_ask, set_step("ask"), ignoreInit = TRUE)
     shiny::observeEvent(input$back_to_confirm, set_step("confirm"), ignoreInit = TRUE)
+    shiny::observeEvent(input$to_export, set_step("export"), ignoreInit = TRUE)
+    shiny::observeEvent(input$back_to_result, set_step("result"), ignoreInit = TRUE)
 
     run_revision <- function(fields, correction = FALSE, rationale = NULL, provenance = NULL) {
       state <- current_revision()
