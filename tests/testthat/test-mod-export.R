@@ -51,11 +51,13 @@ test_that("export module publishes real app revision artifacts", {
     {
       session$setInputs(destination_id = "local")
       session$setInputs(actor_id = "creator")
+      expect_no_match(output$receipts, "receipt-", fixed = TRUE)
       session$setInputs(export = 1)
 
       expect_match(output$message, "Exported receipt-", fixed = TRUE)
       receipts <- current_revision()$repository$list_export_receipts("rev-1")
       expect_equal(nrow(receipts), 1L)
+      expect_match(output$receipts, receipts$receipt_id[[1]], fixed = TRUE)
       published <- provider$inspect_published("local", receipts$receipt_id[[1]])
       expect_equal(
         sort(fs::path_file(fs::dir_ls(published$path))),
@@ -63,6 +65,38 @@ test_that("export module publishes real app revision artifacts", {
       )
       expect_identical(readLines(published$code_path, warn = FALSE), "plot(1)")
     }
+  )
+})
+
+test_that("export module packages revision artifacts as a ZIP download", {
+  workspace <- withr::local_tempdir()
+  provider <- local_workspace_provider(c(local = workspace))
+  state <- make_mod_export_state()
+  service <- new_export_service(
+    state$repository,
+    state$repository$artifact_store,
+    provider,
+    state$identity_provider
+  )
+  export <- service$export_revision(
+    revision_id = "rev-1",
+    actor_id = "creator",
+    destination_id = "local",
+    expected_version = as.integer(state$revision$version),
+    idempotency_key = "download-test"
+  )
+  zipfile <- tempfile(fileext = ".zip")
+
+  .write_export_zip(export, zipfile)
+
+  listing <- utils::unzip(zipfile, list = TRUE)
+  expect_setequal(listing$Name, c("script.R", "plot.png"))
+  extracted <- withr::local_tempdir()
+  utils::unzip(zipfile, exdir = extracted)
+  expect_identical(readLines(fs::path(extracted, "script.R"), warn = FALSE), "plot(1)")
+  expect_equal(
+    readBin(fs::path(extracted, "plot.png"), "raw", n = 9L),
+    charToRaw("png bytes")
   )
 })
 

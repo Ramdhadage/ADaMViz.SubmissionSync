@@ -34,6 +34,7 @@ test_that("plot generation UI gives traceability, review, and export its own ste
   expect_gt(export_panel, export_condition)
   expect_true(all(export_content > export_panel))
   expect_length(gregexpr("Traceability, review, and export", html, fixed = TRUE)[[1]], 1L)
+  expect_match(html, "<details class=\"f001-panel\" open>\\s*<summary>Traceability, review, and export</summary>")
 })
 
 test_that("plot generation navigation reaches Export and returns to Result", {
