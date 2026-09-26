@@ -193,6 +193,7 @@ mod_plot_generation_ui <- function(id) {
           tags$h2(id = ns("export-heading"), "Export"),
           tags$details(
             class = "f001-panel",
+            open = NA,
             tags$summary("Traceability, review, and export"),
             tags$div(
               class = "f001-panel-body",
