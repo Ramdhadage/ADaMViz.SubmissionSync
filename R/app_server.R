@@ -95,7 +95,7 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
   )
 }
 
-.create_assurance_candidate <- function(provider, dataset_id, prompt, suggest = TRUE) {
+.create_assurance_candidate <- function(provider, dataset_id, prompt) {
   if (!checkmate::test_string(dataset_id, min.chars = 1L)) {
     cli::cli_abort("Select one authorized BDS dataset")
   }
@@ -104,26 +104,12 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     snapshot$source_metadata <- provider$source_metadata
   }
   context <- build_prompt_context(snapshot)
-  interpretation <- if (isTRUE(suggest)) {
-    interpret_prompt(prompt, context, mock_prompt_interpreter(), snapshot = NULL)
-  } else {
-    list(status = "manual_selection", candidate = NULL, clarifications = list(), metadata = list())
-  }
-  if (is.null(interpretation$candidate) &&
-      !interpretation$status %in% c("clarification", "manual_selection")) {
-    cli::cli_abort(c(
-      "The prompt could not create an executable candidate",
-      "i" = "Reason: {.val {interpretation$clarifications$reason %||% interpretation$status}}"
-    ))
-  }
-
-  spec <- interpretation$candidate %||% new_plot_spec(dataset_id = dataset_id)
+  spec <- new_plot_spec(dataset_id = dataset_id)
   choices <- .spec_choices_from_context(context)
   list(
     pending = list(
       snapshot = snapshot,
       prompt = prompt,
-      interpretation = interpretation,
       choices = choices
     ),
     plot_id = NULL,

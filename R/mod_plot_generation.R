@@ -131,17 +131,14 @@ mod_plot_generation_ui <- function(id) {
                 width = "100%",
                 rows = 3
               ),
-              shiny::uiOutput(ns("question_validation")),
-              shiny::actionButton(ns("suggest"), "Suggest plot", class = "btn-outline-primary"),
-              shiny::uiOutput(ns("suggestion"))
+              shiny::uiOutput(ns("question_validation"))
             )
           ),
           tags$div(
             class = "d-flex justify-content-between",
             shiny::actionButton(ns("back_to_data"), "Back to data", class = "btn-outline-secondary"),
             shiny::actionButton(ns("to_confirm"), "Continue to review choices", class = "btn-primary")
-          ),
-          tags$p(class = "f001-caption", "Plot suggestion is optional. You can continue and choose the supported plot settings yourself.")
+          )
         )
       ),
       shiny::conditionalPanel(
@@ -366,26 +363,6 @@ mod_plot_generation_server <- function(
       NULL
     })
 
-    output$suggestion <- shiny::renderUI({
-      state <- current_revision()
-      interpretation <- state$pending$interpretation %||% NULL
-      if (is.null(interpretation)) return(NULL)
-      if (is.null(interpretation$candidate)) {
-        return(tags$p(class = "text-body-secondary mt-2", "No automatic suggestion is available for this question. Continue to choose the supported settings manually."))
-      }
-      fields <- interpretation$candidate$fields
-      tags$div(
-        class = "alert alert-info mt-2",
-        tags$strong("Suggested starting point: "),
-        paste(
-          fields$paramcd %||% "parameter to choose",
-          fields$y_variable %||% "outcome to choose",
-          "by treatment and visit"
-        ),
-        tags$div(class = "small mt-1", "Review and confirm every choice on the next step.")
-      )
-    })
-
     output$confirm_guidance <- shiny::renderUI({
       state <- current_revision()
       if (!is.null(state$revision) && is.null(state$pending)) {
@@ -485,26 +462,6 @@ mod_plot_generation_server <- function(
       set_step("ask")
     }, ignoreInit = TRUE)
 
-    shiny::observeEvent(input$suggest, {
-      if (!is_current_upload()) return()
-      question_attempted(TRUE)
-      if (!question_is_valid()) return()
-      loaded <- loaded_file()
-      state <- tryCatch(
-        .create_assurance_candidate(
-          provider = loaded$provider,
-          dataset_id = loaded$snapshot$dataset_id,
-          prompt = input$question,
-          suggest = TRUE
-        ),
-        error = function(error) {
-          shiny::showNotification(conditionMessage(error), type = "error")
-          NULL
-        }
-      )
-      if (!is.null(state)) current_revision(state)
-    }, ignoreInit = TRUE)
-
     shiny::observeEvent(input$to_confirm, {
       if (!is_current_upload()) return()
       question_attempted(TRUE)
@@ -515,8 +472,7 @@ mod_plot_generation_server <- function(
         state <- .create_assurance_candidate(
           provider = loaded$provider,
           dataset_id = loaded$snapshot$dataset_id,
-          prompt = input$question,
-          suggest = FALSE
+          prompt = input$question
         )
         current_revision(state)
       }
