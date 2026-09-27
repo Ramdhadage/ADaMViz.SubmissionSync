@@ -10,7 +10,8 @@ These rules apply to tests under `tests/`. Repository-wide product and safety bo
 
 ## Verification Order
 
-- Run targeted tests first, then the broader configured suite.
+- During development, run focused tests first, then `devtools::test()`.
+- Run `covr::package_coverage()` periodically to identify untested code. Treat coverage as diagnostic evidence, not proof of test quality or formal validation.
 - Use `devtools::check()` for package-level verification. Apply `cran-extrachecks` only when CRAN preparation is explicitly in scope.
 - Use `ce-test-browser` when browser verification is requested. A static or server-side check is not browser evidence.
 - Do not invent commands or claim checks the repository does not configure. Report focused tests, package checks, browser checks, statistical review, and formal validation separately.

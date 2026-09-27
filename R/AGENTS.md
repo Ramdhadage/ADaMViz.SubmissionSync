@@ -13,12 +13,7 @@ These rules apply to implementation files under `R/`. Repository-wide product an
 
 - Build with `bslib` and Bootstrap 5 components. Reuse the centralized theme, minimize custom CSS, verify contrast and accessibility, and keep plots aligned with the application theme.
 - For Shiny work, use the installed `shiny-for-r` skill: read its index and only the linked references relevant to the task.
-- Apply other installed skills when relevant, including `tidy-r`, `cli`, `r-package-development`, `testing-r-packages`, `shiny-bslib`, `shiny-bslib-theming`, `mirai`, `cran-extrachecks`, and `openai-docs`.
-
-## Asynchronous Work
-
-- Use `mirai` only when work would otherwise block Shiny or materially benefits from parallelism.
-- Pass dependencies explicitly, namespace-qualify package calls on daemons, apply backpressure where needed, and clean up daemon pools.
+- Apply other installed skills when relevant, including `tidy-r`, `cli`, `r-package-development`, `testing-r-packages`, `shiny-bslib`, `shiny-bslib-theming`, `cran-extrachecks`, and `openai-docs`.
 
 ## Local Verification
 
