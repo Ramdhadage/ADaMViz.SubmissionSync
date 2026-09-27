@@ -16,3 +16,13 @@ artifacts/
 
 # Tracked source prototype in docs/ux.
 !docs/ux/F001-plot-generation-prototype.html
+!docs/ux/codex-devtools-validation.html
+!docs/ux/codex-observability-stack.html
+!docs/ux/codex-layered-domain-architecture.html
+!docs/ux/codex-knowledge-boundary.html
+docs/ux/codex-devtools-validation.svg
+docs/ux/codex-harness-artical.md
+docs/ux/codex-knowledge-boundary.svg
+docs/ux/codex-layered-domain-architecture.svg
+docs/ux/codex-observability-stack.svg
+docs/ux/codex-help-prompt.md
