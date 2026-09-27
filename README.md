@@ -19,7 +19,7 @@ The package is intended to run from a locked `renv` environment:
 
 ```r
 renv::restore(prompt = FALSE)
-devtools::load_all()
+devtools::install()
 ADaMViz.SubmissionSync::run_app()
 ```
 
