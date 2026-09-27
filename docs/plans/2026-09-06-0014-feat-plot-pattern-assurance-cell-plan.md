@@ -225,7 +225,7 @@ The first pattern must therefore be useful on its own while leaving its assuranc
 - KTD5. **Support a named visit-based numeric BDS profile.** The provider supplies dataset designation, metadata version, declared keys, snapshot identity, content hash, and authorization. The cell validates its own profile and never claims complete ADaM conformance. [CDISC ADaMIG v1.3](https://www.cdisc.org/standards/foundational/adam/adamig-v1-3)
 - KTD6. **Compile confirmed specifications through owned templates.** The model never generates executable R. The compiler emits one UTF-8 script that expects a documented `analysis_data` input, contains no credentials or transient paths, and is byte-identical to the script executed and exported. This constrains R1-R2 and R27.
 - KTD7. **Pin native R/ggplot2 quantile type 7.** Record the algorithm in `PlotSpec`, code, analytical evidence, and test oracles. (session-settled: user-directed — chosen over SAS-compatible type 2: the first cell uses native R/ggplot2 semantics) [ggplot2 boxplot reference](https://ggplot2.tidyverse.org/reference/geom_boxplot.html)
-- KTD8. **Separate UI task binding, asynchronous orchestration, and clean-process execution.** U8 binds Shiny `ExtendedTask` and task buttons to a Shiny-independent U6 coordinator. The coordinator uses `mirai` for backpressure and transport, while a supervised clean R subprocess executes the exact compiled script with bounded output, timeout, cancellation propagation, and process-tree cleanup. Workers return a versioned result manifest and never write evidence storage. This boundary improves reliability but is not a security sandbox; the POC runner remains synthetic/de-identified-data only until the target environment proves worker isolation and denied network/filesystem access. [Shiny non-blocking operations](https://shiny.posit.co/r/articles/improve/nonblocking), [callr](https://callr.r-lib.org/reference/r.html), and [processx cleanup](https://processx.r-lib.org/articles/cleanup.html)
+- KTD8. **Separate synchronous orchestration and clean-process execution.** U8 invokes a Shiny-independent U6 coordinator directly. A supervised clean R subprocess executes the exact compiled script with bounded output, timeout, and process-tree cleanup. The subprocess returns a versioned result manifest and never writes evidence storage. This boundary improves reliability but is not a security sandbox; the POC runner remains synthetic/de-identified-data only until the target environment proves process isolation and denied network/filesystem access. [callr](https://callr.r-lib.org/reference/r.html) and [processx cleanup](https://processx.r-lib.org/articles/cleanup.html)
 - KTD9. **Make append-only events the lifecycle source of truth.** Use a transactional SQLite metadata repository for the single-host, local-disk POC and a separate content-addressed artifact store. Enforce foreign keys, unique revision/event sequences, one terminal outcome per attempt, one accepted bundle per revision, expected-version conflicts, and atomic aggregate commands. Materialized status and head projections must be rebuildable from history. Hash-chain events with a versioned canonical form and keep the chain root outside SQLite so corruption, omission, or reordering can be detected; do not claim resistance to privileged tampering or controlled audit-record retention from the local POC. A validated provider needs qualified backup/restore, encryption, access auditing, retention, and signed anchoring or WORM-equivalent controls where required.
 - KTD10. **Keep workflow status separate from validation state.** Domain services alone enforce `Draft`, `Experimental/Draft`, `Verified`, and `Reviewed` transitions from the authoritative event history. Any status or head projection is updated in the same aggregate transaction and checked against a reconstructable projection. Environment and intended-use validation remain separate evidence attributes; `Reviewed` never implies `Validated for intended use`.
 - KTD11. **Make prompt and direct UI actions share fail-closed domain authorization.** The model can propose specifications and request permitted actions but cannot set status, approve, reject, override validation, or select a workspace path. Every command derives the actor from the authenticated server session, authorizes the specific study, dataset, plot, revision, evidence fields, and workspace, and rechecks current access when consumed. Human approvals require short-lived single-use action intent bound to actor, session, action, version token, revision, and artifact hashes; identity, role, creator, or eligibility claims from the client are never authoritative.
@@ -244,7 +244,7 @@ flowchart TB
   PI[Prompt interpreter adapter] -->|candidate PlotSpec only| DS
   DS --> PS[Canonical PlotSpec and validation]
   PS --> CP[Deterministic compiler]
-  CP --> JR[Async job and supervised R runner]
+  CP --> JR[Synchronous supervised R runner]
   JR --> AB[Artifact bundle and analytical manifest]
   AB --> AS[Content-addressed artifact store]
   AS --> DS
@@ -268,7 +268,7 @@ sequenceDiagram
   participant Prompt as Prompt adapter
   participant Domain as Domain services
   participant Data as Data provider
-  participant Runner as Async runner
+  participant Runner as Synchronous runner
   participant Evidence as Evidence repository
   Scientist->>UI: Submit prompt
   UI->>Data: Request authorized metadata catalog
@@ -306,7 +306,7 @@ A rejection event remains attached to the rejected immutable revision and closes
 
 ### Implementation Constraints
 
-- Obtain explicit approval for the proposed dependency set before U1 installs or records packages. The expected runtime set is `shiny`, `bslib`, `golem`, `ggplot2`, `patchwork`, `dplyr`, `jsonlite`, `jsonvalidate`, `ellmer`, `DBI`, `RSQLite`, `digest`, `fs`, `mirai`, `callr`, and `processx`. The expected test/development set is `testthat`, `shinytest2`, `withr`, `devtools`, `roxygen2`, and `renv`.
+- Obtain explicit approval for the proposed dependency set before U1 installs or records packages. The expected runtime set is `shiny`, `bslib`, `golem`, `ggplot2`, `patchwork`, `dplyr`, `jsonlite`, `jsonvalidate`, `ellmer`, `DBI`, `RSQLite`, `digest`, `fs`, `callr`, and `processx`. The expected test/development set is `testthat`, `shinytest2`, `withr`, `devtools`, `roxygen2`, and `renv`.
 - Select mutually compatible package versions on the implementation machine and commit the resulting explicit `renv.lock`. Do not copy research-time current versions into constraints without verifying Windows installation and target-environment compatibility.
 - Do not use `eval(parse())`, model-returned R, raw user paths, prompt-derived SQL, dynamic package installation, or inherited credentials in the generation path.
 - Pass only metadata, labels, controlled choices, aggregate profiles, and policy to the model. Show duplicate `USUBJID` diagnostics only to authorized users through the application.
@@ -351,7 +351,7 @@ flowchart LR
 | Model output is syntactically valid but clinically wrong | Incorrect plot specification | Closed schema, server-side semantic validation, choice provenance, explicit user confirmation, prompt evaluation corpus |
 | Valid BDS data falls outside the visit-based profile | False nonconformance claim or unusable result | Name the supported profile, record declared keys, stop as unsupported, never claim full ADaM validation |
 | Low-N quartiles differ from external validation programs | Review discrepancies | Pin quantile type 7, retain derived statistics, add hand-calculated fixtures, document the comparison basis |
-| Async job fails, times out, or is submitted twice | Orphaned work or duplicate evidence | Durable attempts, idempotency keys, explicit terminal states, cancellation, bounded logs, process-tree cleanup |
+| Synchronous execution fails, times out, or is submitted twice | Orphaned work or duplicate evidence | Durable attempts, idempotency keys, explicit terminal states, bounded logs, process-tree cleanup |
 | Review attaches to a stale or changed revision | Invalid approval | Immutable hashes, optimistic version tokens, transactional transition checks, two distinct non-creator identities |
 | Session, role, or resource authorization is stale or replayed | Unauthorized review, evidence access, execution, or export | Server-session-derived actor, object-level policy checks, single-use action intents, session expiry, direct-service denial tests |
 | Prompt or evidence content discloses sensitive data | Patient, credential, or study-context exposure | Versioned context allowlist, minimum-cell disclosure, canary tests, structured redacted logs, field-level retention and access policy |
@@ -630,29 +630,29 @@ The tree declares the expected greenfield shape. Unit file lists below are autho
 
 ### U6. Implement supervised execution and automated verification
 
-**Goal:** Execute the exact governed script without blocking Shiny and promote only complete, reproducible evidence to `Verified`.
+**Goal:** Execute the exact governed script synchronously in a clean subprocess and promote only complete, reproducible evidence to `Verified`.
 
 **Requirements:** R12-R15, R27, R30, R36-R37; F2-F4.
 
 **Dependencies:** U4, U5.
 
-**Files:** `R/execution_service.R`, `R/execution_runner.R`, `R/execution_runner_callr.R`, `R/async_task_service.R`, `R/attempt_reconciliation.R`, `R/verification_service.R`, `tests/testthat/test-execution-runner-contract.R`, `tests/testthat/test-execution-runner-callr.R`, `tests/testthat/test-async-task-service.R`, `tests/testthat/test-attempt-reconciliation.R`, `tests/testthat/test-verification-service.R`.
+**Files:** `R/execution_service.R`, `R/execution_runner.R`, `R/execution_runner_callr.R`, `R/attempt_reconciliation.R`, `R/verification_service.R`, `tests/testthat/test-execution-runner-contract.R`, `tests/testthat/test-execution-runner-callr.R`, `tests/testthat/test-attempt-reconciliation.R`, `tests/testthat/test-verification-service.R`.
 
 **Approach:**
 
-1. Accept the immutable U2 execution protocol through a Shiny-independent coordinator and submit it through a `mirai`-backed transport with explicit dependency passing, queue limits, cancellation, and completion signals.
+1. Accept the immutable U2 execution protocol through a Shiny-independent coordinator and run it synchronously through the clean `callr` subprocess boundary.
 2. Use the runner port to create a per-attempt working directory, load a read-only pinned snapshot, execute the exact script in a clean R subprocess, capture bounded allowlisted diagnostics, and return only the versioned result manifest. Workers never access or write SQLite or the artifact store directly.
 3. Persist attempt start before dispatch. On return, durably stage and hash the runtime analytical output, PNG, code, manifest, and environment fingerprint without appending a terminal outcome. Startup reconciliation converts abandoned leases or matching completed manifests into one deterministic terminal result.
 4. Scope idempotency to command type, revision, actor/system principal, and request fingerprint. Permit at most one active attempt and one accepted canonical bundle per revision; an explicit retry creates a separately identified attempt without changing the revision.
-5. Propagate cancellation through the coordinator, `mirai`, subprocess, and process tree, and retain bounded evidence of the terminal outcome. Enforce CPU, memory, process, file, output, and wall-time limits where the target platform supports them.
+5. Enforce subprocess timeout and process-tree cleanup, retain bounded evidence of the terminal outcome, and apply CPU, memory, process, file, output, and wall-time limits where the target platform supports them.
 6. Run one versioned mandatory verification suite over schema, request and input hashes, script hash, analytical oracle, ggplot layer data, image creation, environment fingerprint, and clean re-execution.
 7. After all mandatory checks finish, append exactly one failed terminal outcome, or atomically commit the successful terminal outcome, accepted artifact bundle, and `Verified` transition when every check passes for that revision and attempt.
 
-**Patterns to follow:** Shiny-independent command orchestration, `mirai` explicit dependencies and backpressure, clean subprocess execution, versioned request/result manifests, leases and reconciliation, and immutable attempt records. U8 owns the `ExtendedTask` UI binding.
+**Patterns to follow:** Shiny-independent command orchestration, clean subprocess execution, versioned request/result manifests, leases and reconciliation, and immutable attempt records.
 
 **Test scenarios:**
 
-- A valid immutable request completes asynchronously and records one successful attempt with expected hashes.
+- A valid immutable request completes synchronously and records one successful attempt with expected hashes.
 - A timeout, cancellation, non-zero exit, R crash, full output buffer, or missing result manifest records a terminal failure and cannot produce `Verified`.
 - Duplicate submission with the same idempotency key and fingerprint returns one attempt; reuse with a different fingerprint fails; an explicit retry creates a new attempt for the same unchanged revision.
 - Changing the specification or snapshot creates a new revision rather than retrying the old one.
@@ -663,7 +663,7 @@ The tree declares the expected greenfield shape. Unit file lists below are autho
 - A failed mandatory check prevents partial promotion even when all other checks pass.
 - Clean re-execution reproduces exact source and analytical hashes; the image hash is required only under the pinned rendering fingerprint.
 
-**Verification:** Shiny remains responsive during execution, every attempt reaches a durable terminal state, and only one complete evidence set can trigger `Verified`.
+**Verification:** The request returns only after execution reaches a durable terminal state, and only one complete evidence set can trigger `Verified`.
 
 ### U7. Add the provider-neutral prompt and clarification workflow
 
@@ -715,7 +715,7 @@ The tree declares the expected greenfield shape. Unit file lists below are autho
 **Approach:**
 
 1. Use a bslib page with clearly separated prompt/specification, plot/code, evidence/history, and review regions. Keep one authoritative revision identifier across modules.
-2. Bind `ExtendedTask` and task buttons to the U6 coordinator for interpretation and execution. Disable duplicate actions while tasks run and expose retry or correction only when the domain service permits it.
+2. Invoke the U6 coordinator directly from the execution and correction handlers. Surface synchronous failures through the existing validation message and expose retry or correction only when the domain service permits it.
 3. Present blocking validation failures with actionable details, nonblocking low-N warnings with exact N, and free-scale downgrade before execution.
 4. Display the exact executed script read-only for Verified and Reviewed revisions. Prevent any UI action from editing Reviewed code.
 5. Show both reviewers the same authorization-filtered immutable evidence bundle. Approval, rejection, execution, and export consume short-lived single-use action intents and reauthorize the current server-session actor against the exact revision and hashes.
@@ -864,7 +864,7 @@ The tree declares the expected greenfield shape. Unit file lists below are autho
 | U3 | Every BDS profile rule has governed passing and failing fixtures with reviewed expected results |
 | U4 | Statistical oracle, plot layers, N strip, compiler, and expected manifest agree for all required scenarios |
 | U5 | Append-only persistence, artifact durability, integrity constraints, projection rebuild, backup/restore, correction successors, reviewer independence, idempotency, and concurrency invariants hold |
-| U6 | Async execution is responsive, supervised, protocol-bound, recoverable, and incapable of partial verification promotion; clinical-data enablement remains gated on qualified isolation |
+| U6 | Synchronous execution is supervised, protocol-bound, recoverable, and incapable of partial verification promotion; clinical-data enablement remains gated on qualified isolation |
 | U7 | Prompt interpretation is provider-neutral, schema-bound, clarification-safe, and isolated from executable code |
 | U8 | Critical user and reviewer journeys work through shared services with accessible, restorable state |
 | U9 | Recoverable pair export, reconciliation, traceability, privacy/security evidence, performance evidence, and target-environment protocol satisfy the defined gates |

@@ -105,7 +105,7 @@ This plan resolves the earlier open first-POC envelope and brings F001 interacti
 
 - First input profile: long-format BDS CSV using the selected BDS fields; first plot: longitudinal Tukey boxplot by treatment and visit.
 - Keep current golem+bslib and current dependencies. No teal dependency, Excel parser, arbitrary CSV schema support, new plot family, arbitrary transformation language, or executable model-generated code.
-- Only public, synthetic, or properly de-identified inputs. This POC worker boundary is for reliability, not a hostile-code sandbox or a qualified environment for approved clinical data.
+- Only public, synthetic, or properly de-identified inputs. This POC subprocess boundary is for reliability, not a hostile-code sandbox or a qualified environment for approved clinical data.
 - The POC is designed for validated clinical submission workflows; it is not FDA validated or FDA approved. Intended-use validation belongs to the regulated organization.
 - Formal qualification, production identity integration, organization retention policy, and broader data/plot support remain outside this implementation except for the explicit integration seams and prerequisites below.
 
@@ -126,18 +126,18 @@ This plan resolves the earlier open first-POC envelope and brings F001 interacti
 - KTD2. **Extend the existing BDS profile.** Reuse `validate_bds_profile()`, `local_study_data_provider()`, the deterministic statistics, compiler, and assembly path. Generalize the treatment-variable contract to include `TRTA` while retaining existing `TRT01A` fixtures. Do not build a second analytics path. (session-settled: user-directed — chosen over a new plot architecture: reuse the existing boxplot assurance path; R3-R8)
 - KTD3. **Use explicit step state in existing bslib modules.** Keep navigation linear and stateful; back navigation restores the current proposal. The data profile is an initially closed, discoverable side drawer with aggregate schema/quality summaries. Confirmed controls remain authoritative. Follow the four-step, drawer, task-first, collapsible-panel, and Draft-badge solution notes linked below. (session-settled: user-directed — chosen over teal or a new dependency: retain golem+bslib; R14)
 - KTD4. **Preserve non-executable intent interpretation.** Keep the provider-neutral candidate contract and deterministic mock. The compiler accepts only confirmed structured fields. The optional ellmer transport stays disabled until the existing retention, training, region, transport, and incident terms are approved.
-- KTD5. **Separate async execution from durable writes.** Capture immutable request inputs and persist the Draft revision/attempt before asynchronous invocation. Keep Shiny responsive and use the existing mirai/clean-callr path, but make the worker return a bounded result manifest only. The application/service process validates the returned identity, attaches result evidence to that revision, and promotes it after checks. This is a reliability boundary, not a security sandbox.
+- KTD5. **Separate subprocess execution from durable writes.** Capture immutable request inputs and persist the Draft revision/attempt before synchronous invocation. Use the existing clean-callr path and make the subprocess return a bounded result manifest only. The application/service process validates the returned identity, attaches result evidence to that revision, and promotes it after checks. This is a reliability boundary, not a security sandbox.
 - KTD6. **Reuse review/evidence/export services with authenticated identity and shared revision lookup.** Store revisions and artifacts under a stable app-scoped repository root visible to all user sessions; the current per-execution temporary root cannot support two reviewers loading the same revision. Keep revision lifecycle, immutable evidence, independent role checks, and workspace registration. Replace caller-entered actor identity with a host-authenticated principal carrying stable ID, active status, and role claims. Apply the settled export policy: complete ordinary Draft and Verified bundles export as drafts before review; Reviewed exports require both approvals; Experimental/free-scale results are excluded. Provider-specific configuration and shared storage must come from the host deployment; multi-instance deployment remains outside this POC.
 
 ### High-Level Technical Design
 
 #### End-to-end workflow
 
-![First POC workflow across the scientist, app services, execution worker, and reviewers](diagrams/first-poc-workflow.svg)
+![First POC workflow across the scientist, app services, execution subprocess, and reviewers](diagrams/first-poc-workflow.svg)
 
 [Open the full-size workflow diagram](diagrams/first-poc-workflow.html).
 
-_Fidelity: the original 20 workflow nodes and 27 connections are grouped into six stages and four responsibility lanes. Blocking validation, hash-bound execution, bounded worker results, same-revision verification, two-person review, and the open pre-review export policy remain visible._
+_Fidelity: the original 20 workflow nodes and 27 connections are grouped into six stages and four responsibility lanes. Blocking validation, hash-bound execution, bounded subprocess results, same-revision verification, two-person review, and the open pre-review export policy remain visible._
 
 #### Revision lifecycle
 
@@ -152,7 +152,7 @@ The upload profile drawer shows column names/types, row and missingness counts, 
 ### System-Wide Impact and Risks
 
 - **Data lifecycle:** Shiny upload files are temporary, and the POC handles only permitted data. U1 must snapshot before later steps; evidence references the pinned hash, not a path or raw subject identifiers.
-- **Async state:** a worker can fail or return late. U4 binds the result to immutable request hashes and leaves durable writes to the application process.
+- **Execution state:** a subprocess can fail or time out. U4 binds the result to immutable request hashes and leaves durable writes to the application process.
 - **Identity and export:** local demo selectors cannot establish real reviewer identity. U5 depends on a host identity provider and an explicit pre-review export policy.
 - **Deployment:** CSV size limits and workspace registration are host configuration. The default Shiny upload limit must not be mistaken for an approved product limit.
 - **Assurance:** the clean subprocess is not a security sandbox, and passing automated checks does not qualify the system for regulated use.
@@ -211,21 +211,21 @@ Keep changes in current files/modules. Add tests to current test files/fixtures;
 
 **Verification:** compare analytical result and ggplot layer data to the independent fixture; verify script identity from the confirmed specification.
 
-#### U4. Async execution, verification, and evidence boundary
+#### U4. Synchronous execution, verification, and evidence boundary
 
-**Goal:** Persist a Draft revision and execution attempt before dispatch, run the exact script responsively, and attach accepted results to that same revision before automated promotion.
+**Goal:** Persist a Draft revision and execution attempt before running the exact script synchronously, then attach accepted results to that same revision before automated promotion.
 
 **Requirements:** R8-R9, R12-R13.
 
 **Dependencies:** U1 and U3.
 
-**Files:** `R/async_task_service.R`, `R/execution_service.R`, `R/execution_runner.R`, `R/execution_runner_callr.R`, `R/artifact_store_local.R`, `R/evidence_repository_sqlite.R`, `R/app_server.R`, `R/revision_evidence.R`, `R/verification_service.R`; `tests/testthat/test-async-task-service.R`, `tests/testthat/test-execution-runner-callr.R`, `tests/testthat/test-verification-service.R`, `tests/testthat/test-revision-evidence.R`, `tests/testthat/test-app-smoke.R`.
+**Files:** `R/execution_service.R`, `R/execution_runner.R`, `R/execution_runner_callr.R`, `R/artifact_store_local.R`, `R/evidence_repository_sqlite.R`, `R/app_server.R`, `R/revision_evidence.R`, `R/verification_service.R`; `tests/testthat/test-execution-runner-callr.R`, `tests/testthat/test-verification-service.R`, `tests/testthat/test-revision-evidence.R`, `tests/testthat/test-app-smoke.R`.
 
-**Approach:** After deterministic validation and compilation, create the immutable Draft revision, store its exact script, and persist the execution request/attempt before invoking the worker. Include specification hash, script hash, snapshot ID/hash, renderer settings, and environment version in the request. Refactor the async callback so the worker returns a bounded result manifest and never writes lifecycle or evidence storage. The application service checks returned identities, attaches output/evidence to the already-created revision, and runs mandatory checks; passing checks promote that same revision from Draft to Verified. Worker or verification failure leaves the revision Draft with its failure evidence and no Verified status. Keep Experimental/Draft separate and ineligible for promotion/export. Bind each result to the captured request to prevent stale or duplicate completion from updating another revision.
+**Approach:** After deterministic validation and compilation, create the immutable Draft revision, store its exact script, and persist the execution request/attempt before invoking the clean subprocess synchronously. Include specification hash, script hash, snapshot ID/hash, renderer settings, and environment version in the request. The subprocess returns a bounded result manifest and never writes lifecycle or evidence storage. The application service checks returned identities, attaches output/evidence to the already-created revision, and runs mandatory checks; passing checks promote that same revision from Draft to Verified. Subprocess or verification failure leaves the revision Draft with its failure evidence and no Verified status. Keep Experimental/Draft separate and ineligible for promotion/export. Bind each result to the captured request to prevent stale or duplicate completion from updating another revision.
 
-**Scenarios:** Draft and execution attempt exist before dispatch; exact script equals compiled/stored/executed/exported script; changed snapshot or script hash blocks Verified; worker error/timeout leaves the same Draft and records failure without losing the attempt; successful checks promote that same revision; failed checks never promote; stale/double result cannot overwrite current revision; Experimental/Draft is not auto-promoted; clean rerun matches expected values.
+**Scenarios:** Draft and execution attempt exist before execution; exact script equals compiled/stored/executed/exported script; changed snapshot or script hash blocks Verified; subprocess error/timeout leaves the same Draft and records failure without losing the attempt; successful checks promote that same revision; failed checks never promote; stale/double result cannot overwrite current revision; Experimental/Draft is not auto-promoted; clean rerun matches expected values.
 
-**Verification:** async and callr contract tests, verification/evidence tests, then existing app smoke/browser flow. This does not qualify the subprocess as a hostile-code sandbox.
+**Verification:** synchronous app-server and callr contract tests, verification/evidence tests, then existing app smoke/browser flow. This does not qualify the subprocess as a hostile-code sandbox.
 
 #### U5. Authenticated review, lifecycle, and controlled export
 
@@ -254,7 +254,7 @@ Required evidence:
 1. U1 provider/profile checks plus browser upload: server-side rejection cases, pinned snapshot hash, no dependency on temporary upload path.
 2. U2 module and browser checks: Data → Ask → Confirm → Result, back navigation, ambiguity handling, profile drawer, keyboard navigation.
 3. U3 independent expected-statistics and plot-layer comparison for AE1; duplicate and missing-value cases.
-4. U4 Draft-before-dispatch, exact code/data hash, callr outcome, failure evidence, same-revision promotion, stale-result cases, automated verification and clean rerun.
+4. U4 Draft-before-execution, exact code/data hash, callr outcome, failure evidence, same-revision promotion, stale-result cases, automated verification and clean rerun.
 5. U5 shared revision lookup across two authenticated sessions, two-person review lifecycle, and exact-pair export under the settled policy and host identity claims.
 6. Full package test/check; manual visual comparison with [F001 prototype](../ux/F001-plot-generation-prototype.html), accessibility review, and target-environment evidence. The manual/browser/target-environment results must be reported separately from unit-test success.
 
@@ -269,7 +269,7 @@ No tests are run as part of this planning pass.
 - The Meera example produces the exact N/quartile/median values in AE1; Week 8 Drug low-N is visible, and missing Y does not count.
 - Ambiguities require user choice, duplicate selected keys block before compiler/executor, and hidden population/analysis filters are absent.
 - The compiler accepts only confirmed choices; the exact script executed is byte-identical to the revision and any export.
-- The app-scoped repository records Draft and an execution attempt before dispatch; async workers return bounded results without direct lifecycle/evidence writes; the app service attaches them and promotes that same revision only after verification passes.
+- The app-scoped repository records Draft and an execution attempt before execution; the clean subprocess returns bounded results without direct lifecycle/evidence writes; the app service attaches them and promotes that same revision only after verification passes.
 - Draft, Verified, Reviewed, Experimental, rejection, successor, and immutability behavior is explicit and tested; `Verified` is not presented as human or regulatory approval.
 - Section 11 traceability fields are linked to the revision and protected from raw-ID/temp-path leakage.
 - Separate authenticated sessions load the same immutable revision and evidence from app-scoped storage; review/export uses host-authenticated principals and the explicit workspace registry. The Draft/Verified export policy is settled; deployment must provide its identity claims, upload ceiling, and shared storage configuration before release.
@@ -289,6 +289,6 @@ No tests are run as part of this planning pass.
 - [Draft status badge](../solutions/draft-status-badge.md): concise Draft indicator and clear status explanation.
 - [Task-first clinical plot workbench](../solutions/design-patterns/task-first-clinical-plot-workbench.md): task-oriented plot canvas and result review.
 - [Earlier plot-pattern assurance plan](2026-09-06-0014-feat-plot-pattern-assurance-cell-plan.md): existing BDS validation, type-7 statistics, review lifecycle, and export patterns to reuse.
-- Existing implementation touchpoints: `R/app_ui.R`, `R/app_server.R`, `R/mod_prompt.R`, `R/mod_specification.R`, `R/provider_study_data.R`, `R/provider_study_data_local.R`, `R/bds_profile.R`, `R/boxplot_statistics.R`, `R/boxplot_compiler.R`, `R/boxplot_assembly.R`, `R/async_task_service.R`, `R/revision_evidence.R`, `R/review_service.R`, and `R/export_service.R`.
+- Existing implementation touchpoints: `R/app_ui.R`, `R/app_server.R`, `R/mod_prompt.R`, `R/mod_specification.R`, `R/provider_study_data.R`, `R/provider_study_data_local.R`, `R/bds_profile.R`, `R/boxplot_statistics.R`, `R/boxplot_compiler.R`, `R/boxplot_assembly.R`, `R/revision_evidence.R`, `R/review_service.R`, and `R/export_service.R`.
 - [Shiny fileInput reference](https://shiny.posit.co/r/reference/shiny/latest/fileinput.html): upload paths are temporary and server-side checks are required. [bslib reference](https://rstudio.github.io/bslib/): use installed Bootstrap 5 components and the existing app theme.
 - Current project code resolves numeric threshold 5 to `Assurance Cell default`; sponsor-approved metadata are required for a different value (`R/bds_profile.R`).

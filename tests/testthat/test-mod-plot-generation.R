@@ -39,7 +39,6 @@ test_that("plot generation UI gives traceability, review, and export its own ste
 
 test_that("plot generation navigation reaches Export and returns to Result", {
   current_revision <- shiny::reactiveVal(.empty_assurance_state())
-  execution_status <- shiny::reactiveVal("initial")
 
   shiny::testServer(
     mod_plot_generation_server,
@@ -47,7 +46,6 @@ test_that("plot generation navigation reaches Export and returns to Result", {
       current_revision = current_revision,
       execute_revision = function(fields) NULL,
       create_correction = function(fields, rationale, provenance) NULL,
-      execution_status = execution_status,
       workspace_provider = NULL
     ),
     {

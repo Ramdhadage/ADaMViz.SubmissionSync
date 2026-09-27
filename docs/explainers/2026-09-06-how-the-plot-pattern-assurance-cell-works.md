@@ -195,7 +195,7 @@ This fragment is explanatory rather than the finished production template. The i
 
 The application pins the authorized input snapshot and creates an execution request containing the specification hash, script hash, snapshot identity and hash, renderer settings, and environment version.
 
-The exact script runs in a clean R subprocess. The Shiny session remains responsive while execution runs asynchronously. The worker returns results to the application service; it does not write directly to lifecycle or evidence storage.
+The exact script runs synchronously in a clean R subprocess. The subprocess returns results to the application service; it does not write directly to lifecycle or evidence storage.
 
 For the POC, this is a reliability boundary, not a hostile-code sandbox. Only public, synthetic, or properly de-identified data are permitted. Approved clinical data require a separately qualified worker boundary with least-privilege access and network, filesystem, and resource controls.
 
