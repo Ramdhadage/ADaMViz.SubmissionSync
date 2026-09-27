@@ -4,12 +4,16 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.github$
+^\.quarto$
 ^check$
 ^data-raw$
 dev_history.R
 ^dev$
 $run_dev.*
 ^.here$
+^(AGENTS\.md|CODEX_CONTEXT\.md|CONCEPTS\.md|app\.R|docs|rsconnect)$
+^R/AGENTS\.md$
+^inst/\.codexignore$
 ^docs/ideation$
 ^docs/explainers/assets/plot-pattern-assurance-cell/.*\.(png|svg)$
 ^docs/.*/.*\.html$

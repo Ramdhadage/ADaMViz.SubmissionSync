@@ -10,7 +10,10 @@ local_submission_sync_app <- function(name) {
 
 create_standard_revision <- function(app) {
   app$upload_file(
-    `plot_generation-data_file` = test_path("..", "..", "inst", "extdata", "synthetic", "adlb-standard.csv")
+    `plot_generation-data_file` = system.file(
+      "extdata", "synthetic", "adlb-standard.csv",
+      package = "ADaMViz.SubmissionSync"
+    )
   )
   app$wait_for_js("document.querySelector('#plot_generation-to_ask')?.disabled === false")
   app$click("plot_generation-to_ask")

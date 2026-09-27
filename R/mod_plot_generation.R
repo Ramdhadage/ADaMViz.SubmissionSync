@@ -29,7 +29,7 @@ mod_plot_generation_ui <- function(id) {
       .f001-panel { margin-bottom: 8px; border: 1px solid #c7d1d9; border-radius: 5px; background: white; }
       .f001-panel > summary { display: flex; align-items: center; justify-content: space-between; padding: .5rem .65rem; cursor: pointer; font-weight: 650; list-style: none; }
       .f001-panel > summary::after { content: '+'; color: #31556b; font-weight: 500; }
-      .f001-panel[open] > summary::after { content: '−'; }
+      .f001-panel[open] > summary::after { content: '\\2212'; }
       .f001-panel-body { padding: 0 .65rem .65rem; }
       .f001-caption { margin-top: .75rem; color: #52616d; font-size: .9rem; }
       .f001-page-title { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin: 0 0 8px; }
@@ -65,7 +65,7 @@ mod_plot_generation_ui <- function(id) {
         class = "f001-data-drawer",
         tags$summary(
           tags$span(class = "f001-trigger-label", "Data & profile"),
-          tags$span(class = "f001-drawer-grip", "•••"),
+          tags$span(class = "f001-drawer-grip", "\u2022\u2022\u2022"),
           `aria-label` = "Open active data and profile drawer"
         ),
         tags$div(class = "f001-drawer-body", shiny::uiOutput(ns("data_profile")))
@@ -120,7 +120,7 @@ mod_plot_generation_ui <- function(id) {
           tags$details(
             class = "f001-panel",
             open = NA,
-            tags$summary("Your visualization question · Required"),
+            tags$summary("Your visualization question \u00b7 Required"),
             tags$div(
               class = "f001-panel-body",
               shiny::textAreaInput(
@@ -291,9 +291,9 @@ mod_plot_generation_server <- function(
             "f001-stepmark"
           }
           label <- if (index < current_index) {
-            paste("✓", "·", step_labels[[index]])
+            paste("\u2713", "\u00b7", step_labels[[index]])
           } else {
-            paste(index, "·", step_labels[[index]])
+            paste(index, "\u00b7", step_labels[[index]])
           }
           tags$div(class = class, label)
         })
@@ -319,7 +319,7 @@ mod_plot_generation_server <- function(
           tags$b("Data profile"),
           tags$span(
             class = "text-body-secondary",
-            if (is.null(loaded)) "Available after upload" else paste(loaded$rows, "rows ×", loaded$columns, "columns")
+            if (is.null(loaded)) "Available after upload" else paste(loaded$rows, "rows \u00d7", loaded$columns, "columns")
           )
         ),
         tags$div(
@@ -394,9 +394,9 @@ mod_plot_generation_server <- function(
       decisions <- state$repository$list_review_decisions(revision$revision_id)
       status <- revision$status
       label <- if (status %in% c("Draft", "Verified") && !nrow(decisions)) {
-        paste(status, "· not reviewed")
+        paste(status, "\u00b7 not reviewed")
       } else if (status %in% c("Draft", "Verified")) {
-        paste(status, "· review pending")
+        paste(status, "\u00b7 review pending")
       } else {
         status
       }
