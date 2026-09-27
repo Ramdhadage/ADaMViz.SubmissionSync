@@ -16,54 +16,29 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     stats::setNames(workspace_root, runtime_config$workspace)
   )
   current_revision <- shiny::reactiveVal(.empty_assurance_state())
-  execution_task <- new_async_task_service() |>
-    bslib::bind_task_button("plot_generation-specification-execute") |>
-    bslib::bind_task_button("plot_generation-specification-correct")
-
-  shiny::observe({
-    status <- execution_task$status()
-    if (identical(status, "success")) {
-      current_revision(execution_task$result())
-    } else if (identical(status, "error")) {
-      tryCatch(
-        execution_task$result(),
-        error = \(error) shiny::showNotification(
-          conditionMessage(error),
-          type = "error"
-        )
-      )
-    }
-  })
 
   execute_revision <- function(fields) {
     state <- current_revision()
     if (is.null(state$pending)) {
       cli::cli_abort("Create an inspectable specification before execution")
     }
-    execution_task$invoke(list(
-      function_name = ".execute_assurance_revision",
-      args = list(
-        snapshot = state$pending$snapshot,
-        prompt = state$pending$prompt,
-        fields = fields,
-        repository_root = fs::file_temp(pattern = "assurance-session-")
-      )
+    current_revision(.execute_assurance_revision(
+      snapshot = state$pending$snapshot,
+      prompt = state$pending$prompt,
+      fields = fields,
+      repository_root = fs::file_temp(pattern = "assurance-session-")
     ))
-    invisible(state)
+    invisible(current_revision())
   }
 
   create_correction <- function(fields, rationale, provenance) {
-    state <- current_revision()
-    execution_task$invoke(list(
-      function_name = ".execute_correction_revision",
-      args = list(
-        state = state,
-        fields = fields,
-        rationale = rationale,
-        provenance = provenance
-      )
+    current_revision(.execute_correction_revision(
+      state = current_revision(),
+      fields = fields,
+      rationale = rationale,
+      provenance = provenance
     ))
-    invisible(state)
+    invisible(current_revision())
   }
 
   mod_plot_generation_server(
@@ -71,7 +46,6 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     current_revision = current_revision,
     execute_revision = execute_revision,
     create_correction = create_correction,
-    execution_status = execution_task$status,
     workspace_provider = workspace_provider
   )
 }

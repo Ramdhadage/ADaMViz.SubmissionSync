@@ -2,7 +2,6 @@ mod_plot_generation_ui <- function(id) {
   ns <- shiny::NS(id)
 
   tags$div(
-    waiter::use_waiter(),
     tags$style(shiny::HTML("\
       .f001-screen { position: relative; min-width: 0; min-height: 385px; border: 1px solid #aebbc5; border-radius: .5rem; background: white; overflow: hidden; }
       .f001-appbar { height: 45px; padding: .5rem .75rem; border-bottom: 1px solid #c7d1d9; display: flex; align-items: center; justify-content: space-between; background: white; }
@@ -246,7 +245,6 @@ mod_plot_generation_server <- function(
   current_revision,
   execute_revision,
   create_correction,
-  execution_status,
   workspace_provider
 ) {
   shiny::moduleServer(id, function(input, output, session) {
@@ -389,9 +387,6 @@ mod_plot_generation_server <- function(
 
     output$review_status <- shiny::renderUI({
       state <- current_revision()
-      if (identical(execution_status(), "running")) {
-        return(tags$span(class = "status-badge status-draft", "Generating plot"))
-      }
       if (is.null(state$revision)) {
         return(tags$span(class = "status-badge status-draft", "No result yet"))
       }
@@ -546,18 +541,11 @@ mod_plot_generation_server <- function(
       correct_current
     )
     mod_run_status_server("run_status", current_revision)
-    mod_plot_preview_server("plot_preview", current_revision, execution_status)
+    mod_plot_preview_server("plot_preview", current_revision)
     mod_evidence_server("evidence", current_revision)
     mod_revision_history_server("revision_history", current_revision)
     mod_export_server("export", current_revision, workspace_provider)
     mod_review_server("review", current_revision, current_revision)
-
-    shiny::observeEvent(execution_status(), {
-      if (identical(execution_status(), "error")) {
-        confirm_message("Plot generation failed. Review the run status and try again.")
-        set_step("confirm")
-      }
-    }, ignoreInit = TRUE)
 
   })
 }

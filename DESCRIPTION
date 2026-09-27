@@ -21,13 +21,11 @@ Imports:
     ggplot2,
     jsonvalidate,
     jsonlite,
-    mirai,
     patchwork,
     processx,
     readxl,
     RSQLite,
-    shiny,
-    waiter
+    shiny
 Suggests:
     callr,
     devtools,

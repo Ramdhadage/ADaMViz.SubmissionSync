@@ -26,3 +26,21 @@ test_that("the app server starts with injected runtime configuration", {
     )
   )
 })
+
+test_that("the app server completes execution synchronously", {
+  result <- .empty_assurance_state()
+  result$revision <- list(status = "Verified")
+  testthat::local_mocked_bindings(
+    .execute_assurance_revision = function(...) result
+  )
+
+  shiny::testServer(app_server, {
+    state <- .empty_assurance_state()
+    state$pending <- list(snapshot = make_test_snapshot(), prompt = "Plot ALT")
+    current_revision(state)
+
+    execute_revision(as.list(execution_spec()$fields))
+
+    expect_identical(current_revision(), result)
+  })
+})

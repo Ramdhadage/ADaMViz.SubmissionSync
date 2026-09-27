@@ -44,7 +44,6 @@ The current Result step combines the generated result with revision history, two
 - No change to review, revision, lifecycle, evidence, authorization, or export services.
 - No dependency, public-interface, persistence, identity, or controlled-workspace changes.
 - No redesign of the four existing step surfaces beyond the added navigation controls and five-column stepper.
-- Do not modify or include the user's uncommitted waiter/progress changes from the main checkout.
 
 ### Acceptance Examples
 
