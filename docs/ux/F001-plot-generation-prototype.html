@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>F001 Plot Generation — option C, four screens</title>
+<title>F001 Plot Generation — five screens</title>
 <style>
 :root{color-scheme:light;font:14px/1.4 "Segoe UI",Arial,sans-serif;color:#17232d;background:#f2f5f7;--line:#c7d1d9;--muted:#52616d;--blue:#164f70;--soft:#edf4f8}
 *{box-sizing:border-box}
@@ -30,7 +30,7 @@ h1{font-size:1.5rem;margin:0 0 3px}
 .drawer-section b{display:block}
 .tag{display:inline-block;font-size:.72rem;border:1px solid #a6b6c0;border-radius:12px;background:#f4f7f8;padding:2px 7px;color:#334b5a}
 .workspace{padding:12px 14px 13px 40px}
-.progress{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:0 0 11px}
+.progress{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin:0 0 11px}
 .step{border:1px solid #d1d9de;border-radius:4px;background:#f7f9fa;padding:6px 5px;text-align:center;color:#56636c;font-size:.75rem}
 .step.current{background:var(--soft);border-color:#7492a6;color:#173f59;font-weight:700}
 .step.done{color:#245b46}
@@ -61,6 +61,9 @@ textarea.input{width:100%;height:72px;resize:vertical;font:inherit}
 .chart{height:150px;border:1px solid #d3dce2;border-radius:4px;background:#fff;margin-top:8px}
 .chart svg{width:100%;height:100%}
 .mini-code{font:12px/1.4 Consolas,monospace;white-space:pre-wrap;background:#f6f8f9;border:1px solid #e0e5e9;border-radius:4px;padding:8px}
+.record-table{width:100%;border-collapse:collapse;font-size:.78rem;margin-top:6px}.record-table th,.record-table td{padding:5px;text-align:left;border-bottom:1px solid #dbe3e8}
+.field-label{display:block;font-size:.78rem;margin:9px 0 3px}.select{border:1px solid #aebbc4;border-radius:4px;padding:7px 9px;background:#fff;color:#304552;min-width:190px}
+.action-row{display:flex;gap:6px;flex-wrap:wrap}.action-row .btn{cursor:default}.export-note{margin-top:9px;border:1px solid #dbe3e8;background:#f6f8f9;padding:7px;font:11px Consolas,monospace}
 .screen-caption{border-top:1px solid #e3e8eb;padding:7px 12px 8px 40px;color:#50606a;font-size:.78rem;background:#fafbfc}
 .guardrail{margin-top:12px;font-size:.82rem;color:#45535d}
 .guardrail b{color:#243d4d}
@@ -70,23 +73,23 @@ textarea.input{width:100%;height:72px;resize:vertical;font:inherit}
 </head>
 <body>
 <main>
-<h1>F001 Plot Generation — option C, four screens</h1>
+<h1>F001 Plot Generation — five screens</h1>
 <p class="subtitle">One task canvas per step. Dataset and profile start hidden in a side drawer; open it by clicking the edge tab or dragging it right.</p>
 <div class="topnotes">
-<div class="note"><b>Progress:</b> Data → Ask → Confirm → Result</div>
+<div class="note"><b>Progress:</b> Data → Ask → Confirm → Result → Export</div>
 <div class="note"><b>Panels:</b> native expand/collapse controls throughout</div>
 <div class="note"><b>Example data:</b> synthetic illustration only</div>
 </div>
 
 <section class="grid">
 <article class="screen" aria-label="Data screen">
-<div class="appbar"><span class="brand">Create plot</span><span class="stepmark">Step 1 of 4</span></div>
+<div class="appbar"><span class="brand">Create plot</span><span class="stepmark">Step 1 of 5</span></div>
 <details class="data-drawer">
 <summary class="drawer-trigger" aria-label="Open active data and profile drawer"><span class="trigger-label">Data &amp; profile</span><span class="grip">•••</span></summary>
 <div class="drawer-content"><h3>Active data</h3><p>No dataset uploaded</p><div class="drawer-section"><b>Data profile</b><span class="muted">Available after upload</span></div><div class="drawer-section"><b>File check</b><span class="tag">Waiting for file</span></div><p class="muted">Drawer starts closed. Click the tab or drag it to open.</p></div>
 </details>
 <div class="workspace">
-<div class="progress"><div class="step current">1 · Data</div><div class="step">2 · Ask</div><div class="step">3 · Confirm</div><div class="step">4 · Result</div></div>
+<div class="progress"><div class="step current">1 · Data</div><div class="step">2 · Ask</div><div class="step">3 · Confirm</div><div class="step">4 · Result</div><div class="step">5 · Export</div></div>
 <div class="page-title"><h2>Start with your data</h2><span>Upload is required to continue</span></div>
 <details class="panel" open><summary>Upload a dataset <span class="required">Required</span></summary><div class="panel-body"><div class="muted">Choose a supported CSV or Excel file. </div><div class="drop"><b>Choose file</b> <span class="muted">or drag and drop it here</span><div class="muted">CSV or Excel</div></div></div></details>
 <div class="footer-action"><span class="muted">Next: describe the visualization question</span><span class="btn disabled">Continue</span></div>
@@ -95,13 +98,13 @@ textarea.input{width:100%;height:72px;resize:vertical;font:inherit}
 </article>
 
 <article class="screen" aria-label="Ask screen">
-<div class="appbar"><span class="brand">Create plot</span><span class="stepmark">Step 2 of 4</span></div>
+<div class="appbar"><span class="brand">Create plot</span><span class="stepmark">Step 2 of 5</span></div>
 <details class="data-drawer">
 <summary class="drawer-trigger" aria-label="Open active data and profile drawer"><span class="trigger-label">Data &amp; profile</span><span class="grip">•••</span></summary>
 <div class="drawer-content"><h3>Active data</h3><p>ADSL.csv <span class="tag">Ready</span></p><div class="drawer-section"><b>Data profile</b><span class="muted">Illustrative synthetic file</span></div><div class="drawer-section"><b>Columns</b><span class="muted">Available to inspect</span></div><div class="drawer-section"><b>Validation</b><span class="tag">Passed for this example</span></div></div>
 </details>
 <div class="workspace">
-<div class="progress"><div class="step done">✓ · Data</div><div class="step current">2 · Ask</div><div class="step">3 · Confirm</div><div class="step">4 · Result</div></div>
+<div class="progress"><div class="step done">✓ · Data</div><div class="step current">2 · Ask</div><div class="step">3 · Confirm</div><div class="step">4 · Result</div><div class="step">5 · Export</div></div>
 <div class="page-title"><h2>What would you like to see?</h2><span>One question, in your words</span></div>
 <details class="panel" open><summary>Your visualization question <span class="required">Required</span></summary><div class="panel-body"><div class="input">How does mean change from baseline vary by visit and treatment arm?</div></div></details>
 
@@ -111,13 +114,13 @@ textarea.input{width:100%;height:72px;resize:vertical;font:inherit}
 </article>
 
 <article class="screen" aria-label="Confirm screen">
-<div class="appbar"><span class="brand">Create plot</span><span class="stepmark">Step 3 of 4</span></div>
+<div class="appbar"><span class="brand">Create plot</span><span class="stepmark">Step 3 of 5</span></div>
 <details class="data-drawer">
 <summary class="drawer-trigger" aria-label="Open active data and profile drawer"><span class="trigger-label">Data &amp; profile</span><span class="grip">•••</span></summary>
 <div class="drawer-content"><h3>Active data</h3><p>ADSL.csv <span class="tag">Ready</span></p><div class="drawer-section"><b>Data profile</b><span class="muted">Illustrative synthetic file</span></div><div class="drawer-section"><b>Validation</b><span class="tag">Passed for this example</span></div></div>
 </details>
 <div class="workspace">
-<div class="progress"><div class="step done">✓ · Data</div><div class="step done">✓ · Ask</div><div class="step current">3 · Confirm</div><div class="step">4 · Result</div></div>
+<div class="progress"><div class="step done">✓ · Data</div><div class="step done">✓ · Ask</div><div class="step current">3 · Confirm</div><div class="step">4 · Result</div><div class="step">5 · Export</div></div>
 <div class="page-title"><h2>Review the proposed plot <span class="tip"><button class="tip-trigger" type="button" aria-label="Question and proposed choices" aria-describedby="choices-tip">i</button><span id="choices-tip" class="tipbox" role="tooltip"><b>Question</b><br>How does mean change from baseline vary by visit and treatment arm?<br><b>Proposed choices</b><br>Line plot · mean change by study visit · grouped by treatment arm.<br><span class="muted">Synthetic illustration; return to Ask to revise.</span></span></span></h2></div>
 <details class="panel" open><summary>Plot type</summary><div class="panel-body"><div class="row"><div class="keyval"><b>Suggested display</b><span class="value">Line plot</span></div><div class="keyval"><b>Question</b><span class="value">Mean change over visits</span></div></div></div></details>
 <details class="panel" open><summary>Variables and settings</summary><div class="panel-body"><div class="row"><div class="keyval"><b>X axis</b><span class="value">Study visit</span></div><div class="keyval"><b>Y axis</b><span class="value">Change from baseline</span></div></div><div class="row" style="margin-top:7px"><div class="keyval"><b>Group</b><span class="value">Treatment arm</span></div><div class="keyval"><b>Summary</b><span class="value">Mean</span></div></div></div></details>
@@ -128,13 +131,13 @@ textarea.input{width:100%;height:72px;resize:vertical;font:inherit}
 </article>
 
 <article class="screen" aria-label="Result screen">
-<div class="appbar"><span class="brand">Create plot</span><span class="stepmark">Step 4 of 4</span></div>
+<div class="appbar"><span class="brand">Create plot</span><span class="stepmark">Step 4 of 5</span></div>
 <details class="data-drawer">
 <summary class="drawer-trigger" aria-label="Open active data and profile drawer"><span class="trigger-label">Data &amp; profile</span><span class="grip">•••</span></summary>
 <div class="drawer-content"><h3>Active data</h3><p>ADSL.csv <span class="tag">Synthetic example</span></p><div class="drawer-section"><b>Data profile</b><span class="muted">Source details stay available in this drawer</span></div><div class="drawer-section"><b>Run trace</b><span class="muted">Input · question · choices · code · checks</span></div></div>
 </details>
 <div class="workspace">
-<div class="progress"><div class="step done">✓ · Data</div><div class="step done">✓ · Ask</div><div class="step done">✓ · Confirm</div><div class="step current">4 · Result</div></div>
+<div class="progress"><div class="step done">✓ · Data</div><div class="step done">✓ · Ask</div><div class="step done">✓ · Confirm</div><div class="step current">4 · Result</div><div class="step">5 · Export</div></div>
 <div class="page-title"><h2>Plot result</h2><span><span class="status">Draft · not reviewed</span><span class="tip tip-right"><button class="tip-trigger" type="button" aria-label="Review status information" aria-describedby="review-tip">i</button><span id="review-tip" class="tipbox" role="tooltip">Status: Draft · not reviewed. Reviewer decisions are pending. Both independent approvals are required for post-approval export eligibility.</span></span></span></div>
 <details class="panel" open><summary>Plot preview</summary><div class="panel-body"><div class="chart"><svg viewBox="0 0 540 155" role="img" aria-label="Illustrative line plot"><path d="M48 12V128H525" fill="none" stroke="#687985" stroke-width="1.3"/><path d="M48 40H525M48 68H525M48 96H525" stroke="#e5eaed"/><polyline points="70,108 180,83 290,71 400,49 510,34" fill="none" stroke="#236b8e" stroke-width="3"/><polyline points="70,115 180,100 290,80 400,76 510,58" fill="none" stroke="#be7840" stroke-width="3"/><g fill="#236b8e"><circle cx="70" cy="108" r="3.5"/><circle cx="180" cy="83" r="3.5"/><circle cx="290" cy="71" r="3.5"/><circle cx="400" cy="49" r="3.5"/><circle cx="510" cy="34" r="3.5"/></g><g fill="#be7840"><circle cx="70" cy="115" r="3.5"/><circle cx="180" cy="100" r="3.5"/><circle cx="290" cy="80" r="3.5"/><circle cx="400" cy="76" r="3.5"/><circle cx="510" cy="58" r="3.5"/></g><text x="260" y="150" font-size="10" fill="#53616c">Study visit</text><text x="54" y="11" font-size="9" fill="#53616c">Change from baseline</text><text x="390" y="16" font-size="10" fill="#236b8e">Treatment A</text><text x="461" y="16" font-size="10" fill="#be7840">Treatment B</text></svg></div></div></details>
 <details class="panel"><summary>Exact R code</summary><div class="panel-body"><div class="mini-code"># Exact script used for this run
@@ -142,8 +145,27 @@ textarea.input{width:100%;height:72px;resize:vertical;font:inherit}
 ggplot2::ggplot(...)</div></div></details>
 <details class="panel optional"><summary>Optional: view automated checks</summary><div class="panel-body muted">Code correctness · data integrity · result accuracy · reproducibility. Specific criteria are defined by domain experts.</div></details>
 
+<div class="footer-action"><span class="back">← Back to confirm</span><span class="btn">Continue to export</span></div>
 </div>
-<div class="screen-caption">Plot and exact R code are here. Automated checks are optional; review status is available from the info button. Export policy remains open in F001.</div>
+<div class="screen-caption">Plot and exact R code are here. Automated checks are optional; revision history, review, and export are on the next step.</div>
+</article>
+<article class="screen" aria-label="Export screen">
+<div class="appbar"><span class="brand">Create plot</span><span class="stepmark">Step 5 of 5</span></div>
+<details class="data-drawer">
+<summary class="drawer-trigger" aria-label="Open active data and profile drawer"><span class="trigger-label">Data &amp; profile</span><span class="grip">•••</span></summary>
+<div class="drawer-content"><h3>Active data</h3><p>ADSL.csv <span class="tag">Synthetic example</span></p><div class="drawer-section"><b>Data profile</b><span class="muted">Source details stay available in this drawer</span></div><div class="drawer-section"><b>Run trace</b><span class="muted">Input · question · choices · code · checks</span></div></div>
+</details>
+<div class="workspace">
+<div class="progress"><div class="step done">✓ · Data</div><div class="step done">✓ · Ask</div><div class="step done">✓ · Confirm</div><div class="step done">✓ · Result</div><div class="step current">5 · Export</div></div>
+<div class="page-title"><h2>Export</h2></div>
+<details class="panel" open><summary>Traceability, review, and export</summary><div class="panel-body">
+<details class="panel" open><summary>Revision History</summary><div class="panel-body"><table class="record-table"><thead><tr><th>revision_id</th><th>revision_number</th><th>initial_status</th><th>status</th><th>created_at</th></tr></thead><tbody><tr><td>rev-example</td><td>1</td><td>Draft</td><td>Verified</td><td>Example timestamp</td></tr></tbody></table></div></details>
+<details class="panel" open><summary>Two-Person Review</summary><div class="panel-body"><label class="field-label">Reviewer identity</label><div class="select">Statistical programmer ▾</div><label class="field-label">Review role</label><div class="select">Statistical programmer ▾</div><label class="field-label">Comment or rejection rationale</label><div class="input" style="min-height:55px"></div><div class="action-row"><span class="btn">Approve</span><span class="btn secondary">Reject</span></div></div></details>
+<details class="panel" open><summary>Controlled export</summary><div class="panel-body"><label class="field-label">Actor</label><div class="select">Creator ▾</div><label class="field-label">Destination</label><div class="input">local</div><div class="action-row"><span class="btn secondary">Export image and code</span><span class="btn secondary">Download image and code ZIP</span></div><div class="export-note">No export attempted.</div><table class="record-table"><thead><tr><th>receipt_id</th><th>revision_id</th><th>destination_id</th><th>code_hash</th><th>image_hash</th></tr></thead></table></div></details>
+</div></details>
+<div class="footer-action"><span class="back">← Back to result</span></div>
+</div>
+<div class="screen-caption">Review decisions are pending until both independent reviewers approve. The exact R script and check evidence remain linked to this revision.</div>
 </article>
 </section>
 <p class="guardrail"><b>Interaction sketch:</b> each page is a distinct step with Back/Continue. Panels use familiar expand/collapse controls. The dataset drawer begins hidden and opens by click or an edge drag. All records must pass validation before code generation or execution.</p>

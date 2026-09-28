@@ -21,3 +21,4 @@ $run_dev.*
 ^docs/plans/\.quarto$
 ^docs/plans/\.quarto-preview-output$
 ^docs/plans/\.quarto-render-output$
+^codecov\.yml$

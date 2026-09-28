@@ -36,7 +36,7 @@ The scientist can stay focused on the current task without losing access to inpu
 
 ## Examples
 
-The [F001 plot-generation prototype](../ux/F001-plot-generation-prototype.html) places the drawer on each of its four step screens and shows it hidden by default. The broader [task-first plot workbench pattern](design-patterns/task-first-clinical-plot-workbench.md) describes how this fits the clinical workflow.
+The [F001 plot-generation prototype](../ux/F001-plot-generation-prototype.html) places the drawer on each of its five step screens and shows it hidden by default. The broader [task-first plot workbench pattern](design-patterns/task-first-clinical-plot-workbench.md) describes how this fits the clinical workflow.
 
 ## Related
 

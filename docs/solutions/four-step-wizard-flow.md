@@ -19,7 +19,7 @@ tags:
 
 ## Context
 
-F001 uses the main sequence Data → Ask → Confirm → Result → Export. The design also sets how users return to earlier work, refine choices, and proceed after data validation. The original static prototype stops at Result; the implemented workflow adds Export so traceability, independent review, and controlled export remain separate from the generated result.
+F001 uses the main sequence Data → Ask → Confirm → Result → Export. The design also sets how users return to earlier work, refine choices, and proceed after data validation. The static prototype and implemented workflow both show Export as the final step so traceability, independent review, and controlled export remain separate from the generated result.
 
 ## Guidance
 
