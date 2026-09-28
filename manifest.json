@@ -15,6 +15,39 @@
     }
   },
   "packages": {
+    "ADaMViz.SubmissionSync": {
+      "Source": "github",
+      "Repository": null,
+      "description": {
+        "Package": "ADaMViz.SubmissionSync",
+        "Title": "From Clinical Questions to Review-Ready Figures and Reproducible\nR Code",
+        "Version": "0.1.0",
+        "Authors@R": "\n    person(\"Ramnath\", \"Dhadage\", role = c(\"aut\", \"cre\"), email = \"ram.dhadage123@gmail.com\")",
+        "Description": "Generates and conversationally refines ggplot2 visualizations from Analysis Data Model (ADaM) datasets and other permitted tabular data. Executes generated R code in a controlled environment and records input metadata, code, package versions, outputs, and review status to support reproducibility, traceability, and validation of clinical reporting workflows.",
+        "License": "MIT + file LICENSE",
+        "Depends": "R (>= 4.1.0)",
+        "Imports": "bslib, checkmate, cli, config, DBI, digest, fs, golem,\nggplot2, jsonlite, patchwork, readxl, RSQLite, shiny",
+        "Suggests": "callr, devtools, htmltools, renv, roxygen2, shinytest2,\ntestthat (>= 3.0.0), withr",
+        "Config/testthat/edition": "3",
+        "Encoding": "UTF-8",
+        "Config/roxygen2/version": "8.1.0",
+        "RemoteType": "github",
+        "RemoteHost": "api.github.com",
+        "RemoteRepo": "ADaMViz.SubmissionSync",
+        "RemoteUsername": "Ramdhadage",
+        "RemoteRef": "HEAD",
+        "RemoteSha": "3d8b2b4916ae9d18c48168205693a4e7379a906f",
+        "GithubRepo": "ADaMViz.SubmissionSync",
+        "GithubUsername": "Ramdhadage",
+        "GithubRef": "HEAD",
+        "GithubSHA1": "3d8b2b4916ae9d18c48168205693a4e7379a906f",
+        "NeedsCompilation": "no",
+        "Packaged": "2026-09-28 04:23:24 UTC; admin",
+        "Author": "Ramnath Dhadage [aut, cre]",
+        "Maintainer": "Ramnath Dhadage <ram.dhadage123@gmail.com>",
+        "Built": "R 4.6.0; ; 2026-09-28 04:23:27 UTC; windows"
+      }
+    },
     "AsioHeaders": {
       "Source": "CRAN",
       "Repository": "https://packagemanager.posit.co/cran/latest",
@@ -293,45 +326,6 @@
         "RemoteReposName": "CRAN",
         "RemotePkgPlatform": "x86_64-w64-mingw32",
         "RemoteSha": "0.2.2"
-      }
-    },
-    "V8": {
-      "Source": "CRAN",
-      "Repository": "https://packagemanager.posit.co/cran/latest",
-      "description": {
-        "Package": "V8",
-        "Type": "Package",
-        "Title": "Embedded JavaScript and WebAssembly Engine for R",
-        "Version": "8.2.0",
-        "Authors@R": "c(\n    person(\"Jeroen\", \"Ooms\", role = c(\"aut\", \"cre\"), email = \"jeroenooms@gmail.com\",\n      comment = c(ORCID = \"0000-0002-4035-0289\")),\n    person(\"George\", \"Stagg\", role = \"ctb\", comment = c(ORCID = \"0009-0006-3173-9846\")),\n    person(\"Jan Marvin\", \"Garbuszus\", role = \"ctb\"))",
-        "Description": "An R interface to V8 <https://v8.dev>: Google's open source JavaScript\n    and WebAssembly engine. This package can be compiled either with V8 or NodeJS \n    when built as a shared library.",
-        "License": "MIT + file LICENSE",
-        "URL": "https://jeroen.r-universe.dev/V8",
-        "BugReports": "https://github.com/jeroen/v8/issues",
-        "SystemRequirements": "On Linux you can build against libv8-dev (Debian)\nor v8-devel (Fedora). We also provide static libv8 binaries for\nmost platforms, see the README for details.",
-        "NeedsCompilation": "yes",
-        "VignetteBuilder": "knitr",
-        "Imports": "Rcpp (>= 0.12.12), jsonlite (>= 1.0), curl (>= 1.0), utils",
-        "LinkingTo": "Rcpp",
-        "Suggests": "testthat, knitr, rmarkdown",
-        "RoxygenNote": "7.3.1",
-        "Language": "en-US",
-        "Encoding": "UTF-8",
-        "Biarch": "true",
-        "Packaged": "2026-04-19 11:38:23 UTC; jeroen",
-        "Author": "Jeroen Ooms [aut, cre] (ORCID: <https://orcid.org/0000-0002-4035-0289>),\n  George Stagg [ctb] (ORCID: <https://orcid.org/0009-0006-3173-9846>),\n  Jan Marvin Garbuszus [ctb]",
-        "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
-        "Repository": "RSPM",
-        "Date/Publication": "2026-04-21 05:10:34 UTC",
-        "Built": "R 4.6.0; x86_64-w64-mingw32; 2026-07-06 15:40:27 UTC; windows",
-        "Archs": "x64",
-        "RemoteType": "standard",
-        "RemoteRef": "V8",
-        "RemotePkgRef": "V8",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/latest",
-        "RemoteReposName": "CRAN",
-        "RemotePkgPlatform": "x86_64-w64-mingw32",
-        "RemoteSha": "8.2.0"
       }
     },
     "askpass": {
@@ -1064,42 +1058,6 @@
         "RemoteSha": "0.3.2"
       }
     },
-    "coro": {
-      "Source": "CRAN",
-      "Repository": "https://packagemanager.posit.co/cran/latest",
-      "description": {
-        "Package": "coro",
-        "Title": "'Coroutines' for R",
-        "Version": "1.1.0",
-        "Authors@R": "c(\n    person(\"Lionel\", \"Henry\", , \"lionel@posit.co\", role = c(\"aut\", \"cre\")),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n  )",
-        "Description": "Provides 'coroutines' for R, a family of functions that can\n    be suspended and resumed later on. This includes 'async' functions\n    (which await) and generators (which yield). 'Async' functions are\n    based on the concurrency framework of the 'promises' package.\n    Generators are based on a dependency free iteration protocol defined\n    in 'coro' and are compatible with iterators from the 'reticulate'\n    package.",
-        "License": "MIT + file LICENSE",
-        "URL": "https://github.com/r-lib/coro, https://coro.r-lib.org/",
-        "BugReports": "https://github.com/r-lib/coro/issues",
-        "Depends": "R (>= 3.5.0)",
-        "Imports": "rlang (>= 0.4.12)",
-        "Suggests": "knitr, later (>= 1.1.0), magrittr (>= 2.0.0), promises,\nreticulate, rmarkdown, testthat (>= 3.0.0)",
-        "VignetteBuilder": "knitr",
-        "Config/Needs/website": "tidyverse/tidytemplate",
-        "Config/testthat/edition": "3",
-        "Encoding": "UTF-8",
-        "RoxygenNote": "7.3.2",
-        "NeedsCompilation": "no",
-        "Packaged": "2024-11-05 09:54:43 UTC; lionel",
-        "Author": "Lionel Henry [aut, cre],\n  Posit Software, PBC [cph, fnd]",
-        "Maintainer": "Lionel Henry <lionel@posit.co>",
-        "Repository": "RSPM",
-        "Date/Publication": "2024-11-05 10:30:09 UTC",
-        "Built": "R 4.6.0; ; 2026-04-23 22:50:35 UTC; windows",
-        "RemoteType": "standard",
-        "RemoteRef": "coro",
-        "RemotePkgRef": "coro",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/latest",
-        "RemoteReposName": "CRAN",
-        "RemotePkgPlatform": "x86_64-w64-mingw32",
-        "RemoteSha": "1.1.0"
-      }
-    },
     "covr": {
       "Source": "CRAN",
       "Repository": "https://packagemanager.posit.co/cran/latest",
@@ -1315,46 +1273,6 @@
         "RemoteSha": "8.0.0"
       }
     },
-    "dbplyr": {
-      "Source": "CRAN",
-      "Repository": "https://packagemanager.posit.co/cran/latest",
-      "description": {
-        "Type": "Package",
-        "Package": "dbplyr",
-        "Title": "A 'dplyr' Back End for Databases",
-        "Version": "2.6.0",
-        "Authors@R": "c(\n    person(\"Hadley\", \"Wickham\", , \"hadley@posit.co\", role = c(\"aut\", \"cre\")),\n    person(\"Maximilian\", \"Girlich\", role = \"aut\"),\n    person(\"Edgar\", \"Ruiz\", role = \"aut\"),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n  )",
-        "Description": "A 'dplyr' back end for databases that allows you to work with\n    remote database tables as if they are in-memory data frames.  Basic\n    features work with any database that has a 'DBI' back end; more\n    advanced features require 'SQL' translation to be provided by the\n    package author.",
-        "License": "MIT + file LICENSE",
-        "URL": "https://dbplyr.tidyverse.org/, https://github.com/tidyverse/dbplyr",
-        "BugReports": "https://github.com/tidyverse/dbplyr/issues",
-        "Depends": "R (>= 4.1)",
-        "Imports": "blob (>= 1.2.0), cli (>= 3.6.1), DBI (>= 1.1.3), dplyr (>=\n1.1.2), glue (>= 1.6.2), lifecycle (>= 1.0.3), magrittr,\nmethods, pillar (>= 1.9.0), purrr (>= 1.0.1), R6 (>= 2.2.2),\nrlang (>= 1.1.1), tibble (>= 3.2.1), tidyr (>= 1.3.0),\ntidyselect (>= 1.2.1), utils, vctrs (>= 0.6.3), withr (>=\n2.5.0)",
-        "Suggests": "adbcdrivermanager, adbcsqlite, adbi, bit64, covr, knitr,\nLahman, nycflights13, odbc (>= 1.4.2), RJDBC, RMariaDB (>=\n1.2.2), rmarkdown, RPostgres (>= 1.4.5), RPostgreSQL, RSQLite\n(>= 2.3.8), testthat (>= 3.1.10)",
-        "VignetteBuilder": "knitr",
-        "Config/Needs/website": "tidyverse/tidytemplate",
-        "Config/testthat/edition": "3",
-        "Config/testthat/parallel": "TRUE",
-        "Encoding": "UTF-8",
-        "Language": "en-gb",
-        "Collate": "'verb-copy-inline.R' 'verb-copy-to.R' 'db-sql.R' 'db.R'\n'utils-check.R' 'import-standalone-types-check.R'\n'import-standalone-obj-type.R' 'utils.R' 'sql.R' 'escape.R'\n'translate-sql-cut.R' 'translate-sql-string.R'\n'translate-sql-aggregate.R' 'translate-sql-scalar.R'\n'translate-sql-helpers.R' 'translate-sql-window.R'\n'translate-sql-conditional.R' 'backend-.R' 'backend-access.R'\n'backend-adbc.R' 'backend-db2.R' 'backend-hana.R'\n'backend-hive.R' 'backend-impala.R' 'backend-jdbc.R'\n'backend-mssql.R' 'backend-mysql.R' 'backend-odbc.R'\n'backend-oracle.R' 'backend-postgres.R'\n'backend-postgres-old.R' 'backend-redshift.R'\n'backend-snowflake.R' 'backend-spark-sql.R' 'backend-sqlite.R'\n'backend-teradata.R' 'backward-compatibility.R'\n'bind-queries.R' 'data-cache.R' 'data-lahman.R'\n'data-nycflights13.R' 'db-io.R' 'dbplyr.R' 'ident.R'\n'import-standalone-s3-register.R' 'join-by-compat.R'\n'join-cols-compat.R' 'lazy-ops.R' 'memdb.R' 'optimise-utils.R'\n'progress.R' 'query-base.R' 'query-join.R' 'query-rf-join.R'\n'query-select.R' 'query-semi-join.R' 'query-set-op.R'\n'query-union.R' 'query.R' 'remote.R' 'rows.R' 'schema.R'\n'sql-build.R' 'sql-clause.R' 'sql-dialect.R' 'sql-glue.R'\n'sql-quote.R' 'sql-superseded.R' 'src-sql.R' 'src_dbi.R'\n'table-name.R' 'tbl-lazy.R' 'tbl-sql.R' 'tidyeval-across.R'\n'tidyeval.R' 'translate-sql.R' 'utils-format.R'\n'verb-arrange.R' 'verb-collapse.R' 'verb-collect.R'\n'verb-compute.R' 'verb-count.R' 'verb-distinct.R'\n'verb-do-query.R' 'verb-do.R' 'verb-expand.R' 'verb-explain.R'\n'verb-fill.R' 'verb-filter.R' 'verb-group_by.R' 'verb-head.R'\n'verb-joins.R' 'verb-mutate.R' 'verb-pivot-longer.R'\n'verb-pivot-wider.R' 'verb-pull.R' 'verb-select.R'\n'verb-set-ops.R' 'verb-slice.R' 'verb-summarise.R'\n'verb-uncount.R' 'verb-window.R' 'with-dialect.R' 'zzz.R'",
-        "Config/roxygen2/version": "8.0.0",
-        "NeedsCompilation": "no",
-        "Packaged": "2026-06-17 12:33:03 UTC; hadleywickham",
-        "Author": "Hadley Wickham [aut, cre],\n  Maximilian Girlich [aut],\n  Edgar Ruiz [aut],\n  Posit Software, PBC [cph, fnd]",
-        "Maintainer": "Hadley Wickham <hadley@posit.co>",
-        "Repository": "RSPM",
-        "Date/Publication": "2026-06-17 21:50:07 UTC",
-        "Built": "R 4.6.0; ; 2026-06-18 12:18:03 UTC; windows",
-        "RemoteType": "standard",
-        "RemoteRef": "dbplyr",
-        "RemotePkgRef": "dbplyr",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/latest",
-        "RemoteReposName": "CRAN",
-        "RemotePkgPlatform": "x86_64-w64-mingw32",
-        "RemoteSha": "2.6.0"
-      }
-    },
     "desc": {
       "Source": "CRAN",
       "Repository": "https://packagemanager.posit.co/cran/latest",
@@ -1535,46 +1453,6 @@
         "RemoteSha": "0.4.5"
       }
     },
-    "dplyr": {
-      "Source": "CRAN",
-      "Repository": "https://packagemanager.posit.co/cran/latest",
-      "description": {
-        "Type": "Package",
-        "Package": "dplyr",
-        "Title": "A Grammar of Data Manipulation",
-        "Version": "1.2.1",
-        "Authors@R": "c(\n    person(\"Hadley\", \"Wickham\", , \"hadley@posit.co\", role = c(\"aut\", \"cre\"),\n           comment = c(ORCID = \"0000-0003-4757-117X\")),\n    person(\"Romain\", \"François\", role = \"aut\",\n           comment = c(ORCID = \"0000-0002-2444-4226\")),\n    person(\"Lionel\", \"Henry\", role = \"aut\"),\n    person(\"Kirill\", \"Müller\", role = \"aut\",\n           comment = c(ORCID = \"0000-0002-1416-3412\")),\n    person(\"Davis\", \"Vaughan\", , \"davis@posit.co\", role = \"aut\",\n           comment = c(ORCID = \"0000-0003-4777-038X\")),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n  )",
-        "Description": "A fast, consistent tool for working with data frame like\n    objects, both in memory and out of memory.",
-        "License": "MIT + file LICENSE",
-        "URL": "https://dplyr.tidyverse.org, https://github.com/tidyverse/dplyr",
-        "BugReports": "https://github.com/tidyverse/dplyr/issues",
-        "Depends": "R (>= 4.1.0)",
-        "Imports": "cli (>= 3.6.2), generics, glue (>= 1.3.2), lifecycle (>=\n1.0.5), magrittr (>= 1.5), methods, pillar (>= 1.9.0), R6,\nrlang (>= 1.1.7), tibble (>= 3.2.0), tidyselect (>= 1.2.0),\nutils, vctrs (>= 0.7.1)",
-        "Suggests": "broom, covr, DBI, dbplyr (>= 2.2.1), ggplot2, knitr, Lahman,\nlobstr, nycflights13, purrr, rmarkdown, RSQLite, stringi (>=\n1.7.6), testthat (>= 3.1.5), tidyr (>= 1.3.0), withr",
-        "VignetteBuilder": "knitr",
-        "Config/build/compilation-database": "true",
-        "Config/Needs/website": "tidyverse/tidytemplate",
-        "Config/testthat/edition": "3",
-        "Encoding": "UTF-8",
-        "LazyData": "true",
-        "RoxygenNote": "7.3.3",
-        "NeedsCompilation": "yes",
-        "Packaged": "2026-04-02 19:51:05 UTC; hadleywickham",
-        "Author": "Hadley Wickham [aut, cre] (ORCID:\n    <https://orcid.org/0000-0003-4757-117X>),\n  Romain François [aut] (ORCID: <https://orcid.org/0000-0002-2444-4226>),\n  Lionel Henry [aut],\n  Kirill Müller [aut] (ORCID: <https://orcid.org/0000-0002-1416-3412>),\n  Davis Vaughan [aut] (ORCID: <https://orcid.org/0000-0003-4777-038X>),\n  Posit Software, PBC [cph, fnd]",
-        "Maintainer": "Hadley Wickham <hadley@posit.co>",
-        "Repository": "RSPM",
-        "Date/Publication": "2026-04-03 07:30:08 UTC",
-        "Built": "R 4.6.0; x86_64-w64-mingw32; 2026-04-23 23:14:55 UTC; windows",
-        "Archs": "x64",
-        "RemoteType": "standard",
-        "RemoteRef": "dplyr",
-        "RemotePkgRef": "dplyr",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/latest",
-        "RemoteReposName": "CRAN",
-        "RemotePkgPlatform": "x86_64-w64-mingw32",
-        "RemoteSha": "1.2.1"
-      }
-    },
     "ellipsis": {
       "Source": "CRAN",
       "Repository": "https://packagemanager.posit.co/cran/latest",
@@ -1606,46 +1484,6 @@
         "RemoteReposName": "CRAN",
         "RemotePkgPlatform": "x86_64-w64-mingw32",
         "RemoteSha": "0.3.3"
-      }
-    },
-    "ellmer": {
-      "Source": "CRAN",
-      "Repository": "https://packagemanager.posit.co/cran/latest",
-      "description": {
-        "Package": "ellmer",
-        "Title": "Chat with Large Language Models",
-        "Version": "0.5.0",
-        "Authors@R": "c(\n    person(\"Hadley\", \"Wickham\", , \"hadley@posit.co\", role = c(\"aut\", \"cre\"),\n           comment = c(ORCID = \"0000-0003-4757-117X\")),\n    person(\"Joe\", \"Cheng\", role = \"aut\"),\n    person(\"Aaron\", \"Jacobs\", role = \"aut\"),\n    person(\"Garrick\", \"Aden-Buie\", , \"garrick@posit.co\", role = \"aut\",\n           comment = c(ORCID = \"0000-0002-7111-0077\")),\n    person(\"Barret\", \"Schloerke\", , \"barret@posit.co\", role = \"aut\",\n           comment = c(ORCID = \"0000-0001-9986-114X\")),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"),\n           comment = c(ROR = \"03wc8by49\"))\n  )",
-        "Description": "Chat with large language models from a range of providers\n    including 'Claude' <https://claude.ai>, 'OpenAI'\n    <https://chatgpt.com>, and more. Supports streaming, asynchronous\n    calls, tool calling, and structured data extraction.",
-        "License": "MIT + file LICENSE",
-        "URL": "https://ellmer.tidyverse.org, https://github.com/tidyverse/ellmer",
-        "BugReports": "https://github.com/tidyverse/ellmer/issues",
-        "Depends": "R (>= 4.1)",
-        "Imports": "cli, coro (>= 1.1.0), glue, httr2 (>= 1.2.3), jsonlite, later\n(>= 1.4.0), lifecycle, promises (>= 1.5.0), R6, rlang (>=\n1.3.0), S7 (>= 0.2.0), tibble, vctrs",
-        "Suggests": "connectcreds, curl (>= 6.0.1), gargle, jose, knitr, magick,\nopenssl, otel (>= 0.2.0), otelsdk (>= 0.2.0), paws.common, png,\nrmarkdown, shiny, shinychat (>= 0.3.0), testthat (>= 3.0.0),\nvcr (>= 2.0.0), withr",
-        "VignetteBuilder": "knitr",
-        "Config/Needs/prices": "cli, dplyr, jsonlite, jsonvalidate, stringr,\ntidyr, usethis",
-        "Config/Needs/website": "tidyverse/tidytemplate, rmarkdown",
-        "Config/roxygen2/version": "8.1.0",
-        "Config/testthat/edition": "3",
-        "Config/testthat/parallel": "true",
-        "Config/testthat/start-first": "chat, provider*",
-        "Encoding": "UTF-8",
-        "Collate": "'utils-S7.R' 'types.R' 'ellmer-package.R' 'tools-def.R'\n'content.R' 'provider.R' 'as-json.R' 'batch-chat.R'\n'chat-structured.R' 'chat-tools-content.R' 'turns.R'\n'chat-tools.R' 'chat-utils.R' 'utils-coro.R' 'chat.R' 'files.R'\n'content-document.R' 'content-image.R' 'content-pdf.R'\n'content-replay.R' 'httr2.R' 'import-standalone-defer.R'\n'import-standalone-obj-type.R' 'import-standalone-purrr.R'\n'import-standalone-types-check.R' 'interpolate.R' 'live.R'\n'model.R' 'otel.R' 'parallel-chat.R' 'params.R' 'prices.R'\n'provider-any.R' 'provider-aws-api.R'\n'provider-openai-compatible.R' 'provider-openai.R'\n'provider-claude.R' 'provider-aws.R' 'provider-azure.R'\n'provider-claude-files.R' 'provider-claude-tools.R'\n'provider-google.R' 'provider-cloudflare.R'\n'provider-databricks.R' 'provider-deepseek.R'\n'provider-github.R' 'provider-google-tools.R'\n'provider-google-upload.R' 'provider-groq.R'\n'provider-huggingface.R' 'provider-lmstudio.R'\n'provider-mistral.R' 'provider-ollama.R'\n'provider-openai-tools.R' 'provider-openrouter.R'\n'provider-perplexity.R' 'provider-portkey.R' 'provider-posit.R'\n'provider-snowflake.R' 'provider-vllm.R' 'rounds.R' 'schema.R'\n'stream-controller.R' 'tokens.R' 'tool-context.R'\n'tools-built-in.R' 'tools-def-auto.R' 'utils-auth.R'\n'utils-callbacks.R' 'utils-cat.R' 'utils-merge.R'\n'utils-prettytime.R' 'utils.R' 'zzz.R'",
-        "NeedsCompilation": "no",
-        "Packaged": "2026-09-03 08:15:15 UTC; nic",
-        "Author": "Hadley Wickham [aut, cre] (ORCID:\n    <https://orcid.org/0000-0003-4757-117X>),\n  Joe Cheng [aut],\n  Aaron Jacobs [aut],\n  Garrick Aden-Buie [aut] (ORCID:\n    <https://orcid.org/0000-0002-7111-0077>),\n  Barret Schloerke [aut] (ORCID: <https://orcid.org/0000-0001-9986-114X>),\n  Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>)",
-        "Maintainer": "Hadley Wickham <hadley@posit.co>",
-        "Repository": "RSPM",
-        "Date/Publication": "2026-09-04 06:30:02 UTC",
-        "Built": "R 4.6.0; ; 2026-09-05 04:16:05 UTC; windows",
-        "RemoteType": "standard",
-        "RemoteRef": "ellmer",
-        "RemotePkgRef": "ellmer",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/latest",
-        "RemoteReposName": "CRAN",
-        "RemotePkgPlatform": "x86_64-w64-mingw32",
-        "RemoteSha": "0.5.0"
       }
     },
     "evaluate": {
@@ -1859,41 +1697,6 @@
         "RemoteReposName": "CRAN",
         "RemotePkgPlatform": "x86_64-w64-mingw32",
         "RemoteSha": "2.1.0"
-      }
-    },
-    "generics": {
-      "Source": "CRAN",
-      "Repository": "https://packagemanager.posit.co/cran/latest",
-      "description": {
-        "Package": "generics",
-        "Title": "Common S3 Generics not Provided by Base R Methods Related to\nModel Fitting",
-        "Version": "0.1.4",
-        "Authors@R": "c(\n    person(\"Hadley\", \"Wickham\", , \"hadley@posit.co\", role = c(\"aut\", \"cre\"),\n           comment = c(ORCID = \"0000-0003-4757-117X\")),\n    person(\"Max\", \"Kuhn\", , \"max@posit.co\", role = \"aut\"),\n    person(\"Davis\", \"Vaughan\", , \"davis@posit.co\", role = \"aut\"),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"),\n           comment = c(ROR = \"https://ror.org/03wc8by49\"))\n  )",
-        "Description": "In order to reduce potential package dependencies and\n    conflicts, generics provides a number of commonly used S3 generics.",
-        "License": "MIT + file LICENSE",
-        "URL": "https://generics.r-lib.org, https://github.com/r-lib/generics",
-        "BugReports": "https://github.com/r-lib/generics/issues",
-        "Depends": "R (>= 3.6)",
-        "Imports": "methods",
-        "Suggests": "covr, pkgload, testthat (>= 3.0.0), tibble, withr",
-        "Config/Needs/website": "tidyverse/tidytemplate",
-        "Config/testthat/edition": "3",
-        "Encoding": "UTF-8",
-        "RoxygenNote": "7.3.2",
-        "NeedsCompilation": "no",
-        "Packaged": "2025-05-09 18:17:41 UTC; hadleywickham",
-        "Author": "Hadley Wickham [aut, cre] (ORCID:\n    <https://orcid.org/0000-0003-4757-117X>),\n  Max Kuhn [aut],\n  Davis Vaughan [aut],\n  Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>)",
-        "Maintainer": "Hadley Wickham <hadley@posit.co>",
-        "Repository": "RSPM",
-        "Date/Publication": "2025-05-09 23:50:06 UTC",
-        "Built": "R 4.6.0; ; 2026-04-23 22:39:37 UTC; windows",
-        "RemoteType": "standard",
-        "RemoteRef": "generics",
-        "RemotePkgRef": "generics",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/latest",
-        "RemoteReposName": "CRAN",
-        "RemotePkgPlatform": "x86_64-w64-mingw32",
-        "RemoteSha": "0.1.4"
       }
     },
     "gert": {
@@ -2654,41 +2457,6 @@
         "RemoteSha": "2.0.0"
       }
     },
-    "jsonvalidate": {
-      "Source": "CRAN",
-      "Repository": "https://packagemanager.posit.co/cran/latest",
-      "description": {
-        "Package": "jsonvalidate",
-        "Title": "Validate 'JSON' Schema",
-        "Version": "1.5.0",
-        "Authors@R": "c(person(\"Rich\", \"FitzJohn\", role = c(\"aut\", \"cre\"),\n    email = \"rich.fitzjohn@gmail.com\"),\n    person(\"Rob\", \"Ashton\", role = \"aut\"),\n    person(\"Alex\", \"Hill\", role = \"ctb\"),\n    person(\"Alicia\", \"Schep\", role = \"ctb\"),\n    person(\"Ian\", \"Lyttle\", role = \"ctb\"),\n    person(\"Kara\", \"Woo\", role = \"ctb\"),\n    person(\"Mathias\", \"Buus\", role = c(\"aut\", \"cph\"),\n           comment = \"Author of bundled imjv library\"),\n    person(\"Evgeny\", \"Poberezkin\", role = c(\"aut\", \"cph\"),\n           comment = \"Author of bundled Ajv library\"))",
-        "Maintainer": "Rich FitzJohn <rich.fitzjohn@gmail.com>",
-        "Description": "Uses the node library 'is-my-json-valid' or 'ajv' to\n    validate 'JSON' against a 'JSON' schema.  Drafts 04, 06 and 07 of\n    'JSON' schema are supported.",
-        "License": "MIT + file LICENSE",
-        "URL": "https://docs.ropensci.org/jsonvalidate/,\nhttps://github.com/ropensci/jsonvalidate",
-        "BugReports": "https://github.com/ropensci/jsonvalidate/issues",
-        "Imports": "R6, V8",
-        "Suggests": "knitr, jsonlite, rmarkdown, testthat, withr",
-        "RoxygenNote": "7.3.2",
-        "VignetteBuilder": "knitr",
-        "Encoding": "UTF-8",
-        "Language": "en-GB",
-        "Config/testthat/edition": "3",
-        "NeedsCompilation": "no",
-        "Packaged": "2025-02-07 10:12:53 UTC; rfitzjoh",
-        "Author": "Rich FitzJohn [aut, cre],\n  Rob Ashton [aut],\n  Alex Hill [ctb],\n  Alicia Schep [ctb],\n  Ian Lyttle [ctb],\n  Kara Woo [ctb],\n  Mathias Buus [aut, cph] (Author of bundled imjv library),\n  Evgeny Poberezkin [aut, cph] (Author of bundled Ajv library)",
-        "Repository": "RSPM",
-        "Date/Publication": "2025-02-07 11:20:02 UTC",
-        "Built": "R 4.6.0; ; 2026-04-24 17:47:14 UTC; windows",
-        "RemoteType": "standard",
-        "RemoteRef": "jsonvalidate",
-        "RemotePkgRef": "jsonvalidate",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/latest",
-        "RemoteReposName": "CRAN",
-        "RemotePkgPlatform": "x86_64-w64-mingw32",
-        "RemoteSha": "1.5.0"
-      }
-    },
     "knitr": {
       "Source": "CRAN",
       "Repository": "https://packagemanager.posit.co/cran/latest",
@@ -2964,48 +2732,6 @@
         "RemoteReposName": "CRAN",
         "RemotePkgPlatform": "x86_64-w64-mingw32",
         "RemoteSha": "0.1.2"
-      }
-    },
-    "nanonext": {
-      "Source": "CRAN",
-      "Repository": "https://packagemanager.posit.co/cran/latest",
-      "description": {
-        "Type": "Package",
-        "Package": "nanonext",
-        "Title": "Lightweight Toolkit for Messaging, Concurrency and the Web",
-        "Version": "1.10.2",
-        "Authors@R": "c(\n    person(\"Charlie\", \"Gao\", , \"charlie.gao@posit.co\", role = c(\"aut\", \"cre\"),\n           comment = c(ORCID = \"0000-0002-0750-061X\")),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"),\n           comment = c(ROR = \"03wc8by49\")),\n    person(\"Hibiki AI Limited\", role = \"cph\"),\n    person(\"Staysail Systems, Inc.\", role = \"cph\",\n           comment = \"NNG library\"),\n    person(\"Capitar IT Group BV\", role = \"cph\",\n           comment = \"NNG library\"),\n    person(\"The Mbed TLS Contributors\", role = \"cph\",\n           comment = \"Mbed TLS library\"),\n    person(\"Pierre\", \"L'Ecuyer\", role = \"cph\",\n           comment = \"RngStreams library\"),\n    person(\"sakura authors\", role = \"cph\",\n           comment = \"Serialization hooks\"),\n    person(\"R Consortium\", role = \"fnd\",\n           comment = c(ROR = \"01z833950\"))\n  )",
-        "Description": "R binding for NNG (Nanomsg Next Gen), a successor to ZeroMQ.\n    A toolkit for messaging, concurrency and the web. High-performance\n    socket messaging over in-process, IPC, TCP, WebSocket and secure TLS\n    transports implements 'Scalability Protocols', a standard for common\n    communications patterns including publish/subscribe, request/reply and\n    survey. A threaded concurrency framework with intuitive 'aio' objects\n    that resolve automatically upon completion of asynchronous operations,\n    and synchronisation primitives that allow R to wait on events\n    signalled by concurrent threads. A unified HTTP server hosting REST\n    endpoints, WebSocket connections and streaming on a single port, with\n    a built-in HTTP client.",
-        "License": "MIT + file LICENSE",
-        "URL": "https://nanonext.r-lib.org, https://github.com/r-lib/nanonext",
-        "BugReports": "https://github.com/r-lib/nanonext/issues",
-        "Depends": "R (>= 3.6)",
-        "Suggests": "later, litedown",
-        "Enhances": "promises",
-        "VignetteBuilder": "litedown",
-        "Biarch": "true",
-        "Config/build/compilation-database": "true",
-        "Config/Needs/website": "tidyverse/tidytemplate",
-        "Config/roxygen2/markdown": "TRUE",
-        "Config/roxygen2/version": "8.0.0",
-        "Config/usethis/last-upkeep": "2026-07-11",
-        "Encoding": "UTF-8",
-        "SystemRequirements": "'libnng' >= 1.12 and 'libmbedtls' >= 3.0 (optional,\nbundled sources compiled otherwise)",
-        "NeedsCompilation": "yes",
-        "Packaged": "2026-08-02 22:34:46 UTC; cg334",
-        "Author": "Charlie Gao [aut, cre] (ORCID: <https://orcid.org/0000-0002-0750-061X>),\n  Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>),\n  Hibiki AI Limited [cph],\n  Staysail Systems, Inc. [cph] (NNG library),\n  Capitar IT Group BV [cph] (NNG library),\n  The Mbed TLS Contributors [cph] (Mbed TLS library),\n  Pierre L'Ecuyer [cph] (RngStreams library),\n  sakura authors [cph] (Serialization hooks),\n  R Consortium [fnd] (ROR: <https://ror.org/01z833950>)",
-        "Maintainer": "Charlie Gao <charlie.gao@posit.co>",
-        "Repository": "RSPM",
-        "Date/Publication": "2026-08-04 14:30:02 UTC",
-        "Built": "R 4.6.0; x86_64-w64-mingw32; 2026-08-05 06:27:51 UTC; windows",
-        "Archs": "x64",
-        "RemoteType": "standard",
-        "RemoteRef": "nanonext",
-        "RemotePkgRef": "nanonext",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/latest",
-        "RemoteReposName": "CRAN",
-        "RemotePkgPlatform": "x86_64-w64-mingw32",
-        "RemoteSha": "1.10.2"
       }
     },
     "openssl": {
@@ -4836,83 +4562,6 @@
         "RemoteSha": "3.3.1"
       }
     },
-    "tidyr": {
-      "Source": "CRAN",
-      "Repository": "https://packagemanager.posit.co/cran/latest",
-      "description": {
-        "Package": "tidyr",
-        "Title": "Tidy Messy Data",
-        "Version": "1.3.2",
-        "Authors@R": "c(\n    person(\"Hadley\", \"Wickham\", , \"hadley@posit.co\", role = c(\"aut\", \"cre\")),\n    person(\"Davis\", \"Vaughan\", , \"davis@posit.co\", role = \"aut\"),\n    person(\"Maximilian\", \"Girlich\", role = \"aut\"),\n    person(\"Kevin\", \"Ushey\", , \"kevin@posit.co\", role = \"ctb\"),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n  )",
-        "Description": "Tools to help to create tidy data, where each column is a\n    variable, each row is an observation, and each cell contains a single\n    value. 'tidyr' contains tools for changing the shape (pivoting) and\n    hierarchy (nesting and 'unnesting') of a dataset, turning deeply\n    nested lists into rectangular data frames ('rectangling'), and\n    extracting values out of string columns. It also includes tools for\n    working with missing values (both implicit and explicit).",
-        "License": "MIT + file LICENSE",
-        "URL": "https://tidyr.tidyverse.org, https://github.com/tidyverse/tidyr",
-        "BugReports": "https://github.com/tidyverse/tidyr/issues",
-        "Depends": "R (>= 4.1.0)",
-        "Imports": "cli (>= 3.4.1), dplyr (>= 1.1.0), glue, lifecycle (>= 1.0.3),\nmagrittr, purrr (>= 1.0.1), rlang (>= 1.1.1), stringr (>=\n1.5.0), tibble (>= 2.1.1), tidyselect (>= 1.2.1), utils, vctrs\n(>= 0.5.2)",
-        "Suggests": "covr, data.table, knitr, readr, repurrrsive (>= 1.1.0),\nrmarkdown, testthat (>= 3.0.0)",
-        "LinkingTo": "cpp11 (>= 0.4.0)",
-        "VignetteBuilder": "knitr",
-        "Config/build/compilation-database": "true",
-        "Config/Needs/website": "tidyverse/tidytemplate",
-        "Config/testthat/edition": "3",
-        "Encoding": "UTF-8",
-        "LazyData": "true",
-        "RoxygenNote": "7.3.3",
-        "NeedsCompilation": "yes",
-        "Packaged": "2025-12-17 23:35:11 UTC; hadleywickham",
-        "Author": "Hadley Wickham [aut, cre],\n  Davis Vaughan [aut],\n  Maximilian Girlich [aut],\n  Kevin Ushey [ctb],\n  Posit Software, PBC [cph, fnd]",
-        "Maintainer": "Hadley Wickham <hadley@posit.co>",
-        "Repository": "RSPM",
-        "Date/Publication": "2025-12-19 09:20:02 UTC",
-        "Built": "R 4.6.0; x86_64-w64-mingw32; 2026-05-07 07:28:09 UTC; windows",
-        "Archs": "x64",
-        "RemoteType": "standard",
-        "RemoteRef": "tidyr",
-        "RemotePkgRef": "tidyr",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/latest",
-        "RemoteReposName": "CRAN",
-        "RemotePkgPlatform": "x86_64-w64-mingw32",
-        "RemoteSha": "1.3.2"
-      }
-    },
-    "tidyselect": {
-      "Source": "CRAN",
-      "Repository": "https://packagemanager.posit.co/cran/latest",
-      "description": {
-        "Package": "tidyselect",
-        "Title": "Select from a Set of Strings",
-        "Version": "1.2.1",
-        "Authors@R": "c(\n    person(\"Lionel\", \"Henry\", , \"lionel@posit.co\", role = c(\"aut\", \"cre\")),\n    person(\"Hadley\", \"Wickham\", , \"hadley@posit.co\", role = \"aut\"),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n  )",
-        "Description": "A backend for the selecting functions of the 'tidyverse'.  It\n    makes it easy to implement select-like functions in your own packages\n    in a way that is consistent with other 'tidyverse' interfaces for\n    selection.",
-        "License": "MIT + file LICENSE",
-        "URL": "https://tidyselect.r-lib.org, https://github.com/r-lib/tidyselect",
-        "BugReports": "https://github.com/r-lib/tidyselect/issues",
-        "Depends": "R (>= 3.4)",
-        "Imports": "cli (>= 3.3.0), glue (>= 1.3.0), lifecycle (>= 1.0.3), rlang\n(>= 1.0.4), vctrs (>= 0.5.2), withr",
-        "Suggests": "covr, crayon, dplyr, knitr, magrittr, rmarkdown, stringr,\ntestthat (>= 3.1.1), tibble (>= 2.1.3)",
-        "VignetteBuilder": "knitr",
-        "ByteCompile": "true",
-        "Config/testthat/edition": "3",
-        "Config/Needs/website": "tidyverse/tidytemplate",
-        "Encoding": "UTF-8",
-        "RoxygenNote": "7.3.0.9000",
-        "NeedsCompilation": "yes",
-        "Packaged": "2024-03-11 11:46:04 UTC; lionel",
-        "Author": "Lionel Henry [aut, cre],\n  Hadley Wickham [aut],\n  Posit Software, PBC [cph, fnd]",
-        "Maintainer": "Lionel Henry <lionel@posit.co>",
-        "Repository": "RSPM",
-        "Date/Publication": "2024-03-11 14:10:02 UTC",
-        "Built": "R 4.6.0; ; 2026-04-23 23:01:42 UTC; windows",
-        "RemoteType": "standard",
-        "RemoteRef": "tidyselect",
-        "RemotePkgRef": "tidyselect",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/latest",
-        "RemoteReposName": "CRAN",
-        "RemotePkgPlatform": "x86_64-w64-mingw32",
-        "RemoteSha": "1.2.1"
-      }
-    },
     "tinytex": {
       "Source": "CRAN",
       "Repository": "https://packagemanager.posit.co/cran/latest",
@@ -5519,10 +5168,10 @@
       "checksum": "d41d8cd98f00b204e9800998ecf8427e"
     },
     ".Rbuildignore": {
-      "checksum": "7c1cebf4b90d8c84f90802b5e56e013a"
+      "checksum": "3b262d723af0431168e1a6d8515872bc"
     },
     ".Rprofile": {
-      "checksum": "d13fd43b984de6cdde5ac41c0bbca452"
+      "checksum": "0543abdd4b2caec3abe12434dfe3e45d"
     },
     "AGENTS.md": {
       "checksum": "2b9ef04dc1a258fae4afb9e1f5c26ee2"
@@ -5531,7 +5180,7 @@
       "checksum": "1f344fc2641058da48682ece16e496dc"
     },
     "codecov.yml": {
-      "checksum": "3df907b50c4f00bc26ee6d988e0c849f"
+      "checksum": "e20df979617a9f8c55da8b1506da4078"
     },
     "CODEX_CONTEXT.md": {
       "checksum": "f543d20eff1ef7172f4d9b4da57fe885"
@@ -5540,7 +5189,7 @@
       "checksum": "73c74d27d288aeb383ecb59126011a56"
     },
     "DESCRIPTION": {
-      "checksum": "daca23c14a6793add0d2dec537e3bb4b"
+      "checksum": "27816a56c0164b231fbf09a84bf3f474"
     },
     "dev/01_start.R": {
       "checksum": "c6b8cef7e3dbbc55a06d784e01eeef5e"
@@ -5549,7 +5198,7 @@
       "checksum": "988d3e45157a0a0d73f13b0b65bee44c"
     },
     "dev/03_deploy.R": {
-      "checksum": "121d2bde8a3cc098e028b3492a268fe9"
+      "checksum": "098740c0b4899242cfba06ec5892294a"
     },
     "dev/run_dev.R": {
       "checksum": "e16497b4e7787e5fd1495f9e1aa81182"
@@ -5762,10 +5411,10 @@
       "checksum": "ba7fa2e7ea3e8bf912fba45334ef1d2e"
     },
     "docs/solutions/data-profile-side-drawer.md": {
-      "checksum": "c892b0935c5e9374ea45fab32537ebf9"
+      "checksum": "30098cc7ddbd3782bf073cced95cb6da"
     },
     "docs/solutions/design-patterns/task-first-clinical-plot-workbench.md": {
-      "checksum": "f1d3c3308cb1f5966ae364ac5a359e5c"
+      "checksum": "6bcadc8cce14687fd0c22aeedfd87149"
     },
     "docs/solutions/draft-status-badge.md": {
       "checksum": "d03ca1a69f5532f679b2a3af58c2e6db"
@@ -5834,10 +5483,10 @@
       "checksum": "3245c2d4b6b4f077ead94acabf1a4ec4"
     },
     "docs/ux/F001-plot-generation-prototype.html": {
-      "checksum": "7590cd8be998c701e09ff130afd90c92"
+      "checksum": "05c4440dddf6254806a5a83d3019c7f8"
     },
     "docs/ux/F001-plot-generation.md": {
-      "checksum": "ad734ff460c112a812096858766cab71"
+      "checksum": "5e4f3000c6b0ad7460521cdcc36a2c1f"
     },
     "docs/validation/data-flow-threat-model.md": {
       "checksum": "9f3400b0a53ec313a68aaae1d9a0d2e0"
@@ -6164,10 +5813,10 @@
       "checksum": "829cea6bcc4ead1bbaa17cb7cde3fd3e"
     },
     "renv.lock": {
-      "checksum": "c747e51328e75ae8b33eb1e00e9ce9fe"
+      "checksum": "3be1b5554c89a59176d5437bfc121308"
     },
     "tests/_covrpage.Rmd": {
-      "checksum": "4e3533217bd85c6f30949a0438c202ad"
+      "checksum": "7070f98eda29dda706d495d40d2263d8"
     },
     "tests/AGENTS.md": {
       "checksum": "2ea79ad6ec582fa47484ac76334d2785"
@@ -6206,7 +5855,7 @@
       "checksum": "d78587d650999b35592a08fbc3debfff"
     },
     "tests/testthat/test-app-browser.R": {
-      "checksum": "6bf5b4981e8f102c77811506da4aa321"
+      "checksum": "3ddd80ed78dcadc86a3dbb8dbdc632e0"
     },
     "tests/testthat/test-app-export-browser.R": {
       "checksum": "aa00be1edac0b7345b889a98d65ea55d"
