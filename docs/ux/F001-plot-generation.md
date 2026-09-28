@@ -2,6 +2,8 @@
 
 This document defines the first POC workflow and its behavior. It does not define screen layout, visual styling, or control placement. The workflow starts with data upload, as clarified during brainstorming. Product boundaries and metrics come from the [strategy](../product/STRATEGY.md) and [product contract](../product/product-contract.md).
 
+The implemented workbench follows five steps: Data → Ask → Confirm → Result → Export. Result shows the plot, exact R code, and automated checks. Export shows revision history, two-person review, controlled export, and the image-and-code ZIP download. Back to result returns to the plot without creating a new revision. The [static prototype](F001-plot-generation-prototype.html) illustrates this layout; it is not runtime or validation evidence.
+
 ## 1. User
 
 - **Primary user:** Clinical scientist answering a regulatory or internal clinical question.
@@ -133,7 +135,7 @@ Acceptance cannot be fully tested until the supported data and plot envelope, pe
 1. Which specific ADaM and tabular structures, columns, and plot patterns are supported beyond Excel and CSV as file formats?
 2. Which authentication requirements, de-identification guidance, and data-validation criteria establish that an upload meets the permitted-data boundary?
 3. What exact structure and plot-specific validation rules determine whether a record is unsupported, including which missing or invalid values block a run?
-4. **Resolved (workflow behavior):** Refinement stays linear: going back and revising an earlier input replaces the current proposal in the flow; it does not create a separately versioned proposal. Audit-history and retention requirements remain open under Q9. See [the four-step wizard flow](../solutions/four-step-wizard-flow.md).
+4. **Resolved (workflow behavior):** Refinement stays linear: going back and revising an earlier input replaces the current proposal in the flow; it does not create a separately versioned proposal. Audit-history and retention requirements remain open under Q9. See [the five-step wizard flow](../solutions/four-step-wizard-flow.md).
 5. Which automated checks and measurable pass thresholds establish code correctness, data integrity, result accuracy, and reproducibility?
 6. What are the exact meanings and transition criteria for `Draft`, `Experimental`, `Verified`, `Reviewed`, and approved outputs?
 7. **Partially resolved:** The Plot result shows a `Draft · not reviewed` badge, and its info tooltip states that both independent approvals are required for post-approval export eligibility. This defines the review-status cue and approval gate only; whether unreviewed outputs can use a draft-only export path and how that path relates to post-approval export remain open. See [the draft status badge pattern](../solutions/draft-status-badge.md).

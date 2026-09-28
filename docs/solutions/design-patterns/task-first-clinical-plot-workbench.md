@@ -20,7 +20,7 @@ tags:
 
 ## Context
 
-The user-designated final prototype is the source of truth for F001 screen content and interactions. It shows the four-step flow, a CSV/Excel upload on Data, and a closed-by-default Data & Profile drawer attached to the screen edge. The user also clarified that this POC uses synthetic data only. The workflow prose and older implementation notes provide context, but do not override the prototype where they differ.
+The user-designated final prototype is the source of truth for F001 screen content and interactions. It shows the five-step Data → Ask → Confirm → Result → Export flow, a CSV/Excel upload on Data, and a closed-by-default Data & Profile drawer attached to the screen edge. The user also clarified that this POC uses synthetic data only. The workflow prose and older implementation notes provide context, but do not override the prototype where they differ.
 
 ## Guidance
 
