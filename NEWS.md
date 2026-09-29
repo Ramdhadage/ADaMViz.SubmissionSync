@@ -11,6 +11,9 @@
 - Added deterministic type-7 boxplot statistics, explicit plot layers, an
   aligned low-N strip, reproducible R compilation, and pre-execution artifact
   hashes for the first governed plot pattern.
+- Generated boxplot scripts now inline their governed statistics and plotting
+  helpers, requiring only R and `ggplot2` at runtime; a Nix command is included
+  for reproducible execution.
 
 ## U9 controlled export
 

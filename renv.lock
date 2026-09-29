@@ -33,6 +33,7 @@
         "jsonlite",
         "patchwork",
         "readxl",
+        "rlang",
         "RSQLite",
         "shiny"
       ],

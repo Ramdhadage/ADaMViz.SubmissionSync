@@ -26,7 +26,7 @@
         "Description": "Generates and conversationally refines ggplot2 visualizations from Analysis Data Model (ADaM) datasets and other permitted tabular data. Executes generated R code in a controlled environment and records input metadata, code, package versions, outputs, and review status to support reproducibility, traceability, and validation of clinical reporting workflows.",
         "License": "MIT + file LICENSE",
         "Depends": "R (>= 4.1.0)",
-        "Imports": "bslib, checkmate, cli, config, DBI, digest, fs, golem,\nggplot2, jsonlite, patchwork, readxl, RSQLite, shiny",
+        "Imports": "bslib, checkmate, cli, config, DBI, digest, fs, golem,\nggplot2, jsonlite, patchwork, readxl, rlang, RSQLite, shiny",
         "Suggests": "callr, devtools, htmltools, renv, roxygen2, shinytest2,\ntestthat (>= 3.0.0), withr",
         "Config/testthat/edition": "3",
         "Encoding": "UTF-8",
