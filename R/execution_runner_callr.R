@@ -1,6 +1,21 @@
 .execution_source_root <- function() {
+  configured_root <- Sys.getenv("ADAMVIZ_SUBMISSIONSYNC_SOURCE_ROOT", unset = "")
+  configured_roots <- if (nzchar(configured_root)) {
+    normalizePath(configured_root, winslash = "/", mustWork = FALSE)
+  } else {
+    character()
+  }
+  current <- normalizePath(".", winslash = "/", mustWork = FALSE)
+  roots <- character()
+  repeat {
+    roots <- c(roots, current)
+    parent <- dirname(current)
+    if (identical(parent, current)) break
+    current <- parent
+  }
   roots <- c(
-    normalizePath(".", winslash = "/", mustWork = FALSE),
+    configured_roots,
+    roots,
     getNamespaceInfo(asNamespace("ADaMViz.SubmissionSync"), "path")
   )
   root <- roots[file.exists(file.path(roots, "DESCRIPTION"))][1]

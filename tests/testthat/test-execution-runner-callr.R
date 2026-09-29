@@ -28,3 +28,26 @@ test_that("callr runner executes in a clean subprocess", {
   expect_s3_class(result$result, "execution_result")
   expect_identical(result$result$snapshot_hash, fixture$request$snapshot_hash)
 })
+
+test_that("callr runner resolves the active source root from a nested working directory", {
+  source_root <- normalizePath(
+    testthat::test_path("..", ".."),
+    winslash = "/",
+    mustWork = TRUE
+  )
+  withr::local_dir(fs::path(source_root, "tests", "testthat"))
+
+  expect_identical(.execution_source_root(), source_root)
+})
+
+test_that("callr runner honors an explicitly configured source root", {
+  source_root <- normalizePath(
+    testthat::test_path("..", ".."),
+    winslash = "/",
+    mustWork = TRUE
+  )
+  withr::local_envvar(ADAMVIZ_SUBMISSIONSYNC_SOURCE_ROOT = source_root)
+  withr::local_dir(tempdir())
+
+  expect_identical(.execution_source_root(), source_root)
+})

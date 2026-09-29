@@ -27,6 +27,7 @@ create_standard_revision <- function(app) {
   app$click("plot_generation-to_confirm")
   app$wait_for_value(output = "plot_generation-specification-fields")
   app$click("plot_generation-specification-execute")
+  app$wait_for_idle()
   app$wait_for_js(
     "document.querySelector('#plot_generation-run_status-status')?.textContent.includes('Verified')",
     timeout = 120000

@@ -54,7 +54,7 @@
       "RemoteRepo": "ADaMViz.SubmissionSync",
       "RemoteUsername": "Ramdhadage",
       "RemoteRef": "HEAD",
-      "RemoteSha": "3d8b2b4916ae9d18c48168205693a4e7379a906f",
+      "RemoteSha": "f36697c32e394096a72b799699bce7199514bab3",
       "NeedsCompilation": "no",
       "Author": "Ramnath Dhadage [aut, cre]",
       "Maintainer": "Ramnath Dhadage <ram.dhadage123@gmail.com>"
@@ -3809,7 +3809,7 @@
     },
     "renv": {
       "Package": "renv",
-      "Version": "1.2.4",
+      "Version": "1.3.0",
       "Source": "Repository",
       "Type": "Package",
       "Title": "Project Environments",
@@ -3838,6 +3838,7 @@
         "modules",
         "packrat",
         "pak",
+        "pkgload",
         "R6",
         "remotes",
         "reticulate",

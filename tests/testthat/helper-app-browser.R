@@ -1,7 +1,15 @@
 local_browser_app <- function(app, name) {
   skip_if_not_installed("shinytest2")
   skip_if_not_installed("chromote")
-  withr::local_envvar(NOT_CRAN = "true")
+  source_root <- normalizePath(
+    testthat::test_path("..", ".."),
+    winslash = "/",
+    mustWork = TRUE
+  )
+  withr::local_envvar(c(
+    NOT_CRAN = "true",
+    ADAMVIZ_SUBMISSIONSYNC_SOURCE_ROOT = source_root
+  ))
   tryCatch(
     withCallingHandlers(
       shinytest2::AppDriver$new(
