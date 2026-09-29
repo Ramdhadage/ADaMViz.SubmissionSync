@@ -7,13 +7,13 @@
 <style>
 :root{color-scheme:light;font:14px/1.4 "Segoe UI",Arial,sans-serif;color:#17232d;background:#f2f5f7;--line:#c7d1d9;--muted:#52616d;--blue:#164f70;--soft:#edf4f8}
 *{box-sizing:border-box}
-body{margin:0;padding:22px}
-main{max-width:1580px;margin:auto}
+body{margin:0;padding:clamp(12px,2vw,22px)}
+main{width:100%;max-width:1200px;margin:auto}
 h1{font-size:1.5rem;margin:0 0 3px}
 .subtitle{margin:0 0 12px;color:var(--muted)}
 .topnotes{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
 .note{border:1px solid var(--line);background:white;border-radius:5px;padding:7px 9px;font-size:.83rem}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid{display:grid;grid-template-columns:1fr;gap:14px}
 .screen{position:relative;min-width:0;border:1px solid #aebbc5;border-radius:8px;background:white;overflow:hidden;box-shadow:0 2px 5px #13202a0b}
 .appbar{height:45px;padding:8px 12px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:#fff}
 .brand{font-weight:700}

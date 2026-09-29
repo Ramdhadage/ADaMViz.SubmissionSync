@@ -41,7 +41,6 @@
         "callr",
         "devtools",
         "htmltools",
-        "renv",
         "roxygen2",
         "shinytest2",
         "testthat (>= 3.0.0)",
@@ -55,7 +54,7 @@
       "RemoteRepo": "ADaMViz.SubmissionSync",
       "RemoteUsername": "Ramdhadage",
       "RemoteRef": "HEAD",
-      "RemoteSha": "ebdeba831efbca2d8170b5371415f9ec6bf5983b",
+      "RemoteSha": "f7eb080b7114f95ffd122ecf49dfadbed1c96ab1",
       "NeedsCompilation": "no",
       "Author": "Ramnath Dhadage [aut, cre]",
       "Maintainer": "Ramnath Dhadage <ram.dhadage123@gmail.com>"

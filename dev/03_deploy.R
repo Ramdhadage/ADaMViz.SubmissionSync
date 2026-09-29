@@ -44,14 +44,15 @@ rsconnect::writeManifest()
 
 ## In command line.
 rsconnect::deployApp(
-  appName = desc::desc_get_field("ADaMViz.SubmissionSync"),
-  appTitle = desc::desc_get_field("ADaMViz.SubmissionSync: Review-Ready Clinical Figures"),
+  appName = "ADaMViz-SubmissionSync",
+  appTitle = "ADaMViz.SubmissionSync: Review-Ready Clinical Figures",
   appFiles = c(
     # Add any additional files unique to your app here.
     "R/",
     "inst/",
     "NAMESPACE",
     "DESCRIPTION",
+    "renv.lock",
     "app.R"
   ),
   appId = rsconnect::deployments(".")$appID,

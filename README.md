@@ -7,7 +7,11 @@ FDA validated or FDA approved.
 
 **Live app:** [Open ADaMViz SubmissionSync](https://ramnath-dhadage.shinyapps.io/adamviz/)
 
-**Prototype:** [View the F001 plot-generation prototype](docs/ux/F001-plot-generation-prototype.html)
+**Prototype preview:**
+
+[![Rendered F001 plot-generation prototype](assets/F001-plot-generation-prototype.png)](docs/ux/F001-plot-generation-prototype.html)
+
+[Open the interactive HTML prototype](docs/ux/F001-plot-generation-prototype.html)
 
 ## Development status
 
