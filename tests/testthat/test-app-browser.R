@@ -1,6 +1,4 @@
 local_submission_sync_app <- function(name) {
-  skip("Full browser journeys await the Verified revision fix")
-
   app_ui <- getFromNamespace("app_ui", "ADaMViz.SubmissionSync")
   app_server <- getFromNamespace("app_server", "ADaMViz.SubmissionSync")
 
@@ -29,7 +27,20 @@ create_standard_revision <- function(app) {
   app$click("plot_generation-to_confirm")
   app$wait_for_value(output = "plot_generation-specification-fields")
   app$click("plot_generation-specification-execute")
-  # app$wait_for_js("document.querySelector('#plot_generation-run_status-status').textContent.includes('Verified')", timeout = 120000)
+  app$wait_for_js(
+    "document.querySelector('#plot_generation-run_status-status')?.textContent.includes('Verified')",
+    timeout = 120000
+  )
+  invisible(app)
+}
+
+open_export_step <- function(app) {
+  app$click("plot_generation-to_export")
+  app$wait_for_js(paste0(
+    "document.querySelector('#plot_generation-export-heading')?.getClientRects().length > 0 && ",
+    "document.querySelector('#plot_generation-export-message')?.textContent.includes('No export attempted.')"
+  ))
+  app$wait_for_idle()
   invisible(app)
 }
 
@@ -42,7 +53,7 @@ test_that("browser prompt journey creates a Verified draft with evidence", {
   app$wait_for_value(output = "plot_generation-evidence-checks")
   body <- app$get_text(selector = "body")
 
-  # expect_match(body, "Verified", fixed = TRUE)
+  expect_match(body, "Verified", fixed = TRUE)
   expect_match(body, "Executed R script", fixed = TRUE)
   expect_match(body, "Analytical output", fixed = TRUE)
   expect_match(body, "runner_success", fixed = TRUE)
@@ -52,12 +63,9 @@ test_that("browser prompt journey exports verified image and code", {
   app <- local_submission_sync_app("prompt-to-export")
 
   create_standard_revision(app)
-  app$click("plot_generation-to_export")
-  app$wait_for_js(paste0(
-    "document.querySelector('#plot_generation-export-heading')?.getClientRects().length > 0 && ",
-    "document.querySelector('#plot_generation-export-message')?.textContent.includes('No export attempted.')"
-  ))
+  open_export_step(app)
   app$click("plot_generation-export-export")
+  app$wait_for_idle()
   app$wait_for_js("document.querySelector('#plot_generation-export-message').textContent.includes('Exported receipt-')")
 
   body <- app$get_text(selector = "body")
@@ -69,13 +77,14 @@ test_that("browser review journey reaches Reviewed with two distinct approvals",
   app <- local_submission_sync_app("two-person-review")
 
   create_standard_revision(app)
-  app$click("plot_generation-to_export")
+  open_export_step(app)
   app$set_inputs(
     `plot_generation-review-actor_id` = "stat-programmer",
     `plot_generation-review-role` = "statistical_programmer",
     `plot_generation-review-comment` = "Programmer browser acceptance approval."
   )
   app$click("plot_generation-review-approve")
+  app$wait_for_idle()
   app$wait_for_js("document.querySelector('#plot_generation-review-decisions').textContent.includes('stat-programmer')")
 
   app$set_inputs(
@@ -84,6 +93,7 @@ test_that("browser review journey reaches Reviewed with two distinct approvals",
     `plot_generation-review-comment` = "Biostatistician browser acceptance approval."
   )
   app$click("plot_generation-review-approve")
+  app$wait_for_idle()
   app$wait_for_js("document.querySelector('#plot_generation-revision_history-history').textContent.includes('Reviewed')")
 
   body <- app$get_text(selector = "body")
@@ -92,6 +102,7 @@ test_that("browser review journey reaches Reviewed with two distinct approvals",
   expect_match(body, "biostatistician", fixed = TRUE)
 
   app$click("plot_generation-review-approve")
+  app$wait_for_idle()
   app$wait_for_js("document.querySelector('#plot_generation-review-message').textContent.includes('Reviewed revisions are immutable')")
   expect_match(
     app$get_text(selector = "body"),
@@ -104,13 +115,14 @@ test_that("browser rejection closes the revision and blocks further review", {
   app <- local_submission_sync_app("review-rejection")
 
   create_standard_revision(app)
-  app$click("plot_generation-to_export")
+  open_export_step(app)
   app$set_inputs(
     `plot_generation-review-actor_id` = "stat-programmer",
     `plot_generation-review-role` = "statistical_programmer",
     `plot_generation-review-comment` = "Rejecting from browser acceptance."
   )
   app$click("plot_generation-review-reject")
+  app$wait_for_idle()
   app$wait_for_js("document.querySelector('#plot_generation-revision_history-history').textContent.includes('Rejected')")
 
   body <- app$get_text(selector = "body")
@@ -123,6 +135,7 @@ test_that("browser rejection closes the revision and blocks further review", {
     `plot_generation-review-comment` = "Attempted post-rejection approval."
   )
   app$click("plot_generation-review-approve")
+  app$wait_for_idle()
   app$wait_for_js("document.querySelector('#plot_generation-review-message').textContent.includes('Only a Verified revision can be reviewed')")
   expect_match(
     app$get_text(selector = "body"),
