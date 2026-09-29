@@ -8,25 +8,25 @@
 ) {
   required_columns <- c("USUBJID", "AVISIT", "AVISITN", treatment_variable, y_variable)
   if (!is.data.frame(data) || length(setdiff(required_columns, names(data)))) {
-    stop("analysis_data must contain USUBJID, AVISIT, AVISITN, treatment, and Y columns")
+    cli::cli_abort("analysis_data must contain USUBJID, AVISIT, AVISITN, treatment, and Y columns")
   }
   if (!is.numeric(data[[y_variable]])) {
-    stop("The selected Y variable must be numeric")
+    cli::cli_abort("The selected Y variable must be numeric")
   }
   if (!is.character(facet_levels) || !length(facet_levels) || anyDuplicated(facet_levels) ||
       !is.character(visit_levels) || !length(visit_levels) || anyDuplicated(visit_levels)) {
-    stop("Facet and visit levels must be ordered, unique character vectors")
+    cli::cli_abort("Facet and visit levels must be ordered, unique character vectors")
   }
   if (!is.list(low_n_policy) ||
       !identical(sort(names(low_n_policy)), sort(c("value", "rationale", "authority", "version"))) ||
       !is.numeric(low_n_policy$value) || length(low_n_policy$value) != 1L ||
       !is.finite(low_n_policy$value) || low_n_policy$value < 1) {
-    stop("low_n_policy must retain value, rationale, authority, and version")
+    cli::cli_abort("low_n_policy must retain value, rationale, authority, and version")
   }
   if (!all(vapply(low_n_policy[c("rationale", "authority", "version")],
                   function(value) is.character(value) && length(value) == 1L && nzchar(value),
                   logical(1)))) {
-    stop("low_n_policy text fields must be non-empty strings")
+    cli::cli_abort("low_n_policy text fields must be non-empty strings")
   }
   type7_quantile <- function(values, probability) {
     position <- (length(values) - 1) * probability + 1
@@ -87,7 +87,7 @@
     drop = FALSE
   ]
   if (any(!is.finite(display[[y_variable]]))) {
-    stop("The selected Y variable must contain only finite values")
+    cli::cli_abort("The selected Y variable must contain only finite values")
   }
   if (nrow(display)) {
     ordering <- order(
@@ -168,7 +168,7 @@
 
 .standalone_assemble_boxplot <- function(analysis, scale_mode = c("fixed", "free"), unit = NULL) {
   if (!inherits(analysis, "boxplot_analysis")) {
-    stop("analysis must be a boxplot_analysis object")
+    cli::cli_abort("analysis must be a boxplot_analysis object")
   }
   scale_mode <- match.arg(scale_mode)
   plot_data <- analysis[c("boxes", "outliers", "medians", "n_strip")]

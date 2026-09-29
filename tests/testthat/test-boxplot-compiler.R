@@ -34,10 +34,13 @@ test_that("compiler emits stable parseable governed code", {
 
   expect_identical(first, second)
   expect_no_error(parse(text = first))
-  expect_false(grepl("eval\\s*\\(|parse\\s*\\(|install\\.packages|setwd\\s*\\(|[A-Za-z]:[/\\\\]", first))
-  expect_false(grepl("ADaMViz\\.SubmissionSync|patchwork", first))
-  expect_match(first, "# Required R package: ggplot2", fixed = TRUE)
-  expect_match(first, "nix-shell -p R rPackages.ggplot2", fixed = TRUE)
+  expect_false(grepl("eval\\s*\\(|parse\\s*\\(|setwd\\s*\\(|nix-shell|rix-generated|rix::", first))
+  expect_false(grepl("ADaMViz\\.SubmissionSync::|patchwork", first))
+  expect_match(first, "# Required R packages: ggplot2 and cli.", fixed = TRUE)
+  expect_match(first, "requireNamespace(\"ggplot2\", quietly = TRUE)", fixed = TRUE)
+  expect_match(first, "requireNamespace(\"cli\", quietly = TRUE)", fixed = TRUE)
+  expect_match(first, "# analysis_data <- read.csv(\"D:/R shiny Apps/ADaMViz.SubmissionSync/inst/extdata/synthetic/adlb-standard.csv\"", fixed = TRUE)
+  expect_false(grepl("\\n\\{\\s*\\.standalone_calculate", first))
 })
 
 test_that("compiled script reproduces the independent analytical result", {
