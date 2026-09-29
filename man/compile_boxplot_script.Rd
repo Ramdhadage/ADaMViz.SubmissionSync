@@ -17,6 +17,7 @@ A length-one UTF-8 R script.
 }
 \description{
 The returned script expects the controlled runner to provide the validated,
-pinned selected records as `analysis_data`. It contains resolved literals and
-package-qualified calls only.
+pinned selected records as `analysis_data`. It contains resolved literals,
+inlined base-R helpers, and `ggplot2` as its only external R package.
+A `rix`-generated Nix environment with `ggplot2` can also run the script.
 }

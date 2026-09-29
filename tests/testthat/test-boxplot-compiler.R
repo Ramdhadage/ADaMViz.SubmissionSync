@@ -35,8 +35,9 @@ test_that("compiler emits stable parseable governed code", {
   expect_identical(first, second)
   expect_no_error(parse(text = first))
   expect_false(grepl("eval\\s*\\(|parse\\s*\\(|install\\.packages|setwd\\s*\\(|[A-Za-z]:[/\\\\]", first))
-  expect_match(first, "ADaMViz.SubmissionSync::calculate_boxplot_statistics", fixed = TRUE)
-  expect_match(first, "ADaMViz.SubmissionSync::assemble_boxplot", fixed = TRUE)
+  expect_false(grepl("ADaMViz\\.SubmissionSync|patchwork", first))
+  expect_match(first, "# Required R package: ggplot2", fixed = TRUE)
+  expect_match(first, "nix-shell -p R rPackages.ggplot2", fixed = TRUE)
 })
 
 test_that("compiled script reproduces the independent analytical result", {
@@ -57,7 +58,7 @@ test_that("compiled script reproduces the independent analytical result", {
     stringsAsFactors = FALSE
   )
   script <- compile_boxplot_script(spec, policy)
-  environment <- new.env(parent = globalenv())
+  environment <- new.env(parent = baseenv())
   environment$analysis_data <- profile$selected_data
   connection <- textConnection(script)
   withr::defer(close(connection))
@@ -70,6 +71,22 @@ test_that("compiled script reproduces the independent analytical result", {
     environment$boxplot_artifact$analysis,
     environment$boxplot_analysis
   )
+  expect_s3_class(environment$boxplot_artifact$combined, "grob")
+  skip_if_graphics_device_unavailable()
+  output <- tempfile(fileext = ".png")
+  withr::defer(unlink(output))
+  expect_no_error(
+    ggplot2::ggsave(
+      filename = output,
+      plot = environment$boxplot_artifact$combined,
+      device = function(...) grDevices::png(..., type = "cairo"),
+      width = 12,
+      height = 8.4,
+      dpi = 100,
+      units = "in"
+    )
+  )
+  expect_true(file.exists(output))
 })
 
 test_that("artifact manifest binds only U4 reproducibility evidence", {

@@ -1,28 +1,59 @@
-.r_string_literal <- function(value) {
-  encodeString(value, quote = '"', na.encode = FALSE)
-}
-
-.r_character_literal <- function(values) {
-  if (!length(values)) {
-    return("character()")
-  }
-  paste0("c(", paste(vapply(values, .r_string_literal, character(1)), collapse = ", "), ")")
-}
-
-.r_policy_literal <- function(policy) {
-  paste0(
-    "list(value = ", canonical_serialize(as.numeric(policy$value)), ", ",
-    "rationale = ", .r_string_literal(policy$rationale), ", ",
-    "authority = ", .r_string_literal(policy$authority), ", ",
-    "version = ", .r_string_literal(policy$version), ")"
+.standalone_script_expression <- function(spec, low_n_policy) {
+  calculate_expression <- rlang::call2(
+    "<-",
+    rlang::sym(".standalone_calculate_boxplot_statistics"),
+    rlang::call2(
+      "function",
+      formals(.standalone_calculate_boxplot_statistics),
+      body(.standalone_calculate_boxplot_statistics)
+    )
   )
+  assemble_expression <- rlang::call2(
+    "<-",
+    rlang::sym(".standalone_assemble_boxplot"),
+    rlang::call2(
+      "function",
+      formals(.standalone_assemble_boxplot),
+      body(.standalone_assemble_boxplot)
+    )
+  )
+  treatment_variable <- spec$fields$treatment_variable
+  y_variable <- spec$fields$y_variable
+  facet_levels <- spec$fields$treatment_levels
+  visit_levels <- spec$fields$visits
+  scale_mode <- spec$fields$scale_mode
+  unit <- spec$fields$unit
+  rlang::expr({
+    !!calculate_expression
+    !!assemble_expression
+    boxplot_analysis <- .standalone_calculate_boxplot_statistics(
+      data = analysis_data,
+      treatment_variable = !!treatment_variable,
+      y_variable = !!y_variable,
+      facet_levels = !!facet_levels,
+      visit_levels = !!visit_levels,
+      low_n_policy = list(
+        value = !!as.numeric(low_n_policy$value),
+        rationale = !!low_n_policy$rationale,
+        authority = !!low_n_policy$authority,
+        version = !!low_n_policy$version
+      )
+    )
+    boxplot_artifact <- .standalone_assemble_boxplot(
+      analysis = boxplot_analysis,
+      scale_mode = !!scale_mode,
+      unit = !!unit
+    )
+    boxplot_artifact$combined
+  })
 }
 
 #' Compile the deterministic governed boxplot script
 #'
 #' The returned script expects the controlled runner to provide the validated,
-#' pinned selected records as `analysis_data`. It contains resolved literals and
-#' package-qualified calls only.
+#' pinned selected records as `analysis_data`. It contains resolved literals,
+#' inlined base-R helpers, and `ggplot2` as its only external R package.
+#' A `rix`-generated Nix environment with `ggplot2` can also run the script.
 #'
 #' @param spec A confirmed `plot_spec`.
 #' @param low_n_policy Retained policy with `value`, `rationale`, `authority`,
@@ -40,23 +71,13 @@ compile_boxplot_script <- function(spec, low_n_policy) {
     spec$fields$visits,
     low_n_policy
   )
+  script_expression <- .standalone_script_expression(spec, low_n_policy)
   lines <- c(
-    "boxplot_analysis <- ADaMViz.SubmissionSync::calculate_boxplot_statistics(",
-    "  data = analysis_data,",
-    paste0("  treatment_variable = ", .r_string_literal(spec$fields$treatment_variable), ","),
-    paste0("  y_variable = ", .r_string_literal(spec$fields$y_variable), ","),
-    paste0("  facet_levels = ", .r_character_literal(spec$fields$treatment_levels), ","),
-    paste0("  visit_levels = ", .r_character_literal(spec$fields$visits), ","),
-    paste0("  low_n_policy = ", .r_policy_literal(low_n_policy)),
-    ")",
+    "# Required R package: ggplot2 (only).",
+    "# The generated script does not require the source application package.",
+    "# Nix: nix-shell -p R rPackages.ggplot2 --run \"Rscript --vanilla boxplot_script.R\"",
     "",
-    "boxplot_artifact <- ADaMViz.SubmissionSync::assemble_boxplot(",
-    "  analysis = boxplot_analysis,",
-    paste0("  scale_mode = ", .r_string_literal(spec$fields$scale_mode), ","),
-    paste0("  unit = ", .r_string_literal(spec$fields$unit)),
-    ")",
-    "",
-    "boxplot_artifact$combined"
+    rlang::expr_text(script_expression, width = 500L)
   )
   enc2utf8(paste0(paste(lines, collapse = "\n"), "\n"))
 }
