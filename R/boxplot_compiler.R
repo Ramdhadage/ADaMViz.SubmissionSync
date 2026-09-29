@@ -1,7 +1,7 @@
 .standalone_script_expressions <- function(spec, low_n_policy) {
   calculate_expression <- rlang::call2(
     "<-",
-    rlang::sym(".standalone_calculate_boxplot_statistics"),
+    rlang::sym("calculate_boxplot_statistics"),
     rlang::call2(
       "function",
       formals(.standalone_calculate_boxplot_statistics),
@@ -10,7 +10,7 @@
   )
   assemble_expression <- rlang::call2(
     "<-",
-    rlang::sym(".standalone_assemble_boxplot"),
+    rlang::sym("assemble_boxplot"),
     rlang::call2(
       "function",
       formals(.standalone_assemble_boxplot),
@@ -26,7 +26,7 @@
   list(
     calculate_expression,
     assemble_expression,
-    rlang::expr(boxplot_analysis <- .standalone_calculate_boxplot_statistics(
+    rlang::expr(boxplot_analysis <- calculate_boxplot_statistics(
       data = analysis_data,
       treatment_variable = !!treatment_variable,
       y_variable = !!y_variable,
@@ -39,20 +39,21 @@
         version = !!low_n_policy$version
       )
     )),
-    rlang::expr(boxplot_artifact <- .standalone_assemble_boxplot(
+    rlang::expr(boxplot_artifact <- assemble_boxplot(
       analysis = boxplot_analysis,
       scale_mode = !!scale_mode,
       unit = !!unit
     )),
-    rlang::expr(boxplot_artifact$combined)
+    rlang::expr(if (sys.nframe() == 0L) print(boxplot_artifact$combined))
   )
 }
 
 #' Compile the deterministic governed boxplot script
 #'
-#' The returned script expects the controlled runner to provide the validated,
-#' pinned selected records as `analysis_data`. It contains resolved literals,
-#' inlined helpers, and `ggplot2` and `cli` as its external R packages.
+#' The controlled runner provides validated selected records as `analysis_data`.
+#' When run on its own, the script loads the editable synthetic CSV example if
+#' `analysis_data` is absent. It contains resolved literals, inlined helpers,
+#' and uses `ggplot2`, `cli`, and `patchwork`.
 #'
 #' @param spec A confirmed `plot_spec`.
 #' @param low_n_policy Retained policy with `value`, `rationale`, `authority`,
@@ -71,17 +72,42 @@ compile_boxplot_script <- function(spec, low_n_policy) {
     low_n_policy
   )
   script_expressions <- .standalone_script_expressions(spec, low_n_policy)
+  script_text <- vapply(
+    script_expressions,
+    \(expression) rlang::expr_text(expression, width = 80L),
+    character(1)
+  )
   lines <- c(
-    "# Required R packages: ggplot2 and cli.",
+    "# Boxplot Analysis Script",
+    "# Required packages: ggplot2, cli, patchwork",
     "# The generated script does not require the source application package.",
     "# Run with: Rscript --vanilla boxplot_script.R",
-    "if (!requireNamespace(\"ggplot2\", quietly = TRUE)) install.packages(\"ggplot2\", repos = \"https://cloud.r-project.org\")",
-    "if (!requireNamespace(\"cli\", quietly = TRUE)) install.packages(\"cli\", repos = \"https://cloud.r-project.org\")",
     "",
-    "# Run locally by uncommenting and updating the data path below.",
-    "# analysis_data <- read.csv(\"D:/R shiny Apps/ADaMViz.SubmissionSync/inst/extdata/synthetic/adlb-standard.csv\", stringsAsFactors = FALSE)",
+    "# Package installation ----",
+    "required_packages <- c(\"ggplot2\", \"cli\", \"patchwork\")",
+    "for (pkg in required_packages) {",
+    "  if (!requireNamespace(pkg, quietly = TRUE)) {",
+    "    install.packages(pkg, repos = \"https://cloud.r-project.org\")",
+    "  }",
+    "}",
+    "library(ggplot2)",
+    "library(cli)",
+    "library(patchwork)",
     "",
-    unlist(lapply(script_expressions, rlang::expr_text, width = 500L), use.names = FALSE)
+    "# Data loading ----",
+    "# Replace this synthetic example path with your selected analysis records when running locally.",
+    "if (!exists(\"analysis_data\", inherits = FALSE)) {",
+    "  analysis_data <- read.csv(",
+    "    \"D:/R shiny Apps/ADaMViz.SubmissionSync/inst/extdata/synthetic/adlb-standard.csv\",",
+    "    stringsAsFactors = FALSE",
+    "  )",
+    "}",
+    "",
+    "# Analysis and plotting functions ----",
+    script_text[1:2],
+    "",
+    "# Execute analysis ----",
+    script_text[3:5]
   )
   enc2utf8(paste0(paste(lines, collapse = "\n"), "\n"))
 }

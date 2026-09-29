@@ -177,56 +177,82 @@
     data$visit <- factor(data$visit, levels = analysis$visit_levels)
     data
   })
-  plot_data$n_strip$fontface <- ifelse(plot_data$n_strip$low_n, "bold", "plain")
   y_label <- if (is.null(unit) || !nzchar(unit)) analysis$y_variable else paste0(analysis$y_variable, " (", unit, ")")
   facet_scales <- if (identical(scale_mode, "free")) "free_y" else "fixed"
+  plot_theme <- ggplot2::theme_bw(base_size = 12) +
+    ggplot2::theme(
+      panel.border = ggplot2::element_rect(color = "black", fill = NA, linewidth = 1),
+      panel.grid.major = ggplot2::element_line(color = "grey90", linewidth = 0.3),
+      panel.grid.minor = ggplot2::element_blank(),
+      text = ggplot2::element_text(face = "bold"),
+      axis.text = ggplot2::element_text(face = "bold", color = "black"),
+      axis.text.x = ggplot2::element_blank(),
+      axis.ticks.x = ggplot2::element_blank(),
+      strip.background = ggplot2::element_rect(fill = "grey85", color = "black", linewidth = 1),
+      strip.text = ggplot2::element_text(face = "bold", color = "black")
+    )
   plot <- ggplot2::ggplot(
     plot_data$boxes,
     ggplot2::aes(x = visit, ymin = ymin, lower = lower, middle = middle, upper = upper, ymax = ymax)
   ) +
-    ggplot2::geom_boxplot(stat = "identity", outlier.shape = NA) +
+    ggplot2::geom_boxplot(
+      stat = "identity", outlier.shape = NA, fill = "white", color = "black", linewidth = 0.6
+    ) +
     ggplot2::geom_line(
       data = plot_data$medians,
       mapping = ggplot2::aes(x = visit, y = median, group = treatment),
-      inherit.aes = FALSE
+      inherit.aes = FALSE,
+      linewidth = 0.8,
+      color = "black"
     ) +
     ggplot2::geom_point(
       data = plot_data$medians,
       mapping = ggplot2::aes(x = visit, y = median),
-      inherit.aes = FALSE
+      inherit.aes = FALSE,
+      shape = 21,
+      size = 3,
+      fill = "white",
+      color = "black",
+      stroke = 1.2
     ) +
     ggplot2::geom_point(
       data = plot_data$outliers,
       mapping = ggplot2::aes(x = visit, y = value),
       inherit.aes = FALSE,
-      shape = 1
+      shape = 1,
+      size = 2.5,
+      color = "black",
+      stroke = 1
     ) +
     ggplot2::facet_wrap(ggplot2::vars(treatment), scales = facet_scales, drop = FALSE) +
     ggplot2::scale_x_discrete(drop = FALSE, limits = analysis$visit_levels) +
     ggplot2::labs(x = NULL, y = y_label) +
-    ggplot2::theme_minimal() +
-    ggplot2::theme(axis.text.x = ggplot2::element_blank(), axis.ticks.x = ggplot2::element_blank())
+    plot_theme
   n_strip <- ggplot2::ggplot(
     plot_data$n_strip,
-    ggplot2::aes(x = visit, y = 1, label = label, fontface = fontface)
+    ggplot2::aes(x = visit, y = 1, label = label)
   ) +
-    ggplot2::geom_text(na.rm = TRUE, size = 3) +
-    ggplot2::scale_discrete_identity(aesthetics = "fontface") +
+    ggplot2::geom_text(na.rm = TRUE, size = 4, color = "black", fontface = "bold") +
     ggplot2::facet_wrap(ggplot2::vars(treatment), drop = FALSE) +
     ggplot2::scale_x_discrete(drop = FALSE, limits = analysis$visit_levels) +
     ggplot2::scale_y_continuous(limits = c(0.5, 1.5)) +
-    ggplot2::labs(x = "Analysis visit", y = NULL) +
-    ggplot2::theme_minimal() +
+    ggplot2::labs(x = "Analysis Visit", y = NULL) +
+    ggplot2::theme_bw(base_size = 12) +
     ggplot2::theme(
+      panel.border = ggplot2::element_rect(color = "black", fill = NA, linewidth = 1),
+      text = ggplot2::element_text(face = "bold"),
+      axis.text = ggplot2::element_text(face = "bold", color = "black"),
       axis.text.y = ggplot2::element_blank(),
       axis.ticks.y = ggplot2::element_blank(),
       panel.grid = ggplot2::element_blank(),
-      strip.text = ggplot2::element_blank()
+      strip.text = ggplot2::element_blank(),
+      strip.background = ggplot2::element_rect(fill = "grey85", color = "black", linewidth = 1)
     )
-  combined <- grid::grobTree(
-    grid::editGrob(ggplot2::ggplotGrob(plot), vp = grid::viewport(layout.pos.row = 1L)),
-    grid::editGrob(ggplot2::ggplotGrob(n_strip), vp = grid::viewport(layout.pos.row = 2L)),
-    vp = grid::viewport(layout = grid::grid.layout(2L, 1L, heights = grid::unit(c(4, 1), "null")))
+  combined <- patchwork::wrap_plots(
+    plot,
+    n_strip,
+    ncol = 1L,
+    heights = c(4, 1)
   )
   structure(
     list(

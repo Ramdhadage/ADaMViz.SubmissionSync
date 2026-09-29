@@ -31,6 +31,7 @@ test_that("plot layers use the oracle and the N strip remains aligned", {
   expect_match(artifact$plot_data$n_strip$label[artifact$plot_data$n_strip$low_n], "Low N")
   expect_identical(main_panels, n_strip_panels)
   expect_equal(n_strip_built$data[[1]]$label, expected_n_strip$label)
+  expect_identical(unique(n_strip_built$data[[1]]$fontface), "bold")
   expect_equal(as.integer(n_strip_built$data[[1]]$x), expected_x)
   expect_equal(as.integer(n_strip_built$data[[1]]$PANEL), expected_panels)
 })

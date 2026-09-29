@@ -5,7 +5,6 @@
     data$visit <- factor(data$visit, levels = analysis$visit_levels)
     data
   })
-  layers$n_strip$fontface <- ifelse(layers$n_strip$low_n, "bold", "plain")
   layers
 }
 
@@ -44,22 +43,34 @@ assemble_boxplot <- function(analysis, scale_mode = c("fixed", "free"), unit = N
       ymax = ymax
     )
   ) +
-    ggplot2::geom_boxplot(stat = "identity", outlier.shape = NA) +
+    ggplot2::geom_boxplot(
+      stat = "identity", outlier.shape = NA, fill = "white", color = "black", linewidth = 0.6
+    ) +
     ggplot2::geom_line(
       data = plot_data$medians,
       mapping = ggplot2::aes(x = visit, y = median, group = treatment),
-      inherit.aes = FALSE
+      inherit.aes = FALSE,
+      linewidth = 0.8,
+      color = "black"
     ) +
     ggplot2::geom_point(
       data = plot_data$medians,
       mapping = ggplot2::aes(x = visit, y = median),
-      inherit.aes = FALSE
+      inherit.aes = FALSE,
+      shape = 21,
+      size = 3,
+      fill = "white",
+      color = "black",
+      stroke = 1.2
     ) +
     ggplot2::geom_point(
       data = plot_data$outliers,
       mapping = ggplot2::aes(x = visit, y = value),
       inherit.aes = FALSE,
-      shape = 1
+      shape = 1,
+      size = 2.5,
+      color = "black",
+      stroke = 1
     ) +
     ggplot2::facet_wrap(
       ggplot2::vars(treatment),
@@ -68,25 +79,38 @@ assemble_boxplot <- function(analysis, scale_mode = c("fixed", "free"), unit = N
     ) +
     ggplot2::scale_x_discrete(drop = FALSE, limits = analysis$visit_levels) +
     ggplot2::labs(x = NULL, y = y_label) +
-    ggplot2::theme_minimal() +
-    ggplot2::theme(axis.text.x = ggplot2::element_blank(), axis.ticks.x = ggplot2::element_blank())
+    ggplot2::theme_bw(base_size = 12) +
+    ggplot2::theme(
+      text = ggplot2::element_text(face = "bold"),
+      panel.border = ggplot2::element_rect(color = "black", fill = NA, linewidth = 1),
+      panel.grid.major = ggplot2::element_line(color = "grey90", linewidth = 0.3),
+      panel.grid.minor = ggplot2::element_blank(),
+      axis.text = ggplot2::element_text(face = "bold", color = "black"),
+      axis.text.x = ggplot2::element_blank(),
+      axis.ticks.x = ggplot2::element_blank(),
+      strip.background = ggplot2::element_rect(fill = "grey85", color = "black", linewidth = 1),
+      strip.text = ggplot2::element_text(face = "bold", color = "black")
+    )
 
   n_strip <- ggplot2::ggplot(
     plot_data$n_strip,
-    ggplot2::aes(x = visit, y = 1, label = label, fontface = fontface)
+    ggplot2::aes(x = visit, y = 1, label = label)
   ) +
-    ggplot2::geom_text(na.rm = TRUE, size = 3) +
-    ggplot2::scale_discrete_identity(aesthetics = "fontface") +
+    ggplot2::geom_text(na.rm = TRUE, size = 4, color = "black", fontface = "bold") +
     ggplot2::facet_wrap(ggplot2::vars(treatment), drop = FALSE) +
     ggplot2::scale_x_discrete(drop = FALSE, limits = analysis$visit_levels) +
     ggplot2::scale_y_continuous(limits = c(0.5, 1.5)) +
-    ggplot2::labs(x = "Analysis visit", y = NULL) +
-    ggplot2::theme_minimal() +
+    ggplot2::labs(x = "Analysis Visit", y = NULL) +
+    ggplot2::theme_bw(base_size = 12) +
     ggplot2::theme(
+      text = ggplot2::element_text(face = "bold"),
+      panel.border = ggplot2::element_rect(color = "black", fill = NA, linewidth = 1),
+      axis.text = ggplot2::element_text(face = "bold", color = "black"),
       axis.text.y = ggplot2::element_blank(),
       axis.ticks.y = ggplot2::element_blank(),
       panel.grid = ggplot2::element_blank(),
-      strip.text = ggplot2::element_blank()
+      strip.text = ggplot2::element_blank(),
+      strip.background = ggplot2::element_rect(fill = "grey85", color = "black", linewidth = 1)
     )
 
   structure(

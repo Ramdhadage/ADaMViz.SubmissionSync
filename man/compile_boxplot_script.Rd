@@ -16,8 +16,8 @@ and `version`.}
 A length-one UTF-8 R script.
 }
 \description{
-The returned script expects the controlled runner to provide the validated,
-pinned selected records as `analysis_data`. It contains resolved literals,
-inlined base-R helpers, and `ggplot2` as its only external R package.
-A `rix`-generated Nix environment with `ggplot2` can also run the script.
+The controlled runner provides validated selected records as `analysis_data`.
+When run on its own, the script loads the editable synthetic CSV example if
+`analysis_data` is absent. It contains resolved literals, inlined helpers,
+and uses `ggplot2`, `cli`, and `patchwork`.
 }

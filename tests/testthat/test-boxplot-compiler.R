@@ -35,12 +35,14 @@ test_that("compiler emits stable parseable governed code", {
   expect_identical(first, second)
   expect_no_error(parse(text = first))
   expect_false(grepl("eval\\s*\\(|parse\\s*\\(|setwd\\s*\\(|nix-shell|rix-generated|rix::", first))
-  expect_false(grepl("ADaMViz\\.SubmissionSync::|patchwork", first))
-  expect_match(first, "# Required R packages: ggplot2 and cli.", fixed = TRUE)
-  expect_match(first, "requireNamespace(\"ggplot2\", quietly = TRUE)", fixed = TRUE)
-  expect_match(first, "requireNamespace(\"cli\", quietly = TRUE)", fixed = TRUE)
-  expect_match(first, "# analysis_data <- read.csv(\"D:/R shiny Apps/ADaMViz.SubmissionSync/inst/extdata/synthetic/adlb-standard.csv\"", fixed = TRUE)
-  expect_false(grepl("\\n\\{\\s*\\.standalone_calculate", first))
+  expect_false(grepl("ADaMViz\\.SubmissionSync::|grid::grobTree", first))
+  expect_match(first, "# Required packages: ggplot2, cli, patchwork", fixed = TRUE)
+  expect_match(first, "required_packages <- c(\"ggplot2\", \"cli\", \"patchwork\")", fixed = TRUE)
+  expect_match(first, "if (!exists(\"analysis_data\", inherits = FALSE))", fixed = TRUE)
+  expect_match(first, "D:/R shiny Apps/ADaMViz.SubmissionSync/inst/extdata/synthetic/adlb-standard.csv", fixed = TRUE)
+  expect_match(first, "calculate_boxplot_statistics <- function", fixed = TRUE)
+  expect_match(first, "assemble_boxplot <- function", fixed = TRUE)
+  expect_match(first, "patchwork::wrap_plots", fixed = TRUE)
 })
 
 test_that("compiled script reproduces the independent analytical result", {
@@ -67,6 +69,7 @@ test_that("compiled script reproduces the independent analytical result", {
   withr::defer(close(connection))
   source(connection, local = environment)
 
+  expect_identical(environment$analysis_data, profile$selected_data)
   expect_identical(environment$boxplot_analysis$boxes, expected_boxes)
   expect_identical(nrow(environment$boxplot_analysis$outliers), 0L)
   expect_identical(environment$boxplot_analysis$low_n_policy, policy)
@@ -74,7 +77,12 @@ test_that("compiled script reproduces the independent analytical result", {
     environment$boxplot_artifact$analysis,
     environment$boxplot_analysis
   )
-  expect_s3_class(environment$boxplot_artifact$combined, "grob")
+  expect_s3_class(environment$boxplot_artifact$combined, "patchwork")
+  expect_identical(
+    unique(ggplot2::ggplot_build(environment$boxplot_artifact$n_strip)$data[[1]]$fontface),
+    "bold"
+  )
+  expect_s3_class(environment$boxplot_artifact$plot$theme$panel.border, "element_rect")
   skip_if_graphics_device_unavailable()
   output <- tempfile(fileext = ".png")
   withr::defer(unlink(output))
