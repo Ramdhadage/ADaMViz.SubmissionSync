@@ -5,6 +5,10 @@ clinical visualizations and reproducible R code from permitted ADaM or tabular
 data. It is designed for validated clinical submission workflows; it is not
 FDA validated or FDA approved.
 
+**Live app:** [Open ADaMViz SubmissionSync](https://ramnath-dhadage.shinyapps.io/adamviz/)
+
+**Prototype:** [View the F001 plot-generation prototype](docs/ux/F001-plot-generation-prototype.html)
+
 ## Development status
 
 The first Plot-Pattern Assurance Cell is being implemented incrementally. The
