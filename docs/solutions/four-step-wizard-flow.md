@@ -1,6 +1,7 @@
 ---
 title: "Use a linear five-step plot workflow"
 date: 2026-09-20
+last_updated: 2026-09-30
 category: design-patterns
 module: F001 Plot Generation workflow
 problem_type: design_pattern
@@ -25,6 +26,7 @@ F001 uses the main sequence Data → Ask → Confirm → Result → Export. The 
 
 - Keep the sequence Data → Ask → Confirm → Result → Export.
 - Provide Back navigation from every step with a predecessor: Ask to Data, Confirm to Ask, Result to Confirm, and Export to Result. Data is the entry step.
+- When Result returns to Confirm for an immutable generated revision, show the confirmed settings as disabled and provide Back to Result. Do not leave a disabled Back to question control as the only exit.
 - Keep Continue on Data disabled until file validation passes.
 - Keep plot output and automated checks on Result; keep revision history, review, and controlled export on Export.
 - Keep refinement linear: return to an earlier step, revise the input or choices, then continue forward. Do not create in-page branches for refinement.
@@ -40,7 +42,7 @@ A stable sequence keeps users oriented, and returning to a prior step gives them
 
 ## Examples
 
-In the implemented F001 workflow, each step after Data links back to its predecessor, Result continues to Export, and Export contains the existing traceability, review, and export panel. The Data screen keeps Continue disabled until a permitted file is ready. Within the workflow, refining an earlier input replaces the current proposal instead of creating a separately versioned proposal; this interaction rule does not define audit history or retention. Exact validation criteria and audit-history requirements remain governed by the [F001 workflow spec](../ux/F001-plot-generation.md).
+In the implemented F001 workflow, each step after Data links back to its predecessor, Result continues to Export, and Export contains the existing traceability, review, and export panel. If a generated revision is revisited from Result, Confirm is a read-only view of its settings and returns to Result without reopening the immutable revision for editing. The Data screen keeps Continue disabled until a permitted file is ready. Within the workflow, refining an earlier input replaces the current proposal instead of creating a separately versioned proposal; this interaction rule does not define audit history or retention. Exact validation criteria and audit-history requirements remain governed by the [F001 workflow spec](../ux/F001-plot-generation.md).
 
 ## Related
 
