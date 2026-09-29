@@ -149,7 +149,11 @@ mod_plot_generation_ui <- function(id) {
           mod_specification_ui(ns("specification")),
           tags$div(
             class = "d-flex justify-content-between",
-            shiny::uiOutput(ns("back_to_ask")),
+            tags$div(
+              class = "d-flex gap-2",
+              shiny::uiOutput(ns("back_to_ask")),
+              shiny::uiOutput(ns("back_to_result_from_confirm"))
+            ),
             shiny::uiOutput(ns("confirm_message"))
           ),
           tags$p(class = "f001-caption", "The selected BDS records are validated before the deterministic R script is generated or executed.")
@@ -371,11 +375,21 @@ mod_plot_generation_server <- function(
 
     output$back_to_ask <- shiny::renderUI({
       state <- current_revision()
+      if (!is.null(state$revision) && is.null(state$pending)) return(NULL)
       shiny::actionButton(
         session$ns("back_to_ask"),
         "Back to question",
-        class = "btn-outline-secondary",
-        disabled = !is.null(state$revision) && is.null(state$pending)
+        class = "btn-outline-secondary"
+      )
+    })
+
+    output$back_to_result_from_confirm <- shiny::renderUI({
+      state <- current_revision()
+      if (is.null(state$revision) || !is.null(state$pending)) return(NULL)
+      shiny::actionButton(
+        session$ns("back_to_result_from_confirm"),
+        "Back to result",
+        class = "btn-outline-secondary"
       )
     })
 
@@ -476,6 +490,7 @@ mod_plot_generation_server <- function(
 
     shiny::observeEvent(input$back_to_data, set_step("data"), ignoreInit = TRUE)
     shiny::observeEvent(input$back_to_ask, set_step("ask"), ignoreInit = TRUE)
+    shiny::observeEvent(input$back_to_result_from_confirm, set_step("result"), ignoreInit = TRUE)
     shiny::observeEvent(input$back_to_confirm, set_step("confirm"), ignoreInit = TRUE)
     shiny::observeEvent(input$to_export, set_step("export"), ignoreInit = TRUE)
     shiny::observeEvent(input$back_to_result, set_step("result"), ignoreInit = TRUE)

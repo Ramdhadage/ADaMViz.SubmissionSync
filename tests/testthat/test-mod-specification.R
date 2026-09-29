@@ -24,6 +24,46 @@ test_that("specification module renders confirmed fields and provenance", {
   )
 })
 
+test_that("specification module keeps generated settings visible but read-only", {
+  spec <- new_plot_spec(
+    dataset_id = "fixture-adlb",
+    paramcd = "ALT",
+    y_variable = "AVAL",
+    unit = "U/L",
+    treatment_variable = "TRT01A",
+    treatment_levels = c("Active", "Placebo"),
+    visits = c("Baseline", "Week 4"),
+    provenance = stats::setNames(rep("user_confirmed", 8L), .plot_spec_fields),
+    state = "confirmed"
+  )
+  current_revision <- shiny::reactiveVal(list(
+    spec = spec,
+    revision = list(status = "Draft"),
+    choices = list(
+      parameters = "ALT",
+      units = list(ALT = "U/L"),
+      y_variables = c("AVAL", "CHG", "PCHG"),
+      treatment_variables = "TRT01A",
+      treatment_levels = list(TRT01A = c("Active", "Placebo")),
+      visits = c("Baseline", "Week 4"),
+      scale_modes = c("fixed", "free")
+    )
+  ))
+
+  shiny::testServer(
+    mod_specification_server,
+    args = list(current_revision = current_revision),
+    {
+      session$flushReact()
+      controls <- htmltools::renderTags(output$controls)$html
+
+      expect_match(controls, "Parameter")
+      expect_match(controls, "disabled")
+      expect_no_match(controls, "Confirm and generate")
+    }
+  )
+})
+
 test_that("specification module executes user-confirmed selections", {
   spec <- new_plot_spec(
     dataset_id = "fixture-adlb",
