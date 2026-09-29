@@ -43,6 +43,7 @@ skip_if_graphics_device_unavailable <- function() {
         filename = path,
         plot = ggplot2::ggplot(data.frame(x = 1, y = 1), ggplot2::aes(x, y)) +
           ggplot2::geom_point(),
+        device = grDevices::png,
         width = 1,
         height = 1,
         dpi = 72,
