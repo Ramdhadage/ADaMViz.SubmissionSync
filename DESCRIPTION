@@ -27,7 +27,6 @@ Suggests:
     callr,
     devtools,
     htmltools,
-    renv,
     roxygen2,
     shinytest2,
     testthat (>= 3.0.0),
