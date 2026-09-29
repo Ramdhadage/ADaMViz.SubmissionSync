@@ -76,3 +76,35 @@ test_that("plot generation navigation reaches Export and returns to Result", {
     }
   )
 })
+
+test_that("plot generation returns from read-only Confirm to Result", {
+  state <- .empty_assurance_state()
+  state$revision <- list(status = "Draft")
+  current_revision <- shiny::reactiveVal(state)
+
+  shiny::testServer(
+    mod_plot_generation_server,
+    args = list(
+      current_revision = current_revision,
+      execute_revision = function(fields) NULL,
+      create_correction = function(fields, rationale, provenance) NULL,
+      workspace_provider = NULL
+    ),
+    {
+      session$setInputs(back_to_confirm = 1)
+      session$flushReact()
+      expect_match(
+        htmltools::renderTags(output$back_to_result_from_confirm)$html,
+        "Back to result"
+      )
+
+      session$setInputs(back_to_result_from_confirm = 1)
+      session$flushReact()
+      expect_match(
+        paste(as.character(output$step_mark), collapse = ""),
+        "Step 4 of 5",
+        fixed = TRUE
+      )
+    }
+  )
+})

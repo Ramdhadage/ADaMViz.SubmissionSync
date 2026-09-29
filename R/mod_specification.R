@@ -73,9 +73,7 @@ mod_specification_server <- function(
 
     output$controls <- shiny::renderUI({
       state <- current_revision()
-      if (is.null(state$pending) && !.can_create_correction(state)) {
-        return(NULL)
-      }
+      read_only <- is.null(state$pending) && !.can_create_correction(state)
       choices <- .specification_choices(state)
       fields <- state$spec$fields
       treatment_variable <- input$treatment_variable %||%
@@ -105,8 +103,7 @@ mod_specification_server <- function(
         choices$visits
       }
 
-      tags$div(
-        class = "specification-controls",
+      settings <- tagList(
         shiny::selectInput(session$ns("paramcd"), "Parameter", choices$parameters, selected = paramcd),
         shiny::selectInput(
           session$ns("y_variable"),
@@ -144,7 +141,21 @@ mod_specification_server <- function(
           session$ns("confirm_free_scale"),
           "I understand free Y scales create an Experimental/Draft revision",
           value = FALSE
-        ),
+        )
+      )
+
+      if (read_only) {
+        return(tags$fieldset(
+          disabled = TRUE,
+          class = "specification-controls",
+          tags$legend(class = "visually-hidden", "Confirmed plot settings"),
+          settings
+        ))
+      }
+
+      tags$div(
+        class = "specification-controls",
+        settings,
         if (.can_create_correction(state)) {
           tagList(
             shiny::textAreaInput(
