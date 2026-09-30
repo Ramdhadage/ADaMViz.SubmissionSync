@@ -5,13 +5,13 @@ clinical visualizations and reproducible R code from permitted ADaM or tabular
 data. It is designed for validated clinical submission workflows; it is not
 FDA validated or FDA approved.
 
-**Live app:** [Open ADaMViz SubmissionSync](https://ramnath-dhadage.shinyapps.io/adamviz/)
+**Live app:** [Open ADaMViz SubmissionSync](https://ramnath-dhadage.shinyapps.io/ADaMViz-SubmissionSync/)
 
 **Prototype preview:**
 
-[![Rendered F001 plot-generation prototype](assets/F001-plot-generation-prototype.png)](docs/ux/F001-plot-generation-prototype.html)
+[![Rendered F001 plot-generation prototype](assets/F001-plot-generation-prototype.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/docs/ux/F001-plot-generation-prototype.html)
 
-[Open the interactive HTML prototype](docs/ux/F001-plot-generation-prototype.html)
+[Open the rendered prototype in Chrome](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/docs/ux/F001-plot-generation-prototype.html)
 
 ## Development status
 

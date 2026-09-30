@@ -1,0 +1,10 @@
+name: ADaMViz-SubmissionSync
+title: ADaMViz.SubmissionSync: Review-Ready Clinical Figures
+username: ramnath-dhadage
+account: ramnath-dhadage
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 18047061
+bundleId: 12628345
+url: https://ramnath-dhadage.shinyapps.io/ADaMViz-SubmissionSync/
+version: 1
