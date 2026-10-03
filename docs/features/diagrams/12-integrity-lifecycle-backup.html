@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Evidence integrity and recovery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--navy:#0B3C5D;--slate:#5B6770;--paper:#f5f5f5}*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--navy);font-family:Inter,'Segoe UI',Arial,sans-serif}main{max-width:1040px;margin:32px auto;padding:0 24px}h1{font-size:30px;line-height:1.2;margin:8px 0 12px;font-weight:700}p{color:var(--slate);line-height:1.6;max-width:850px}.eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}.diagram-container{overflow-x:auto}svg{display:block;width:100%;min-width:960px;height:auto;background:var(--paper)}.node{fill:white;stroke:#5B6770;stroke-width:1.5}.focal{stroke:#0B3C5D;stroke-width:2}.name{font-size:18px;font-weight:600;fill:#0B3C5D}.body{font-size:14px;fill:#5B6770}.tag{font-size:11px;font-weight:600;letter-spacing:.06em;fill:#0B3C5D}.technical{font-family:'Geist Mono',Consolas,monospace;font-size:12px;fill:#5B6770}.edge{fill:none;stroke:#5B6770;stroke-width:2;marker-end:url(#integrity-arrow)}.legend{font-size:13px;fill:#5B6770}a{color:#0B3C5D}@media print{main{margin:0;max-width:none}.diagram-container{overflow:visible}}
+</style>
+</head>
+<body><main>
+<div class="eyebrow">Feature 12 · local repository operations</div>
+<h1>Evidence integrity and recovery</h1>
+<p>Backup captures the repository under its lock. Restore verifies a staged copy before publishing it. Local hashes support detection; storage custody and scheduled backups remain outside this workflow.</p>
+<div class="diagram-container">
+<svg viewBox="0 0 960 600" role="img" aria-labelledby="12-integrity-lifecycle-backup-title 12-integrity-lifecycle-backup-desc">
+<title id="12-integrity-lifecycle-backup-title">Evidence integrity and recovery</title>
+<desc id="12-integrity-lifecycle-backup-desc">Repository records and sidecar roots are verified and backed up, then a restore checks the manifest and staged records before publication, with an explicit missing-artifact-directory limitation.</desc>
+<defs>
+<marker id="integrity-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#5B6770"/></marker>
+<marker id="integrity-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#0B3C5D"/></marker>
+<marker id="integrity-arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#0B3C5D"/></marker>
+</defs>
+<rect width="960" height="600" fill="#f5f5f5"/>
+<text x="40" y="36" class="tag">BACKUP · REPOSITORY LOCK HELD</text>
+<text x="40" y="276" class="tag">RESTORE · EMPTY DESTINATION REQUIRED</text>
+<path class="edge" d="M 296 136 H 352"/>
+<path class="edge" d="M 608 136 H 664"/>
+<path class="edge" d="M 792 216 V 304"/>
+<path class="edge" d="M 664 384 H 608"/>
+<path class="edge" d="M 352 384 H 296"/>
+<g>
+<rect class="node" x="40" y="56" width="256" height="160" rx="6"/>
+<text class="tag" x="56" y="80">01 · RETAIN</text>
+<text class="name" x="56" y="112">Repository records</text>
+<text class="body" x="56" y="140">Events, evidence, review, receipts</text>
+<text class="technical" x="56" y="168">evidence.sqlite + chain root</text>
+<text class="body" x="56" y="192">Referenced script / image bytes</text>
+</g>
+<g>
+<rect class="node focal" x="352" y="56" width="256" height="160" rx="6"/>
+<text class="tag" x="368" y="80">02 · VERIFY SOURCE</text>
+<text class="name" x="368" y="112">Integrity checks</text>
+<text class="body" x="368" y="140">Chains, roots, records, projection</text>
+<text class="technical" x="368" y="168">require_artifacts = TRUE</text>
+<text class="body" x="368" y="192">Failure stops backup</text>
+</g>
+<g>
+<rect class="node" x="664" y="56" width="256" height="160" rx="6"/>
+<text class="tag" x="680" y="80">03 · COPY AND PUBLISH</text>
+<text class="name" x="680" y="112">Backup package</text>
+<text class="body" x="680" y="140">Database, root, artifact directory</text>
+<text class="body" x="680" y="168">Verify copy; write completion file</text>
+<text class="technical" x="680" y="192">backup-manifest.json</text>
+</g>
+<g>
+<rect class="node" x="664" y="304" width="256" height="160" rx="6"/>
+<text class="tag" x="680" y="328">04 · CHECK BACKUP</text>
+<text class="name" x="680" y="360">Manifest checks</text>
+<text class="body" x="680" y="388">Database + root file hashes</text>
+<text class="body" x="680" y="416">Recorded database row counts</text>
+<text class="body" x="680" y="440">Failure stops restore</text>
+</g>
+<g>
+<rect class="node focal" x="352" y="304" width="256" height="160" rx="6"/>
+<text class="tag" x="368" y="328">05 · VERIFY STAGING</text>
+<text class="name" x="368" y="360">Restored copy</text>
+<text class="technical" x="368" y="388">verify_integrity()</text>
+<text class="body" x="368" y="416">Bytes checked if store attached</text>
+<text class="body" x="368" y="440">Absent store skips byte checks</text>
+</g>
+<g>
+<rect class="node" x="40" y="304" width="256" height="160" rx="6"/>
+<text class="tag" x="56" y="328">06 · PUBLISH RESTORE</text>
+<text class="name" x="56" y="360">Destination repository</text>
+<text class="body" x="56" y="388">Move after successful verification</text>
+<text class="body" x="56" y="416">Return repository at new paths</text>
+<text class="body" x="56" y="440">Failure removes staging</text>
+</g>
+<path d="M 40 512 H 920" stroke="#d9dfe3"/>
+<rect x="40" y="536" width="16" height="16" rx="2" fill="white" stroke="#5B6770"/>
+<text class="legend" x="68" y="548">Operation / records</text>
+<rect x="252" y="536" width="16" height="16" rx="2" fill="white" stroke="#0B3C5D" stroke-width="2"/>
+<text class="legend" x="280" y="548">Integrity check</text>
+<path d="M 464 544 H 504" class="edge"/>
+<text class="legend" x="516" y="548">Operation order</text>
+<text class="legend" x="40" y="576">Completion manifest covers database and root hashes; it is not an artifact inventory or a signed custody record.</text>
+</svg>
+</div>
+<p><a href="../12-integrity-lifecycle-backup.md">Read implementation details and inspected test coverage</a>. Fonts use Inter with Segoe UI / Arial fallbacks; technical labels use Geist Mono with Consolas / monospace fallbacks.</p>
+</main></body></html>

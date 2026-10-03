@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reproducing retained results — ADaMViz SubmissionSync</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet">
+<style>
+:root { --paper:#ffffff; --paper-2:#f5f7f9; --ink:#0B3C5D; --muted:#5B6770; --rule:#cbd4db; --accent:#0B3C5D; --font-sans:Inter,'Segoe UI',Arial,sans-serif; --font-mono:'Geist Mono',Consolas,monospace; }
+* { box-sizing:border-box; }
+body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--font-sans); }
+main { max-width:1040px; min-width:0; margin:32px auto; padding:0 24px; }
+h1 { margin:8px 0 12px; font-size:28px; font-weight:600; }
+p { color:var(--muted); line-height:1.6; max-width:900px; }
+.eyebrow { font:12px var(--font-mono); }
+.diagram-container { width:100%; overflow-x:auto; }
+svg { display:block; width:100%; min-width:960px; }
+.node { fill:var(--paper); stroke:var(--rule); stroke-width:1; }
+.focal { fill:var(--paper-2); stroke:var(--accent); stroke-width:2; }
+.optional { stroke-dasharray:5 4; }
+.name { font:600 12px var(--font-sans); fill:var(--ink); }
+.detail { font:9px var(--font-mono); fill:var(--muted); }
+.label { font:8px var(--font-mono); fill:var(--muted); }
+.arrow { fill:none; stroke:var(--muted); stroke-width:1.5; marker-end:url(#replay08-arrow); }
+.small { font-size:12px; }
+@media print { main { margin:0; padding:0; } .diagram-container { overflow-x:visible; } svg { min-width:0; } }
+</style>
+</head>
+<body>
+<main>
+<div class="eyebrow">ADaMViz SubmissionSync · Feature 08</div>
+<h1>Reproducing retained results</h1>
+<p>A separately requested replay reads retained inputs and compares identities. The default runner executes in the current R process. Replay does not change review status or control the normal export path.</p>
+<div class="diagram-container">
+<svg viewBox="0 0 960 600" role="img" aria-labelledby="08-reproducing-retained-results-title 08-reproducing-retained-results-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="08-reproducing-retained-results-title">Reproducing retained results</title>
+<desc id="08-reproducing-retained-results-desc">Replay loads context and script bytes, reconstructs selected records, executes, retains verification, compares hashes and environment, returns a result, and optionally records evidence.</desc>
+<defs>
+<marker id="replay08-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#5B6770"/></marker>
+<marker id="replay08-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#0B3C5D"/></marker>
+<marker id="replay08-arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#0B3C5D"/></marker>
+</defs>
+<rect width="960" height="600" fill="#ffffff"/>
+<path class="arrow" d="M 288 108 V 132"/>
+<path class="arrow" d="M 288 188 V 212"/>
+<path class="arrow" d="M 288 268 V 292"/>
+<path class="arrow" d="M 288 348 V 372"/>
+<path class="arrow" d="M 288 428 V 452"/>
+<path class="arrow" stroke-dasharray="5 4" d="M 496 480 H 624"/>
+<rect x="508" y="456" width="104" height="16" fill="#ffffff"/>
+<text x="560" y="468" text-anchor="middle" class="label">key supplied</text>
+<rect class="node" x="80" y="52" width="416" height="56" rx="6"/>
+<text class="name" x="100" y="76">Load revision context and retained script</text>
+<text class="detail" x="100" y="96">latest context · artifact lookup by code_hash</text>
+<rect class="node" x="80" y="132" width="416" height="56" rx="6"/>
+<text class="name" x="100" y="156">Rebuild selected records and request</text>
+<text class="detail" x="100" y="176">column order · NA sentinel · numeric / integer</text>
+<rect class="node" x="80" y="212" width="416" height="56" rx="6"/>
+<text class="name" x="100" y="236">Execute the retained R script</text>
+<text class="detail" x="100" y="256">default: local runner · checks input hashes</text>
+<rect class="node" x="80" y="292" width="416" height="56" rx="6"/>
+<text class="name" x="100" y="316">Retain the execution verification result</text>
+<text class="detail" x="100" y="336">verification status does not set replay status</text>
+<rect class="node focal" x="80" y="372" width="416" height="56" rx="6"/>
+<text class="name" x="100" y="396">Compare with the original revision</text>
+<text class="detail" x="100" y="416">spec · script · analysis · environment · image*</text>
+<rect class="node" x="80" y="452" width="416" height="56" rx="6"/>
+<text class="name" x="100" y="476">Return passed or failed and individual checks</text>
+<text class="detail" x="100" y="496">failed if any comparison is exactly FALSE</text>
+<rect class="node optional" x="624" y="452" width="256" height="56" rx="6"/>
+<text class="name" x="644" y="476">Record replay evidence</text>
+<text class="detail" x="644" y="496">reproducibility_rerun</text>
+<line x1="40" y1="540" x2="920" y2="540" stroke="#cbd4db"/>
+<line x1="56" y1="564" x2="84" y2="564" stroke="#5B6770" stroke-width="1.5"/>
+<text class="detail" x="92" y="568">Required sequence</text>
+<line x1="260" y1="564" x2="288" y2="564" stroke="#5B6770" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text class="detail" x="296" y="568">Optional evidence write</text>
+<text class="detail" x="520" y="568">*Image check = NA when environments differ.</text>
+</svg>
+</div>
+<p class="small">An environment mismatch still fails replay. The diagram combines data and script retrieval in one step; reconstruction rules and fingerprint limits are detailed in the <a href="../08-reproducing-retained-results.md">feature documentation</a>.</p>
+<p class="small">Application palette: navy #0B3C5D and slate #5B6770. Text uses Inter with Segoe UI and Arial fallbacks; technical labels use Geist Mono with Consolas fallback. Font availability can change rendering.</p>
+</main>
+</body>
+</html>

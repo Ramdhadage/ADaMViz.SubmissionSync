@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deterministic script and subprocess execution</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Geist+Mono:wght@400&amp;display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;font-family:Inter,"Segoe UI",Arial,sans-serif;color:#0B3C5D;background:#fff}body{margin:0;padding:32px}main{max-width:1000px;margin:auto}h1{font-size:28px;line-height:1.2;margin:0 0 12px;font-weight:600}p{color:#5B6770;line-height:1.6;margin:0 0 16px}.diagram-scroll{overflow-x:auto;border:1px solid #d7dfe4;border-radius:8px}svg{display:block;min-width:960px;width:100%;height:auto;background:#f5f5f5}svg text{font-family:Inter,"Segoe UI",Arial,sans-serif;fill:#0B3C5D}.name{font-size:12px;font-weight:600}.sub{font-family:"Geist Mono",Consolas,monospace;font-size:9px;fill:#5B6770}.group{font-size:14px;font-weight:600}.note{font-size:11px;fill:#5B6770}.node{fill:#fff;stroke:#9baab4;stroke-width:1}.focal{fill:#edf3f7;stroke:#0B3C5D;stroke-width:2}.edge{fill:none;stroke:#5B6770;stroke-width:1.5;marker-end:url(#exec06-arrow)}a{color:#0B3C5D}footer{margin-top:16px;font-size:13px;color:#5B6770}@media print{body{padding:0}.diagram-scroll{overflow:visible;border:0}svg{min-width:0;width:100%}}
+</style>
+</head>
+<body><main>
+<h1>Deterministic script and subprocess execution</h1>
+<p>Fixed-scale revisions bind owned R code to selected records before synchronous execution. The worker returns artifacts and execution identity; the service records verification evidence.</p>
+<div class="diagram-scroll">
+<svg viewBox="0 0 960 600" role="img" aria-labelledby="06-script-generation-execution-title 06-script-generation-execution-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="06-script-generation-execution-title">Deterministic script and subprocess execution</title>
+<desc id="06-script-generation-execution-desc">A confirmed specification becomes an owned script and bound request, which a clean callr process executes before returning artifacts for verification.</desc>
+<defs><marker id="exec06-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#5B6770"/></marker></defs>
+<text x="48" y="64" class="group">Application process</text>
+<rect x="40" y="280" width="880" height="192" rx="8" fill="#fff" stroke="#c5d1d9" stroke-dasharray="5 4"/>
+<text x="60" y="308" class="group">Separate R process</text>
+<!-- All connectors precede their endpoint nodes. -->
+<path class="edge" d="M280 168H360"/>
+<path class="edge" d="M600 168H680"/>
+<path class="edge" d="M800 216V352"/>
+<path class="edge" d="M680 400H600"/>
+<path class="edge" d="M360 400H280"/>
+<rect class="node" x="40" y="120" width="240" height="96" rx="8"/>
+<text class="name" x="60" y="152">Confirm specification</text>
+<text class="sub" x="60" y="176">selected records + low-N policy</text>
+<text class="note" x="60" y="196">Profile checks precede compilation</text>
+<rect class="focal" x="360" y="120" width="240" height="96" rx="8"/>
+<text class="name" x="380" y="152">Compile owned R helpers</text>
+<text class="sub" x="380" y="176">compile_boxplot_script()</text>
+<text class="note" x="380" y="196">Resolved literals; stable UTF-8 text</text>
+<rect class="node" x="680" y="120" width="240" height="96" rx="8"/>
+<text class="name" x="700" y="152">Record bound attempt</text>
+<text class="sub" x="700" y="176">script + data + spec hashes</text>
+<text class="note" x="700" y="196">Draft revision; synchronous submit</text>
+<rect class="focal" x="680" y="352" width="240" height="96" rx="8"/>
+<text class="name" x="700" y="384">Start clean callr worker</text>
+<text class="sub" x="700" y="408">--vanilla; timeout = 60 seconds</text>
+<text class="note" x="700" y="428">Disabled startup profiles</text>
+<rect class="node" x="360" y="352" width="240" height="96" rx="8"/>
+<text class="name" x="380" y="384">Check hashes; source script</text>
+<text class="sub" x="380" y="408">analysis_data supplied by runner</text>
+<text class="note" x="380" y="428">Require governed runtime objects</text>
+<rect class="node" x="40" y="352" width="240" height="96" rx="8"/>
+<text class="name" x="60" y="384">Return artifacts and identity</text>
+<text class="sub" x="60" y="408">PNG + analysis + environment</text>
+<text class="note" x="60" y="428">Service verifies and records evidence</text>
+<text class="note" x="48" y="508">A separate process is not a hostile-code sandbox or a compiler allowlist.</text>
+<line x1="40" x2="920" y1="540" y2="540" stroke="#c5d1d9"/>
+<rect x="48" y="560" width="12" height="12" fill="#fff" stroke="#9baab4"/><text class="note" x="68" y="571">Owned step</text>
+<rect x="216" y="560" width="12" height="12" fill="#edf3f7" stroke="#0B3C5D"/><text class="note" x="236" y="571">Compiler or execution boundary</text>
+<text class="note" x="568" y="571">Scope: fixed scales; free scales skip this worker</text>
+</svg></div>
+<footer>Source inspection, not a fresh runtime result. Diagram: static flowchart, doc-inline 960 × 600, engineer audience. Font fallbacks: Segoe UI / Arial and Consolas. <a href="../06-script-generation-execution.md">Read the implementation notes</a>.</footer>
+</main></body></html>

@@ -107,6 +107,10 @@ These observations identify differences; they do not authorize new requirements 
 
 ## Navigation and maintenance
 
+The [twelve feature guides](docs/features/README.md) explain the current input,
+profiling, plotting, execution, review, export, and evidence workflows. Each guide
+includes an implementation diagram and links to source and inspected tests.
+
 | Task | Read before changing it |
 | --- | --- |
 | Scope, terminology, or product boundaries | `CODEX_CONTEXT.md`, `docs/product/STRATEGY.md`, `docs/product/product-contract.md`, `CONCEPTS.md` |

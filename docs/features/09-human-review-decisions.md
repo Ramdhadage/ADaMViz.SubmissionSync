@@ -1,0 +1,49 @@
+# Human review: reviewer roles, approvals, and rejections
+
+Human review binds decisions to one revision's retained script, image, and analytical output. A revision reaches `Reviewed` only after approvals from distinct active non-creator actors covering both `statistical_programmer` and `biostatistician` roles. Successful execution alone produces `Verified`; it does not supply either human approval.
+
+This page describes implementation inspected at base commit `5e2fa6a`. It documents the local proof of concept, not authenticated production review or formal validation evidence.
+
+[Open the review-state diagram](diagrams/09-human-review-decisions.html).
+
+## Using the review panel
+
+The Export step contains the **Two-Person Review** panel. The reviewer selects a local identity and a review role, enters an optional approval comment or required rejection rationale, and chooses **Approve** or **Reject**. The panel then shows recorded actor IDs, roles, decisions, and timestamps. Selecting the creator identity remains possible in the interface, but the repository refuses that actor's decision on their own revision.
+
+[`mod_review_server()`](../../R/mod_review.R) reloads the revision before submitting a decision. It supplies the current integer version and an idempotency key built from the decision, revision ID, actor ID, and version. On success it refreshes application state; on failure it displays the error message. The role selector does not grant that role: the repository checks the claim against the actor's registered roles.
+
+## Decision checks and outcomes
+
+[`new_review_service()`](../../R/review_service.R) resolves an actor through the identity provider. Its `approve()` and `reject()` methods delegate to `record_review_decision()` in [`sqlite_evidence_repository()`](../../R/evidence_repository_sqlite.R). When callers omit hashes, the service reads the revision's `code_hash`, `image_hash`, and `analytical_hash` and submits those values.
+
+The repository applies these checks within its decision transaction:
+
+- The revision must be `Verified`, and the submitted version must equal its current version. `Reviewed` revisions are immutable; `Draft`, `Experimental/Draft`, and `Rejected` revisions cannot accept new review decisions.
+- All three submitted artifact hashes must match the revision. A changed script, image, or analytical result cannot reuse an approval for different bytes or content identity.
+- The actor must be active, must differ from the revision creator, and must hold an eligible reviewer role. An actor holding both roles must explicitly select one authorized role.
+- An actor who already recorded a decision on this revision cannot record another under a new command. One person with both roles cannot provide both required approvals.
+- Rejection requires a rationale satisfying the implementation's nonempty-string check. Approval comments are optional.
+
+After the first approval, the status remains `Verified`, and the version increments. Another approval may arrive in either role order. Once recorded approvals include at least two distinct actors and both required roles, the repository sets `Reviewed`. Two approvals covering only one role leave the revision `Verified` until another eligible actor supplies the missing role.
+
+A valid rejection immediately sets `Rejected`, including when an earlier approval exists. It prevents further decisions on that revision. A competing request using the previous version fails the stale-token check. Correction creates a successor rather than reopening the rejected revision; see [correction revisions](10-correction-revision-traceability.md).
+
+## Records and repeat requests
+
+Each decision retains its decision and revision IDs, actor ID, claimed role, decision, authorization snapshot, comment or rationale, three artifact hashes, UTC timestamp, idempotency key, and record hash. The authorization snapshot records the actor's ID, roles, and active flag at decision time.
+
+The repository appends a `review_approved` or `review_rejected` lifecycle event containing the resulting status, actor, role, decision ID, and decision hash. `list_review_decisions()` returns the stored decisions ordered by timestamp and decision ID. Integrity verification compares their artifact hashes and record hashes with the revisions and lifecycle history.
+
+Repeating an identical registered command with the same idempotency key returns without adding another decision. Reusing a key for changed command content is rejected. This repeat handling is separate from the distinct-actor rule applied to new commands.
+
+## Enforcement limits
+
+[`local_identity_provider()`](../../R/provider_identity_local.R) looks up actors in a supplied catalog. [`app_server()`](../../R/app_server.R) constructs creator, programmer, and biostatistician actors locally, and the interface lets the user select them. These mechanisms demonstrate role and identity rules but do not authenticate the person operating the session. Error messages referring to an “authenticated” actor do not establish authentication.
+
+The displayed preview is rebuilt in the application process rather than loaded from the accepted worker PNG. Decisions bind retained revision hashes, but the current interface does not establish that the image visually inspected was the accepted image. Review does not automatically invoke retained-input replay. See [execution evidence](07-verification-revision-evidence.md) for the distinction between automated checks and human judgment.
+
+Rejection is implemented directly by the repository's decision transaction. The generic [`transition_revision_status()`](../../R/domain_status.R) helper lists `Verified` to `Reviewed` but has no rejection transition; it is not the complete review lifecycle. Also, `Reviewed` is not an unconditional export prerequisite: current export code permits accepted bundles in other eligible statuses, as described in [controlled export](11-controlled-export.md).
+
+## Inspected coverage
+
+[`test-review-service.R`](../../tests/testthat/test-review-service.R) covers creator exclusion, active actors, dual-role claims, distinct identities, exact hashes, rationale retention, stale versions, either approval order, and competing decisions. [`test-mod-review.R`](../../tests/testthat/test-mod-review.R) exercises the panel's two-approval state update. These files were inspected, not executed for this documentation change. Browser behavior, authentication, statistical adequacy of reviewer decisions, and regulated qualification remain unverified here.
