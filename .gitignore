@@ -7,6 +7,10 @@ docs/**/libs/
 docs/**/*.html
 docs/**/*.png
 
+# Retained feature documentation diagrams and local authoring worktrees.
+!docs/features/diagrams/*.html
+.worktrees/
+
 # Local execution and evidence workspaces.
 .assurance-workspace/
 execution-workspace/

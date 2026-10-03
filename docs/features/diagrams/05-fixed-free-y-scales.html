@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fixed and free Y scales — ADaMViz SubmissionSync</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Geist+Mono:wght@400&amp;display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;font-family:Inter,"Segoe UI",Arial,sans-serif;color:#0B3C5D;background:#fff}*{box-sizing:border-box}body{margin:0;padding:32px}main{max-width:1040px;min-width:0;margin:auto}h1{font-size:28px;margin:8px 0 12px;line-height:1.2}p{color:#5B6770;line-height:1.6;max-width:80ch}.eyebrow{font-size:12px;font-weight:700;letter-spacing:.08em}.diagram-container{width:100%;overflow-x:auto;border:1px solid #D7DEE3;border-radius:8px}svg{display:block;width:100%;min-width:960px}.node{fill:#fff;stroke:#5B6770;stroke-width:1.4}.focal{fill:#EDF3F7;stroke:#0B3C5D;stroke-width:2}.name{font-size:17px;font-weight:600;fill:#0B3C5D}.sub{font-size:13px;fill:#5B6770}.technical{font-family:"Geist Mono",Consolas,monospace;font-size:12px;fill:#5B6770}.connector{fill:none;stroke:#5B6770;stroke-width:1.5;marker-end:url(#scale05-arrow)}.label{font-size:11px;fill:#0B3C5D;font-weight:600}a{color:#0B3C5D}.footnote{font-size:13px}@media(max-width:600px){body{padding:16px}h1{font-size:24px}}@media print{body{padding:0}.diagram-container{overflow-x:visible}svg{min-width:0}}
+</style>
+</head>
+<body><main>
+<div class="eyebrow">ADaMViz SubmissionSync · Feature 05</div>
+<h1>Fixed and free Y scales</h1>
+<p>The scale choice changes the visual range and the revision's permitted workflow. Analytical summaries use the same selected data.</p>
+<div class="diagram-container" tabindex="0" aria-label="Scale-path diagram; scroll horizontally on small screens">
+<svg viewBox="0 0 960 600" role="img" aria-labelledby="05-fixed-free-y-scales-title 05-fixed-free-y-scales-desc">
+<title id="05-fixed-free-y-scales-title">Fixed and free Y scales</title>
+<desc id="05-fixed-free-y-scales-desc">A confirmed specification branches into a fixed-scale Draft with governed worker execution or an acknowledged free-scale Experimental/Draft with an in-process preview and blocked verification, review, and export.</desc>
+<defs><marker id="scale05-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5B6770"/></marker></defs>
+<rect width="960" height="600" fill="#fff"/>
+<!-- Connectors precede nodes; branches have distinct ports and rounded elbows. -->
+<path class="connector" d="M480 72 V96"/>
+<path class="connector" d="M400 128 H224 Q216 128 216 136 V208"/>
+<path class="connector" d="M560 128 H736 Q744 128 744 136 V208"/>
+<path class="connector" d="M216 272 V320"/>
+<path class="connector" d="M744 272 V320"/>
+<path class="connector" d="M216 392 V440"/>
+<path class="connector" d="M744 392 V440"/>
+<rect x="268" y="136" width="68" height="24" fill="#fff"/><text class="label" x="302" y="152" text-anchor="middle">FIXED</text>
+<rect x="612" y="136" width="68" height="24" fill="#fff"/><text class="label" x="646" y="152" text-anchor="middle">FREE</text>
+<rect class="node" x="348" y="16" width="264" height="56" rx="6"/><text class="name" x="480" y="40" text-anchor="middle">Confirmed specification</text><text class="sub" x="480" y="60" text-anchor="middle">Selected BDS profile must pass</text>
+<path class="focal" d="M480 96 L560 128 L480 160 L400 128 Z"/><text class="name" x="480" y="134" text-anchor="middle">Y scales?</text>
+<rect class="node" x="76" y="208" width="280" height="64" rx="6"/><text class="name" x="216" y="234" text-anchor="middle">Draft revision</text><text class="technical" x="216" y="254" text-anchor="middle">scale_mode = "fixed"</text>
+<rect class="focal" x="604" y="208" width="280" height="64" rx="6"/><text class="name" x="744" y="234" text-anchor="middle">Experimental/Draft</text><text class="sub" x="744" y="254" text-anchor="middle">Requires user acknowledgement</text>
+<rect class="node" x="76" y="320" width="280" height="72" rx="6"/><text class="name" x="216" y="346" text-anchor="middle">Governed execution</text><text class="sub" x="216" y="368" text-anchor="middle">Clean callr worker + verification</text>
+<rect class="node" x="604" y="320" width="280" height="72" rx="6"/><text class="name" x="744" y="346" text-anchor="middle">Application preview + script</text><text class="sub" x="744" y="368" text-anchor="middle">No governed worker attempt</text>
+<rect class="node" x="76" y="440" width="280" height="76" rx="6"/><text class="name" x="216" y="465" text-anchor="middle">Verified when checks pass</text><text class="sub" x="216" y="488" text-anchor="middle">Human review available</text><text class="sub" x="216" y="506" text-anchor="middle">Export subject to separate gates</text>
+<rect class="node" x="604" y="440" width="280" height="76" rx="6"/><text class="name" x="744" y="465" text-anchor="middle">Governed progression blocked</text><text class="sub" x="744" y="488" text-anchor="middle">Cannot verify or enter review</text><text class="sub" x="744" y="506" text-anchor="middle">Controlled export rejected</text>
+<line x1="40" y1="552" x2="920" y2="552" stroke="#D7DEE3"/>
+<text class="sub" x="40" y="576">Decision diamond: scale choice · Boxes: implemented actions and outcomes</text>
+</svg></div>
+<p class="footnote">Flowchart · 960 × 600 · Current implementation at 5e2fa6a. Failed fixed-scale verification remains Draft. The diagram omits artifact and reviewer details; see <a href="../05-fixed-free-y-scales.md">the feature documentation</a>.</p>
+<p class="footnote">Application palette: navy #0B3C5D and slate #5B6770. Inter and Geist Mono load from Google Fonts; Segoe UI/Arial and Consolas/monospace provide offline fallbacks. Static diagram; no JavaScript.</p>
+</main></body></html>

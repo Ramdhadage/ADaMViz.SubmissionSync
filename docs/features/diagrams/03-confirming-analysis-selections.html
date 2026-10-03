@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Confirming analysis selections</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Geist+Mono:wght@400&amp;display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0B3C5D;--muted:#5B6770;--paper:#fff;--wash:#F4F6F8;--rule:#D7DEE3}
+*{box-sizing:border-box}body{margin:0;padding:32px;color:var(--ink);background:var(--wash);font-family:Inter,"Segoe UI",Arial,sans-serif}main{max-width:1040px;margin:auto}h1{margin:0 0 12px;font-size:28px;font-weight:600}p{color:var(--muted);line-height:1.6;max-width:900px}.diagram-container{width:100%;overflow-x:auto;border:1px solid var(--rule);background:var(--paper)}svg{display:block;width:100%;min-width:960px}.node{fill:var(--paper);stroke:var(--muted);stroke-width:1.5}.focal{fill:var(--ink);stroke:var(--ink)}.name{font-size:18px;font-weight:600;fill:var(--ink)}.detail{font-size:14px;fill:var(--muted)}.technical{font-family:"Geist Mono",Consolas,monospace;font-size:13px;fill:var(--muted)}.white{fill:white}.connector{fill:none;stroke:var(--muted);stroke-width:1.5;marker-end:url(#f03-arrow)}.branch{font-size:12px;letter-spacing:1px;font-weight:600;fill:var(--ink)}a{color:var(--ink)}
+</style>
+</head>
+<body><main>
+<h1>Confirming analysis selections</h1>
+<p>Dataset metadata supplies choices. The scientist confirms scope before BDS eligibility and plot generation.</p>
+<div class="diagram-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" role="img" aria-labelledby="03-confirming-analysis-selections-title 03-confirming-analysis-selections-desc">
+<title id="03-confirming-analysis-selections-title">Confirming analysis selections</title>
+<desc id="03-confirming-analysis-selections-desc">A pinned dataset supplies aggregate choices, the scientist selects scope, invalid fields stop confirmation, and a confirmed specification enters a separate BDS eligibility gate.</desc>
+<defs><marker id="f03-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5B6770"/></marker></defs>
+<rect width="960" height="600" fill="#fff"/>
+<path class="connector" d="M480 92 V124"/>
+<path class="connector" d="M480 184 V216"/>
+<path class="connector" d="M480 276 V296"/>
+<path class="connector" d="M580 340 H708"/>
+<path class="connector" d="M480 384 V428"/>
+<path class="connector" d="M816 380 V432"/>
+<rect x="608" y="308" width="56" height="24" fill="#fff"/><text class="branch" x="636" y="324" text-anchor="middle">YES</text>
+<rect x="496" y="392" width="44" height="24" fill="#fff"/><text class="branch" x="518" y="408" text-anchor="middle">NO</text>
+<g><rect class="node" x="280" y="32" width="400" height="60" rx="6"/><text class="name" x="480" y="57" text-anchor="middle">Pinned snapshot + retained question</text><text class="detail" x="480" y="79" text-anchor="middle">Question is retained; no active interpretation</text></g>
+<g><rect class="node" x="280" y="124" width="400" height="60" rx="6"/><text class="name" x="480" y="149" text-anchor="middle">Build aggregate choices</text><text class="technical" x="480" y="171" text-anchor="middle">build_prompt_context()</text></g>
+<g><rect class="node" x="280" y="216" width="400" height="60" rx="6"/><text class="name" x="480" y="241" text-anchor="middle">Scientist selects scope</text><text class="detail" x="480" y="263" text-anchor="middle">Parameter · Y · unit · treatment · visits · scale</text></g>
+<g><path class="node" d="M480 296 L580 340 L480 384 L380 340 Z"/><text class="name" x="480" y="337" text-anchor="middle">Valid fields?</text><text class="detail" x="480" y="357" text-anchor="middle">Shape + required values</text></g>
+<g><rect class="focal" x="708" y="300" width="220" height="80" rx="6"/><text class="name white" x="818" y="326" text-anchor="middle">Confirmed spec</text><text class="technical white" x="818" y="350" text-anchor="middle">fields + provenance</text><text class="detail white" x="818" y="370" text-anchor="middle">Canonical hash</text></g>
+<g><rect class="node" x="280" y="428" width="400" height="64" rx="6"/><text class="name" x="480" y="453" text-anchor="middle">Stay on Confirm</text><text class="detail" x="480" y="477" text-anchor="middle">Show the diagnostic; revise choices</text></g>
+<g><rect class="node" x="708" y="432" width="220" height="64" rx="6"/><text class="name" x="818" y="457" text-anchor="middle">BDS profile gate</text><text class="detail" x="818" y="481" text-anchor="middle">Availability + record checks</text></g>
+<line x1="32" y1="532" x2="928" y2="532" stroke="#D7DEE3"/>
+<rect x="32" y="552" width="16" height="16" fill="#0B3C5D"/><text class="detail" x="60" y="565">Hashed specification</text><rect class="node" x="288" y="552" width="16" height="16" rx="2"/><text class="detail" x="316" y="565">Selection or gate</text><path class="connector" d="M544 560 H580"/><text class="detail" x="596" y="565">Required progression</text>
+</svg>
+</div>
+<p>Scope: ordinary flowchart, doc-inline (960 × 600), seven nodes. The profile gate is summarized here; execution and human review follow separately. App colors use navy and slate. Fonts use Inter with Segoe UI/Arial fallback; technical labels use Geist Mono with Consolas fallback.</p>
+<p><a href="../03-confirming-analysis-selections.md">Read the implementation documentation</a></p>
+</main></body></html>

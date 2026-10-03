@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Uploads, snapshots, and input identity</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Geist+Mono:wght@400&amp;display=swap">
+<style>
+:root{--ink:#0B3C5D;--muted:#5B6770;--paper:#f5f5f5;--font-sans:Inter,"Segoe UI",Arial,sans-serif;--font-mono:"Geist Mono",Consolas,monospace}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans)}main{max-width:1040px;min-width:0;margin:32px auto;padding:0 24px}h1{font-size:28px;font-weight:600;margin:0 0 12px}p{color:var(--muted);line-height:1.5}.diagram-container{width:100%;overflow-x:auto}svg{display:block;width:100%;min-width:960px}.box{fill:#fff;stroke:var(--ink);stroke-width:1}.name{font-size:12px;font-weight:600;fill:var(--ink)}.tech{font-family:var(--font-mono);font-size:9px;fill:var(--muted)}.caption{font-size:11px;fill:var(--muted)}.edge{fill:none;stroke:var(--muted);stroke-width:1.5;marker-end:url(#arrow)}.tag{font-family:var(--font-mono);font-size:8px;fill:var(--muted)}
+@media print{.diagram-container{overflow-x:visible}svg{min-width:0}main{margin:0;padding:0}}
+</style>
+</head>
+<body><main>
+<h1>Uploads, snapshots, and input identity</h1>
+<p>One parsed table becomes a pinned snapshot. File bytes, full-table content, and selected execution records retain separate identities.</p>
+<div class="diagram-container">
+<svg viewBox="0 0 960 600" role="img" aria-labelledby="01-uploads-snapshots-input-identity-title 01-uploads-snapshots-input-identity-desc">
+<title id="01-uploads-snapshots-input-identity-title">Uploads, snapshots, and input identity</title>
+<desc id="01-uploads-snapshots-input-identity-desc">The upload adapter reads CSV or the first Excel worksheet, checks structure, hashes the input, pins a snapshot, and carries separate identities into revision evidence.</desc>
+<defs>
+<marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#5B6770"/></marker>
+<marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#0B3C5D"/></marker>
+<marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#0B3C5D"/></marker>
+</defs>
+<rect width="960" height="600" fill="#f5f5f5"/>
+<path class="edge" d="M280 112 V140"/>
+<path class="edge" d="M280 200 V228"/>
+<path class="edge" d="M280 288 V316"/>
+<path class="edge" d="M280 376 V404"/>
+<path class="edge" d="M460 346 H560"/>
+<path class="edge" d="M712 376 V428"/>
+<path class="edge" d="M460 444 H560"/>
+<g><rect class="box" x="100" y="52" width="360" height="60" rx="6"/><text class="name" x="120" y="76">Select one readable file</text><text class="tech" x="120" y="96">.csv / .xls / .xlsx</text></g>
+<g><rect class="box" x="100" y="140" width="360" height="60" rx="6"/><text class="name" x="120" y="164">Parse the table</text><text class="tech" x="120" y="184">CSV or first Excel worksheet</text></g>
+<g><rect class="box" x="100" y="228" width="360" height="60" rx="6"/><text class="name" x="120" y="252">Check upload structure</text><text class="tech" x="120" y="272">Required fields / numeric values / choices</text></g>
+<g><rect class="box" x="100" y="316" width="360" height="60" rx="6"/><text class="name" x="120" y="340">Hash bytes and parsed table</text><text class="tech" x="120" y="360">SHA-256 / canonical content</text></g>
+<g><rect class="box" x="100" y="404" width="360" height="80" rx="6"/><text class="name" x="120" y="428">Pin snapshot and confirm selections</text><text class="tech" x="120" y="448">Recheck full-table content hash</text><text class="tech" x="120" y="468">Selected records become analysis_data</text></g>
+<g><rect class="box" x="560" y="316" width="304" height="60" rx="6"/><text class="name" x="580" y="340">Upload identity and metadata</text><text class="tech" x="580" y="360">dataset_id / snapshot_id / source metadata</text></g>
+<g><rect class="box" x="560" y="428" width="304" height="80" rx="6"/><text class="name" x="580" y="452">Retain revision input evidence</text><text class="tech" x="580" y="472">File + table + selected-record hashes</text><text class="tech" x="580" y="492">Selected records retained; original file absent</text></g>
+<text class="caption" x="100" y="28">Successful intake path; parser and structural errors stop before pinning.</text>
+<line x1="40" y1="544" x2="920" y2="544" stroke="#d8dee3"/>
+<rect class="box" x="48" y="564" width="16" height="12" rx="2"/><text class="caption" x="76" y="574">Application step / record</text>
+<path class="edge" d="M312 570 H344"/><text class="caption" x="360" y="574">Data or identity handoff</text>
+<text class="caption" x="580" y="574">Format checks do not establish permitted provenance.</text>
+</svg></div>
+<p>Application colors and Inter typography; technical labels use Geist Mono. Google Fonts supplies both families when available; Segoe UI, Arial, and Consolas provide offline fallbacks.</p>
+</main></body></html>

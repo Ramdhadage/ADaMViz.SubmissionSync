@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Human review decisions | ADaMViz SubmissionSync</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}body{margin:0;padding:32px;background:#fff;color:#0B3C5D;font-family:Inter,"Segoe UI",Arial,sans-serif}main{max-width:1040px;margin:auto;min-width:0}h1{font-size:30px;margin:8px 0 12px;font-weight:700}.eyebrow{color:#5B6770;font-size:13px;letter-spacing:.08em;text-transform:uppercase}p{color:#5B6770;line-height:1.6;max-width:850px}a{color:#0B3C5D}.diagram-container{width:100%;overflow-x:auto;border:1px solid #DCE2E6;border-radius:8px}svg{display:block;width:100%;min-width:960px;background:#F6F8FA}svg text{font-family:Inter,"Segoe UI",Arial,sans-serif;fill:#0B3C5D}.name{font-size:20px;font-weight:600}.detail{font-size:15px;fill:#5B6770}.technical{font-family:"Geist Mono",Consolas,monospace;font-size:13px;fill:#5B6770}.edge{fill:none;stroke:#5B6770;stroke-width:2;marker-end:url(#review09-arrow)}.state{fill:#fff;stroke:#B8C4CC;stroke-width:1.5}.focal{fill:#0B3C5D;stroke:#0B3C5D}.light{fill:#fff}.label{font-size:12px;font-weight:600;fill:#5B6770}.note{font-size:14px;fill:#5B6770}@media print{body{padding:0}.diagram-container{overflow:visible}svg{min-width:0}}
+  </style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">Feature 09 · Current implementation</div>
+  <h1>Human review decisions</h1>
+  <p>Two independent role approvals complete review. A rejection closes the revision to further review decisions.</p>
+  <div class="diagram-container">
+    <svg viewBox="0 0 960 600" role="img" aria-labelledby="09-human-review-decisions-title 09-human-review-decisions-desc">
+      <title id="09-human-review-decisions-title">Human review decisions</title>
+      <desc id="09-human-review-decisions-desc">A Verified revision remains Verified after one approval, becomes Reviewed when distinct actors cover both required roles, or becomes Rejected after an eligible reviewer supplies a rationale.</desc>
+      <defs><marker id="review09-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#5B6770"/></marker></defs>
+      <text x="40" y="44" class="detail">Every new decision checks role, active actor, creator exclusion, version, and artifact hashes.</text>
+      <path class="edge" d="M260 188 H352"/>
+      <path class="edge" d="M608 188 H700"/>
+      <path class="edge" d="M152 248 V392 Q152 400 160 400 H360"/>
+      <path class="edge" d="M480 248 V360"/>
+      <rect x="264" y="148" width="84" height="24" fill="#F6F8FA"/><text x="306" y="165" class="label" text-anchor="middle">APPROVE</text>
+      <rect x="612" y="148" width="84" height="24" fill="#F6F8FA"/><text x="654" y="165" class="label" text-anchor="middle">ROLE PAIR</text>
+      <rect x="164" y="300" width="76" height="24" fill="#F6F8FA"/><text x="202" y="317" class="label" text-anchor="middle">REJECT</text>
+      <rect x="492" y="292" width="76" height="24" fill="#F6F8FA"/><text x="530" y="309" class="label" text-anchor="middle">REJECT</text>
+      <rect x="44" y="128" width="216" height="120" rx="8" class="state"/>
+      <text x="64" y="164" class="name">Verified</text><text x="64" y="196" class="detail">No decisions yet</text><text x="64" y="224" class="technical">accepted hashes</text>
+      <rect x="352" y="128" width="256" height="120" rx="8" class="state"/>
+      <text x="372" y="164" class="name">Verified</text><text x="372" y="196" class="detail">One approval recorded</text><text x="372" y="224" class="technical">version increments</text>
+      <rect x="700" y="128" width="216" height="120" rx="8" class="focal"/>
+      <text x="720" y="164" class="name light">Reviewed</text><text x="720" y="196" class="detail light">Distinct actors</text><text x="720" y="224" class="detail light">Both required roles</text>
+      <rect x="360" y="360" width="240" height="112" rx="8" class="state"/>
+      <text x="380" y="396" class="name">Rejected</text><text x="380" y="428" class="detail">Rationale retained</text><text x="380" y="454" class="detail">Correction → successor</text>
+      <text x="700" y="284" class="note">No further decisions</text>
+      <text x="44" y="510" class="note">Required roles: statistical programmer + biostatistician, in either order.</text>
+      <line x1="40" y1="536" x2="920" y2="536" stroke="#DCE2E6"/>
+      <text x="44" y="566" class="note">Local selectable identities are not authentication. Stored hashes bind decisions to artifacts.</text>
+    </svg>
+  </div>
+  <p>The middle state represents pending approval. Additional approvals that cover only one role leave it Verified. New decisions require a fresh version; identical command retries do not add records.</p>
+  <p>Inter and Geist Mono load from Google Fonts; offline fallbacks are Segoe UI/Arial and Consolas/monospace. <a href="../09-human-review-decisions.md">Read the feature documentation</a>.</p>
+</main>
+</body>
+</html>

@@ -1,0 +1,48 @@
+# Fixed and free Y scales
+
+Fixed Y scales use the governed execution path. Free Y scales require an explicit acknowledgement and create an `Experimental/Draft` revision with a generated script and an in-process preview. The free-scale revision does not receive a governed subprocess attempt, execution verification, human review, or controlled export.
+
+[Open the scale-path diagram](diagrams/05-fixed-free-y-scales.html). The diagram shows current implementation, inspected at commit `5e2fa6a`; it does not establish runtime or statistical validation.
+
+## Choosing a scale
+
+The Confirm controls offer `Fixed` and `Free`, with fixed as the fallback when the specification has no scale choice. The scientist also confirms one parameter, unit, stored Y variable, treatment variable, treatment levels, and visits. Both scale modes go through the selected BDS profile checks before materialization. A free scale does not relax the input envelope or permit otherwise invalid selections.
+
+`mod_specification_server()` checks the acknowledgement before invoking either generation or correction. If the scientist selects free scales without checking “I understand free Y scales create an Experimental/Draft revision”, the module displays a message and returns without calling the action. This is a UI confirmation check: the checkbox itself is not a field of the confirmed plot specification. The separate mock-prompt coordinator also checks free-scale confirmation, but it is not the active upload workflow's prompt interpreter.
+
+Source: [specification module](../../R/mod_specification.R), [application coordinator](../../R/app_server.R), and [plot specification](../../R/domain_plot_spec.R).
+
+## What changes in the figure
+
+`assemble_boxplot()` passes `scales = "fixed"` or `scales = "free_y"` to `ggplot2::facet_wrap()`. Fixed scales give the treatment facets a common Y scale. Free scales allow each treatment facet to use its own Y range. Consequently, similar vertical positions across free-scale facets need not represent similar analysis values; the artifact carries the warning “Free Y scales weaken cross-facet visual comparison.”
+
+The scale choice does not enter `calculate_boxplot_statistics()`. With the same selected records and plotting choices, both assemblies use the same boxes, median connections, outliers, and distinct-subject N. Visit positions remain globally ordered, and the aligned N strip uses its own fixed display range. This distinction matters when comparing treatment magnitudes: a change in apparent separation can come from the axes while the analytical values remain unchanged.
+
+The generated standalone assembly helper uses the same fixed/free mapping and experimental warning. `compile_boxplot_script()` embeds the confirmed scale value as a literal in its assembly call, so the choice is part of the specification and script identities.
+
+Source: [plot assembly](../../R/boxplot_assembly.R), [standalone helper](../../R/boxplot_standalone.R), and [compiler](../../R/boxplot_compiler.R).
+
+## Execution and evidence boundaries
+
+`.materialize_revision()` compiles the script, builds an execution request, stores the script bytes, and creates the repository revision for either mode. A fixed-scale revision starts as `Draft`. The coordinator submits it to `new_execution_service()`, which runs the script in the clean `callr` worker. Passing verification accepts the artifact bundle and promotes the revision to `Verified`; failed verification leaves it `Draft`.
+
+A free-scale revision starts as `Experimental/Draft`. The coordinator skips submission, leaves `verification` as `NULL`, and calculates the displayed analysis and plot in the application process. It also skips `.record_revision_context_evidence()`, because that call depends on a non-null verification result. A stored script and visible preview therefore do not imply the retained execution evidence available on the fixed-scale path. `.materialize_correction_revision()` makes the same scale-based submission distinction for a successor revision.
+
+`new_execution_service()` admits only `Draft` revisions. `.workflow_transitions` gives `Experimental/Draft` no outgoing status transitions. Repository review decisions require `Verified`, and `.assert_exportable_revision()` accepts only `Draft`, `Verified`, or `Reviewed`. Free-scale revisions fail those gates. For fixed scales, status alone still does not guarantee export: the service also requires accepted artifacts and the remaining export checks.
+
+Source: [execution service](../../R/execution_service.R), [status rules](../../R/domain_status.R), [review repository gate](../../R/evidence_repository_sqlite.R), and [export service](../../R/export_service.R).
+
+## Checks and known gaps
+
+The inspected tests specify the intended boundaries:
+
+- [Assembly tests](../../tests/testthat/test-boxplot-assembly.R) compare analytical objects, shared versus separate panel scales, ranges, statuses, and the warning.
+- [Specification tests](../../tests/testthat/test-mod-specification.R) verify that an unconfirmed free-scale action does not call generation and that acknowledgement allows the callback.
+- [Execution tests](../../tests/testthat/test-execution-service.R) reject an experimental submission and assert that no attempt was recorded.
+- [Export tests](../../tests/testthat/test-export-service.R) reject an `Experimental/Draft` revision. [Status tests](../../tests/testthat/test-domain-status.R) cover its initial status.
+
+These tests were read, not executed, for this documentation change. No R execution, browser journey, statistical review, or formal validation is claimed.
+
+The Result panel labels its script disclosure “Executed R script” for both modes, even though the experimental script was not submitted to the worker. The preview also renders `state$artifact$combined`, reconstructed in the application process, rather than the accepted worker PNG. Those are current presentation limits, not evidence that the free path is governed. The proof of concept is designed for validated clinical submission workflows; it is not FDA validated or FDA approved.
+
+Source: [preview module](../../R/mod_plot_preview.R). Related documentation: [statistical summaries](04-longitudinal-boxplot-statistics.md), [script execution](06-script-generation-execution.md), and [controlled export](11-controlled-export.md).
