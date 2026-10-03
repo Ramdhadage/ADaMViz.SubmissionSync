@@ -1,0 +1,9 @@
+url: https://ramdhadage.github.io/ADaMViz.SubmissionSync/
+
+template:
+  bootstrap: 5
+
+articles:
+  - title: Getting started
+    contents:
+      - ADaMViz.SubmissionSync
