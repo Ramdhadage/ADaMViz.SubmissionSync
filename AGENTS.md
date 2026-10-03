@@ -4,7 +4,7 @@
 
 - For product or code work, read [CODEX_CONTEXT.md](CODEX_CONTEXT.md) before planning or changing implementation.
 - Treat [docs/product/STRATEGY.md](docs/product/STRATEGY.md) as the source of truth for scope, terminology, boundaries, and metrics.
-- Consult [docs/solutions/](docs/solutions/) for reusable technical learnings and [CONCEPTS.md](CONCEPTS.md) for project vocabulary.
+- Consult [docs/solutions/](docs/solutions/) for reusable technical learnings and [CONCEPTS.md](CONCEPTS.md) for project vocabulary. The solutions store is organized by category and searchable through YAML frontmatter such as `module`, `tags`, and `problem_type` when implementing or debugging a documented area.
 - More specific nested `AGENTS.md` files govern work in their directories.
 
 ## Working Contract
@@ -50,4 +50,6 @@
 - Use `ce-debug` for failures, `ce-explain` for evidence-based explanations, and `ce-pov` for evaluating approaches. Search relevant `docs/solutions/` before planning or debugging.
 - For substantial code changes, run `ce-simplify-code` before `ce-code-review`. Use `ce-doc-review` for plans and `ce-test-browser` for requested browser verification; review findings are not test evidence.
 - Use `ce-compound` only after a verified, non-obvious solution that is not already explained by the diff or existing documentation.
+- After a solved, verified problem, automatically invoke the `ce-compound` skill with `mode:non-interactive` at the completion checkpoint only when the work produced durable project reasoning that is not readily recoverable from the final code, tests, types, comments, or existing documentation, and losing it would plausibly cause recurrence, material risk, or substantial rediscovery. Apply this counterfactual: if the learning document disappeared, would a future engineer reading the final implementation still be likely to repeat the mistake or redo substantial investigation? If not, do not invoke it. Completion, effort, and diff size alone are not enough. Capture at the checkpoint so a qualifying learning can ship in the PR that produced it, and only where the repository treats captured learnings as tracked, committed knowledge.
+- Write every report, summary, or handoff to the user through the `ce-noslop` skill. This applies when you are the top-level agent writing to the user, not when you are a subagent reporting to its caller. Do not apply it to code, config, verbatim quotes, or text the user asked to post as written.
 - Commit, publish, or merge only when requested. Use `lfg` only when the user explicitly authorizes autonomous delivery.
