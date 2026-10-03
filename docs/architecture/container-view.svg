@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="container-title container-desc">
+  <title id="container-title">ADaMViz SubmissionSync — C4 container view</title>
+  <desc id="container-desc">The installed R package runs a Shiny application that owns input, specification, compilation, evidence, review and export services. A synchronous clean callr subprocess executes generated R code. The coordinating application writes to SQLite evidence and a local artifact store, then publishes accepted script and plot files through a development-only workspace provider.</desc>
+  <defs><marker id="container-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#71808c"/></marker></defs>
+  <rect width="1280" height="720" fill="#f8fafb"/>
+  <text x="64" y="68" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="30" font-weight="700" fill="#0b3c5d">Container view</text>
+  <text x="64" y="99" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="15" fill="#5b6770">Current runtime boundaries · internal R functions stay inside the Shiny container</text>
+
+  <rect x="308" y="136" width="684" height="450" rx="8" fill="#f1f5f7" stroke="#9fabb4" stroke-width="2" stroke-dasharray="8 6"/>
+  <text x="332" y="164" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="1" fill="#5b6770">ADAMVIZ SUBMISSIONSYNC · LOCAL RUNTIME</text>
+
+  <!-- Relationships, drawn before nodes. -->
+  <path d="M 276 292 H 352" fill="none" stroke="#71808c" stroke-width="2" marker-end="url(#container-arrow)"/>
+  <path d="M 610 278 H 674" fill="none" stroke="#71808c" stroke-width="2" marker-end="url(#container-arrow)"/>
+  <path d="M 674 315 H 610" fill="none" stroke="#71808c" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#container-arrow)"/>
+  <path d="M 444 356 V 424" fill="none" stroke="#71808c" stroke-width="2" marker-end="url(#container-arrow)"/>
+  <path d="M 574 356 V 390 H 790 V 424" fill="none" stroke="#71808c" stroke-width="2" marker-end="url(#container-arrow)"/>
+  <path d="M 562 224 V 192 H 1116 V 424" fill="none" stroke="#71808c" stroke-width="2" marker-end="url(#container-arrow)"/>
+  <rect x="275" y="273" width="83" height="24" fill="#f8fafb"/>
+  <text x="316" y="289" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="10" font-weight="700" fill="#5b6770">UI ACTIONS</text>
+  <rect x="611" y="255" width="62" height="20" fill="#f1f5f7"/>
+  <text x="642" y="269" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="10" font-weight="700" fill="#5b6770">SCRIPT</text>
+  <rect x="608" y="318" width="65" height="19" fill="#f1f5f7"/>
+  <text x="641" y="331" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="10" font-weight="700" fill="#5b6770">RESULT</text>
+  <rect x="406" y="382" width="76" height="22" fill="#f1f5f7"/>
+  <text x="444" y="397" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="10" font-weight="700" fill="#5b6770">EVIDENCE</text>
+  <rect x="669" y="374" width="91" height="22" fill="#f1f5f7"/>
+  <text x="715" y="389" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="10" font-weight="700" fill="#5b6770">ARTIFACTS</text>
+  <rect x="894" y="177" width="87" height="22" fill="#f1f5f7"/>
+  <text x="938" y="192" text-anchor="middle" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="10" font-weight="700" fill="#5b6770">PUBLISH</text>
+
+  <rect x="56" y="242" width="220" height="100" rx="8" fill="#fff" stroke="#9fabb4" stroke-width="2"/>
+  <text x="76" y="270" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="1" fill="#5b6770">PEOPLE</text>
+  <text x="76" y="297" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="700" fill="#263945">Users + reviewers</text>
+  <text x="76" y="320" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" fill="#5b6770">Local identity selection</text>
+
+  <rect x="352" y="224" width="258" height="132" rx="8" fill="#e9f1f5" stroke="#0b3c5d" stroke-width="3"/>
+  <text x="372" y="252" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="1" fill="#0b3c5d">R/SHINY APPLICATION</text>
+  <text x="372" y="282" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="19" font-weight="700" fill="#0b3c5d">Installed R package</text>
+  <text x="372" y="306" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" fill="#263945">UI, providers, specification, compiler</text>
+  <text x="372" y="326" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" fill="#263945">execution, evidence, review, export</text>
+  <text x="372" y="346" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11" fill="#5b6770">run_app() · app_server()</text>
+
+  <rect x="674" y="224" width="258" height="132" rx="8" fill="#fff" stroke="#9fabb4" stroke-width="2"/>
+  <text x="694" y="252" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="1" fill="#5b6770">EXECUTION PROCESS</text>
+  <text x="694" y="282" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="19" font-weight="700" fill="#263945">Clean callr worker</text>
+  <text x="694" y="306" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" fill="#263945">Runs generated script synchronously</text>
+  <text x="694" y="326" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" fill="#263945">Returns PNG, hashes, diagnostics</text>
+  <text x="694" y="346" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11" fill="#5b6770">run_execution_callr()</text>
+
+  <rect x="352" y="424" width="258" height="108" rx="8" fill="#fff" stroke="#9fabb4" stroke-width="2"/>
+  <text x="372" y="452" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="1" fill="#5b6770">LOCAL DATA STORE</text>
+  <text x="372" y="480" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="700" fill="#263945">SQLite evidence</text>
+  <text x="372" y="503" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" fill="#5b6770">Revisions, attempts, review, receipts</text>
+  <text x="372" y="523" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11" fill="#5b6770">sqlite_evidence_repository()</text>
+
+  <rect x="674" y="424" width="258" height="108" rx="8" fill="#fff" stroke="#9fabb4" stroke-width="2"/>
+  <text x="694" y="452" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="1" fill="#5b6770">LOCAL DATA STORE</text>
+  <text x="694" y="480" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="700" fill="#263945">Artifact directory</text>
+  <text x="694" y="503" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" fill="#5b6770">Accepted script + worker PNG</text>
+  <text x="694" y="523" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11" fill="#5b6770">local_artifact_store()</text>
+
+  <rect x="1016" y="424" width="218" height="108" rx="8" fill="#fff" stroke="#9fabb4" stroke-width="2"/>
+  <text x="1036" y="452" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="1" fill="#5b6770">LOCAL DESTINATION</text>
+  <text x="1036" y="480" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="17" font-weight="700" fill="#263945">Workspace provider</text>
+  <text x="1036" y="503" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" fill="#5b6770">Development-only export</text>
+  <text x="1036" y="523" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11" fill="#5b6770">script.R + plot.png</text>
+
+  <line x1="64" y1="620" x2="1216" y2="620" stroke="#cbd4da"/>
+  <text x="64" y="650" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13" fill="#425461">The coordinator writes evidence and artifacts; the worker only returns execution results.</text>
+  <text x="64" y="675" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13" fill="#425461">No active LLM provider, qualified authentication, or production export target is implied.</text>
+</svg>

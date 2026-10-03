@@ -4,6 +4,22 @@ ADaMViz SubmissionSync is an R-first, package-oriented Shiny proof of concept fo
 
 It is **designed for validated clinical submission workflows; it is not FDA validated or FDA approved**. Intended-use validation belongs to the regulated organization.
 
+## Diagrams
+
+The diagrams show the current proof of concept. They are visual guides to the code and the implementation limits described below.
+
+**System context** — people, the application, permitted input, and the local development export. [Open full-size view](docs/architecture/system-context.html).
+
+![C4-style system context for ADaMViz SubmissionSync](docs/architecture/system-context.svg)
+
+**Container view** — the Shiny application, clean `callr` worker, local stores, and development workspace. [Open full-size view](docs/architecture/container-view.html).
+
+![C4 container view for ADaMViz SubmissionSync](docs/architecture/container-view.svg)
+
+**Governed flow** — a representative fixed-scale sequence, with optional human review and the code's export gate. [Open full-size view](docs/architecture/governed-flow.html).
+
+![C4 dynamic workflow for ADaMViz SubmissionSync](docs/architecture/governed-flow.svg)
+
 ## Current scope
 
 The implemented plotting pattern is a longitudinal numeric BDS boxplot: one parameter, unit, and stored Y variable (`AVAL`, `CHG`, or `PCHG`), ordered analysis visits, treatment facets, median connections, visible outliers, and distinct-subject N.
