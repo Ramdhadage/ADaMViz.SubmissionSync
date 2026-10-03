@@ -3,6 +3,7 @@
 ## System Anchors
 
 - For product or code work, read [CODEX_CONTEXT.md](CODEX_CONTEXT.md) before planning or changing implementation.
+- Read [ARCHITECTURE.md](ARCHITECTURE.md) for the implementation map, enforcement boundaries, known gaps, and task-specific document pointers.
 - Treat [docs/product/STRATEGY.md](docs/product/STRATEGY.md) as the source of truth for scope, terminology, boundaries, and metrics.
 - Consult [docs/solutions/](docs/solutions/) for reusable technical learnings and [CONCEPTS.md](CONCEPTS.md) for project vocabulary. The solutions store is organized by category and searchable through YAML frontmatter such as `module`, `tags`, and `problem_type` when implementing or debugging a documented area.
 - More specific nested `AGENTS.md` files govern work in their directories.
