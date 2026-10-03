@@ -1,0 +1,244 @@
+# Getting started: from data upload to plot export
+
+This guide walks through the current ADaMViz SubmissionSync proof of
+concept: upload a synthetic dataset, confirm a longitudinal boxplot,
+inspect the result, and download the plot and R script.
+
+The example uses synthetic ALT measurements. The supported plot pattern
+is a longitudinal numeric BDS boxplot. Other plot types and broader
+table and listing workflows are outside this walkthrough.
+
+## Before you start
+
+Use the supplied synthetic file for this exercise. The POC permits
+public, synthetic, or properly de-identified data; confidential
+patient-level data is prohibited. Upload checks establish format
+compatibility, not de-identification or permission to use a dataset.
+
+The application is designed for validated clinical submission workflows.
+It is not FDA validated or FDA approved. This walkthrough demonstrates
+the POC; it does not establish statistical or intended-use validation.
+
+From the repository root, open the RStudio Console. If the package is
+already loaded after source changes, restart R before installing it:
+
+``` r
+
+devtools::install()
+ADaMViz.SubmissionSync::run_app()
+```
+
+If the project environment has not been restored, follow the
+repository’s environment setup before installing. The application
+launches interactively; the vignette does not start a Shiny session
+while rendering.
+
+Locate the example file in the installed package:
+
+``` r
+
+sample_file <- system.file(
+  "extdata", "synthetic", "adlb-standard.csv",
+  package = "ADaMViz.SubmissionSync",
+  mustWork = TRUE
+)
+sample_file
+```
+
+In a source checkout, the same file is at
+`inst/extdata/synthetic/adlb-standard.csv`. It contains 18 records, one
+parameter (`ALT`), two treatment groups (`Placebo` and `Active`), and
+three visits (`Baseline`, `Week 4`, and `Week 8`).
+
+## 1. Upload the data
+
+On the **Data** step, choose **Choose file** under **Upload a dataset**
+and select `adlb-standard.csv`. Wait for **File ready**, then select
+**Continue**.
+
+The application accepts one CSV or Excel (`.xls` or `.xlsx`) file at a
+time. For Excel, it reads the first worksheet. The data must be in long
+format, with subject, parameter, and visit information stored in columns
+rather than a separate measurement column for every visit.
+
+For upload, the required columns are `USUBJID`, `PARAMCD`, `PARAM`,
+`AVISIT`, `AVISITN`, `AVAL`, and `AVALU`, together with a supported
+treatment variable such as `TRT01A`. `AVAL` and `AVISITN` must be
+numeric. The supplied file already has these columns.
+
+Open **Data & profile** to inspect the active data context. A successful
+upload does not mean the selected records have passed all plotting
+checks; those checks run after you confirm the choices.
+
+## 2. Describe the question
+
+On the **Ask** step, keep the supplied example question:
+
+> Create a boxplot of ALT AVAL by visit, split by treatment. Include all
+> visits and treatment groups, show the number of subjects below each
+> box, and connect the medians.
+
+Select **Continue to review choices**.
+
+The current upload workflow records this question with the revision. It
+derives the available choices from the uploaded data and uses your
+confirmed selections to define the plot. It does not interpret the
+question through an LLM. Check each selection even when the question
+describes exactly what you want.
+
+## 3. Confirm the plot
+
+Under **Confirm plot choices**, use these settings:
+
+| Control                   | Selection                          |
+|---------------------------|------------------------------------|
+| Parameter                 | `ALT`                              |
+| Y variable                | `AVAL`                             |
+| Unit                      | `U/L`                              |
+| Treatment facet           | `TRT01A`                           |
+| Included treatment levels | `Placebo` and `Active`             |
+| Included visits           | `Baseline`, `Week 4`, and `Week 8` |
+| Y scales                  | **Fixed**                          |
+
+Select **Confirm and generate**.
+
+The application validates the selected records against its supported BDS
+plotting profile before generating the R script. Blocking diagnostics
+stop generation. These checks assess the supported plotting envelope,
+not full ADaM conformance. Analysis flags are not silently applied as
+filters; this example uses the records selected through the controls.
+
+Keep **Fixed** Y scales for this walkthrough. **Free** scales require an
+explicit acknowledgement and create an `Experimental/Draft` revision.
+That path does not enter governed subprocess execution, verification, or
+controlled export.
+
+## 4. Inspect the result
+
+On **Result**, inspect the **Plot preview**. For this example, look for
+ALT measurements at the three selected visits, split into the two
+treatment facets. The plot shows boxplots, visible outliers, connected
+medians, and distinct-subject N values in a strip below the boxes.
+
+Open **Executed R script** to inspect the generated code. Open
+**Optional: view automated checks** to inspect the evidence and check
+messages. Read any nonblocking profile warnings shown in **Run Status**.
+
+For fixed scales, the application generates its own R script and runs it
+synchronously in a clean `callr` subprocess. Passing execution-service
+checks accepts the artifacts and moves the revision to `Verified`. A
+failed check can leave the revision at `Draft`; read the diagnostic
+before continuing.
+
+| Status | Meaning for this walkthrough |
+|----|----|
+| `Draft` | The revision has not reached successful execution verification. |
+| `Verified` | The execution-service checks passed; human review remains separate. |
+| `Reviewed` | Both required independent reviewer roles approved the revision’s artifacts. |
+| `Rejected` | A reviewer rejected the revision; it cannot be exported. |
+| `Experimental/Draft` | The free-scale path is experimental and cannot be exported. |
+
+`Verified` does not establish statistical correctness or human approval.
+The UI preview is assembled in the application process; it is not the
+accepted PNG produced by the subprocess. Inspect the downloaded PNG as
+well.
+
+## 5. Review and export
+
+Select **Continue to export**. Expand **Traceability, review, and
+export**.
+
+For a demonstration of human review, use **Two-Person Review**:
+
+1.  Select **Statistical programmer** for both **Reviewer identity** and
+    **Review role**. Inspect the result and evidence, enter a comment,
+    and select **Approve** if the result is acceptable.
+2.  Have the second reviewer inspect the same revision. Select
+    **Biostatistician** for both identity and role, then record that
+    reviewer’s decision.
+
+Both distinct non-creator actors must approve the same artifact hashes
+for the revision to become `Reviewed`. The POC identities are selectable
+local actors, not authenticated user accounts. Selecting both identities
+yourself demonstrates the mechanics; it is not independent human review.
+
+Under **Controlled export**:
+
+1.  Select **Creator** as **Actor** for this local exercise.
+2.  Keep **Destination** as `local` when using the default runtime
+    configuration.
+3.  Select **Export image and code**.
+4.  Confirm that the message reports **Exported** and a receipt appears.
+5.  Select **Download image and code ZIP**.
+
+Export must succeed before the ZIP download can be created. The
+destination is a registered workspace identifier, not a folder path. If
+your runtime configuration uses another workspace identifier, use that
+registered destination.
+
+The ZIP contains exactly two files:
+
+| File       | Content                                             |
+|------------|-----------------------------------------------------|
+| `plot.png` | The accepted plot image from the exported revision. |
+| `script.R` | The accepted R script from the exported revision.   |
+
+The export receipt stays in the internal evidence store. The ZIP does
+not contain the uploaded dataset, review decisions, or a complete replay
+bundle. Download only after successfully exporting the revision you
+intend to keep: the ZIP packages the last successful export.
+
+The current service permits `Draft`, `Verified`, and `Reviewed` exports
+when an accepted artifact bundle and the other export checks are
+present. It does not require both approvals for every export. Treat any
+unreviewed output as a draft; the detached files do not carry the
+revision’s review-status label. Do not infer approval from a successful
+export.
+
+## Check what you downloaded
+
+Unzip the download and open `plot.png`. Confirm the parameter, unit,
+visits, treatment facets, and N strip against your selections. Open
+`script.R` and inspect it before running it in another environment.
+
+The generated script has a checkout-specific fallback data path and
+package installation code. Copying the script and PNG alone does not
+guarantee portable reproduction. Reproduction requires the appropriate
+input records, dependencies, and execution environment.
+
+The local POC stores session evidence and workspace outputs under
+temporary directories. Keep the downloaded files you need; do not assume
+a later session will provide access to this revision or its internal
+evidence.
+
+## If a step stops
+
+| Symptom | Next action |
+|----|----|
+| Upload does not show **File ready** | Read the upload message; check the required columns and numeric fields. For Excel, check the first worksheet. |
+| Generation reports a blocking profile diagnostic | Resolve the named issue in the input or selections before generating again. |
+| The result remains `Draft` | Inspect the execution diagnostics and automated checks; do not treat the preview as verification evidence. |
+| Export fails | Read the export message and check the status, actor, destination, and accepted artifact availability. |
+| ZIP download reports that export is required | Complete **Export image and code** successfully before downloading. |
+
+## Implementation references
+
+This guide describes the inspected source behavior, not a record of a
+completed browser test. The main implementation references, relative to
+the repository root, are:
+
+- `R/mod_plot_generation.R`: `mod_plot_generation_ui()` and
+  `.uploaded_study_data_provider()` define the journey and upload
+  adapter.
+- `R/mod_specification.R`: `mod_specification_server()` collects plot
+  choices.
+- `R/app_server.R`: `.create_assurance_candidate()` and
+  `.materialize_revision()` connect the question, selections, execution,
+  and revision state.
+- `R/mod_plot_preview.R`: `mod_plot_preview_server()` renders the
+  preview and code.
+- `R/mod_review.R`: `mod_review_server()` records review decisions.
+- `R/export_service.R`: `new_export_service()` checks and publishes the
+  export.
+- `R/mod_export.R`: `mod_export_server()` and `.write_export_zip()`
+  provide export controls and the two-file ZIP download.
