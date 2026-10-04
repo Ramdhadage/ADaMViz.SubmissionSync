@@ -1,0 +1,47 @@
+---
+title: "Deterministic R script generation and subprocess execution"
+description: >
+  The fixed-scale plotting path compiles a confirmed specification into application-owned R code, then runs that code synchronously in a separate R process. The script, selected records, specification, and execution harness have recorded identities. A completed worker run supplies evidence for verification; it does not establish statistical approval or human review.
+---
+
+The fixed-scale plotting path compiles a confirmed specification into application-owned R code, then runs that code synchronously in a separate R process. The script, selected records, specification, and execution harness have recorded identities. A completed worker run supplies evidence for verification; it does not establish statistical approval or human review.
+
+[Open the execution diagram](diagrams/06-script-generation-execution.html). The diagram shows the fixed-scale path. Free-scale previews and detached script use are described below.
+
+## From confirmation to executable code
+
+[`compile_boxplot_script()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/boxplot_compiler.R) validates the `plot_spec`, requires `state = "confirmed"`, and checks the ordered treatment and visit levels plus retained low-N policy. It constructs R expressions from owned helper functions and resolved specification literals using `rlang::call2()` and `rlang::expr()`. `rlang::expr_text()` writes those expressions at width 80. The resulting script is UTF-8 text with a final newline.
+
+The emitted code contains the standalone statistical and plotting functions from [`boxplot_standalone.R`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/boxplot_standalone.R). It inserts the treatment variable, Y variable, ordered levels, scale mode, unit, and low-N policy into the analysis call. This avoids relying on the application package for those functions when the detached script is used elsewhere. The active upload workflow retains the user's question but collects plotting choices through confirmation. Its execution path uses this compiler; it does not execute an LLM-generated script.
+
+For unchanged compiler helpers, specification fields, policy, and rendering dependencies, repeated compilation produces identical text. This is a script-generation guarantee within that implementation, rather than a promise of identical bytes across compiler or package upgrades. Revision identifiers in the coordinator include time, and PNG identity depends on the execution environment. Neither follows from identical generated text alone.
+
+## Binding the selected input
+
+In [`app_server.R`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/app_server.R), `.materialize_revision()` compiles the script and constructs an execution request with the specification hash, script hash, snapshot identifier, hash of `profile$selected_data`, and `execution-harness-v1`. The request's snapshot hash identifies the selected execution records, not the entire original upload.
+
+[`new_execution_request()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/domain_execution_protocol.R) requires non-empty identity fields. Before sourcing the script, `.validate_execution_input()` in [`execution_runner.R`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/execution_runner.R) recomputes the script SHA-256 and canonical data hash and rejects mismatches. The worker places the selected records in its evaluation environment as `analysis_data`. Consequently, the generated fallback CSV loader is skipped during governed execution.
+
+The local runner accepts classification strings `synthetic` and `deidentified`. The service defaults to `synthetic`, and the coordinator does not pass a separately established upload classification. This check validates the supplied label; it does not prove synthetic provenance or de-identification.
+
+## What the subprocess executes
+
+[`new_execution_service()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/execution_service.R) records an attempt before calling the runner. Only `Draft` revisions can start, and the service prevents another active attempt with a different attempt identity for the same revision. Its fingerprint combines the request, supplied script hash, and selected-data hash.
+
+[`run_execution_callr()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/execution_runner_callr.R) invokes `callr::r()` synchronously with `--vanilla`, disabled system and user profiles, and the current library paths. It clears `R_PROFILE_USER`, `R_ENVIRON_USER`, and `ADAMVIZ_SECRET_CANARY`. The default timeout is 60 seconds and is configurable through the runner constructor. Timeout or subprocess errors become failed runner results. There is no user cancellation control in this path.
+
+The worker can load the active source checkout with `devtools::load_all()`, using the configured source root, an ancestor containing `DESCRIPTION`, or the installed package location. It then calls `run_execution_locally()`. That function writes `script.R`, sources it in an environment containing `analysis_data`, and requires `boxplot_analysis` and `boxplot_artifact` objects. It saves the combined plot as a Cairo PNG, defaulting to 1200 by 840 pixels, and rejects an absent or empty image.
+
+Successful results return the analytical object, image location and hash, request-bound result manifest, environment details, and diagnostics. The environment record includes R, platform, operating system, selected package versions, device, and dimensions. Local diagnostics default to a 4000-byte threshold; subprocess error messages pass through the separate `callr` error handler. The coordinator writes evidence and accepts artifacts after verification.
+
+## Enforcement limits and detached use
+
+The worker sources the supplied script. Hash binding detects a script changed relative to its request; it does not independently prove that the script came from the compiler. The runner has no compiler allowlist, hostile-code sandbox, or demonstrated complete environment-variable allowlist. Process separation and disabled startup profiles should not be described as those controls.
+
+The generated script installs missing `ggplot2`, `cli`, and `patchwork` packages from CRAN without pinning their versions. If `analysis_data` is absent, it reads a checkout-specific synthetic CSV path. Detached execution therefore requires suitable data and dependencies; the fallback path is not portable. The active free-scale path still compiles a script and constructs an application-process preview, but skips governed subprocess submission and remains `Experimental/Draft`. The normal UI preview is reconstructed in the application process rather than read from the accepted worker PNG.
+
+## Inspected checks and remaining evidence
+
+The inspected tests cover [stable parseable scripts and analytical fixtures](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-boxplot-compiler.R), [subprocess execution and source-root selection](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-execution-runner-callr.R), [runner manifests and rejection cases](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-execution-runner-contract.R), [service promotion and terminal failures](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-execution-service.R), and [execution manifest identity](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-domain-execution-protocol.R). Graphics and package availability can cause skips in the subprocess tests.
+
+This documentation records source and test inspection. It does not report a fresh R test run, browser execution, statistical sign-off, or target-environment qualification.

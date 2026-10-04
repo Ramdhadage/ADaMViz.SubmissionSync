@@ -1,0 +1,54 @@
+---
+title: "Execution verification and revision evidence"
+description: >
+  A governed fixed-scale revision becomes `Verified` when the execution service records passing checks, accepts its artifact bundle, completes the attempt, and promotes the revision. `Verified` describes automated execution evidence. Human approval and reproduction of a retained result are separate operations.
+---
+
+A governed fixed-scale revision becomes `Verified` when the execution service records passing checks, accepts its artifact bundle, completes the attempt, and promotes the revision. `Verified` describes automated execution evidence. Human approval and reproduction of a retained result are separate operations.
+
+[Open the verification diagram](diagrams/07-verification-revision-evidence.html). This page describes the implementation inspected on 2026-10-04; test files cited below were read, not executed.
+
+## What happens after confirmation
+
+The application coordinator, `.materialize_revision()` in [app_server.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/app_server.R), compiles the script and creates an execution request. The request identifies the confirmed specification, script hash, snapshot identifier, selected-record hash, and harness version. The selected-record hash is distinct from the uploaded dataset's full content hash.
+
+The coordinator stores script bytes and creates a revision with pending image and analytical hashes. Fixed scales start at `Draft`; free scales start at `Experimental/Draft` and skip governed execution. The coordinator later assembles the displayed preview in the application process. That preview is not the accepted worker PNG.
+
+`new_execution_service()` in [execution_service.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/execution_service.R) accepts only `Draft` revisions. Its `start()` method captures the revision version, records an attempt, and rejects another active attempt with a different identifier. The attempt identifier derives from the idempotency key. Its fingerprint includes the complete request plus hashes of the actual supplied script and selected records. Reusing an attempt identifier for different inputs is rejected by the repository.
+
+## The checks that determine the outcome
+
+[verify_execution_result()](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/verification_service.R) returns `execution-verification-v1`, a `passed` or `failed` status, named boolean checks, and the names of failed checks. All eight checks must pass:
+
+| Check | Current comparison |
+| --- | --- |
+| `schema` | Request inherits `execution_request`; this is a class check. |
+| `script_hash` | Hash of the supplied script equals the request's script hash. |
+| `snapshot_hash` | Canonical hash of supplied selected records equals the request's snapshot hash. |
+| `runner_success` | Runner status is exactly `succeeded`. |
+| `result_manifest` | Returned result inherits `execution_result`. |
+| `analytical_hash` | Returned analytical hash equals a canonical hash of the runner's analytical output. |
+| `image_hash` | Returned image hash matches lowercase 64-character hexadecimal syntax. |
+| `environment_fingerprint` | Returned environment fingerprint matches that same syntax. |
+
+The final two checks do not independently hash the image bytes or environment details. The analytical comparison establishes consistency between two returned values; it does not compare the analysis with an independently reviewed statistical reference.
+
+`new_execution_result()` in [domain_execution_protocol.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/domain_execution_protocol.R) normally copies request fields into the result. The verifier does not explicitly compare those copied specification, snapshot, script, or harness fields back to the request. The attempt fingerprint binds submission inputs, but this does not add result-field comparisons to verification.
+
+## Evidence and accepted artifacts
+
+The execution service first records an `execution_verification` evidence entry, for either outcome. It retains the attempt identifier, verification checks, execution result, environment information, and runner diagnostics. The SQLite repository serializes details canonically, stores their content hash, and registers the evidence command's idempotency key.
+
+On failure, the service records a terminal `failed` attempt and returns without promoting the revision. Runner exceptions are converted to failed runner results with the error message in diagnostics.
+
+On success, an injected artifact store receives script and image bytes. `accept_artifact_bundle()` in [evidence_repository_sqlite.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/evidence_repository_sqlite.R) binds both pending image and analytical hashes once, checks the bundle against the revision's code/image/analytical identities, and permits one accepted bundle per revision. With an artifact store attached, it verifies the stored script and PNG against the supplied hashes. [local_artifact_store()](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/artifact_store_local.R) calculates SHA-256 from bytes and checks content before publication and retrieval. An artifact store is optional in the service and repository contracts; these byte checks depend on its injection.
+
+The service then records terminal success and calls `mark_verified()` using the version captured when execution started. That repository method rejects a stale version or a status other than `Draft`, updates the status/version, and appends `revision_verified` lifecycle evidence. It does not require passing execution evidence or an accepted bundle itself. Direct repository promotion can therefore bypass the service's verification gate.
+
+## Retained context and recovery limits
+
+After governed execution, [.record_revision_context_evidence()](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/revision_evidence.R) records `revision-context-evidence-v1`. It retains the prompt, confirmed specification, selected records with column classes, snapshot/source metadata, generated R code, request/result, environment, profile warnings, verification, and rendered-output hashes. Classification is included only when present. This context supports [retained-result reproduction](08-reproducing-retained-results.html).
+
+Completion uses several repository calls rather than one encompassing transaction. An error during artifact acceptance or promotion can leave partial completion records. [reconcile_execution_attempts()](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/attempt_reconciliation.R) marks attempts without terminal outcomes as failed; it neither reruns verification nor repairs promotion. The application does not automatically call this recovery function at startup.
+
+[Verification tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-verification-service.R) cover passing evidence and a missing image hash. [Execution-service tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-execution-service.R) cover promotion, failed verification, runner errors, and exclusion of experimental drafts. [Revision-evidence tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-revision-evidence.R) inspect retained context and a mocked replay. These sources establish intended checks, not a passing test run, browser proof, independent statistical review, or formal validation. For the upstream execution boundary, see [script generation and execution](06-script-generation-execution.html).

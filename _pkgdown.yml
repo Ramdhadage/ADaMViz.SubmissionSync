@@ -7,3 +7,19 @@ articles:
   - title: Getting started
     contents:
       - ADaMViz.SubmissionSync
+
+  - title: Feature documentation
+    desc: Current implementation guides for the input-to-export workflow.
+    contents:
+      - articles/01-uploads-snapshots-input-identity
+      - articles/02-bds-profiling-eligibility
+      - articles/03-confirming-analysis-selections
+      - articles/04-longitudinal-boxplot-statistics
+      - articles/05-fixed-free-y-scales
+      - articles/06-script-generation-execution
+      - articles/07-verification-revision-evidence
+      - articles/08-reproducing-retained-results
+      - articles/09-human-review-decisions
+      - articles/10-correction-revision-traceability
+      - articles/11-controlled-export
+      - articles/12-integrity-lifecycle-backup
