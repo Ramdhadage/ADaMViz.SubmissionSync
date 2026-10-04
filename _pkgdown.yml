@@ -3,12 +3,22 @@ url: https://ramdhadage.github.io/ADaMViz.SubmissionSync/
 template:
   bootstrap: 5
 
+navbar:
+  structure:
+    left: [intro, reference, articles, news]
+    right: [search, github]
+  components:
+    intro:
+      text: Get started
+      href: articles/ADaMViz.SubmissionSync.html
+
 articles:
   - title: Getting started
     contents:
       - ADaMViz.SubmissionSync
 
   - title: Feature documentation
+    navbar: ~
     desc: Current implementation guides for the input-to-export workflow.
     contents:
       - articles/01-uploads-snapshots-input-identity
