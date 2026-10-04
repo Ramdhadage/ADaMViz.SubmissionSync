@@ -2,8 +2,20 @@ pandoc: 3.8.3
 pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
+  articles/01-uploads-snapshots-input-identity: 01-uploads-snapshots-input-identity.html
+  articles/02-bds-profiling-eligibility: 02-bds-profiling-eligibility.html
+  articles/03-confirming-analysis-selections: 03-confirming-analysis-selections.html
+  articles/04-longitudinal-boxplot-statistics: 04-longitudinal-boxplot-statistics.html
+  articles/05-fixed-free-y-scales: 05-fixed-free-y-scales.html
+  articles/06-script-generation-execution: 06-script-generation-execution.html
+  articles/07-verification-revision-evidence: 07-verification-revision-evidence.html
+  articles/08-reproducing-retained-results: 08-reproducing-retained-results.html
+  articles/09-human-review-decisions: 09-human-review-decisions.html
+  articles/10-correction-revision-traceability: 10-correction-revision-traceability.html
+  articles/11-controlled-export: 11-controlled-export.html
+  articles/12-integrity-lifecycle-backup: 12-integrity-lifecycle-backup.html
   ADaMViz.SubmissionSync: ADaMViz.SubmissionSync.html
-last_built: 2026-10-03T19:20Z
+last_built: 2026-10-04T07:30Z
 urls:
   reference: https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference
   article: https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles

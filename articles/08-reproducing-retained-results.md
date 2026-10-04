@@ -1,0 +1,131 @@
+# Reproducing plots from retained inputs and execution records
+
+The separately callable reproducibility service reruns a revision’s
+retained R script against its retained selected records and compares the
+new result with stored identities. Replay does not run automatically
+during confirmation, human review, or export. It returns evidence for a
+caller to inspect; it does not promote a revision, replace its accepted
+artifacts, or approve a plot.
+
+[Open the replay
+diagram](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/diagrams/08-reproducing-retained-results.md).
+The diagram shows the service sequence and optional evidence write.
+Details of data reconstruction and comparison rules follow below.
+
+## What replay reads
+
+[`new_reproducibility_service()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/reproducibility_service.R)
+accepts an evidence repository, readable artifact store, runner, and
+verification service. Its
+`reproduce_revision(revision_id, idempotency_key = NULL)` method
+retrieves the persisted revision and its latest `revision_context`
+entry. Missing context stops the operation. With the SQLite repository,
+entries are ordered by `created_at`, then `evidence_id`; “latest” means
+the last matching row in that order.
+
+[`.revision_context_details()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/revision_evidence.R)
+retains the question, confirmed specification, input identity, selected
+records, generated script, execution request and result, environment,
+profile warnings, and checks. Replay reads the script bytes from the
+artifact store using the revision’s `code_hash`, rather than recompiling
+the specification or using the script copy in context JSON. The [local
+store](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/artifact_store_local.R)
+verifies an artifact’s SHA-256 hash before returning its bytes through
+[`get()`](https://rdrr.io/r/base/get.html).
+
+The retained request supplies the original specification hash, script
+hash, snapshot identity and hash, and harness version. Replay restores
+its `execution_request` class directly. It does not call the request
+constructor again or re-confirm plotting choices.
+
+## Reconstructing selected data
+
+`.evidence_selected_data()` rebuilds a data frame from
+`input_data$selected_data`. It flattens list-valued columns, restores
+`selected_data_columns` order when recorded, and otherwise uses the
+retained column names. Row values retain their stored sequence.
+
+The helper converts every value equal to the literal string `"NA"` to an
+R missing value. It then restores recorded numeric and integer columns
+using [`as.numeric()`](https://rdrr.io/r/base/numeric.html) and
+[`as.integer()`](https://rdrr.io/r/base/integer.html). Recorded class
+names may be normalized by stripping their prefix through the last dot;
+positional names are used when class names are absent and counts match.
+
+This is limited reconstruction, not a general R-object serializer.
+Factors, dates, custom classes, and attributes are not explicitly
+restored. A genuine character value `"NA"` can become missing. Those
+differences can make the reconstructed input fail the runner’s
+snapshot-hash check. Retaining a class label alone does not guarantee
+that every input type can be recreated.
+
+## Running and checking the result
+
+The default replay runner is
+[`new_execution_runner()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/execution_runner.R),
+which executes locally in the current R process. The normal governed
+execution path uses a clean `callr` subprocess, described in [script
+generation and
+execution](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/06-script-generation-execution.md).
+A caller can inject a different runner into replay; the default does not
+recreate an isolated or locked historical environment.
+
+The runner receives the retained request, script, reconstructed
+`analysis_data`, and recorded classification. If classification was
+omitted, replay passes `"synthetic"`. This default does not establish
+synthetic provenance. The local runner accepts synthetic or
+de-identified classifications and checks script and data hashes against
+the immutable request before execution.
+
+Replay invokes the verification service and retains its result. It then
+calculates a separate comparison set:
+
+| Check | Comparison |
+|----|----|
+| `specification` | Retained request specification hash equals the revision specification hash. |
+| `generated_r_code` | SHA-256 of replayed script text equals the revision code hash. |
+| `analytical_result` | New analytical hash equals the revision analytical hash. |
+| `environment` | New environment fingerprint equals the recorded context fingerprint. |
+| `image_bytes` | New image hash equals the revision image hash, only when fingerprints match. |
+
+An environment mismatch makes `environment` false and sets `image_bytes`
+to `NA`. The overall result still fails because the environment
+comparison failed. The fingerprint covers recorded R/platform/OS
+details, versions of the application, `ggplot2`, and `patchwork`,
+graphics device, and image dimensions. It is not a complete environment
+lock or inventory of every font, library, dependency, or
+operating-system setting.
+
+The returned `revision_reproducibility_result` has status `failed` when
+any comparison is exactly `FALSE`; otherwise it has status `passed`. Its
+embedded `verification$status` does **not** participate in that
+calculation. Callers therefore need to inspect both comparison and
+verification results. See [execution verification and revision
+evidence](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/07-verification-revision-evidence.md)
+for the separate execution checks. Hash agreement does not independently
+establish statistical correctness.
+
+## Recording and using replay evidence
+
+Supplying an `idempotency_key` records a `reproducibility_rerun` entry
+containing the result and its outcome. Omitting the key returns the
+result without that evidence write. The key controls repository command
+deduplication; the service still runs the script before attempting the
+write on every call.
+
+There is no revision-status prerequisite in this method and no normal UI
+replay gate. Replay neither changes review status nor records a new
+governed execution attempt. Its practical prerequisites are available
+context, accessible script bytes, reconstructable records, and a
+runnable environment.
+
+## Coverage and limits
+
+[`test-revision-evidence.R`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-revision-evidence.R)
+checks retained context and a passing replay with recorded evidence. Its
+injected runner sources the script but writes fixed `"png bytes"`; that
+test does not demonstrate real PNG reproducibility or clean-subprocess
+behavior. The tests were inspected for this document and were not
+executed. Source inspection also identifies the reconstruction and
+status-calculation limits above; no browser or regulated validation
+claim follows from this documentation.

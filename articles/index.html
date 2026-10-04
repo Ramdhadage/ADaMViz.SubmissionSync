@@ -39,7 +39,37 @@
       <dl><dt><a href="ADaMViz.SubmissionSync.html">Getting started: from data upload to plot export</a></dt>
         <dd>
       </dd></dl></div>
-  </main></div>
+    <div class="section ">
+      <h3>Feature documentation</h3>
+      <div class="section-desc"><p>Current implementation guides for the input-to-export workflow.</p></div>
+
+      <dl><dt><a href="01-uploads-snapshots-input-identity.html">CSV and Excel uploads, data snapshots, and input identity</a></dt>
+        <dd><p>The Data step reads one CSV or Excel file into an in-memory study-data provider, checks the supported upload structure, and pins a content-verified snapshot. Later revisions retain the selected analysis records and input identities. These mechanisms identify what was read and executed; they do not establish synthetic provenance, de-identification, or full ADaM conformance.</p>
+        </dd><dt><a href="02-bds-profiling-eligibility.html">BDS data profiling and plotting eligibility</a></dt>
+        <dd><p>The application checks whether selected records support its longitudinal numeric BDS boxplot before generating a result. Passing this check establishes compatibility with one plotting pattern. The result explicitly records <code>dataset_conformance = "not_assessed"</code>; it does not establish full ADaM conformance, data provenance, or statistical suitability for an intended clinical analysis.</p>
+        </dd><dt><a href="03-confirming-analysis-selections.html">Confirming analysis selections</a></dt>
+        <dd><p>The Confirm step turns scientist-selected scope into a hashed plot specification. The active upload workflow retains the question but does not interpret it to choose a parameter, Y variable, unit, visit, or treatment. Its choices come from the pinned dataset, and the scientist confirms the settings before generation.</p>
+        </dd><dt><a href="04-longitudinal-boxplot-statistics.html">Longitudinal boxplots: statistical summaries and visual conventions</a></dt>
+        <dd><p>The implemented figure summarizes one confirmed numeric analysis variable across ordered visits, with a separate facet for each selected treatment. Statistical calculations happen before rendering. The plot draws those calculated values directly, so <code>ggplot2</code> does not choose a second quartile or whisker definition.</p>
+        </dd><dt><a href="05-fixed-free-y-scales.html">Fixed and free Y scales</a></dt>
+        <dd><p>Fixed Y scales use the governed execution path. Free Y scales require an explicit acknowledgement and create an <code>Experimental/Draft</code> revision with a generated script and an in-process preview. The free-scale revision does not receive a governed subprocess attempt, execution verification, human review, or controlled export.</p>
+        </dd><dt><a href="06-script-generation-execution.html">Deterministic R script generation and subprocess execution</a></dt>
+        <dd><p>The fixed-scale plotting path compiles a confirmed specification into application-owned R code, then runs that code synchronously in a separate R process. The script, selected records, specification, and execution harness have recorded identities. A completed worker run supplies evidence for verification; it does not establish statistical approval or human review.</p>
+        </dd><dt><a href="07-verification-revision-evidence.html">Execution verification and revision evidence</a></dt>
+        <dd><p>A governed fixed-scale revision becomes <code>Verified</code> when the execution service records passing checks, accepts its artifact bundle, completes the attempt, and promotes the revision. <code>Verified</code> describes automated execution evidence. Human approval and reproduction of a retained result are separate operations.</p>
+        </dd><dt><a href="08-reproducing-retained-results.html">Reproducing plots from retained inputs and execution records</a></dt>
+        <dd><p>The separately callable reproducibility service reruns a revision’s retained R script against its retained selected records and compares the new result with stored identities. Replay does not run automatically during confirmation, human review, or export. It returns evidence for a caller to inspect; it does not promote a revision, replace its accepted artifacts, or approve a plot.</p>
+        </dd><dt><a href="09-human-review-decisions.html">Human review: reviewer roles, approvals, and rejections</a></dt>
+        <dd><p>Human review binds decisions to one revision’s retained script, image, and analytical output. A revision reaches <code>Reviewed</code> only after approvals from distinct active non-creator actors covering both <code>statistical_programmer</code> and <code>biostatistician</code> roles. Successful execution alone produces <code>Verified</code>; it does not supply either human approval.</p>
+        </dd><dt><a href="10-correction-revision-traceability.html">Correction revisions and traceability to earlier results</a></dt>
+        <dd><p>A correction creates a new revision linked to a closed result. The earlier revision remains <code>Reviewed</code> or <code>Rejected</code>, with its existing evidence and decisions. The successor receives its own specification, script, artifacts, execution evidence, and review decisions. Approval of the parent does not approve the correction.</p>
+        </dd><dt><a href="11-controlled-export.html">Controlled export of plot images and R scripts</a></dt>
+        <dd><p>Controlled export publishes the accepted <code>plot.png</code> and <code>script.R</code> pair to a registered workspace destination and retains a receipt inside the evidence repository. The current implementation permits <code>Draft</code>, <code>Verified</code>, and <code>Reviewed</code> revisions with an accepted artifact bundle. Human approval is not a service prerequisite. The local workspace provider is explicitly development-only.</p>
+        </dd><dt><a href="12-integrity-lifecycle-backup.html">Evidence integrity, lifecycle history, and backup and restore</a></dt>
+        <dd><p>The local evidence repository retains revision history and checks relationships between records, lifecycle events, and stored artifacts. Its backup and restore functions operate on that local evidence package. These mechanisms detect several forms of local modification; they do not establish qualified audit-record custody or a durable study repository.</p>
+      </dd></dl></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
