@@ -7,11 +7,15 @@ evidence repository. The current implementation permits `Draft`,
 Human approval is not a service prerequisite. The local workspace
 provider is explicitly development-only.
 
-[Open the export
-diagram](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/diagrams/11-controlled-export.md).
-It separates workspace publication, internal receipt recording, and the
-later ZIP download. This page describes inspected implementation at
-`5e2fa6a`; it does not establish target-environment qualification.
+[![Rendered export
+diagram](diagrams/11-controlled-export.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/11-controlled-export.html)
+
+[View in Full
+Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/11-controlled-export.html)
+
+The diagram separates workspace publication, internal receipt recording,
+and the later ZIP download. This page describes inspected implementation
+at `5e2fa6a`; it does not establish target-environment qualification.
 
 ## User actions and eligibility
 

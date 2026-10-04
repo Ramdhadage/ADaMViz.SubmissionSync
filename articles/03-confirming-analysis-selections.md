@@ -6,8 +6,12 @@ not interpret it to choose a parameter, Y variable, unit, visit, or
 treatment. Its choices come from the pinned dataset, and the scientist
 confirms the settings before generation.
 
-[Open the confirmation flow
-diagram](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/diagrams/03-confirming-analysis-selections.md).
+[![Rendered confirmation flow
+diagram](diagrams/03-confirming-analysis-selections.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/03-confirming-analysis-selections.html)
+
+[View in Full
+Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/03-confirming-analysis-selections.html)
+
 The diagram shows the selection and field gates; detailed BDS
 eligibility checks are described in [BDS data
 profiling](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/02-bds-profiling-eligibility.md).

@@ -7,8 +7,12 @@ during confirmation, human review, or export. It returns evidence for a
 caller to inspect; it does not promote a revision, replace its accepted
 artifacts, or approve a plot.
 
-[Open the replay
-diagram](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/diagrams/08-reproducing-retained-results.md).
+[![Rendered replay
+diagram](diagrams/08-reproducing-retained-results.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/08-reproducing-retained-results.html)
+
+[View in Full
+Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/08-reproducing-retained-results.html)
+
 The diagram shows the service sequence and optional evidence write.
 Details of data reconstruction and comparison rules follow below.
 

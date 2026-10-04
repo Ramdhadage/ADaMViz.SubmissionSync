@@ -6,8 +6,11 @@ Its backup and restore functions operate on that local evidence package.
 These mechanisms detect several forms of local modification; they do not
 establish qualified audit-record custody or a durable study repository.
 
-[Open the integrity and recovery
-diagram](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/diagrams/12-integrity-lifecycle-backup.md).
+[![Rendered integrity and recovery
+diagram](diagrams/12-integrity-lifecycle-backup.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/12-integrity-lifecycle-backup.html)
+
+[View in Full
+Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/12-integrity-lifecycle-backup.html)
 
 ## Records and identity
 

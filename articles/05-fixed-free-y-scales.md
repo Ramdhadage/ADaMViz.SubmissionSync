@@ -6,8 +6,12 @@ with a generated script and an in-process preview. The free-scale
 revision does not receive a governed subprocess attempt, execution
 verification, human review, or controlled export.
 
-[Open the scale-path
-diagram](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/diagrams/05-fixed-free-y-scales.md).
+[![Rendered scale-path
+diagram](diagrams/05-fixed-free-y-scales.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/05-fixed-free-y-scales.html)
+
+[View in Full
+Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/05-fixed-free-y-scales.html)
+
 The diagram shows current implementation, inspected at commit `5e2fa6a`;
 it does not establish runtime or statistical validation.
 

@@ -7,11 +7,15 @@ records and input identities. These mechanisms identify what was read
 and executed; they do not establish synthetic provenance,
 de-identification, or full ADaM conformance.
 
-[Open the upload and identity
-diagram](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/diagrams/01-uploads-snapshots-input-identity.md).
-It shows the successful intake path and the distinct identities carried
-into revision evidence. Parser and structural errors stop that path
-before a snapshot is available.
+[![Rendered upload and identity
+diagram](diagrams/01-uploads-snapshots-input-identity.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/01-uploads-snapshots-input-identity.html)
+
+[View in Full
+Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/01-uploads-snapshots-input-identity.html)
+
+The diagram shows the successful intake path and the distinct identities
+carried into revision evidence. Parser and structural errors stop that
+path before a snapshot is available.
 
 ## Reading a file
 

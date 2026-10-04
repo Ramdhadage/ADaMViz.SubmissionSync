@@ -6,8 +6,12 @@ the attempt, and promotes the revision. `Verified` describes automated
 execution evidence. Human approval and reproduction of a retained result
 are separate operations.
 
-[Open the verification
-diagram](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/diagrams/07-verification-revision-evidence.md).
+[![Rendered verification
+diagram](diagrams/07-verification-revision-evidence.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/07-verification-revision-evidence.html)
+
+[View in Full
+Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/07-verification-revision-evidence.html)
+
 This page describes the implementation inspected on 2026-10-04; test
 files cited below were read, not executed.
 

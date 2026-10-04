@@ -7,8 +7,11 @@ explicitly records `dataset_conformance = "not_assessed"`; it does not
 establish full ADaM conformance, data provenance, or statistical
 suitability for an intended clinical analysis.
 
-[Open the eligibility flow
-diagram](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/diagrams/02-bds-profiling-eligibility.md).
+[![Rendered eligibility flow
+diagram](diagrams/02-bds-profiling-eligibility.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/02-bds-profiling-eligibility.html)
+
+[View in Full
+Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/02-bds-profiling-eligibility.html)
 
 ## Two checks with different scope
 

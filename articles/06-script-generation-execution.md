@@ -7,8 +7,12 @@ execution harness have recorded identities. A completed worker run
 supplies evidence for verification; it does not establish statistical
 approval or human review.
 
-[Open the execution
-diagram](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/diagrams/06-script-generation-execution.md).
+[![Rendered execution
+diagram](diagrams/06-script-generation-execution.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/06-script-generation-execution.html)
+
+[View in Full
+Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/06-script-generation-execution.html)
+
 The diagram shows the fixed-scale path. Free-scale previews and detached
 script use are described below.
 

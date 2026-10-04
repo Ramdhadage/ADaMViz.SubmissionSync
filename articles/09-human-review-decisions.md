@@ -11,8 +11,11 @@ This page describes implementation inspected at base commit `5e2fa6a`.
 It documents the local proof of concept, not authenticated production
 review or formal validation evidence.
 
-[Open the review-state
-diagram](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/diagrams/09-human-review-decisions.md).
+[![Rendered review-state
+diagram](diagrams/09-human-review-decisions.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/09-human-review-decisions.html)
+
+[View in Full
+Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/09-human-review-decisions.html)
 
 ## Using the review panel
 

@@ -6,8 +6,11 @@ treatment. Statistical calculations happen before rendering. The plot
 draws those calculated values directly, so `ggplot2` does not choose a
 second quartile or whisker definition.
 
-[Open the statistical-to-visual pipeline
-diagram](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/diagrams/04-longitudinal-boxplot-statistics.md).
+[![Rendered statistical-to-visual pipeline
+diagram](diagrams/04-longitudinal-boxplot-statistics.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/04-longitudinal-boxplot-statistics.html)
+
+[View in Full
+Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/04-longitudinal-boxplot-statistics.html)
 
 ## Selected records and grouping
 
