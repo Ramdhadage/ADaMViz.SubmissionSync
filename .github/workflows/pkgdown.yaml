@@ -37,6 +37,11 @@ jobs:
         run: pkgdown::build_site_github_pages(dest_dir = "pkgdown-site", new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 
+      - name: Copy homepage assets
+        run: |
+          mkdir -p pkgdown-site/inst/app/www
+          cp inst/app/www/wireframe.png pkgdown-site/inst/app/www/wireframe.png
+
       - name: Deploy to GitHub Pages
         if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4.7.3
