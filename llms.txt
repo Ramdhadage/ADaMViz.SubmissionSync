@@ -11,7 +11,7 @@ SubmissionSync](https://ramnath-dhadage.shinyapps.io/ADaMViz-SubmissionSync/)
 **Prototype preview:**
 
 [![Rendered F001 plot-generation
-prototype](assets/F001-plot-generation-prototype.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/docs/ux/F001-plot-generation-prototype.html)
+prototype](inst/app/www/wireframe.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/docs/ux/F001-plot-generation-prototype.html)
 
 [Open the rendered prototype in
 Chrome](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/docs/ux/F001-plot-generation-prototype.html)
