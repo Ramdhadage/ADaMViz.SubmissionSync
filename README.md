@@ -11,7 +11,7 @@ FDA validated or FDA approved.
 
 [![Rendered F001 plot-generation prototype](inst/app/www/wireframe.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/docs/ux/F001-plot-generation-prototype.html)
 
-[Open the rendered prototype in Chrome](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/docs/ux/F001-plot-generation-prototype.html)
+[View in Full Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/docs/ux/F001-plot-generation-prototype.html)
 
 ## Development status
 

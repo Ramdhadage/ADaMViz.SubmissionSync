@@ -6,7 +6,11 @@ description: >
 
 Controlled export publishes the accepted `plot.png` and `script.R` pair to a registered workspace destination and retains a receipt inside the evidence repository. The current implementation permits `Draft`, `Verified`, and `Reviewed` revisions with an accepted artifact bundle. Human approval is not a service prerequisite. The local workspace provider is explicitly development-only.
 
-[Open the export diagram](diagrams/11-controlled-export.html). It separates workspace publication, internal receipt recording, and the later ZIP download. This page describes inspected implementation at `5e2fa6a`; it does not establish target-environment qualification.
+[![Rendered export diagram](diagrams/11-controlled-export.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/11-controlled-export.html)
+
+[View in Full Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/11-controlled-export.html)
+
+The diagram separates workspace publication, internal receipt recording, and the later ZIP download. This page describes inspected implementation at `5e2fa6a`; it does not establish target-environment qualification.
 
 ## User actions and eligibility
 
