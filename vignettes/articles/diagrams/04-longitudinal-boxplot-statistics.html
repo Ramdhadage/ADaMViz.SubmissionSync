@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Longitudinal boxplot statistics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Geist+Mono:wght@400&amp;display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0B3C5D;--slate:#5B6770;--paper:#fff;--pale:#F5F7F9;--rule:#CDD5DB}*{box-sizing:border-box}body{margin:0;background:var(--pale);color:var(--navy);font-family:Inter,"Segoe UI",Arial,sans-serif}main{max-width:1040px;margin:32px auto;padding:0 24px;min-width:0}h1{font-size:28px;line-height:1.2;margin:8px 0 12px;font-weight:600}.eyebrow{font-size:12px;color:var(--slate);letter-spacing:.08em}p{line-height:1.6;color:var(--slate);max-width:80ch}.diagram-container{width:100%;overflow-x:auto;border:1px solid var(--rule);background:white}svg{width:100%;min-width:960px;display:block}.node{fill:white;stroke:var(--rule);stroke-width:1}.focus{fill:#EDF3F7;stroke:var(--navy);stroke-width:1.5}.name{font-size:12px;font-weight:600;fill:var(--navy)}.sub{font-family:"Geist Mono",Consolas,monospace;font-size:9px;fill:var(--slate)}.tag{font-family:"Geist Mono",Consolas,monospace;font-size:8px;fill:var(--slate);letter-spacing:.08em}.annotation{font-size:11px;fill:var(--slate)}.flow{fill:none;stroke:var(--slate);stroke-width:1.2;marker-end:url(#box04-arrow)}a{color:var(--navy)}@media print{main{margin:0;padding:0}.diagram-container{overflow-x:visible}svg{min-width:0}}
+</style>
+</head>
+<body><main>
+<div class="eyebrow">FEATURE 04 · CURRENT IMPLEMENTATION</div>
+<h1>Longitudinal boxplot statistics</h1>
+<p>Calculate the summary once, then draw its values directly. The main panel and N strip share treatment facets and global visit positions.</p>
+<div class="diagram-container" tabindex="0" aria-label="Scrollable statistical pipeline diagram">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" role="img" aria-labelledby="04-longitudinal-boxplot-statistics-title 04-longitudinal-boxplot-statistics-desc">
+<title id="04-longitudinal-boxplot-statistics-title">Longitudinal boxplot statistics</title>
+<desc id="04-longitudinal-boxplot-statistics-desc">Selected records yield type-7 statistical tables that supply identity boxplot layers and a distinct-subject N strip, composed together with patchwork.</desc>
+<defs><marker id="box04-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#5B6770"/></marker></defs>
+<rect width="960" height="600" fill="white"/>
+<text x="40" y="60" class="tag">ANALYTICAL CALCULATION</text>
+<text x="40" y="280" class="tag">VISUAL ASSEMBLY</text>
+<path class="flow" d="M260 152 H340"/>
+<path class="flow" d="M600 152 H700"/>
+<path class="flow" d="M772 212 V244 Q772 252 764 252 H476 Q468 252 468 260 V312"/>
+<path class="flow" d="M848 212 V312"/>
+<path class="flow" d="M340 360 H260"/>
+<path class="flow" d="M808 408 V452 Q808 460 800 460 H160 Q152 460 152 452 V408"/>
+<rect x="40" y="100" width="220" height="112" rx="6" class="node"/>
+<text x="56" y="124" class="tag">INPUT</text><text x="56" y="148" class="name">Selected records</text>
+<text x="56" y="168" class="sub">Numeric Y; treatment; visit</text><text x="56" y="188" class="sub">Missing Y does not contribute</text>
+<rect x="340" y="100" width="260" height="112" rx="6" class="focus"/>
+<text x="356" y="124" class="tag">CALCULATOR</text><text x="356" y="148" class="name">Independent box summaries</text>
+<text x="356" y="168" class="sub">Type-7 Q1 / median / Q3</text><text x="356" y="188" class="sub">1.5-IQR fences; observed whiskers</text>
+<rect x="700" y="100" width="220" height="112" rx="6" class="node"/>
+<text x="716" y="124" class="tag">ANALYTICAL OBJECT</text><text x="716" y="148" class="name">Four ordered tables</text>
+<text x="716" y="168" class="sub">boxes · outliers · medians</text><text x="716" y="188" class="sub">n_strip + retained policy</text>
+<rect x="40" y="312" width="220" height="96" rx="6" class="focus"/>
+<text x="56" y="336" class="tag">COMPOSITION</text><text x="56" y="360" class="name">Plot above N strip</text>
+<text x="56" y="380" class="sub">patchwork::wrap_plots()</text><text x="56" y="396" class="sub">One column; heights c(4, 1)</text>
+<rect x="340" y="312" width="260" height="96" rx="6" class="node"/>
+<text x="356" y="336" class="tag">MAIN PANEL</text><text x="356" y="360" class="name">Identity boxplot layers</text>
+<text x="356" y="380" class="sub">White boxes; black median lines</text><text x="356" y="396" class="sub">Open outliers; treatment facets</text>
+<rect x="700" y="312" width="220" height="96" rx="6" class="node"/>
+<text x="716" y="336" class="tag">ALIGNED N PANEL</text><text x="716" y="360" class="name">Distinct-subject labels</text>
+<text x="716" y="380" class="sub">N = count; Low N flag</text><text x="716" y="396" class="sub">Same visits and treatments</text>
+<text x="40" y="512" class="annotation">Empty groups add no summary row; median lines connect the remaining observed visits.</text>
+<line x1="40" y1="540" x2="920" y2="540" stroke="#CDD5DB"/>
+<rect x="40" y="560" width="16" height="12" rx="2" class="focus"/><text x="68" y="570" class="annotation">Calculation and composition</text>
+<rect x="300" y="560" width="16" height="12" rx="2" class="node"/><text x="328" y="570" class="annotation">Input, tables, and panels</text>
+<line x1="588" y1="566" x2="620" y2="566" class="flow"/><text x="636" y="570" class="annotation">Values supplied to the next step</text>
+</svg></div>
+<p>Architecture view · doc-inline 960 × 600 · six nodes and six connectors. Formula details, execution, and review controls remain in the feature documentation. Fonts use Inter with Segoe UI/Arial fallback; technical labels use Geist Mono with Consolas fallback when web fonts are unavailable.</p>
+<p><a href="../04-longitudinal-boxplot-statistics.md">Read the feature documentation</a></p>
+</main></body></html>

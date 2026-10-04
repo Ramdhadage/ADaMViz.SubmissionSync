@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Execution verification and revision evidence</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Geist+Mono:wght@400&amp;display=swap">
+<style>
+:root{--navy:#0B3C5D;--slate:#5B6770;--paper:#f5f5f5;--sans:Inter,"Segoe UI",Arial,sans-serif;--mono:"Geist Mono",Consolas,monospace}*{box-sizing:border-box}body{margin:0;background:white;color:var(--navy);font-family:var(--sans)}main{max-width:1360px;margin:auto;padding:28px 24px}h1{font-size:28px;margin:8px 0 12px;font-weight:600}p{color:var(--slate);line-height:1.55;max-width:960px}.eyebrow{font-family:var(--mono);font-size:12px}.scroll{overflow-x:auto;border:1px solid #d8dfe3;border-radius:6px;background:var(--paper)}svg{display:block;width:100%;min-width:1280px;height:auto}.node{fill:white;stroke:var(--slate);stroke-width:1.5}.name{font-family:var(--sans);font-size:16px;font-weight:600;fill:var(--navy)}.detail{font-family:var(--mono);font-size:12px;fill:var(--slate)}.edge{fill:none;stroke:var(--navy);stroke-width:2;marker-end:url(#verification07-arrow)}.optional{stroke-dasharray:5 4}.branch{font-family:var(--mono);font-size:12px;fill:var(--navy)}a{color:var(--navy)}@media print{main{padding:0}.scroll{overflow:visible}svg{min-width:0;width:100%}}
+</style></head>
+<body><main><div class="eyebrow">FEATURE 07 · CURRENT IMPLEMENTATION</div><h1>Execution verification and revision evidence</h1><p>The execution service records checks before accepting artifacts and promoting a revision. The repository promotion method can also be called directly; it checks status and version but does not require passing evidence.</p>
+<div class="scroll"><svg viewBox="0 0 1280 720" role="img" aria-labelledby="07-verification-revision-evidence-title 07-verification-revision-evidence-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="07-verification-revision-evidence-title">Execution verification and revision evidence</title>
+<desc id="07-verification-revision-evidence-desc">A Draft revision produces an attempt and verification evidence, then either remains Draft after failure or accepts artifacts and becomes Verified after all checks pass.</desc>
+<defs><marker id="verification07-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#0B3C5D"/></marker></defs>
+<path class="edge" d="M640 112 V156"/><path class="edge" d="M640 244 V292"/>
+<path class="edge optional" d="M520 344 H312 Q304 344 304 352 V448"/>
+<path class="edge" d="M760 344 H968 Q976 344 976 352 V448"/>
+<path class="edge" d="M976 536 V584"/>
+<rect x="384" y="316" width="68" height="20" fill="#f5f5f5"/><text class="branch" x="418" y="330" text-anchor="middle">FAILED</text>
+<rect x="820" y="316" width="68" height="20" fill="#f5f5f5"/><text class="branch" x="854" y="330" text-anchor="middle">PASSED</text>
+<rect class="node" x="496" y="48" width="288" height="64" rx="6"/><text class="name" x="520" y="76">Draft revision + attempt</text><text class="detail" x="520" y="96">Request / script / selected data</text>
+<rect class="node" x="496" y="156" width="288" height="88" rx="6"/><text class="name" x="520" y="184">Run, check, record evidence</text><text class="detail" x="520" y="208">execution_verification</text><text class="detail" x="520" y="228">Checks / result / diagnostics</text>
+<path class="node" d="M640 292 L760 344 L640 396 L520 344 Z"/><text class="name" x="640" y="340" text-anchor="middle">All eight</text><text class="name" x="640" y="360" text-anchor="middle">checks pass?</text>
+<rect class="node" x="152" y="448" width="304" height="88" rx="6"/><text class="name" x="176" y="476">Failed attempt; remains Draft</text><text class="detail" x="176" y="500">Terminal outcome: failed</text><text class="detail" x="176" y="520">No service promotion</text>
+<rect class="node" x="824" y="448" width="304" height="88" rx="6"/><text class="name" x="848" y="476">Accept artifact bundle</text><text class="detail" x="848" y="500">Bind pending hashes once</text><text class="detail" x="848" y="520">Store verifies bytes if attached</text>
+<rect class="node" x="824" y="584" width="304" height="64" rx="6"/><text class="name" x="848" y="612">Complete + mark Verified</text><text class="detail" x="848" y="632">Version check / lifecycle event</text>
+<text class="name" x="152" y="596">Verification has a limited meaning</text><text class="detail" x="152" y="620">Image + environment checks test hash syntax.</text><text class="detail" x="152" y="640">Replay and human statistical review are separate.</text>
+<line x1="40" y1="660" x2="1240" y2="660" stroke="#d8dfe3"/><text class="detail" x="48" y="692">SOLID: passing service path</text><text class="detail" x="408" y="692">DASHED: failed verification</text><text class="detail" x="848" y="692">NO AUTOMATIC REPLAY</text>
+</svg></div><p><a href="../07-verification-revision-evidence.md">Read the feature documentation</a>. Six nodes summarize the service path; context fields, individual checks, and recovery limits are detailed in the documentation. Application colors and Inter typography are retained; offline fallback fonts are Segoe UI/Arial and Consolas.</p></main></body></html>

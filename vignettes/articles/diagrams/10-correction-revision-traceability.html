@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Correction revision traceability</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+:root{--paper:#fff;--ink:#0B3C5D;--muted:#5B6770;--soft:#F4F6F8;--border:#CBD3D9;--font-sans:Inter,'Segoe UI',Arial,sans-serif;--font-mono:'Geist Mono',Consolas,monospace}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans)}main{max-width:1040px;min-width:0;margin:auto;padding:32px 40px}h1{font-size:28px;font-weight:600;margin:12px 0}p{color:var(--muted);line-height:1.5;max-width:840px}.eyebrow{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em}.diagram-container{width:100%;overflow-x:auto}svg{width:100%;min-width:960px;display:block}.node{fill:var(--paper);stroke:var(--border);stroke-width:1.5;rx:8}.focus{fill:var(--soft);stroke:var(--ink)}.name{font-family:var(--font-sans);font-size:12px;font-weight:600;fill:var(--ink)}.sub{font-family:var(--font-mono);font-size:9px;fill:var(--muted)}.edge{fill:none;stroke:var(--muted);stroke-width:1.5;marker-end:url(#correction-arrow)}.label{font-family:var(--font-mono);font-size:8px;fill:var(--muted)}.mask{fill:var(--paper)}.legend{font-family:var(--font-sans);font-size:10px;fill:var(--muted)}a{color:var(--ink)}@media print{main{padding:0}.diagram-container{overflow-x:visible}svg{min-width:0}}
+</style>
+</head>
+<body><main>
+<div class="eyebrow">FEATURE 10 · CURRENT IMPLEMENTATION</div>
+<h1>Correction revision traceability</h1>
+<p>A closed parent keeps its status and decisions. The linked successor receives new artifacts, execution evidence, and review decisions.</p>
+<div class="diagram-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" role="img" aria-labelledby="10-correction-revision-traceability-title 10-correction-revision-traceability-desc">
+<title id="10-correction-revision-traceability-title">Correction revision traceability</title>
+<desc id="10-correction-revision-traceability-desc">A Reviewed or Rejected parent links to a new correction whose fixed-scale path requires new verification and review, while free scales remain Experimental/Draft.</desc>
+<defs>
+<marker id="correction-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#5B6770"/></marker>
+<marker id="correction-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#0B3C5D"/></marker>
+<marker id="correction-arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#0B3C5D"/></marker>
+</defs>
+<rect width="960" height="600" fill="#fff"/>
+<path class="edge" d="M320 108 H400"/>
+<path class="edge" d="M580 148 V208"/>
+<path class="edge" d="M440 288 V312 Q440 320 432 320 H208 Q200 320 200 328 V352"/>
+<path class="edge" d="M720 288 V312 Q720 320 728 320 H752 Q760 320 760 328 V352"/>
+<path class="edge" d="M200 424 V460"/>
+<path class="edge" d="M320 492 H400"/>
+<rect class="mask" x="332" y="84" width="56" height="16"/><text class="label" x="360" y="95" text-anchor="middle">correct</text>
+<rect class="mask" x="592" y="168" width="132" height="16"/><text class="label" x="600" y="179">valid selections</text>
+<rect class="mask" x="276" y="296" width="80" height="16"/><text class="label" x="316" y="307" text-anchor="middle">fixed Y</text>
+<rect class="mask" x="776" y="316" width="80" height="16"/><text class="label" x="784" y="327">free Y</text>
+<rect class="mask" x="212" y="432" width="184" height="16"/><text class="label" x="220" y="443">verification passed</text>
+<rect class="mask" x="328" y="468" width="64" height="16"/><text class="label" x="360" y="479" text-anchor="middle">review</text>
+<rect class="node focus" x="80" y="68" width="240" height="80" rx="8"/>
+<text class="name" x="100" y="96">Closed parent</text><text class="sub" x="100" y="116">Reviewed or Rejected</text><text class="sub" x="100" y="132">Earlier decisions remain</text>
+<rect class="node" x="400" y="68" width="360" height="80" rx="8"/>
+<text class="name" x="420" y="96">Confirm correction</text><text class="sub" x="420" y="116">New fields + rationale + provenance</text><text class="sub" x="420" y="132">Current snapshot; BDS checks run again</text>
+<rect class="node focus" x="400" y="208" width="360" height="80" rx="8"/>
+<text class="name" x="420" y="236">Create linked successor</text><text class="sub" x="420" y="256">Same plot; next plot-wide revision number</text><text class="sub" x="420" y="272">parent_revision_id points to closed parent</text>
+<rect class="node" x="80" y="352" width="240" height="72" rx="8"/>
+<text class="name" x="100" y="380">Draft</text><text class="sub" x="100" y="400">New governed execution attempt</text>
+<rect class="node" x="640" y="352" width="240" height="72" rx="8"/>
+<text class="name" x="660" y="380">Experimental/Draft</text><text class="sub" x="660" y="400">Script + preview; no worker attempt</text>
+<rect class="node" x="80" y="460" width="240" height="64" rx="8"/>
+<text class="name" x="100" y="488">Verified successor</text><text class="sub" x="100" y="508">Its own accepted artifacts</text>
+<rect class="node" x="400" y="460" width="240" height="64" rx="8"/>
+<text class="name" x="420" y="488">New human decisions</text><text class="sub" x="420" y="508">Parent approvals do not transfer</text>
+<line x1="40" y1="548" x2="920" y2="548" stroke="#CBD3D9"/>
+<text class="legend" x="40" y="572">Boxes: revision states and creation steps · Arrows: correction flow</text>
+<text class="legend" x="40" y="590">Failed verification leaves the fixed-scale successor Draft. The parent remains closed.</text>
+</svg>
+</div>
+<p>History lists IDs, numbers, statuses, and times. Parent links and correction text are retained in repository records. Inter and Geist Mono load from Google Fonts; Segoe UI, Arial, and Consolas provide offline fallbacks.</p>
+<p><a href="../10-correction-revision-traceability.md">Read the feature documentation and implementation limits</a></p>
+</main></body></html>

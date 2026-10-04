@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BDS profiling and plotting eligibility</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Geist+Mono:wght@400&amp;display=swap">
+<style>
+:root{--navy:#0B3C5D;--slate:#5B6770;--paper:#fff;--pale:#F5F7F9;--rule:#D8E0E5}*{box-sizing:border-box}body{margin:0;background:var(--pale);color:var(--navy);font-family:Inter,"Segoe UI",Arial,sans-serif}main{max-width:1040px;margin:32px auto;padding:0 24px;min-width:0}h1{font-size:28px;line-height:1.2;margin:8px 0 12px}p{color:var(--slate);line-height:1.6;max-width:80ch}a{color:var(--navy)}.diagram-container{width:100%;overflow-x:auto;border:1px solid var(--rule);background:white}svg{width:100%;min-width:960px;display:block}.node{fill:white;stroke:var(--slate);stroke-width:1.5}.focus{fill:#EDF3F7;stroke:var(--navy);stroke-width:2}.name{font-size:17px;font-weight:600;fill:var(--navy)}.detail{font-size:13px;fill:var(--slate)}.technical{font-family:"Geist Mono",Consolas,monospace;font-size:12px;fill:var(--slate)}.arrow{fill:none;stroke:var(--slate);stroke-width:1.5;marker-end:url(#bds02-arrow)}.label{font-size:12px;font-weight:600;fill:var(--slate)}@media print{main{margin:0;padding:0}.diagram-container{overflow-x:visible}svg{min-width:0;width:100%}}
+</style>
+</head>
+<body><main>
+<h1>BDS profiling and plotting eligibility</h1>
+<p>A selected-data compatibility check precedes generation. Passing the profile preserves warnings and does not establish ADaM conformance.</p>
+<div class="diagram-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" role="img" aria-labelledby="02-bds-profiling-eligibility-title 02-bds-profiling-eligibility-desc">
+<title id="02-bds-profiling-eligibility-title">BDS profiling and plotting eligibility</title>
+<desc id="02-bds-profiling-eligibility-desc">A pinned snapshot and explicit selections enter profile checks; a blocking diagnostic stops generation, while compatible selected and display records proceed to downstream statistical checks.</desc>
+<defs><marker id="bds02-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#5B6770"/></marker></defs>
+<path class="arrow" d="M280 80 V104"/><path class="arrow" d="M280 168 V192"/><path class="arrow" d="M280 264 V284"/>
+<path class="arrow" d="M280 372 V408"/><path class="arrow" d="M404 328 H604"/><path class="arrow" d="M280 480 V504"/>
+<rect x="296" y="380" width="32" height="20" fill="white"/><text class="label" x="312" y="394" text-anchor="middle">NO</text>
+<rect x="472" y="300" width="44" height="20" fill="white"/><text class="label" x="494" y="314" text-anchor="middle">YES</text>
+<rect class="node" x="72" y="16" width="416" height="64" rx="6"/><text class="name" x="96" y="42">Pinned snapshot</text><text class="detail" x="96" y="64">Source metadata and retained data identity</text>
+<rect class="node" x="72" y="104" width="416" height="64" rx="6"/><text class="name" x="96" y="130">Apply explicit selections</text><text class="detail" x="96" y="152">Parameter, Y, unit, treatment levels, visits</text>
+<rect class="node" x="72" y="192" width="416" height="72" rx="6"/><text class="name" x="96" y="218">Check the supported envelope</text><text class="detail" x="96" y="240">Source, fields, missing keys, visit mapping, duplicates</text>
+<path class="focus" d="M280 284 L404 328 L280 372 L156 328 Z"/><text class="name" x="280" y="324" text-anchor="middle">Blocking</text><text class="name" x="280" y="344" text-anchor="middle">diagnostic?</text>
+<rect class="node" x="604" y="296" width="300" height="88" rx="6"/><text class="name" x="628" y="326">Stop generation</text><text class="detail" x="628" y="350">Show first blocking code and message</text><text class="detail" x="628" y="372">Keep the user at Confirm</text>
+<rect class="node" x="72" y="408" width="416" height="72" rx="6"/><text class="name" x="96" y="434">Return profile data and evidence</text><text class="detail" x="96" y="456">Retain selected rows; display non-missing Y</text><text class="technical" x="604" y="436">dataset_conformance = "not_assessed"</text><text class="detail" x="604" y="462">Low N and empty groups remain warnings.</text>
+<rect class="node" x="72" y="504" width="416" height="52" rx="6"/><text class="name" x="96" y="526">Continue generation</text><text class="detail" x="96" y="546">Downstream statistics reject non-finite displayed Y</text>
+<line x1="32" y1="576" x2="928" y2="576" stroke="#D8E0E5"/><text class="detail" x="40" y="596">Rectangle: processing step · Diamond: blocking decision · Rounded endpoint: input or outcome</text>
+</svg></div>
+<p>Reading order: missing subjects and treatment values are checked after parameter/unit selection, before treatment/visit exclusions. Visit mapping and duplicate-key checks follow those exclusions. This overview groups checks; see the <a href="../02-bds-profiling-eligibility.md">feature documentation</a> for exact ordering.</p>
+<p>Style follows the application palette. Google Fonts supplies Inter and Geist Mono; Segoe UI or Arial and Consolas remain offline fallbacks.</p>
+</main></body></html>
