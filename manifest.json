@@ -5179,7 +5179,7 @@
     "app.R": {
       "checksum": "6ab6fd00b6f8165cd203606abfad64d5"
     },
-    "assets/F001-plot-generation-prototype.png": {
+    "inst/app/www/wireframe.png": {
       "checksum": "a9e56c8a693286739673f71bbb6fed35"
     },
     "codecov.yml": {
