@@ -20,9 +20,9 @@ execution: code
 
 **Success signal:** The product reaches `Verified` from a prompt in a median of under one minute, then records the separate human-review interval required to reach `Reviewed`.
 
-**Authority:** [STRATEGY.md](../../STRATEGY.md) defines the product positioning, users, boundaries, metrics, and investment tracks. This contract refines the first plot pattern without changing those commitments.
+**Authority:** [Product strategy](../product/STRATEGY.md) defines the product positioning, users, boundaries, metrics, and investment tracks. This contract refines the first plot pattern without changing those commitments.
 
-**Execution profile:** Greenfield R package and Shiny application. Use only public, synthetic, or properly de-identified data during the POC. Add dependencies only after explicit user approval and lock the accepted set with `renv`.
+**Execution profile:** Reconcile this plan against the existing R package and Shiny application. Use only public, synthetic, or properly de-identified data during the POC. Add dependencies only after explicit user approval and lock the accepted set with `renv`.
 
 **Stop conditions:** Stop the affected flow when a material plot choice is unresolved, the selected data fail the supported visit-based BDS profile, a required provider is unavailable, a stale revision token is presented, or an actor lacks permission. Do not represent local or CI evidence as qualified-target-environment validation.
 
@@ -204,7 +204,7 @@ The first pattern must therefore be useful on its own while leaving its assuranc
 
 ### Sources
 
-- [ADaMViz SubmissionSync Strategy](../../STRATEGY.md)
+- [ADaMViz SubmissionSync Strategy](../product/STRATEGY.md)
 - [Validation-ready product ideation](../ideation/2026-09-05-adamviz-submissionsync-validation-ready-product-ideation.md)
 - [GxP coding-agent guidance](../references/gxp-coding-agent-guidance.md)
 - [CDISC ADaM Basic Data Structure example](https://www.cdisc.org/kb/examples/adam-basic-data-structure-bds-using-paramcd-80288192)
@@ -438,7 +438,7 @@ flowchart LR
         └── target-environment-protocol.md
 ```
 
-The tree declares the expected greenfield shape. Unit file lists below are authoritative, and implementation may adjust helper filenames while preserving the stated boundaries.
+The tree records the original target package shape. Unit file lists below describe the planned ownership; reconcile them against the current flat `R/` layout and existing implementation before selecting work.
 
 ---
 
@@ -704,7 +704,7 @@ The tree declares the expected greenfield shape. Unit file lists below are autho
 
 ### U8. Assemble the accessible Shiny assurance and review experience
 
-**Goal:** Deliver the end-to-end prompt, clarification, validation, plot, code, evidence, revision, and two-person review workflow through shared domain services.
+**Goal:** Deliver the end-to-end prompt, clarification, validation, plot, code, evidence, revision, and two-person review workflow through shared domain services, with a separate Export step for traceability, review, and controlled export.
 
 **Requirements:** R1-R25, R29-R35; F1-F6; AE1-AE10.
 
@@ -714,12 +714,13 @@ The tree declares the expected greenfield shape. Unit file lists below are autho
 
 **Approach:**
 
-1. Use a bslib page with clearly separated prompt/specification, plot/code, evidence/history, and review regions. Keep one authoritative revision identifier across modules.
+1. Use a bslib page with the ordered workflow Data -> Ask -> Confirm -> Result -> Export. Keep plot status, run status, plot preview, and optional automated checks on Result. Place the existing traceability, revision-history, review, and controlled-export panel on Export.
 2. Invoke the U6 coordinator directly from the execution and correction handlers. Surface synchronous failures through the existing validation message and expose retry or correction only when the domain service permits it.
 3. Present blocking validation failures with actionable details, nonblocking low-N warnings with exact N, and free-scale downgrade before execution.
 4. Display the exact executed script read-only for Verified and Reviewed revisions. Prevent any UI action from editing Reviewed code.
-5. Show both reviewers the same authorization-filtered immutable evidence bundle. Approval, rejection, execution, and export consume short-lived single-use action intents and reauthorize the current server-session actor against the exact revision and hashes.
-6. Apply deployment controls for trusted Host/Origin, secure session cookies, session rotation and expiry, reconnect invalidation, content security, contextual output encoding, and no sensitive state in URLs or browser storage.
+5. Keep `mod_revision_history_server()`, `mod_review_server()`, and `mod_export_server()` wired once; move their existing UI together without changing module IDs or governed behavior. Provide Result -> Export and Export -> Result navigation while preserving each module's empty, running, and completed states.
+6. Show both reviewers the same authorization-filtered immutable evidence bundle. Approval, rejection, execution, and export consume short-lived single-use action intents and reauthorize the current server-session actor against the exact revision and hashes.
+7. Apply deployment controls for trusted Host/Origin, secure session cookies, session rotation and expiry, reconnect invalidation, content security, contextual output encoding, and no sensitive state in URLs or browser storage.
 
 **Patterns to follow:** Namespaced `moduleServer()` modules, `testServer()` for module contracts, bslib Bootstrap 5 layouts, reactive alternative text, keyboard focus, color-independent status, and domain-service-owned transitions.
 
@@ -737,8 +738,11 @@ The tree declares the expected greenfield shape. Unit file lists below are autho
 - Prompt, label, diagnostic, and reviewer-comment values containing HTML, script, control characters, or invalid encoding render as safe text or are rejected according to the limits policy.
 - Keyboard navigation, focus order, status announcements, input labels, warning contrast, and plot alternative text remain usable across prompt, validation, and review flows.
 - The prompt flow and direct manual selection flow produce the same specification, code, analytical manifest, and output fingerprint.
+- The stepper displays Data -> Ask -> Confirm -> Result -> Export; Result -> Export -> Result navigation preserves the current result and running/completed module states.
+- The traceability/review/export panel appears once on Export, while Result retains the plot and automated checks; review/export module IDs and server wiring remain unchanged.
+- Browser coverage exercises review and export actions from Export. Browser evidence for Export -> Result navigation must be recorded separately from server-side navigation tests.
 
-**Verification:** `testServer()` proves module contracts, shinytest2 proves critical multi-session flows, and essential layout screenshots pass only in the pinned browser environment.
+**Verification:** `testServer()` covers module contracts and Result <-> Export navigation. shinytest2 covers critical review/export journeys; browser navigation from Export back to Result and essential layout screenshots require recorded runs in the pinned browser environment.
 
 ### U9. Enforce controlled export and close the validation evidence loop
 
@@ -781,6 +785,30 @@ The tree declares the expected greenfield shape. Unit file lists below are autho
 ---
 
 ## Verification Contract
+
+### Implementation and Evidence Status (2026-10-05)
+
+The following is a source and test inventory, not a passing test report. Test files and implementation paths were inspected; the focused R test could not run in this environment because project `renv` bootstrap could not reach its package repository and the local `testthat` package is incomplete. No browser test was run.
+
+| Unit | Current implementation status | Evidence boundary |
+|---|---|---|
+| U1 | Package, app, lockfile, and CI foundation are present. | Clean restore, clean-checkout startup, and the full quality gates remain unverified here. |
+| U2 | Domain contracts, canonical serialization, authorization and provider interfaces are substantially implemented. | Local selectable identities do not provide the authenticated-principal and single-use action-intent guarantees specified by this plan. |
+| U3 | BDS profile validation, snapshots, synthetic fixtures, and upload workflow are implemented. | Direct uploads do not establish data provenance or de-identification; the strategy data boundary remains an open enforcement gap. |
+| U4 | Statistics, plot assembly, compiler, and independent fixture tests are implemented. | Test execution and pinned-environment evidence were not established in this review. |
+| U5 | Local SQLite evidence, lifecycle, review, artifact, and recovery services are implemented. | Local storage and actor identities do not establish qualified audit custody or production identity controls. |
+| U6 | Supervised `callr` execution, verification, and reconciliation are implemented. | User cancellation and qualified clinical-data isolation are not implemented or proven. |
+| U7 | Prompt contracts and a mock interpreter exist. | The active upload flow derives choices from data and user selections; it does not call the interpreter. The real-provider adapter is disabled. |
+| U8 | The five-step interface, relocation, module tests, and review/export browser journeys are present. | Focused tests could not run. No browser run was performed, and the app browser test does not assert Export -> Result navigation. |
+| U9 | Local export, receipt, reconciliation, and related tests are implemented. | Qualified target-workspace guarantees, full threat-model evidence, performance results, and target-environment validation remain open. |
+
+The Export workflow-tab plan has been consolidated into U8 above. The existing implementation supports the five-step layout and its module tests cover Result -> Export -> Result. The detailed export eligibility and evidence requirements remain defined once in R36-R40, AE11, and U9.
+
+### Open Contract Reconciliation
+
+- `docs/product/STRATEGY.md` says unreviewed outputs may be exported only as drafts. This plan's R38 permits `Draft`, `Verified`, and `Reviewed` exports, while the current code permits unreviewed `Verified` exports and detached files omit status. The strategy and the export contract do not currently agree. Per the 2026-10-05 user decision, leave this policy conflict open; this plan merge does not change export behavior or strategy wording.
+- The strategy sets exact reproducibility at 80% of Reviewed outputs; this plan's success criterion requires 100%. Per the 2026-10-05 user decision, retain 100% as this plan's stricter criterion without changing the strategy metric.
+- The prompt-first contract and U7 target are not met by the active upload workflow. Keep the interpreter integration as incomplete rather than treating the separate mock path as evidence of completion.
 
 ### Required Quality Gates
 
