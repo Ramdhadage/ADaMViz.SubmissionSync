@@ -794,9 +794,9 @@ The following is a source and test inventory, not a passing test report. Test fi
 |---|---|---|
 | U1 | Package, app, lockfile, and CI foundation are present. | Clean restore, clean-checkout startup, and the full quality gates remain unverified here. |
 | U2 | Domain contracts, canonical serialization, authorization and provider interfaces are substantially implemented. | Local selectable identities do not provide the authenticated-principal and single-use action-intent guarantees specified by this plan. |
-| U3 | BDS profile validation, snapshots, synthetic fixtures, and upload workflow are implemented. | Direct uploads do not establish data provenance or de-identification; the strategy data boundary remains an open enforcement gap. |
+| U3 | BDS profile validation, snapshots, synthetic fixtures, and CSV/Excel upload workflow are implemented. | Direct uploads have no permitted-data attestation and do not establish provenance; execution defaults direct uploads to `synthetic`. Revision evidence currently retains selected rows including `USUBJID`, contrary to the durable-evidence minimization criteria. |
 | U4 | Statistics, plot assembly, compiler, and independent fixture tests are implemented. | Test execution and pinned-environment evidence were not established in this review. |
-| U5 | Local SQLite evidence, lifecycle, review, artifact, and recovery services are implemented. | Local storage and actor identities do not establish qualified audit custody or production identity controls. |
+| U5 | Local SQLite evidence, lifecycle, review, artifact, and recovery services are implemented. | Selectable local actor identities and per-execution temporary roots do not provide host-authenticated principals or cross-session shared revision lookup. They do not establish qualified audit custody. |
 | U6 | Supervised `callr` execution, verification, and reconciliation are implemented. | User cancellation and qualified clinical-data isolation are not implemented or proven. |
 | U7 | Prompt contracts and a mock interpreter exist. | The active upload flow derives choices from data and user selections; it does not call the interpreter. The real-provider adapter is disabled. |
 | U8 | The five-step interface, relocation, module tests, and review/export browser journeys are present. | Focused tests could not run. No browser run was performed, and the app browser test does not assert Export -> Result navigation. |
@@ -804,10 +804,14 @@ The following is a source and test inventory, not a passing test report. Test fi
 
 The Export workflow-tab plan has been consolidated into U8 above. The existing implementation supports the five-step layout and its module tests cover Result -> Export -> Result. The detailed export eligibility and evidence requirements remain defined once in R36-R40, AE11, and U9.
 
+The First POC workflow plan is consolidated here rather than copied as another requirement set. Its concrete upload, provenance, evidence, review, and workflow concerns are retained in the existing U1-U9 requirements and the reconciliation notes below.
+
 ### Open Contract Reconciliation
 
 - `docs/product/STRATEGY.md` says unreviewed outputs may be exported only as drafts. This plan's R38 permits `Draft`, `Verified`, and `Reviewed` exports, while the current code permits unreviewed `Verified` exports and detached files omit status. The strategy and the export contract do not currently agree. Per the 2026-10-05 user decision, leave this policy conflict open; this plan merge does not change export behavior or strategy wording.
 - The strategy sets exact reproducibility at 80% of Reviewed outputs; this plan's success criterion requires 100%. Per the 2026-10-05 user decision, retain 100% as this plan's stricter criterion without changing the strategy metric.
+- The First POC plan specified CSV-only input and four steps. Per the 2026-10-05 user decision, retain the current CSV and Excel input support. The workflow sequence discrepancy remains open: this plan and implementation use five steps, while the older plan described four.
+- The First POC plan requires a permitted-data statement and retained attestation, and prohibits raw subject IDs in durable evidence. Current uploads have no attestation and default to `synthetic` classification; revision evidence retains selected rows including `USUBJID`. Keep these as unresolved privacy and evidence gaps; do not treat format validation or temporary duplicate diagnostics as proof of provenance or identifier minimization.
 - The prompt-first contract and U7 target are not met by the active upload workflow. Keep the interpreter integration as incomplete rather than treating the separate mock path as evidence of completion.
 
 ### Required Quality Gates

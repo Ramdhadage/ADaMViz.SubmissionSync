@@ -5207,7 +5207,7 @@
       "checksum": "e16497b4e7787e5fd1495f9e1aa81182"
     },
     "docs/explainers/2026-09-06-how-the-plot-pattern-assurance-cell-works.md": {
-      "checksum": "83ab5cee8b519bd1c6fa5069c6c6c04c"
+      "checksum": "a2f62df15ec8b330e48a46e68a4b40cf"
     },
     "docs/explainers/assets/plot-pattern-assurance-cell/poc-vs-qualified-architecture.svg": {
       "checksum": "7951a3edba61f4f03a228399c636813e"
@@ -5225,10 +5225,10 @@
       "checksum": "9ba0d27763135193007cd1dcbf282cf9"
     },
     "docs/plans/2026-09-06-0014-feat-plot-pattern-assurance-cell-plan.md": {
-      "checksum": "574ce235c361ebaf6a3964d82c8d9216"
+      "checksum": "56cda832b535dce59c84b65d9381a29f"
     },
     "docs/plans/2026-09-20-1315-feat-first-poc-workflow-plan.md": {
-      "checksum": "9b24176dd2e9babb70aa2a36c6e229a3"
+      "checksum": "a5e9fa88ff399bf7f4476516da967cb2"
     },
     "docs/plans/2026-09-24-2026-feat-export-tab-plan.md": {
       "checksum": "9ce8dc7a67aa17013caecb4194b34b15"
