@@ -5,8 +5,8 @@ Keep links and concise execution notes here; canonical plans stay in
 requirement-level progress and acceptance evidence have not been reconciled.
 This does not claim that an implementation unit is currently being executed.
 
-- [Plot-Pattern Assurance Cell](../../2026-09-06-0014-feat-plot-pattern-assurance-cell-plan.md) — **Development evidence in progress**; the plan now includes the five-step Export workflow. Reconcile U1-U9 and R1-R40 against implementation and record remaining evidence.
-- [First POC workflow](../../2026-09-20-1315-feat-first-poc-workflow-plan.md) — **Development evidence in progress**; reconcile acceptance criteria against the implemented workflow and its evidence.
+- [Plot-Pattern Assurance Cell](../../2026-09-06-0014-feat-plot-pattern-assurance-cell-plan.md) — **Development evidence in progress**; the 2026-10-05 inventory records the five-step workflow, test limitations, and three open contract reconciliations. Complete the remaining quality gates.
+- [First POC workflow](../../2026-09-20-1315-feat-first-poc-workflow-plan.md) — **Development evidence in progress**; most workflow surfaces exist, but the data-provenance and raw-subject-ID evidence gap, acceptance evidence, and later scope changes need reconciliation.
 
 See [`../tech-debt-tracker.md`](../tech-debt-tracker.md) for the progress snapshot,
 known gaps, and closure evidence.
