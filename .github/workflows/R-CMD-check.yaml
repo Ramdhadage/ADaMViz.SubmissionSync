@@ -26,9 +26,12 @@ jobs:
           dependencies: '"all"'
           extra-packages: |
             any::rcmdcheck
+            any::lintr
       - name: Document package
         run: Rscript -e 'roxygen2::roxygenise()'
+      - name: Lint package
+        run: Rscript -e 'lints <- lintr::lint_package(); print(lints); if (length(lints)) quit(status = 1)'
       - name: Run tests
         run: Rscript -e 'testthat::test_local(reporter = "summary")'
       - name: Check package
-        run: Rscript -e 'rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")'
+        run: Rscript -e 'rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning")'

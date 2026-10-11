@@ -1,6 +1,7 @@
 .verification_checks <- function(
   request, script, analysis_data, runner_result
 ) {
+  result <- runner_result$result
   checks <- list(
     schema = inherits(request, "execution_request"),
     script_hash = identical(.execution_hash_text(script), request$script_hash),
@@ -8,22 +9,40 @@
       canonical_hash(analysis_data), request$snapshot_hash
     ),
     runner_success = identical(runner_result$status, "succeeded"),
-    result_manifest = inherits(runner_result$result, "execution_result"),
+    runner_manifest = identical(
+      runner_result$manifest_version,
+      "execution-runner-result-v1"
+    ),
+    result_manifest = inherits(result, "execution_result") &&
+      identical(result$manifest_version, "execution-result-v1"),
+    request_binding = FALSE,
     analytical_hash = FALSE,
     image_hash = FALSE,
     environment_fingerprint = FALSE
   )
   if (isTRUE(checks$result_manifest)) {
+    request_fields <- setdiff(names(unclass(request)), "manifest_version")
+    checks$request_binding <- identical(
+      unclass(result)[request_fields],
+      unclass(request)[request_fields]
+    )
     checks$analytical_hash <- identical(
-      runner_result$result$analytical_hash,
+      result$analytical_hash,
       canonical_hash(runner_result$analytical_output)
     )
-    checks$image_hash <- checkmate::test_string(
-      runner_result$result$image_hash,
-      pattern = "^[0-9a-f]{64}$"
-    )
+    image_exists <- checkmate::test_string(
+      runner_result$image_path,
+      min.chars = 1L
+    ) && fs::file_exists(runner_result$image_path) &&
+      fs::file_size(runner_result$image_path) > 0
+    checks$image_hash <- image_exists &&
+      checkmate::test_string(result$image_hash, pattern = "^[0-9a-f]{64}$") &&
+      identical(
+        digest::digest(file = runner_result$image_path, algo = "sha256"),
+        result$image_hash
+      )
     checks$environment_fingerprint <- checkmate::test_string(
-      runner_result$result$environment_fingerprint,
+      result$environment_fingerprint,
       pattern = "^[0-9a-f]{64}$"
     )
   }

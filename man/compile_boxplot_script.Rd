@@ -17,7 +17,6 @@ A length-one UTF-8 R script.
 }
 \description{
 The controlled runner provides validated selected records as `analysis_data`.
-When run on its own, the script loads the editable synthetic CSV example if
-`analysis_data` is absent. It contains resolved literals, inlined helpers,
-and uses `ggplot2`, `cli`, and `patchwork`.
+The caller must supply `analysis_data`. The script contains resolved
+literals, inlined helpers, and uses `ggplot2`, `cli`, and `patchwork`.
 }

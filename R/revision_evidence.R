@@ -30,6 +30,14 @@
 .revision_context_details <- function(state, request, runner_result, revision) {
   profile <- state$profile
   snapshot <- state$snapshot
+  analysis_data <- profile$analysis_data
+  source_metadata <- snapshot$source_metadata %||% NULL
+  if (!is.null(source_metadata)) {
+    source_metadata <- source_metadata[intersect(
+      c("source", "file_type", "source_file_hash"),
+      names(source_metadata)
+    )]
+  }
   environment <- runner_result$environment %||% .execution_environment_details()
   environment$fingerprint <- runner_result$result$environment_fingerprint
   input_data <- c(
@@ -44,19 +52,19 @@
       list(classification = snapshot$classification)
     },
     list(
-      source_metadata = snapshot$source_metadata %||% NULL,
-      selected_data_columns = names(profile$selected_data),
+      source_metadata = source_metadata,
+      selected_data_columns = names(analysis_data),
       selected_data_classes = as.list(
         stats::setNames(
           vapply(
-            profile$selected_data,
+            analysis_data,
             \(column) class(column)[[1]],
             character(1)
           ),
-          names(profile$selected_data)
+          names(analysis_data)
         )
       ),
-      selected_data = as.list(profile$selected_data)
+      selected_data = as.list(analysis_data)
     )
   )
   list(

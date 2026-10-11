@@ -34,7 +34,7 @@ Successful results return the analytical object, image location and hash, reques
 
 The worker sources the supplied script. Hash binding detects a script changed relative to its request; it does not independently prove that the script came from the compiler. The runner has no compiler allowlist, hostile-code sandbox, or demonstrated complete environment-variable allowlist. Process separation and disabled startup profiles should not be described as those controls.
 
-The generated script installs missing `ggplot2`, `cli`, and `patchwork` packages from CRAN without pinning their versions. If `analysis_data` is absent, it reads a checkout-specific synthetic CSV path. Detached execution therefore requires suitable data and dependencies; the fallback path is not portable. The active free-scale path still compiles a script and constructs an application-process preview, but skips governed subprocess submission and remains `Experimental/Draft`. The normal UI preview is reconstructed in the application process rather than read from the accepted worker PNG.
+The generated script does not install packages or load a checkout-specific data path. It stops unless the caller supplies `analysis_data`, and it expects `ggplot2`, `cli`, and `patchwork` from the controlled environment. The active free-scale path still compiles a script and constructs an application-process preview, but skips governed subprocess submission and remains `Experimental/Draft`. Governed revisions display the accepted worker PNG and stored script.
 
 ## Inspected checks and remaining evidence
 

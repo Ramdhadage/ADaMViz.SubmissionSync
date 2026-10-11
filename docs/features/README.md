@@ -33,7 +33,7 @@ The diagrams use the application's navy and slate colors and Inter font stack fr
 
 - Upload and profile checks establish supported structure and selected-record compatibility. They do not prove synthetic provenance or remove patient identifiers.
 - Fixed-scale revisions use the governed subprocess path. Free-scale revisions remain `Experimental/Draft` and do not submit that governed attempt.
-- The UI reconstructs its preview separately from the accepted worker PNG. Human review binds recorded artifact identities.
+- Governed previews use the accepted worker PNG and stored script. Experimental free-scale previews remain in-process and cannot enter review or export.
 - Reviewer identities in the current UI come from a selectable local catalog. Production authentication and qualified record custody remain outside this implementation.
 - The export service permits accepted bundles in `Draft`, `Verified`, or `Reviewed` status. Detached files do not carry an enforced draft status label.
 - Local evidence integrity and backup mechanisms exist. The app's temporary storage, operational recovery, retention custody, and target-environment qualification still need explicit decisions.

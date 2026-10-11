@@ -22,3 +22,35 @@ test_that("verification passes only complete runtime evidence", {
   expect_identical(failed$status, "failed")
   expect_setequal(failed$failed_checks, "image_hash")
 })
+
+test_that("verification binds the result manifest to the execution request", {
+  fixture <- execution_fixture()
+  runner_result <- fake_success_runner_result(fixture)
+  runner_result$result$spec_hash <- "different-specification"
+
+  verification <- verify_execution_result(
+    request = fixture$request,
+    script = fixture$script,
+    analysis_data = fixture$profile$selected_data,
+    runner_result = runner_result
+  )
+
+  expect_identical(verification$status, "failed")
+  expect_setequal(verification$failed_checks, "request_binding")
+})
+
+test_that("verification hashes the produced image bytes", {
+  fixture <- execution_fixture()
+  runner_result <- fake_success_runner_result(fixture)
+  writeBin(charToRaw("tampered png bytes"), runner_result$image_path)
+
+  verification <- verify_execution_result(
+    request = fixture$request,
+    script = fixture$script,
+    analysis_data = fixture$profile$selected_data,
+    runner_result = runner_result
+  )
+
+  expect_identical(verification$status, "failed")
+  expect_setequal(verification$failed_checks, "image_hash")
+})

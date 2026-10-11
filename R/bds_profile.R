@@ -56,6 +56,7 @@
       visit_levels = choices$included_visits,
       low_n_policy = policy,
       selected_data = data.frame(),
+      analysis_data = data.frame(),
       display_data = data.frame(),
       counts = data.frame(),
       blocking_diagnostics = list(),
@@ -87,6 +88,24 @@
   )
   result <- data[ordering, , drop = FALSE]
   row.names(result) <- NULL
+  result
+}
+
+.minimize_analysis_data <- function(data, treatment_variable, y_variable) {
+  result <- data[
+    unique(c(
+      "USUBJID", "AVISIT", "AVISITN", treatment_variable, y_variable
+    ))
+  ]
+  subject_ids <- sort(unique(as.character(result$USUBJID)), method = "radix")
+  prefix <- "SUBJ"
+  repeat {
+    pseudonyms <- sprintf("%s-%06d", prefix, seq_along(subject_ids))
+    if (!any(pseudonyms %in% subject_ids)) break
+    prefix <- paste0("PSEUDO-", prefix)
+  }
+  names(pseudonyms) <- subject_ids
+  result$USUBJID <- unname(pseudonyms[as.character(result$USUBJID)])
   result
 }
 
@@ -525,6 +544,7 @@ validate_bds_profile <- function(snapshot, selections, low_n_threshold = 5) {
   }
 
   result$selected_data <- selected
+  result$analysis_data <- .minimize_analysis_data(selected, treatment, y)
   result$display_data <- display
   result$counts <- counts
   result$warnings <- warnings

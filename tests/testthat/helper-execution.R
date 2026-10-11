@@ -80,19 +80,18 @@ skip_if_no_cairo_device <- function() {
   )
 }
 
-fake_success_runner_result <- function(fixture, image_hash = paste(
-                                         rep("a", 64L),
-                                         collapse = ""
-                                       )) {
+fake_success_runner_result <- function(fixture) {
   env <- new.env(parent = globalenv())
   env$analysis_data <- fixture$profile$selected_data
   connection <- textConnection(fixture$script)
   withr::defer(close(connection), envir = parent.frame())
   source(connection, local = env, keep.source = FALSE)
+  image_path <- tempfile(fileext = ".png")
+  writeBin(charToRaw("png bytes"), image_path)
   result <- new_execution_result(
     fixture$request,
     analytical_hash = canonical_hash(env$boxplot_analysis),
-    image_hash = image_hash,
+    image_hash = digest::digest(file = image_path, algo = "sha256"),
     environment_fingerprint =
       .environment_fingerprint() # nolint: object_usage_linter.
   )
@@ -102,7 +101,7 @@ fake_success_runner_result <- function(fixture, image_hash = paste(
       manifest_version = "execution-runner-result-v1",
       result = result,
       analytical_output = env$boxplot_analysis,
-      image_path = tempfile(fileext = ".png"),
+      image_path = image_path,
       code_hash = fixture$request$script_hash,
       environment = .execution_environment_details(),
       diagnostics = list(stdout = "", stderr = "")

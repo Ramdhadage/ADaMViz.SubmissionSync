@@ -33,3 +33,39 @@ test_that("plot preview exposes the exact compiled script", {
     }
   )
 })
+
+test_that("governed preview uses accepted image and code artifacts", {
+  root <- withr::local_tempdir()
+  store <- local_artifact_store(fs::path(root, "artifacts"))
+  accepted_script <- "accepted script\n"
+  code_hash <- store$put(charToRaw(accepted_script))
+  image_hash <- store$put(charToRaw("accepted png bytes"))
+  current_revision <- shiny::reactiveVal(list(
+    repository = list(artifact_store = store),
+    revision = list(
+      status = "Verified",
+      code_hash = code_hash,
+      image_hash = image_hash
+    ),
+    script = "different script",
+    profile = list(),
+    spec = execution_spec()
+  ))
+
+  shiny::testServer(
+    mod_plot_preview_server,
+    args = list(current_revision = current_revision),
+    {
+      expect_match(
+        paste(as.character(output$plot), collapse = " "),
+        "accepted_plot",
+        fixed = TRUE
+      )
+      expect_identical(output$code, trimws(accepted_script))
+      expect_match(
+        output$accepted_plot$src,
+        "^data:image/png;base64,"
+      )
+    }
+  )
+})

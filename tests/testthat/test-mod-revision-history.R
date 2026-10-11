@@ -8,7 +8,7 @@ test_that("revision history shows parent and child current statuses", {
     "plot-1", "rev-1", 1L, "creator", "spec", "code", "image",
     "analysis", "create"
   )
-  new_lifecycle_service(repo)$mark_verified("rev-1", 1L, "verify")
+  record_passing_execution(repo, "rev-1")
   lifecycle <- new_lifecycle_service(repo)
   identities <- local_identity_provider(list(
     new_actor("sp", "statistical_programmer"),

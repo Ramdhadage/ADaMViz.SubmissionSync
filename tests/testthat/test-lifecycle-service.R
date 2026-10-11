@@ -14,10 +14,7 @@ test_that("rejection closes a revision and correction creates a child Draft", {
     "image", "analysis", "create"
   )
 
-  lifecycle$mark_verified("rev-1",
-    expected_version = 1L,
-    idempotency_key = "verify"
-  )
+  record_passing_execution(repo, "rev-1")
   review$reject(
     "rev-1", "reviewer", 2L, "reject", "Incorrect analysis"
   )
@@ -39,21 +36,20 @@ test_that("rejection closes a revision and correction creates a child Draft", {
   expect_identical(child$parent_revision_id, "rev-1")
 })
 
-test_that("stale lifecycle commands do not append partial history", {
+test_that("stale repository promotions do not append partial history", {
   root <- withr::local_tempdir()
   repo <- sqlite_evidence_repository(
     fs::path(root, "db.sqlite"),
     fs::path(root, "root.json")
   )
-  lifecycle <- new_lifecycle_service(repo)
   repo$create_revision(
     "plot-1", "rev-1", 1L, "creator", "spec", "code",
     "image", "analysis", "create"
   )
 
-  lifecycle$mark_verified("rev-1", 1L, "verified")
+  record_passing_execution(repo, "rev-1")
   before <- nrow(repo$list_events("plot-1"))
-  expect_error(lifecycle$mark_verified("rev-1", 1L, "stale"), "stale")
+  expect_error(repo$mark_verified("rev-1", 1L, "stale"), "stale")
   expect_equal(nrow(repo$list_events("plot-1")), before)
 })
 
@@ -63,7 +59,6 @@ test_that("Experimental drafts cannot be promoted to Verified", {
     fs::path(root, "db.sqlite"),
     fs::path(root, "root.json")
   )
-  lifecycle <- new_lifecycle_service(repo)
   repo$create_revision(
     "plot-1", "rev-1", 1L, "creator", "spec", "code", "image",
     "analysis", "create",
@@ -71,7 +66,7 @@ test_that("Experimental drafts cannot be promoted to Verified", {
   )
   events_before <- nrow(repo$list_events("plot-1"))
 
-  expect_error(lifecycle$mark_verified("rev-1", 1L, "verify"), "Draft")
+  expect_error(repo$mark_verified("rev-1", 1L, "verify"), "Draft")
   expect_identical(repo$get_revision("rev-1")$status, "Experimental/Draft")
   expect_equal(nrow(repo$list_events("plot-1")), events_before)
 })
@@ -94,7 +89,7 @@ test_that("only closed revisions can have correction successors", {
     ),
     "closed revision"
   )
-  lifecycle$mark_verified("rev-1", 1L, "verify")
+  record_passing_execution(repo, "rev-1")
   expect_error(
     lifecycle$create_correction(
       "rev-1", "rev-2", "creator", "spec", "code", "image",
@@ -120,7 +115,7 @@ test_that("changes to a Reviewed revision create a child Draft", {
     "plot-1", "rev-1", 1L, "creator", "spec", "code", "image",
     "analysis", "create"
   )
-  lifecycle$mark_verified("rev-1", 1L, "verified")
+  record_passing_execution(repo, "rev-1")
   review$approve("rev-1", "sp", 2L, "sp-approval")
   review$approve("rev-1", "bio", 3L, "bio-approval")
 

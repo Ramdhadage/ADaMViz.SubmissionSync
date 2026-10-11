@@ -25,7 +25,7 @@ make_export_fixture <- function(status = "Draft") {
     "bundle-1", "rev-1", code_hash, image_hash, "analysis", "bundle"
   )
   if (identical(status, "Verified") || identical(status, "Reviewed")) {
-    new_lifecycle_service(repo)$mark_verified("rev-1", 1L, "verify")
+    record_passing_execution(repo, "rev-1")
   }
   if (identical(status, "Reviewed")) {
     identities <- local_identity_provider(list(

@@ -40,7 +40,7 @@ Repeating an identical registered command with the same idempotency key returns 
 
 [`local_identity_provider()`](../../R/provider_identity_local.R) looks up actors in a supplied catalog. [`app_server()`](../../R/app_server.R) constructs creator, programmer, and biostatistician actors locally, and the interface lets the user select them. These mechanisms demonstrate role and identity rules but do not authenticate the person operating the session. Error messages referring to an “authenticated” actor do not establish authentication.
 
-The displayed preview is rebuilt in the application process rather than loaded from the accepted worker PNG. Decisions bind retained revision hashes, but the current interface does not establish that the image visually inspected was the accepted image. Review does not automatically invoke retained-input replay. See [execution evidence](07-verification-revision-evidence.md) for the distinction between automated checks and human judgment.
+Governed revisions display the accepted worker PNG and stored script before review. Decisions bind those retained revision hashes. Review does not automatically invoke retained-input replay. See [execution evidence](07-verification-revision-evidence.md) for the distinction between automated checks and human judgment.
 
 Rejection is implemented directly by the repository's decision transaction. The generic [`transition_revision_status()`](../../R/domain_status.R) helper lists `Verified` to `Reviewed` but has no rejection transition; it is not the complete review lifecycle. Also, `Reviewed` is not an unconditional export prerequisite: current export code permits accepted bundles in other eligible statuses, as described in [controlled export](11-controlled-export.md).
 

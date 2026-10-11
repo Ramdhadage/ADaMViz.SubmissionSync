@@ -58,6 +58,37 @@ test_that("profile keeps selected records and distinct nonmissing subjects", {
   expect_true(all(result$selected_data$ANL01FL %in% c("Y", "N")))
 })
 
+test_that("analysis data is minimal, pseudonymous, and deterministic", {
+  data <- synthetic_bds_fixture()
+  data$PRIVATE_NOTE <- paste("private", data$USUBJID)
+  first <- validate_bds_profile(
+    make_test_snapshot(data),
+    default_profile_selections()
+  )
+  second <- validate_bds_profile(
+    make_test_snapshot(data[rev(seq_len(nrow(data))), , drop = FALSE]),
+    default_profile_selections()
+  )
+
+  expect_named(
+    first$analysis_data,
+    c("USUBJID", "AVISIT", "AVISITN", "TRT01A", "AVAL")
+  )
+  expect_identical(
+    sort(unique(first$analysis_data$USUBJID)),
+    sprintf("SUBJ-%06d", 1:6)
+  )
+  expect_disjoint(first$analysis_data$USUBJID, unique(data$USUBJID))
+  expect_identical(first$analysis_data, second$analysis_data)
+
+  data$USUBJID[data$USUBJID == "SYNTH001-001"] <- "SUBJ-000001"
+  colliding <- validate_bds_profile(
+    make_test_snapshot(data),
+    default_profile_selections()
+  )
+  expect_disjoint(colliding$analysis_data$USUBJID, unique(data$USUBJID))
+})
+
 test_that("multiple units require an explicit authorized choice", {
   data <- synthetic_bds_fixture()
   data$AVALU[data$USUBJID == "SYNTH001-006"] <- "ukat/L"

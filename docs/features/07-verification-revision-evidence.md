@@ -8,13 +8,13 @@ A governed fixed-scale revision becomes `Verified` when the execution service re
 
 The application coordinator, `.materialize_revision()` in [app_server.R](../../R/app_server.R), compiles the script and creates an execution request. The request identifies the confirmed specification, script hash, snapshot identifier, selected-record hash, and harness version. The selected-record hash is distinct from the uploaded dataset's full content hash.
 
-The coordinator stores script bytes and creates a revision with pending image and analytical hashes. Fixed scales start at `Draft`; free scales start at `Experimental/Draft` and skip governed execution. The coordinator later assembles the displayed preview in the application process. That preview is not the accepted worker PNG.
+The coordinator stores script bytes and creates a revision with pending image and analytical hashes. Fixed scales start at `Draft`; free scales start at `Experimental/Draft` and skip governed execution. Governed revisions display the accepted worker PNG and stored script; free-scale revisions retain their in-process preview.
 
 `new_execution_service()` in [execution_service.R](../../R/execution_service.R) accepts only `Draft` revisions. Its `start()` method captures the revision version, records an attempt, and rejects another active attempt with a different identifier. The attempt identifier derives from the idempotency key. Its fingerprint includes the complete request plus hashes of the actual supplied script and selected records. Reusing an attempt identifier for different inputs is rejected by the repository.
 
 ## The checks that determine the outcome
 
-[verify_execution_result()](../../R/verification_service.R) returns `execution-verification-v1`, a `passed` or `failed` status, named boolean checks, and the names of failed checks. All eight checks must pass:
+[verify_execution_result()](../../R/verification_service.R) returns `execution-verification-v1`, a `passed` or `failed` status, named boolean checks, and the names of failed checks. All ten checks must pass:
 
 | Check | Current comparison |
 | --- | --- |
@@ -22,14 +22,14 @@ The coordinator stores script bytes and creates a revision with pending image an
 | `script_hash` | Hash of the supplied script equals the request's script hash. |
 | `snapshot_hash` | Canonical hash of supplied selected records equals the request's snapshot hash. |
 | `runner_success` | Runner status is exactly `succeeded`. |
-| `result_manifest` | Returned result inherits `execution_result`. |
+| `runner_manifest` | Runner manifest version is exactly `execution-runner-result-v1`. |
+| `result_manifest` | Returned result inherits `execution_result` and has the expected version. |
+| `request_binding` | Returned specification, script, snapshot, and harness fields equal the request. |
 | `analytical_hash` | Returned analytical hash equals a canonical hash of the runner's analytical output. |
-| `image_hash` | Returned image hash matches lowercase 64-character hexadecimal syntax. |
+| `image_hash` | The returned image exists, is non-empty, and its SHA-256 equals the returned hash. |
 | `environment_fingerprint` | Returned environment fingerprint matches that same syntax. |
 
-The final two checks do not independently hash the image bytes or environment details. The analytical comparison establishes consistency between two returned values; it does not compare the analysis with an independently reviewed statistical reference.
-
-`new_execution_result()` in [domain_execution_protocol.R](../../R/domain_execution_protocol.R) normally copies request fields into the result. The verifier does not explicitly compare those copied specification, snapshot, script, or harness fields back to the request. The attempt fingerprint binds submission inputs, but this does not add result-field comparisons to verification.
+The environment fingerprint check validates syntax but does not independently rebuild the environment identity. The analytical comparison establishes consistency between two returned values; it does not compare the analysis with an independently reviewed statistical reference.
 
 ## Evidence and accepted artifacts
 
@@ -39,7 +39,7 @@ On failure, the service records a terminal `failed` attempt and returns without 
 
 On success, an injected artifact store receives script and image bytes. `accept_artifact_bundle()` in [evidence_repository_sqlite.R](../../R/evidence_repository_sqlite.R) binds both pending image and analytical hashes once, checks the bundle against the revision's code/image/analytical identities, and permits one accepted bundle per revision. With an artifact store attached, it verifies the stored script and PNG against the supplied hashes. [local_artifact_store()](../../R/artifact_store_local.R) calculates SHA-256 from bytes and checks content before publication and retrieval. An artifact store is optional in the service and repository contracts; these byte checks depend on its injection.
 
-The service then records terminal success and calls `mark_verified()` using the version captured when execution started. That repository method rejects a stale version or a status other than `Draft`, updates the status/version, and appends `revision_verified` lifecycle evidence. It does not require passing execution evidence or an accepted bundle itself. Direct repository promotion can therefore bypass the service's verification gate.
+The service then records terminal success and calls `mark_verified()` using the version captured when execution started. The repository rejects a stale version or a status other than `Draft` and requires a successful attempt linked to passing execution-verification evidence plus an accepted artifact bundle. It then updates the status/version and appends `revision_verified` lifecycle evidence.
 
 ## Retained context and recovery limits
 

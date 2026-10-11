@@ -7,6 +7,8 @@
 #' @param profile Runtime profile: `local`, `test`, or `production`.
 #' @param prompt_provider Logical prompt-provider identifier.
 #' @param workspace Logical workspace identifier.
+#' @param evidence_root Directory containing durable revision evidence and
+#'   artifacts.
 #' @param secret_provider Function accepting a secret reference and returning
 #'   its value, or `NULL` when unavailable.
 #' @param required_secret_references Character vector of required references.
@@ -17,6 +19,13 @@ new_runtime_config <- function(
   profile = Sys.getenv("ADAMVIZ_PROFILE", "local"),
   prompt_provider = Sys.getenv("ADAMVIZ_PROMPT_PROVIDER", "mock"),
   workspace = Sys.getenv("ADAMVIZ_WORKSPACE", "local"),
+  evidence_root = Sys.getenv(
+    "ADAMVIZ_EVIDENCE_ROOT",
+    fs::path(
+      tools::R_user_dir("ADaMViz.SubmissionSync", which = "data"),
+      "evidence"
+    )
+  ),
   secret_provider = NULL,
   required_secret_references = character()
 ) {
@@ -29,6 +38,9 @@ new_runtime_config <- function(
   }
   if (!checkmate::test_string(workspace, min.chars = 1)) {
     cli::cli_abort("{.arg workspace} must be one non-empty identifier")
+  }
+  if (!checkmate::test_string(evidence_root, min.chars = 1)) {
+    cli::cli_abort("{.arg evidence_root} must be one non-empty path")
   }
   if (profile != "production" && identical(prompt_provider, "production")) {
     cli::cli_abort(c(
@@ -54,6 +66,7 @@ new_runtime_config <- function(
       profile = profile,
       prompt_provider = prompt_provider,
       workspace = workspace,
+      evidence_root = as.character(fs::path_abs(evidence_root)),
       required_secret_references = unique(required_secret_references),
       secret_provider = secret_provider
     ),

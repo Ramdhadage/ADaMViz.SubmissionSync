@@ -51,9 +51,8 @@
 #' Compile the deterministic governed boxplot script
 #'
 #' The controlled runner provides validated selected records as `analysis_data`.
-#' When run on its own, the script loads the editable synthetic CSV example if
-#' `analysis_data` is absent. It contains resolved literals, inlined helpers,
-#' and uses `ggplot2`, `cli`, and `patchwork`.
+#' The caller must supply `analysis_data`. The script contains resolved
+#' literals, inlined helpers, and uses `ggplot2`, `cli`, and `patchwork`.
 #'
 #' @param spec A confirmed `plot_spec`.
 #' @param low_n_policy Retained policy with `value`, `rationale`, `authority`,
@@ -81,32 +80,15 @@ compile_boxplot_script <- function(spec, low_n_policy) {
     "# Boxplot Analysis Script",
     "# Required packages: ggplot2, cli, patchwork",
     "# The generated script does not require the source application package.",
-    "# Run with: Rscript --vanilla boxplot_script.R",
+    "# Source this script after defining analysis_data.",
     "",
-    "# Package installation ----",
-    "required_packages <- c(\"ggplot2\", \"cli\", \"patchwork\")",
-    "for (pkg in required_packages) {",
-    "  if (!requireNamespace(pkg, quietly = TRUE)) {",
-    "    install.packages(pkg, repos = \"https://cloud.r-project.org\")",
-    "  }",
-    "}",
     "library(ggplot2)",
     "library(cli)",
     "library(patchwork)",
     "",
     "# Data loading ----",
-    paste0(
-      "# Replace this synthetic example path with your selected analysis ",
-      "records when running locally."
-    ),
     "if (!exists(\"analysis_data\", inherits = FALSE)) {",
-    "  analysis_data <- read.csv(",
-    paste0(
-      "    \"D:/R shiny Apps/ADaMViz.SubmissionSync/inst/extdata/",
-      "synthetic/adlb-standard.csv\","
-    ),
-    "    stringsAsFactors = FALSE",
-    "  )",
+    "  stop(\"analysis_data must be supplied\", call. = FALSE)",
     "}",
     "",
     "# Analysis and plotting functions ----",
