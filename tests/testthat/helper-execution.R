@@ -1,3 +1,21 @@
+test_source_root <- function() {
+  source_root <- normalizePath(
+    testthat::test_path("..", ".."),
+    winslash = "/",
+    mustWork = TRUE
+  )
+  nested_source_root <- file.path(source_root, "ADaMViz.SubmissionSync")
+  if (!file.exists(file.path(source_root, "DESCRIPTION")) &&
+    file.exists(file.path(nested_source_root, "DESCRIPTION"))) {
+    source_root <- normalizePath(
+      nested_source_root,
+      winslash = "/",
+      mustWork = TRUE
+    )
+  }
+  source_root
+}
+
 execution_spec <- function() {
   new_plot_spec(
     dataset_id = "fixture-adlb",

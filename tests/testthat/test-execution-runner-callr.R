@@ -3,11 +3,7 @@ test_that("callr runner executes in a clean subprocess", {
   skip_if_not_installed("devtools")
   skip_if_no_cairo_device()
   fixture <- execution_fixture()
-  source_root <- normalizePath(
-    testthat::test_path("..", ".."),
-    winslash = "/",
-    mustWork = TRUE
-  )
+  source_root <- test_source_root()
 
   result <- run_execution_callr(
     request = fixture$request,
@@ -32,22 +28,14 @@ test_that("callr runner executes in a clean subprocess", {
 })
 
 test_that("callr runner resolves the source root from a nested directory", {
-  source_root <- normalizePath(
-    testthat::test_path("..", ".."),
-    winslash = "/",
-    mustWork = TRUE
-  )
+  source_root <- test_source_root()
   withr::local_dir(fs::path(source_root, "tests", "testthat"))
 
   expect_identical(.execution_source_root(), source_root)
 })
 
 test_that("callr runner honors an explicitly configured source root", {
-  source_root <- normalizePath(
-    testthat::test_path("..", ".."),
-    winslash = "/",
-    mustWork = TRUE
-  )
+  source_root <- test_source_root()
   withr::local_envvar(ADAMVIZ_SUBMISSIONSYNC_SOURCE_ROOT = source_root)
   withr::local_dir(tempdir())
 
