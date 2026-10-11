@@ -669,9 +669,7 @@ mod_plot_generation_server <- function(
       ignoreInit = TRUE
     )
 
-    run_revision <- function(
-      fields, correction = FALSE, rationale = NULL, provenance = NULL
-    ) {
+    run_revision <- function(fields, correction = FALSE, rationale = NULL, provenance = NULL) {
       state <- current_revision()
       snapshot <- if (isTRUE(correction)) {
         state$snapshot
