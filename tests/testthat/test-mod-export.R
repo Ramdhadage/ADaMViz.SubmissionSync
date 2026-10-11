@@ -26,7 +26,7 @@ make_mod_export_state <- function(status = "Verified") {
     "bundle-1", "rev-1", code_hash, image_hash, "analysis", "bundle"
   )
   if (identical(status, "Verified")) {
-    new_lifecycle_service(repo)$mark_verified("rev-1", 1L, "verify")
+    record_passing_execution(repo, "rev-1")
   }
   list(
     repository = repo,

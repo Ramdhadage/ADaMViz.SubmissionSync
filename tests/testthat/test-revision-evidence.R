@@ -31,7 +31,16 @@ fake_revision_context_runner <- function(request, script, analysis_data, ...) {
 }
 
 test_that("app revisions persist complete context evidence for R36", {
-  snapshot <- make_test_snapshot()
+  data <- synthetic_bds_fixture()
+  data$PRIVATE_NOTE <- "must not be retained"
+  snapshot <- make_test_snapshot(data)
+  snapshot$source_metadata <- list(
+    source = "direct_upload",
+    file_name = "participant-SYNTH001-001.csv",
+    file_type = "csv",
+    sheet_name = "participant-SYNTH001-001",
+    source_file_hash = paste(rep("f", 64L), collapse = "")
+  )
   profile <- validate_bds_profile(snapshot, default_profile_selections())
   spec <- execution_spec()
   testthat::local_mocked_bindings(
@@ -56,6 +65,19 @@ test_that("app revisions persist complete context evidence for R36", {
   expect_identical(details$prompt, "Create an ALT boxplot by treatment.")
   expect_identical(details$specification$hash, spec$hash)
   expect_identical(details$input_data$snapshot_id, snapshot$snapshot_id)
+  expect_identical(
+    unlist(details$input_data$selected_data_columns, use.names = FALSE),
+    c("USUBJID", "AVISIT", "AVISITN", "TRT01A", "AVAL")
+  )
+  expect_setequal(
+    names(details$input_data$source_metadata),
+    c("source", "file_type", "source_file_hash")
+  )
+  expect_false(grepl("SYNTH001-001", context$details_json[[1]], fixed = TRUE))
+  expect_false(grepl("PRIVATE_NOTE", context$details_json[[1]], fixed = TRUE))
+  expect_false(grepl(
+    "must not be retained", context$details_json[[1]], fixed = TRUE
+  ))
   expect_identical(details$generated_r_code, state$script)
   expect_identical(details$request$script_hash, state$revision$code_hash)
   expect_named(details$environment$packages, c(

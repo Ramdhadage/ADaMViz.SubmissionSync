@@ -13,12 +13,13 @@ test_that("backup and restore preserve history, projections, and artifacts", {
   repo$record_attempt("attempt-1", "rev-1", "run-1")
   repo$complete_attempt("attempt-1", "succeeded", "attempt-complete")
   repo$record_evidence(
-    "evidence-1", "rev-1", "reproducibility", "passed", "evidence"
+    "evidence-1", "rev-1", "execution_verification", "passed", "evidence",
+    details = list(attempt_id = "attempt-1")
   )
   repo$accept_artifact_bundle(
     "bundle-1", "rev-1", code_hash, image_hash, "analysis", "bundle"
   )
-  new_lifecycle_service(repo)$mark_verified("rev-1", 1L, "verified")
+  repo$mark_verified("rev-1", 1L, "verified")
   identities <- local_identity_provider(list(
     new_actor("sp", "statistical_programmer"),
     new_actor("bio", "biostatistician")
@@ -85,6 +86,7 @@ test_that("backup remains consistent with a concurrent lifecycle write", {
     "plot-1", "rev-1", 1L, "creator", "spec", code_hash, image_hash,
     "analysis", "create"
   )
+  prepare_passing_execution(repo, "rev-1")
   source_root <- normalizePath(
     testthat::test_path("..", ".."),
     winslash = "/",
@@ -95,15 +97,12 @@ test_that("backup remains consistent with a concurrent lifecycle write", {
     if (!is.null(source_root)) devtools::load_all(source_root, quiet = TRUE)
     package <- asNamespace("ADaMViz.SubmissionSync")
     repository <- get("sqlite_evidence_repository", package)
-    lifecycle_service <- get("new_lifecycle_service", package)
     artifact_store <- get("local_artifact_store", package)
     while (!file.exists(gate)) Sys.sleep(0.01)
-    lifecycle_service(
-      repository(
-        database,
-        chain_root,
-        artifact_store(artifact_root)
-      )
+    repository(
+      database,
+      chain_root,
+      artifact_store(artifact_root)
     )$mark_verified("rev-1", 1L, "verify")
     TRUE
   }

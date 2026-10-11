@@ -21,7 +21,7 @@ local_export_browser_fixture <- function(root = NULL) {
   repo$accept_artifact_bundle(
     "bundle-1", "rev-1", code_hash, image_hash, "analysis", "bundle"
   )
-  new_lifecycle_service(repo)$mark_verified("rev-1", 1L, "verify")
+  record_passing_execution(repo, "rev-1")
 
   workspace_root <- fs::path(root, "workspace")
   fs::dir_create(workspace_root)

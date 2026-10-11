@@ -1,13 +1,9 @@
 new_lifecycle_service <- function(repository) {
   .validate_evidence_repository(
     repository,
-    c("mark_verified", "get_revision", "list_revisions", "create_revision")
+    c("get_revision", "list_revisions", "create_revision")
   )
 
-  mark_verified <- function(revision_id, expected_version, idempotency_key) {
-    repository$mark_verified(revision_id, expected_version, idempotency_key)
-    invisible(repository$get_revision(revision_id))
-  }
   create_correction <- function(
     parent_revision_id, revision_id, creator_id, spec_hash,
     code_hash, image_hash, analytical_hash, rationale,
@@ -35,7 +31,6 @@ new_lifecycle_service <- function(repository) {
   }
   structure(
     list(
-      mark_verified = mark_verified,
       create_correction = create_correction
     ),
     class = "lifecycle_service"

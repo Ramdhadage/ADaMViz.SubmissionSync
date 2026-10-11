@@ -41,8 +41,7 @@ test_that("app correction creates child Draft and preserves reviewed parent", {
     "plot-1", "rev-1", 1L, "creator", "spec", code_hash,
     image_hash, "analysis", "create"
   )
-  lifecycle <- new_lifecycle_service(repo)
-  lifecycle$mark_verified("rev-1", 1L, "verify")
+  record_passing_execution(repo, "rev-1")
   identities <- local_identity_provider(list(
     new_actor("sp", "statistical_programmer"),
     new_actor("bio", "biostatistician")

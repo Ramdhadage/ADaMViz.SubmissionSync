@@ -50,7 +50,7 @@ test_that("event omission and previous-hash tampering are detected", {
     "plot-1", "rev-1", 1L, "creator", "spec", "code", "image",
     "analysis", "create"
   )
-  new_lifecycle_service(repo)$mark_verified("rev-1", 1L, "verify")
+  record_passing_execution(repo, "rev-1")
 
   con <- DBI::dbConnect(RSQLite::SQLite(), db)
   DBI::dbExecute(
@@ -124,11 +124,16 @@ test_that("integrity checks detect evidence and decision metadata tampering", {
     "plot-1", "rev-1", 1L, "creator", "spec", "code", "image",
     "analysis", "create"
   )
+  repo$record_attempt("attempt-1", "rev-1", "run-1")
   repo$record_evidence(
-    "evidence-1", "rev-1", "check", "passed", "evidence",
-    details = list(result = "ok")
+    "evidence-1", "rev-1", "execution_verification", "passed", "evidence",
+    details = list(attempt_id = "attempt-1")
   )
-  new_lifecycle_service(repo)$mark_verified("rev-1", 1L, "verify")
+  repo$accept_artifact_bundle(
+    "bundle-1", "rev-1", "code", "image", "analysis", "bundle"
+  )
+  repo$complete_attempt("attempt-1", "succeeded", "complete")
+  repo$mark_verified("rev-1", 1L, "verify")
   review <- new_review_service(
     repo,
     local_identity_provider(list(new_actor("sp", "statistical_programmer")))
@@ -146,7 +151,10 @@ test_that("integrity checks detect evidence and decision metadata tampering", {
   con <- DBI::dbConnect(RSQLite::SQLite(), db)
   DBI::dbExecute(
     con,
-    "UPDATE evidence_entries SET details_json = '{\"result\":\"ok\"}'"
+    paste0(
+      "UPDATE evidence_entries SET details_json = ",
+      "'{\"attempt_id\":\"attempt-1\"}'"
+    )
   )
   DBI::dbExecute(con, "UPDATE review_decisions SET comment = 'Changed'")
   DBI::dbDisconnect(con)
@@ -210,7 +218,7 @@ test_that("a missing external root blocks new lifecycle commands", {
   fs::file_delete(chain_root)
 
   expect_error(
-    new_lifecycle_service(repo)$mark_verified("rev-1", 1L, "create"),
+    repo$mark_verified("rev-1", 1L, "create"),
     "chain root"
   )
   expect_false(fs::file_exists(chain_root))
@@ -357,6 +365,7 @@ test_that("writes, projection rebuilds, and integrity checks serialize", {
     "plot-1", "rev-1", 1L, "creator", "spec", "code", "image",
     "analysis", "create"
   )
+  prepare_passing_execution(repo, "rev-1")
   source_root <- normalizePath(
     testthat::test_path("..", ".."),
     winslash = "/",
@@ -367,11 +376,10 @@ test_that("writes, projection rebuilds, and integrity checks serialize", {
     if (!is.null(source_root)) devtools::load_all(source_root, quiet = TRUE)
     package <- asNamespace("ADaMViz.SubmissionSync")
     repository <- get("sqlite_evidence_repository", package)
-    lifecycle_service <- get("new_lifecycle_service", package)
     while (!file.exists(gate)) Sys.sleep(0.01)
     repo <- repository(database, chain_root)
     if (action == "write") {
-      lifecycle_service(repo)$mark_verified("rev-1", 1L, "verify")
+      repo$mark_verified("rev-1", 1L, "verify")
     } else if (action == "rebuild") {
       repo$rebuild_projections()
     } else {
@@ -423,4 +431,57 @@ test_that("artifact acceptance binds pending revision hashes once", {
     ),
     "do not match"
   )
+})
+
+test_that("Draft promotion requires linked passing execution evidence", {
+  root <- withr::local_tempdir()
+  repo <- sqlite_evidence_repository(
+    fs::path(root, "db.sqlite"),
+    fs::path(root, "chain-root.json")
+  )
+  repo$create_revision(
+    "plot-1", "rev-1", 1L, "creator", "spec", "code",
+    "image", "analysis", "create"
+  )
+
+  expect_error(
+    repo$mark_verified("rev-1", 1L, "verify"),
+    "passing execution evidence"
+  )
+  expect_identical(repo$get_revision("rev-1")$status, "Draft")
+})
+
+test_that("linked passing execution evidence allows Draft promotion", {
+  root <- withr::local_tempdir()
+  repo <- sqlite_evidence_repository(
+    fs::path(root, "db.sqlite"),
+    fs::path(root, "chain-root.json")
+  )
+  repo$create_revision(
+    "plot-1", "rev-1", 1L, "creator", "spec", "code",
+    "image", "analysis", "create"
+  )
+
+  record_passing_execution(repo, "rev-1")
+
+  expect_identical(repo$get_revision("rev-1")$status, "Verified")
+})
+
+test_that("revision creation persists every inserted column", {
+  root <- withr::local_tempdir()
+  repo <- sqlite_evidence_repository(
+    fs::path(root, "db.sqlite"),
+    fs::path(root, "chain-root.json")
+  )
+
+  repo$create_revision(
+    "plot-1", "rev-1", 1L, "creator", "spec", "code",
+    NULL, NULL, "create"
+  )
+
+  revision <- repo$get_revision("rev-1")
+  expect_identical(revision$revision_id, "rev-1")
+  expect_identical(revision$initial_status, "Draft")
+  expect_true(is.na(revision$image_hash))
+  expect_true(is.na(revision$analytical_hash))
 })

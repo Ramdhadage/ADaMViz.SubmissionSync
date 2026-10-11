@@ -43,6 +43,6 @@ The inspected tests specify the intended boundaries:
 
 These tests were read, not executed, for this documentation change. No R execution, browser journey, statistical review, or formal validation is claimed.
 
-The Result panel labels its script disclosure “Executed R script” for both modes, even though the experimental script was not submitted to the worker. The preview also renders `state$artifact$combined`, reconstructed in the application process, rather than the accepted worker PNG. Those are current presentation limits, not evidence that the free path is governed. The proof of concept is designed for validated clinical submission workflows; it is not FDA validated or FDA approved.
+The Result panel labels the disclosure “Generated R script.” Governed revisions display the stored script and accepted worker PNG. Experimental revisions retain the in-process preview because they have no accepted worker artifact. The proof of concept is designed for validated clinical submission workflows; it is not FDA validated or FDA approved.
 
 Source: [preview module](../../R/mod_plot_preview.R). Related documentation: [statistical summaries](04-longitudinal-boxplot-statistics.md), [script execution](06-script-generation-execution.md), and [controlled export](11-controlled-export.md).

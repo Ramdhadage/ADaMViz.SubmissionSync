@@ -15,7 +15,7 @@ test_that("two independent eligible reviewers are required", {
     "plot-1", "rev-1", 1L, "creator", "spec", "code",
     "image", "analysis", "create"
   )
-  lifecycle$mark_verified("rev-1", 1L, "verified")
+  record_passing_execution(repo, "rev-1")
 
   expect_error(
     review$approve("rev-1", "creator", 2L, "creator-approval"),
@@ -54,7 +54,7 @@ test_that("review decisions bind exact immutable hashes", {
     "plot-1", "rev-1", 1L, "creator", "spec", "code",
     "image", "analysis", "create"
   )
-  new_lifecycle_service(repo)$mark_verified("rev-1", 1L, "verified")
+  record_passing_execution(repo, "rev-1")
 
   expect_error(
     review$approve("rev-1", "sp", 2L, "approval",
@@ -84,7 +84,7 @@ test_that("review decisions retain comments and an authorized role claim", {
     "plot-1", "rev-1", 1L, "creator", "spec", "code", "image",
     "analysis", "create"
   )
-  new_lifecycle_service(repo)$mark_verified("rev-1", 1L, "verified")
+  record_passing_execution(repo, "rev-1")
 
   expect_error(
     review$approve("rev-1", "dual-role", 2L, "ambiguous-role"),
@@ -125,7 +125,7 @@ test_that("rejection rationale is required and retained", {
     "plot-1", "rev-1", 1L, "creator", "spec", "code", "image",
     "analysis", "create"
   )
-  new_lifecycle_service(repo)$mark_verified("rev-1", 1L, "verified")
+  record_passing_execution(repo, "rev-1")
 
   expect_error(
     review$reject("rev-1", "reviewer", 2L, "blank", ""),
@@ -154,7 +154,7 @@ test_that("a competing approval cannot follow a committed rejection", {
     "plot-1", "rev-1", 1L, "creator", "spec", "code", "image",
     "analysis", "create"
   )
-  new_lifecycle_service(repo)$mark_verified("rev-1", 1L, "verified")
+  record_passing_execution(repo, "rev-1")
 
   review$reject("rev-1", "bio", 2L, "reject", "Incorrect result")
   expect_error(
@@ -179,7 +179,7 @@ test_that("required approvals may arrive in either role order", {
     "plot-1", "rev-1", 1L, "creator", "spec", "code", "image",
     "analysis", "create"
   )
-  new_lifecycle_service(repo)$mark_verified("rev-1", 1L, "verified")
+  record_passing_execution(repo, "rev-1")
 
   review$approve("rev-1", "bio", 2L, "bio-first")
   review$approve("rev-1", "sp", 3L, "sp-second")
@@ -198,7 +198,7 @@ test_that("concurrent approval and rejection commit exactly one decision", {
     "plot-1", "rev-1", 1L, "creator", "spec", "code", "image",
     "analysis", "create"
   )
-  new_lifecycle_service(repo)$mark_verified("rev-1", 1L, "verify")
+  record_passing_execution(repo, "rev-1")
   source_root <- normalizePath(
     testthat::test_path("..", ".."),
     winslash = "/",

@@ -45,24 +45,28 @@ test_that("compiler emits stable parseable governed code", {
   expect_match(first, "# Required packages: ggplot2, cli, patchwork",
     fixed = TRUE
   )
-  expect_match(first,
-    "required_packages <- c(\"ggplot2\", \"cli\", \"patchwork\")",
-    fixed = TRUE
-  )
-  expect_match(first, "if (!exists(\"analysis_data\", inherits = FALSE))",
-    fixed = TRUE
-  )
-  expect_match(
-    first,
-    paste0(
-      "D:/R shiny Apps/ADaMViz.SubmissionSync/inst/extdata/synthetic/",
-      "adlb-standard.csv"
-    ),
-    fixed = TRUE
-  )
+  expect_false(grepl("install.packages", first, fixed = TRUE))
+  expect_false(grepl("adlb-standard.csv", first, fixed = TRUE))
+  expect_match(first, "analysis_data must be supplied", fixed = TRUE)
   expect_match(first, "calculate_boxplot_statistics <- function", fixed = TRUE)
   expect_match(first, "assemble_boxplot <- function", fixed = TRUE)
   expect_match(first, "patchwork::wrap_plots", fixed = TRUE)
+})
+
+test_that("compiled script requires explicitly supplied analysis data", {
+  script <- compile_boxplot_script(
+    confirmed_boxplot_spec(),
+    governed_low_n_policy()
+  )
+  environment <- new.env(parent = baseenv())
+  connection <- textConnection(script)
+  withr::defer(close(connection))
+
+  expect_error(
+    source(connection, local = environment),
+    "analysis_data must be supplied",
+    fixed = TRUE
+  )
 })
 
 test_that("compiled script reproduces the independent analytical result", {

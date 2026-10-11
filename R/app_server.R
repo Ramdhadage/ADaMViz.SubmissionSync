@@ -20,6 +20,7 @@ app_server <- function(
   workspace_provider <- local_workspace_provider(
     stats::setNames(workspace_root, runtime_config$workspace)
   )
+  fs::dir_create(runtime_config$evidence_root, recurse = TRUE)
   current_revision <- shiny::reactiveVal(.empty_assurance_state())
 
   execute_revision <- function(fields) {
@@ -31,7 +32,7 @@ app_server <- function(
       snapshot = state$pending$snapshot,
       prompt = state$pending$prompt,
       fields = fields,
-      repository_root = fs::file_temp(pattern = "assurance-session-")
+      repository_root = runtime_config$evidence_root
     ))
     invisible(current_revision())
   }
@@ -261,7 +262,7 @@ app_server <- function(
     spec = spec,
     script_hash = .execution_hash_text(script),
     snapshot_id = profile$snapshot_id,
-    snapshot_hash = canonical_hash(profile$selected_data),
+    snapshot_hash = canonical_hash(profile$analysis_data),
     harness_version = "execution-harness-v1"
   )
   root <- repository_root %||% fs::file_temp(pattern = "assurance-session-")
@@ -271,11 +272,11 @@ app_server <- function(
     fs::path(root, "chain-root.json"),
     artifact_store
   )
-  plot_id <- paste0("plot-", substr(spec$hash, 1L, 12L))
   revision_id <- paste0(
     "rev-",
     substr(canonical_hash(list(spec$hash, Sys.time())), 1L, 12L)
   )
+  plot_id <- sub("^rev-", "plot-", revision_id)
   initial_status <- if (identical(spec$fields$scale_mode, "free")) {
     "Experimental/Draft"
   } else {
@@ -306,7 +307,7 @@ app_server <- function(
       revision_id = revision_id,
       request = request,
       script = script,
-      analysis_data = profile$selected_data,
+      analysis_data = profile$analysis_data,
       idempotency_key = paste0("execute:", revision_id)
     )
     verification <- execution$verification
@@ -371,7 +372,7 @@ app_server <- function(
     spec = spec,
     script_hash = .execution_hash_text(script),
     snapshot_id = profile$snapshot_id,
-    snapshot_hash = canonical_hash(profile$selected_data),
+    snapshot_hash = canonical_hash(profile$analysis_data),
     harness_version = "execution-harness-v1"
   )
   artifact_store <- state$repository$artifact_store
@@ -412,7 +413,7 @@ app_server <- function(
       revision_id = revision_id,
       request = request,
       script = script,
-      analysis_data = profile$selected_data,
+      analysis_data = profile$analysis_data,
       idempotency_key = paste0("execute:", revision_id)
     )
     verification <- execution$verification

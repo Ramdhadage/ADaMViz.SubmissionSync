@@ -8,7 +8,7 @@ test_that("review module records distinct approvals and reaches Reviewed", {
     "plot-1", "rev-1", 1L, "creator", "spec", "code",
     "image", "analysis", "create"
   )
-  new_lifecycle_service(repo)$mark_verified("rev-1", 1L, "verify")
+  record_passing_execution(repo, "rev-1")
   identities <- local_identity_provider(list(
     new_actor("creator", "clinical_scientist"),
     new_actor("stat-programmer", "statistical_programmer"),

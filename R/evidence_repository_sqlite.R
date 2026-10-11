@@ -811,6 +811,28 @@ sqlite_evidence_repository <- function(
           "Only a Draft revision can become Verified"
         )
       }
+      passing_execution <- DBI::dbGetQuery(
+        con,
+        paste(
+          "SELECT 1 FROM attempts a",
+          "JOIN attempt_outcomes o USING(attempt_id)",
+          "JOIN evidence_entries e ON e.revision_id = a.revision_id",
+          "JOIN artifact_bundles b ON b.revision_id = a.revision_id",
+          "WHERE a.revision_id = ? AND o.outcome = 'succeeded'",
+          "AND e.evidence_type = 'execution_verification'",
+          "AND e.outcome = 'passed'",
+          paste0(
+            "AND json_extract(e.details_json, '$.attempt_id') = ",
+            "a.attempt_id LIMIT 1"
+          )
+        ),
+        params = list(revision_id)
+      )
+      if (!nrow(passing_execution)) {
+        cli::cli_abort(
+          "A revision requires passing execution evidence before verification"
+        )
+      }
       DBI::dbExecute(
         con,
         paste(

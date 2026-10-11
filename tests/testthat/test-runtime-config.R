@@ -1,14 +1,17 @@
 test_that("local runtime configuration is explicit and safe", {
+  evidence_root <- withr::local_tempdir()
   config <- new_runtime_config(
     profile = "local",
     prompt_provider = "mock",
-    workspace = "local"
+    workspace = "local",
+    evidence_root = evidence_root
   )
 
   expect_s3_class(config, "submission_sync_runtime_config")
   expect_identical(config$profile, "local")
   expect_identical(config$prompt_provider, "mock")
   expect_identical(config$workspace, "local")
+  expect_identical(config$evidence_root, as.character(fs::path_abs(evidence_root)))
   expect_disjoint("secret", names(config))
 })
 
