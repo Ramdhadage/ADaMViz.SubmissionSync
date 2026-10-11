@@ -508,7 +508,7 @@ sqlite_evidence_repository <- function(
         "creator_id, parent_revision_id,",
         paste(
           "correction_rationale, correction_provenance, spec_hash,",
-          "code_hash, image_hash, analytical_hash, initial_status, created_at"
+          "code_hash, image_hash, analytical_hash, initial_status, created_at)"
         ),
         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
       ), params = list(
