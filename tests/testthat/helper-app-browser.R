@@ -1,11 +1,7 @@
 local_browser_app <- function(app, name) {
   testthat::skip_if_not_installed("shinytest2")
   testthat::skip_if_not_installed("chromote")
-  source_root <- normalizePath(
-    testthat::test_path("..", ".."),
-    winslash = "/",
-    mustWork = TRUE
-  )
+  source_root <- test_source_root() # nolint: object_usage_linter.
   withr::local_envvar(c(
     NOT_CRAN = "true",
     ADAMVIZ_SUBMISSIONSYNC_SOURCE_ROOT = source_root
