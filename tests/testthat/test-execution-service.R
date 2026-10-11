@@ -1,6 +1,6 @@
 test_that("execution service promotes only a complete passing attempt", {
   fixture <- execution_fixture()
-  runner_result <- fake_successful_runner_result(fixture)
+  runner_result <- fake_success_runner_result(fixture)
   root <- withr::local_tempdir()
   repo <- sqlite_evidence_repository(
     fs::path(root, "db.sqlite"),
@@ -80,7 +80,7 @@ test_that("failed verification records terminal failure without promotion", {
 
 test_that("experimental drafts cannot inherit governed verification", {
   fixture <- execution_fixture()
-  runner_result <- fake_successful_runner_result(fixture)
+  runner_result <- fake_success_runner_result(fixture)
   root <- withr::local_tempdir()
   repo <- sqlite_evidence_repository(
     fs::path(root, "db.sqlite"),

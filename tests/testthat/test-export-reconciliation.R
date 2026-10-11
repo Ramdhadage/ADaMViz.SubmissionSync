@@ -5,5 +5,8 @@ test_that("reconciliation has no effect when no staged exports exist", {
   result <- reconcile_workspace_exports(provider, "controlled")
 
   expect_equal(nrow(result), 0L)
-  expect_equal(names(result), c("destination_id", "export_id", "action", "path"))
+  expect_equal(names(result), c(
+    "destination_id", "export_id", "action",
+    "path"
+  ))
 })

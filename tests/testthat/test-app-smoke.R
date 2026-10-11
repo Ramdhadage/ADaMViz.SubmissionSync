@@ -1,6 +1,7 @@
 test_that("the app exposes the current plot workflow", {
   config <- new_runtime_config(profile = "local", prompt_provider = "mock")
-  ui <- getFromNamespace("app_ui", "ADaMViz.SubmissionSync")(NULL, runtime_config = config)
+  ui <- getFromNamespace("app_ui", "ADaMViz.SubmissionSync")(NULL,
+    runtime_config = config)
 
   expect_s3_class(ui, "shiny.tag.list")
   expect_match(as.character(ui), "Start with your data", fixed = TRUE)

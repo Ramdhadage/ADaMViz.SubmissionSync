@@ -1,6 +1,9 @@
 test_that("two independent eligible reviewers are required", {
   root <- withr::local_tempdir()
-  repo <- sqlite_evidence_repository(fs::path(root, "db.sqlite"), fs::path(root, "root.json"))
+  repo <- sqlite_evidence_repository(
+    fs::path(root, "db.sqlite"),
+    fs::path(root, "root.json")
+  )
   identities <- local_identity_provider(list(
     new_actor("creator", "statistical_programmer"),
     new_actor("sp", "statistical_programmer"),
@@ -8,13 +11,22 @@ test_that("two independent eligible reviewers are required", {
   ))
   lifecycle <- new_lifecycle_service(repo)
   review <- new_review_service(repo, identities)
-  repo$create_revision("plot-1", "rev-1", 1L, "creator", "spec", "code", "image", "analysis", "create")
+  repo$create_revision(
+    "plot-1", "rev-1", 1L, "creator", "spec", "code",
+    "image", "analysis", "create"
+  )
   lifecycle$mark_verified("rev-1", 1L, "verified")
 
-  expect_error(review$approve("rev-1", "creator", 2L, "creator-approval"), "creator")
+  expect_error(
+    review$approve("rev-1", "creator", 2L, "creator-approval"),
+    "creator"
+  )
   review$approve("rev-1", "sp", 2L, "sp-approval")
   expect_identical(repo$get_revision("rev-1")$status, "Verified")
-  expect_error(review$reject("rev-1", "bio", 2L, "stale-reject", "Incorrect analysis"), "stale")
+  expect_error(review$reject(
+    "rev-1", "bio", 2L, "stale-reject",
+    "Incorrect analysis"
+  ), "stale")
   expect_equal(nrow(repo$list_review_decisions("rev-1")), 1L)
   expect_error(review$approve("rev-1", "sp", 3L, "sp-again"), "distinct")
   review$approve("rev-1", "bio", 3L, "bio-approval")
@@ -29,14 +41,28 @@ test_that("two independent eligible reviewers are required", {
 
 test_that("review decisions bind exact immutable hashes", {
   root <- withr::local_tempdir()
-  repo <- sqlite_evidence_repository(fs::path(root, "db.sqlite"), fs::path(root, "root.json"))
-  identities <- local_identity_provider(list(new_actor("sp", "statistical_programmer")))
+  repo <- sqlite_evidence_repository(
+    fs::path(root, "db.sqlite"),
+    fs::path(root, "root.json")
+  )
+  identities <- local_identity_provider(list(new_actor(
+    "sp",
+    "statistical_programmer"
+  )))
   review <- new_review_service(repo, identities)
-  repo$create_revision("plot-1", "rev-1", 1L, "creator", "spec", "code", "image", "analysis", "create")
+  repo$create_revision(
+    "plot-1", "rev-1", 1L, "creator", "spec", "code",
+    "image", "analysis", "create"
+  )
   new_lifecycle_service(repo)$mark_verified("rev-1", 1L, "verified")
 
   expect_error(
-    review$approve("rev-1", "sp", 2L, "approval", hashes = list(code_hash = "wrong", image_hash = "image", analytical_hash = "analysis")),
+    review$approve("rev-1", "sp", 2L, "approval",
+      hashes = list(
+        code_hash = "wrong", image_hash = "image",
+        analytical_hash = "analysis"
+      )
+    ),
     "hashes"
   )
   expect_equal(nrow(repo$list_review_decisions("rev-1")), 0L)
@@ -201,17 +227,20 @@ test_that("concurrent approval and rejection commit exactly one decision", {
       repository(database, chain_root),
       identities
     )
-    tryCatch({
-      if (decision == "approved") {
-        review$approve("rev-1", actor_id, 2L, paste0(actor_id, "-decision"))
-      } else {
-        review$reject(
-          "rev-1", actor_id, 2L, paste0(actor_id, "-decision"),
-          "Incorrect result"
-        )
-      }
-      "committed"
-    }, error = conditionMessage)
+    tryCatch(
+      {
+        if (decision == "approved") {
+          review$approve("rev-1", actor_id, 2L, paste0(actor_id, "-decision"))
+        } else {
+          review$reject(
+            "rev-1", actor_id, 2L, paste0(actor_id, "-decision"),
+            "Incorrect result"
+          )
+        }
+        "committed"
+      },
+      error = conditionMessage
+    )
   }
   approval <- callr::r_bg(
     worker,

@@ -1,7 +1,13 @@
 test_that("SQLite connections enforce foreign keys and projections rebuild", {
   root <- withr::local_tempdir()
-  repo <- sqlite_evidence_repository(fs::path(root, "db.sqlite"), fs::path(root, "root.json"))
-  repo$create_revision("plot-1", "rev-1", 1L, "creator", "spec", "code", "image", "analysis", "create")
+  repo <- sqlite_evidence_repository(
+    fs::path(root, "db.sqlite"),
+    fs::path(root, "root.json")
+  )
+  repo$create_revision(
+    "plot-1", "rev-1", 1L, "creator", "spec", "code",
+    "image", "analysis", "create"
+  )
 
   expect_identical(repo$foreign_keys_enabled(), TRUE)
   repo$rebuild_projections()
@@ -21,11 +27,17 @@ test_that("event corruption and external-root rollback are detected", {
   db <- fs::path(root, "db.sqlite")
   chain <- fs::path(root, "root.json")
   repo <- sqlite_evidence_repository(db, chain)
-  repo$create_revision("plot-1", "rev-1", 1L, "creator", "spec", "code", "image", "analysis", "create")
+  repo$create_revision(
+    "plot-1", "rev-1", 1L, "creator", "spec", "code",
+    "image", "analysis", "create"
+  )
 
   con <- DBI::dbConnect(RSQLite::SQLite(), db)
   withr::defer(DBI::dbDisconnect(con))
-  DBI::dbExecute(con, "UPDATE lifecycle_events SET chain_hash = 'corrupt' WHERE event_sequence = 1")
+  DBI::dbExecute(con, paste0(
+    "UPDATE lifecycle_events SET chain_hash = 'corrupt' ",
+    "WHERE event_sequence = 1"
+  ))
   expect_error(repo$verify_integrity(), "chain")
 })
 
@@ -43,7 +55,10 @@ test_that("event omission and previous-hash tampering are detected", {
   con <- DBI::dbConnect(RSQLite::SQLite(), db)
   DBI::dbExecute(
     con,
-    "UPDATE lifecycle_events SET previous_hash = 'changed' WHERE event_sequence = 2"
+    paste0(
+      "UPDATE lifecycle_events SET previous_hash = 'changed' ",
+      "WHERE event_sequence = 2"
+    )
   )
   DBI::dbDisconnect(con)
   expect_error(repo$verify_integrity(), "chain")
@@ -55,15 +70,21 @@ test_that("event omission and previous-hash tampering are detected", {
   expect_error(repo$verify_integrity(), "chain")
 })
 
-test_that("rollback to an older database copy is detected by the external root", {
+test_that("rollback to an older database copy is detected by the root", {
   root <- withr::local_tempdir()
   db <- fs::path(root, "db.sqlite")
   chain <- fs::path(root, "root.json")
   old_db <- fs::path(root, "old.sqlite")
   repo <- sqlite_evidence_repository(db, chain)
-  repo$create_revision("plot-1", "rev-1", 1L, "creator", "spec", "code", "image", "analysis", "create-1")
+  repo$create_revision(
+    "plot-1", "rev-1", 1L, "creator", "spec", "code",
+    "image", "analysis", "create-1"
+  )
   fs::file_copy(db, old_db)
-  repo$create_revision("plot-1", "rev-2", 2L, "creator", "spec2", "code2", "image2", "analysis2", "create-2")
+  repo$create_revision(
+    "plot-1", "rev-2", 2L, "creator", "spec2", "code2",
+    "image2", "analysis2", "create-2"
+  )
 
   fs::file_copy(old_db, db, overwrite = TRUE)
   expect_error(repo$verify_integrity(), "External chain root")
@@ -301,13 +322,25 @@ test_that("schema snapshot matches the numbered migrations", {
 
   expect_identical(sort(DBI::dbListTables(snapshot)), tables)
   for (table in tables) {
-    expect_equal(DBI::dbListFields(snapshot, table), DBI::dbListFields(migrated, table))
     expect_equal(
-      DBI::dbGetQuery(snapshot, paste0("PRAGMA foreign_key_list('", table, "')")),
-      DBI::dbGetQuery(migrated, paste0("PRAGMA foreign_key_list('", table, "')"))
+      DBI::dbListFields(snapshot, table),
+      DBI::dbListFields(migrated, table)
     )
     expect_equal(
-      DBI::dbGetQuery(snapshot, paste0("PRAGMA index_list('", table, "')"))$name,
+      DBI::dbGetQuery(snapshot, paste0(
+        "PRAGMA foreign_key_list('", table,
+        "')"
+      )),
+      DBI::dbGetQuery(migrated, paste0(
+        "PRAGMA foreign_key_list('", table,
+        "')"
+      ))
+    )
+    expect_equal(
+      DBI::dbGetQuery(snapshot, paste0(
+        "PRAGMA index_list('", table,
+        "')"
+      ))$name,
       DBI::dbGetQuery(migrated, paste0("PRAGMA index_list('", table, "')"))$name
     )
   }
@@ -356,8 +389,14 @@ test_that("writes, projection rebuilds, and integrity checks serialize", {
   file.create(gate)
   lapply(processes, function(process) process$wait(timeout = 60000))
 
-  expect_true(all(!vapply(processes, \(process) process$is_alive(), logical(1))))
-  expect_true(all(vapply(processes, \(process) process$get_result(), logical(1))))
+  expect_true(all(!vapply(
+    processes, \(process) process$is_alive(),
+    logical(1)
+  )))
+  expect_true(all(vapply(
+    processes, \(process) process$get_result(),
+    logical(1)
+  )))
   expect_identical(repo$get_revision("rev-1")$status, "Verified")
   expect_identical(repo$verify_integrity(), TRUE)
 })

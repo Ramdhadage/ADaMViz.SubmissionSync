@@ -6,18 +6,22 @@
   )
 }
 
-.record_revision_context_evidence <- function(state, request, runner_result) {
+.record_revision_context <- function(state, request, runner_result) {
   if (is.null(state$repository) || is.null(state$revision)) {
     cli::cli_abort("Revision evidence requires a persisted revision")
   }
   revision <- state$repository$get_revision(state$revision$revision_id)
   details <- .revision_context_details(state, request, runner_result, revision)
   state$repository$record_evidence(
-    evidence_id = .revision_evidence_id(revision$revision_id, "revision_context"),
+    evidence_id = .revision_evidence_id(
+      revision$revision_id, "revision_context"
+    ),
     revision_id = revision$revision_id,
     evidence_type = "revision_context",
     outcome = "recorded",
-    idempotency_key = paste0("evidence:revision-context:", revision$revision_id),
+    idempotency_key = paste0(
+      "evidence:revision-context:", revision$revision_id
+    ),
     details = details
   )
   invisible(details)

@@ -5,7 +5,7 @@ test_that("local workspace provider is explicitly development-only", {
   expect_s3_class(provider, "development_only_workspace_provider")
 })
 
-test_that("local workspace provider publishes only complete image and script pairs", {
+test_that("local workspace publishes complete image and script pairs", {
   root <- withr::local_tempdir()
   provider <- local_workspace_provider(c(controlled = root))
 
@@ -18,9 +18,15 @@ test_that("local workspace provider publishes only complete image and script pai
   published <- provider$publish_staged(stage)
 
   expect_true(fs::dir_exists(published$path))
-  expect_equal(sort(fs::path_file(fs::dir_ls(published$path))), c("plot.png", "script.R"))
+  expect_equal(sort(fs::path_file(fs::dir_ls(published$path))), c(
+    "plot.png",
+    "script.R"
+  ))
   expect_equal(readLines(published$code_path, warn = FALSE), "plot(1)")
-  expect_equal(readBin(published$image_path, "raw", n = 9L), charToRaw("png bytes"))
+  expect_equal(
+    readBin(published$image_path, "raw", n = 9L),
+    charToRaw("png bytes")
+  )
   expect_error(
     provider$stage_bundle(
       "controlled",

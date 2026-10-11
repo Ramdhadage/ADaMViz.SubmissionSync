@@ -1,6 +1,6 @@
 local_browser_app <- function(app, name) {
-  skip_if_not_installed("shinytest2")
-  skip_if_not_installed("chromote")
+  testthat::skip_if_not_installed("shinytest2")
+  testthat::skip_if_not_installed("chromote")
   source_root <- normalizePath(
     testthat::test_path("..", ".."),
     winslash = "/",
@@ -25,7 +25,10 @@ local_browser_app <- function(app, name) {
       }
     ),
     error = function(error) {
-      skip(paste("Pinned shinytest2 browser is unavailable:", conditionMessage(error)))
+      testthat::skip(paste(
+        "Pinned shinytest2 browser is unavailable:",
+        conditionMessage(error)
+      ))
     }
   )
 }

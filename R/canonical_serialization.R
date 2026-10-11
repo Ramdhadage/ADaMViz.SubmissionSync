@@ -19,5 +19,9 @@ canonical_serialize <- function(value) {
 }
 
 canonical_hash <- function(value, algorithm = "sha256") {
-  digest::digest(canonical_serialize(value), algo = algorithm, serialize = FALSE)
+  digest::digest(
+    canonical_serialize(value),
+    algo = algorithm,
+    serialize = FALSE
+  )
 }

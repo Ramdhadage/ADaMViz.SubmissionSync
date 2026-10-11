@@ -36,7 +36,7 @@ test_that("repository cleanup preserves referenced content", {
   expect_identical(store$exists(remove), FALSE)
 })
 
-test_that("artifact cleanup ignores files outside the content-addressed layout", {
+test_that("cleanup ignores files outside content-addressed storage", {
   root <- withr::local_tempdir()
   store <- local_artifact_store(fs::path(root, "artifacts"))
   keep <- store$put(charToRaw("keep"))
@@ -56,7 +56,7 @@ test_that("artifact cleanup ignores files outside the content-addressed layout",
   expect_true(fs::file_exists(marker))
 })
 
-test_that("artifact stores retain their resolved root after working-directory changes", {
+test_that("artifact stores retain their root after working-directory changes", {
   parent <- withr::local_tempdir()
   original <- fs::path(parent, "original")
   elsewhere <- fs::path(parent, "elsewhere")

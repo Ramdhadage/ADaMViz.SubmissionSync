@@ -47,9 +47,10 @@ expected_week4_counts <- data.frame(
   stringsAsFactors = FALSE
 )
 
-make_test_snapshot <- function(data = synthetic_bds_fixture(), declared_keys = c(
-  "STUDYID", "USUBJID", "PARAMCD", "AVISITN"
-)) {
+make_test_snapshot <- function(
+  data = synthetic_bds_fixture(),
+  declared_keys = c("STUDYID", "USUBJID", "PARAMCD", "AVISITN")
+) {
   structure(
     list(
       snapshot_contract_version = "study-snapshot-v1",

@@ -23,20 +23,27 @@ new_plot_spec <- function(
     y_variable,
     choices = c("AVAL", "CHG", "PCHG")
   )) {
-    cli::cli_abort("{.arg y_variable} must be one of {.val {c('AVAL', 'CHG', 'PCHG')}}")
+    cli::cli_abort(paste0(
+      "{.arg y_variable} must be one of {.val ",
+      "{c('AVAL', 'CHG', 'PCHG')}}"
+    ))
   }
   if (!checkmate::test_choice(scale_mode, choices = c("fixed", "free"))) {
     cli::cli_abort("{.arg scale_mode} must be {.val fixed} or {.val free}")
   }
   unknown_provenance <- setdiff(names(provenance), .plot_spec_fields)
   if (length(unknown_provenance)) {
-    cli::cli_abort("Unknown provenance field{?s}: {.field {unknown_provenance}}")
+    cli::cli_abort(paste0(
+      "Unknown provenance field{?s}: {.field {unknown_provenance}}"
+    ))
   }
   invalid_sources <- unlist(provenance, use.names = FALSE)
   if (length(invalid_sources) && any(!invalid_sources %in% c(
     "prompt", "metadata", "default", "user_confirmed"
   ))) {
-    cli::cli_abort("Provenance values must be prompt, metadata, default, or user_confirmed")
+    cli::cli_abort(paste0(
+      "Provenance values must be prompt, metadata, default, or user_confirmed"
+    ))
   }
 
   fields <- list(
@@ -70,11 +77,15 @@ plot_spec_clarifications <- function(spec) {
 confirm_plot_spec <- function(spec) {
   missing_fields <- plot_spec_clarifications(spec)
   if (length(missing_fields)) {
-    cli::cli_abort("The plot specification needs clarification for {.field {missing_fields}}")
+    cli::cli_abort(paste0(
+      "The plot specification needs clarification for {.field {missing_fields}}"
+    ))
   }
   unconfirmed <- setdiff(.plot_spec_fields, names(spec$provenance))
   if (length(unconfirmed)) {
-    cli::cli_abort("The plot specification lacks provenance for {.field {unconfirmed}}")
+    cli::cli_abort(paste0(
+      "The plot specification lacks provenance for {.field {unconfirmed}}"
+    ))
   }
   new_plot_spec(
     dataset_id = spec$fields$dataset_id,

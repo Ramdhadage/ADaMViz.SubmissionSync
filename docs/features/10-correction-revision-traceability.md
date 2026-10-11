@@ -28,7 +28,7 @@ The revision record contains creator identity, specification and code hashes, ar
 
 ## Execution and status of the successor
 
-A fixed-scale correction starts as `Draft`. `.materialize_correction_revision()` compiles and stores a new script, creates the linked successor with image and analytical hashes pending, then submits a new governed execution attempt using the selected data. Passing verification and artifact acceptance can promote this successor to `Verified`. A failed verification completes a failed attempt and leaves the successor `Draft`; it does not reopen or reject the parent.
+A fixed-scale correction starts as `Draft`. `.materialize_correction()` compiles and stores a new script, creates the linked successor with image and analytical hashes pending, then submits a new governed execution attempt using the selected data. Passing verification and artifact acceptance can promote this successor to `Verified`. A failed verification completes a failed attempt and leaves the successor `Draft`; it does not reopen or reject the parent.
 
 A free-scale correction starts as `Experimental/Draft`. The coordinator builds its script and in-process preview without submitting the governed worker attempt. It cannot inherit the parent's verification or review status. See [scale paths](05-fixed-free-y-scales.md) and [verification evidence](07-verification-revision-evidence.md).
 
@@ -43,7 +43,7 @@ Tests inspected cover rejection followed by correction, preservation of a review
 ## Implementation references
 
 - [Lifecycle service](../../R/lifecycle_service.R): `create_correction()`.
-- [Application coordinator](../../R/app_server.R): `.execute_correction_revision()`, `.materialize_correction_revision()`.
+- [Application coordinator](../../R/app_server.R): `.execute_correction_revision()`, `.materialize_correction()`.
 - [Specification controls](../../R/mod_specification.R): `.can_create_correction()`, `.current_spec_input_fields()`.
 - [Repository](../../R/evidence_repository_sqlite.R) and [schema](../../inst/sql/schema.sql): revision relationships and creation transaction.
 - [History module](../../R/mod_revision_history.R), [lifecycle tests](../../tests/testthat/test-lifecycle-service.R), [application correction test](../../tests/testthat/test-app-server-correction.R), [repository contract tests](../../tests/testthat/test-evidence-repository-contract.R), and [history test](../../tests/testthat/test-mod-revision-history.R).

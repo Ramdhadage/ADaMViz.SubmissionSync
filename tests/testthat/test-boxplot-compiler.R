@@ -1,4 +1,7 @@
-confirmed_boxplot_spec <- function(scale_mode = "fixed", visits = c("Baseline", "Week 4", "Week 8")) {
+confirmed_boxplot_spec <- function(
+  scale_mode = "fixed",
+  visits = c("Baseline", "Week 4", "Week 8")
+) {
   new_plot_spec(
     dataset_id = "fixture-adlb",
     paramcd = "ALT",
@@ -34,12 +37,29 @@ test_that("compiler emits stable parseable governed code", {
 
   expect_identical(first, second)
   expect_no_error(parse(text = first))
-  expect_false(grepl("eval\\s*\\(|parse\\s*\\(|setwd\\s*\\(|nix-shell|rix-generated|rix::", first))
+  expect_false(grepl(
+    "eval\\s*\\(|parse\\s*\\(|setwd\\s*\\(|nix-shell|rix-generated|rix::",
+    first
+  ))
   expect_false(grepl("ADaMViz\\.SubmissionSync::|grid::grobTree", first))
-  expect_match(first, "# Required packages: ggplot2, cli, patchwork", fixed = TRUE)
-  expect_match(first, "required_packages <- c(\"ggplot2\", \"cli\", \"patchwork\")", fixed = TRUE)
-  expect_match(first, "if (!exists(\"analysis_data\", inherits = FALSE))", fixed = TRUE)
-  expect_match(first, "D:/R shiny Apps/ADaMViz.SubmissionSync/inst/extdata/synthetic/adlb-standard.csv", fixed = TRUE)
+  expect_match(first, "# Required packages: ggplot2, cli, patchwork",
+    fixed = TRUE
+  )
+  expect_match(first,
+    "required_packages <- c(\"ggplot2\", \"cli\", \"patchwork\")",
+    fixed = TRUE
+  )
+  expect_match(first, "if (!exists(\"analysis_data\", inherits = FALSE))",
+    fixed = TRUE
+  )
+  expect_match(
+    first,
+    paste0(
+      "D:/R shiny Apps/ADaMViz.SubmissionSync/inst/extdata/synthetic/",
+      "adlb-standard.csv"
+    ),
+    fixed = TRUE
+  )
   expect_match(first, "calculate_boxplot_statistics <- function", fixed = TRUE)
   expect_match(first, "assemble_boxplot <- function", fixed = TRUE)
   expect_match(first, "patchwork::wrap_plots", fixed = TRUE)
@@ -47,7 +67,10 @@ test_that("compiler emits stable parseable governed code", {
 
 test_that("compiled script reproduces the independent analytical result", {
   spec <- confirmed_boxplot_spec()
-  profile <- validate_bds_profile(make_test_snapshot(), default_profile_selections())
+  profile <- validate_bds_profile(
+    make_test_snapshot(),
+    default_profile_selections()
+  )
   policy <- profile$low_n_policy
   expected_boxes <- data.frame(
     treatment = rep(c("Active", "Placebo"), each = 3L),
@@ -79,10 +102,15 @@ test_that("compiled script reproduces the independent analytical result", {
   )
   expect_s3_class(environment$boxplot_artifact$combined, "patchwork")
   expect_identical(
-    unique(ggplot2::ggplot_build(environment$boxplot_artifact$n_strip)$data[[1]]$fontface),
+    unique(ggplot2::ggplot_build(
+      environment$boxplot_artifact$n_strip
+    )$data[[1]]$fontface),
     "bold"
   )
-  expect_s3_class(environment$boxplot_artifact$plot$theme$panel.border, "element_rect")
+  expect_s3_class(
+    environment$boxplot_artifact$plot$theme$panel.border,
+    "element_rect"
+  )
   skip_if_graphics_device_unavailable()
   output <- tempfile(fileext = ".png")
   withr::defer(unlink(output))
@@ -102,7 +130,10 @@ test_that("compiled script reproduces the independent analytical result", {
 
 test_that("artifact manifest binds only U4 reproducibility evidence", {
   spec <- confirmed_boxplot_spec("free")
-  profile <- validate_bds_profile(make_test_snapshot(), default_profile_selections())
+  profile <- validate_bds_profile(
+    make_test_snapshot(),
+    default_profile_selections()
+  )
   analysis <- calculate_boxplot_statistics(
     profile$selected_data,
     spec$fields$treatment_variable,
@@ -120,15 +151,24 @@ test_that("artifact manifest binds only U4 reproducibility evidence", {
   expect_identical(manifest$spec_hash, spec$hash)
   expect_identical(manifest$script_hash, .execution_hash_text(script))
   expect_identical(manifest$analytical_hash, canonical_hash(analysis))
-  expect_identical(manifest$expected_contract_hash, canonical_hash(expected_contract))
-  expect_identical(manifest$expected_contract_review_status, "pending_human_review")
+  expect_identical(
+    manifest$expected_contract_hash,
+    canonical_hash(expected_contract)
+  )
+  expect_identical(
+    manifest$expected_contract_review_status,
+    "pending_human_review"
+  )
   expect_null(manifest$image_hash)
   expect_null(manifest$runtime_artifact_hash)
 })
 
 test_that("artifact manifest rejects inconsistent U4 inputs", {
   spec <- confirmed_boxplot_spec()
-  profile <- validate_bds_profile(make_test_snapshot(), default_profile_selections())
+  profile <- validate_bds_profile(
+    make_test_snapshot(),
+    default_profile_selections()
+  )
   analysis <- calculate_boxplot_statistics(
     profile$selected_data,
     spec$fields$treatment_variable,
@@ -148,7 +188,10 @@ test_that("artifact manifest rejects inconsistent U4 inputs", {
   )
 
   expect_error(
-    new_artifact_manifest(spec, paste0(script, "# tampered\n"), analysis, expected_contract),
+    new_artifact_manifest(
+      spec, paste0(script, "# tampered\n"), analysis,
+      expected_contract
+    ),
     "compiled script does not match"
   )
 

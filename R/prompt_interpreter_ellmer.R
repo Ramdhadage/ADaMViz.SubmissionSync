@@ -8,5 +8,8 @@
 #' @return This function always aborts in the local POC.
 #' @export
 ellmer_prompt_interpreter <- function(...) {
-  cli::cli_abort("The ellmer prompt interpreter is disabled until provider terms are approved")
+  cli::cli_abort(paste(
+    "The ellmer prompt interpreter is disabled until provider terms",
+    "are approved"
+  ))
 }

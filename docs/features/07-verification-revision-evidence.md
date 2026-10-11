@@ -43,7 +43,7 @@ The service then records terminal success and calls `mark_verified()` using the 
 
 ## Retained context and recovery limits
 
-After governed execution, [.record_revision_context_evidence()](../../R/revision_evidence.R) records `revision-context-evidence-v1`. It retains the prompt, confirmed specification, selected records with column classes, snapshot/source metadata, generated R code, request/result, environment, profile warnings, verification, and rendered-output hashes. Classification is included only when present. This context supports [retained-result reproduction](08-reproducing-retained-results.md).
+After governed execution, [.record_revision_context()](../../R/revision_evidence.R) records `revision-context-evidence-v1`. It retains the prompt, confirmed specification, selected records with column classes, snapshot/source metadata, generated R code, request/result, environment, profile warnings, verification, and rendered-output hashes. Classification is included only when present. This context supports [retained-result reproduction](08-reproducing-retained-results.md).
 
 Completion uses several repository calls rather than one encompassing transaction. An error during artifact acceptance or promotion can leave partial completion records. [reconcile_execution_attempts()](../../R/attempt_reconciliation.R) marks attempts without terminal outcomes as failed; it neither reruns verification nor repairs promotion. The application does not automatically call this recovery function at startup.
 

@@ -4,8 +4,8 @@
     rlang::sym("calculate_boxplot_statistics"),
     rlang::call2(
       "function",
-      formals(.standalone_calculate_boxplot_statistics),
-      body(.standalone_calculate_boxplot_statistics)
+      formals(.standalone_boxplot_stats),
+      body(.standalone_boxplot_stats)
     )
   )
   assemble_expression <- rlang::call2(
@@ -27,7 +27,7 @@
     calculate_expression,
     assemble_expression,
     rlang::expr(boxplot_analysis <- calculate_boxplot_statistics(
-      data = analysis_data,
+      data = !!rlang::sym("analysis_data"),
       treatment_variable = !!treatment_variable,
       y_variable = !!y_variable,
       facet_levels = !!facet_levels,
@@ -95,10 +95,16 @@ compile_boxplot_script <- function(spec, low_n_policy) {
     "library(patchwork)",
     "",
     "# Data loading ----",
-    "# Replace this synthetic example path with your selected analysis records when running locally.",
+    paste0(
+      "# Replace this synthetic example path with your selected analysis ",
+      "records when running locally."
+    ),
     "if (!exists(\"analysis_data\", inherits = FALSE)) {",
     "  analysis_data <- read.csv(",
-    "    \"D:/R shiny Apps/ADaMViz.SubmissionSync/inst/extdata/synthetic/adlb-standard.csv\",",
+    paste0(
+      "    \"D:/R shiny Apps/ADaMViz.SubmissionSync/inst/extdata/",
+      "synthetic/adlb-standard.csv\","
+    ),
     "    stringsAsFactors = FALSE",
     "  )",
     "}",

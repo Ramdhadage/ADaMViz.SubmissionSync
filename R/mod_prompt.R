@@ -4,7 +4,10 @@ mod_prompt_ui <- function(id) {
     class = "assurance-panel",
     bslib::card_header("Prompt and Dataset"),
     bslib::card_body(
-      shiny::selectInput(ns("dataset_id"), "Synthetic BDS scenario", choices = character()),
+      shiny::selectInput(
+        ns("dataset_id"), "Synthetic BDS scenario",
+        choices = character()
+      ),
       shiny::textAreaInput(
         ns("prompt"),
         "Plot request",
@@ -14,10 +17,15 @@ mod_prompt_ui <- function(id) {
       ),
       shiny::checkboxInput(
         ns("confirm_free_scale"),
-        "I understand free Y scales create an Experimental/Draft revision",
+        paste(
+          "I understand free Y scales create an Experimental/Draft revision"
+        ),
         value = FALSE
       ),
-      .assurance_task_button(ns("submit"), "Create revision", class = "btn-primary"),
+      .assurance_task_button(
+        ns("submit"), "Create revision",
+        class = "btn-primary"
+      ),
       shiny::uiOutput(ns("message"))
     )
   )
@@ -33,23 +41,28 @@ mod_prompt_server <- function(id, catalog, create_revision) {
     message <- shiny::reactiveVal(NULL)
     output$message <- shiny::renderUI({
       text <- message()
-      if (is.null(text)) return(NULL)
+      if (is.null(text)) {
+        return(NULL)
+      }
       div(class = "assurance-message", role = "status", text)
     })
 
-    shiny::observeEvent(input$submit, {
-      message(NULL)
-      tryCatch(
-        create_revision(
-          dataset_id = input$dataset_id,
-          prompt = input$prompt,
-          confirm_free_scale = isTRUE(input$confirm_free_scale)
-        ),
-        error = function(error) {
-          message(conditionMessage(error))
-        }
-      )
-    }, ignoreInit = TRUE)
+    shiny::observeEvent(input$submit,
+      {
+        message(NULL)
+        tryCatch(
+          create_revision(
+            dataset_id = input$dataset_id,
+            prompt = input$prompt,
+            confirm_free_scale = isTRUE(input$confirm_free_scale)
+          ),
+          error = function(error) {
+            message(conditionMessage(error))
+          }
+        )
+      },
+      ignoreInit = TRUE
+    )
   })
 }
 

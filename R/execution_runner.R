@@ -1,5 +1,9 @@
 .execution_hash_text <- function(value) {
-  digest::digest(.execution_text_bytes(value), algo = "sha256", serialize = FALSE)
+  digest::digest(
+    .execution_text_bytes(value),
+    algo = "sha256",
+    serialize = FALSE
+  )
 }
 
 .execution_text_bytes <- function(value) {
@@ -12,7 +16,9 @@
 
 .bounded_text <- function(value, limit = 4000L) {
   value <- paste(value, collapse = "\n")
-  if (nchar(value, type = "bytes") <= limit) return(value)
+  if (nchar(value, type = "bytes") <= limit) {
+    return(value)
+  }
   paste0(substr(value, 1L, limit), "\n[truncated]")
 }
 
@@ -35,11 +41,16 @@
   )
 }
 
-.execution_environment_fingerprint <- function() {
+.environment_fingerprint <- function() {
   canonical_hash(.execution_environment_details())
 }
 
-.validate_execution_input <- function(request, script, analysis_data, data_classification) {
+.validate_execution_input <- function(
+  request,
+  script,
+  analysis_data,
+  data_classification
+) {
   if (!inherits(request, "execution_request")) {
     cli::cli_abort("{.arg request} must be an {.cls execution_request}")
   }
@@ -50,7 +61,9 @@
     cli::cli_abort("{.arg analysis_data} must be a data frame")
   }
   if (!data_classification %in% c("synthetic", "deidentified")) {
-    cli::cli_abort("The local POC runner accepts only synthetic or de-identified data")
+    cli::cli_abort(paste0(
+      "The local POC runner accepts only synthetic or de-identified data"
+    ))
   }
   script_hash <- .execution_hash_text(script)
   if (!identical(script_hash, request$script_hash)) {
@@ -94,8 +107,10 @@ run_execution_locally <- function(
         type = "output"
       )
       if (!inherits(env$boxplot_analysis, "boxplot_analysis") ||
-          !inherits(env$boxplot_artifact, "boxplot_artifact")) {
-        cli::cli_abort("Execution script did not create the governed runtime objects")
+        !inherits(env$boxplot_artifact, "boxplot_artifact")) {
+        cli::cli_abort(
+          "Execution script did not create the governed runtime objects"
+        )
       }
       ggplot2::ggsave(
         filename = image_path,

@@ -11,7 +11,11 @@
 }
 
 .execution_id <- function(prefix, attempt_id, suffix) {
-  paste(prefix, substr(canonical_hash(list(attempt_id, suffix)), 1L, 24L), sep = "-")
+  paste(
+    prefix,
+    substr(canonical_hash(list(attempt_id, suffix)), 1L, 24L),
+    sep = "-"
+  )
 }
 
 new_execution_service <- function(
@@ -28,12 +32,20 @@ new_execution_service <- function(
       "get_revision"
     )
   )
-  if (!is.function(runner$run)) cli::cli_abort("Execution runner must provide {.fn run}")
+  if (!is.function(runner$run)) {
+    cli::cli_abort("Execution runner must provide {.fn run}")
+  }
   if (!is.function(verification_service$verify)) {
     cli::cli_abort("Verification service must provide {.fn verify}")
   }
 
-  start <- function(revision_id, request, script, analysis_data, idempotency_key) {
+  start <- function(
+    revision_id,
+    request,
+    script,
+    analysis_data,
+    idempotency_key
+  ) {
     revision <- repository$get_revision(revision_id)
     if (!identical(revision$status, "Draft")) {
       cli::cli_abort("Only Draft revisions can be submitted for verification")
@@ -41,7 +53,11 @@ new_execution_service <- function(
     attempts <- repository$list_attempts(revision_id)
     active <- attempts[is.na(attempts$outcome), , drop = FALSE]
     attempt_id <- .execution_attempt_id(idempotency_key)
-    fingerprint <- .execution_request_fingerprint(request, script, analysis_data)
+    fingerprint <- .execution_request_fingerprint(
+      request,
+      script,
+      analysis_data
+    )
     if (nrow(active) && !attempt_id %in% active$attempt_id) {
       cli::cli_abort("A revision can have only one active execution attempt")
     }
@@ -77,7 +93,8 @@ new_execution_service <- function(
         verification = unclass(verification),
         execution_result = unclass(runner_result$result %||% list()),
         environment = runner_result$environment %||% list(
-          fingerprint = runner_result$result$environment_fingerprint %||% NA_character_
+          fingerprint = runner_result$result$environment_fingerprint %||%
+            NA_character_
         ),
         diagnostics = runner_result$diagnostics
       )
@@ -138,7 +155,13 @@ new_execution_service <- function(
     idempotency_key,
     data_classification = "synthetic"
   ) {
-    attempt <- start(revision_id, request, script, analysis_data, idempotency_key)
+    attempt <- start(
+      revision_id,
+      request,
+      script,
+      analysis_data,
+      idempotency_key
+    )
     runner_result <- tryCatch(
       runner$run(
         request = request,
@@ -147,14 +170,16 @@ new_execution_service <- function(
         data_classification = data_classification,
         work_dir = attempt$work_dir
       ),
-      error = \(error) structure(
-        list(
-          status = "failed",
-          manifest_version = "execution-runner-result-v1",
-          diagnostics = list(stdout = "", stderr = conditionMessage(error))
-        ),
-        class = "execution_runner_result"
-      )
+      error = \(error) {
+        structure(
+          list(
+            status = "failed",
+            manifest_version = "execution-runner-result-v1",
+            diagnostics = list(stdout = "", stderr = conditionMessage(error))
+          ),
+          class = "execution_runner_result"
+        )
+      }
     )
     complete(attempt, runner_result)
   }

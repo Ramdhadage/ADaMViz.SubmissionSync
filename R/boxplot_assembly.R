@@ -19,7 +19,11 @@
 #'
 #' @return A `boxplot_artifact` containing plot, N strip, composition, and data.
 #' @export
-assemble_boxplot <- function(analysis, scale_mode = c("fixed", "free"), unit = NULL) {
+assemble_boxplot <- function(
+  analysis,
+  scale_mode = c("fixed", "free"),
+  unit = NULL
+) {
   if (!inherits(analysis, "boxplot_analysis")) {
     cli::cli_abort("{.arg analysis} must be a {.cls boxplot_analysis}")
   }
@@ -44,7 +48,8 @@ assemble_boxplot <- function(analysis, scale_mode = c("fixed", "free"), unit = N
     )
   ) +
     ggplot2::geom_boxplot(
-      stat = "identity", outlier.shape = NA, fill = "white", color = "black", linewidth = 0.6
+      stat = "identity", outlier.shape = NA, fill = "white",
+      color = "black", linewidth = 0.6
     ) +
     ggplot2::geom_line(
       data = plot_data$medians,
@@ -82,13 +87,19 @@ assemble_boxplot <- function(analysis, scale_mode = c("fixed", "free"), unit = N
     ggplot2::theme_bw(base_size = 12) +
     ggplot2::theme(
       text = ggplot2::element_text(face = "bold"),
-      panel.border = ggplot2::element_rect(color = "black", fill = NA, linewidth = 1),
-      panel.grid.major = ggplot2::element_line(color = "grey90", linewidth = 0.3),
+      panel.border = ggplot2::element_rect(
+        color = "black", fill = NA, linewidth = 1
+      ),
+      panel.grid.major = ggplot2::element_line(
+        color = "grey90", linewidth = 0.3
+      ),
       panel.grid.minor = ggplot2::element_blank(),
       axis.text = ggplot2::element_text(face = "bold", color = "black"),
       axis.text.x = ggplot2::element_blank(),
       axis.ticks.x = ggplot2::element_blank(),
-      strip.background = ggplot2::element_rect(fill = "grey85", color = "black", linewidth = 1),
+      strip.background = ggplot2::element_rect(
+        fill = "grey85", color = "black", linewidth = 1
+      ),
       strip.text = ggplot2::element_text(face = "bold", color = "black")
     )
 
@@ -96,7 +107,9 @@ assemble_boxplot <- function(analysis, scale_mode = c("fixed", "free"), unit = N
     plot_data$n_strip,
     ggplot2::aes(x = visit, y = 1, label = label)
   ) +
-    ggplot2::geom_text(na.rm = TRUE, size = 4, color = "black", fontface = "bold") +
+    ggplot2::geom_text(
+      na.rm = TRUE, size = 4, color = "black", fontface = "bold"
+    ) +
     ggplot2::facet_wrap(ggplot2::vars(treatment), drop = FALSE) +
     ggplot2::scale_x_discrete(drop = FALSE, limits = analysis$visit_levels) +
     ggplot2::scale_y_continuous(limits = c(0.5, 1.5)) +
@@ -104,13 +117,17 @@ assemble_boxplot <- function(analysis, scale_mode = c("fixed", "free"), unit = N
     ggplot2::theme_bw(base_size = 12) +
     ggplot2::theme(
       text = ggplot2::element_text(face = "bold"),
-      panel.border = ggplot2::element_rect(color = "black", fill = NA, linewidth = 1),
+      panel.border = ggplot2::element_rect(
+        color = "black", fill = NA, linewidth = 1
+      ),
       axis.text = ggplot2::element_text(face = "bold", color = "black"),
       axis.text.y = ggplot2::element_blank(),
       axis.ticks.y = ggplot2::element_blank(),
       panel.grid = ggplot2::element_blank(),
       strip.text = ggplot2::element_blank(),
-      strip.background = ggplot2::element_rect(fill = "grey85", color = "black", linewidth = 1)
+      strip.background = ggplot2::element_rect(
+        fill = "grey85", color = "black", linewidth = 1
+      )
     )
 
   structure(
@@ -127,7 +144,10 @@ assemble_boxplot <- function(analysis, scale_mode = c("fixed", "free"), unit = N
       plot_data = plot_data,
       plot = plot,
       n_strip = n_strip,
-      combined = patchwork::wrap_plots(plot, n_strip, ncol = 1L, heights = c(4, 1))
+      combined = patchwork::wrap_plots(
+        plot, n_strip,
+        ncol = 1L, heights = c(4, 1)
+      )
     ),
     class = "boxplot_artifact"
   )

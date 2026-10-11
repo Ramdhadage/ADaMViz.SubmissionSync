@@ -1,8 +1,13 @@
 .latest_revision_context <- function(repository, revision_id) {
   evidence <- repository$list_evidence(revision_id)
-  evidence <- evidence[evidence$evidence_type == "revision_context", , drop = FALSE]
+  evidence <- evidence[
+    evidence$evidence_type == "revision_context", ,
+    drop = FALSE
+  ]
   if (!nrow(evidence)) {
-    cli::cli_abort("Revision {.val {revision_id}} has no revision context evidence")
+    cli::cli_abort(
+      "Revision {.val {revision_id}} has no revision context evidence"
+    )
   }
   jsonlite::fromJSON(
     evidence$details_json[[nrow(evidence)]],
@@ -60,8 +65,8 @@ new_reproducibility_service <- function(
     c("get_revision", "list_evidence", "record_evidence")
   )
   if (!is.list(artifact_store) ||
-      !is.function(artifact_store$get) ||
-      !is.function(artifact_store$verify)) {
+    !is.function(artifact_store$get) ||
+    !is.function(artifact_store$verify)) {
     cli::cli_abort("Reproducibility service requires a readable artifact store")
   }
   if (!is.function(runner$run)) {
@@ -99,7 +104,9 @@ new_reproducibility_service <- function(
     )
     checks <- list(
       specification = identical(request$spec_hash, revision$spec_hash),
-      generated_r_code = identical(.execution_hash_text(script), revision$code_hash),
+      generated_r_code = identical(
+        .execution_hash_text(script), revision$code_hash
+      ),
       analytical_result = identical(
         runner_result$result$analytical_hash,
         revision$analytical_hash

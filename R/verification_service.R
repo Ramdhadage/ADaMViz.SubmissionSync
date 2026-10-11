@@ -1,8 +1,12 @@
-.verification_checks <- function(request, script, analysis_data, runner_result) {
+.verification_checks <- function(
+  request, script, analysis_data, runner_result
+) {
   checks <- list(
     schema = inherits(request, "execution_request"),
     script_hash = identical(.execution_hash_text(script), request$script_hash),
-    snapshot_hash = identical(canonical_hash(analysis_data), request$snapshot_hash),
+    snapshot_hash = identical(
+      canonical_hash(analysis_data), request$snapshot_hash
+    ),
     runner_success = identical(runner_result$status, "succeeded"),
     result_manifest = inherits(runner_result$result, "execution_result"),
     analytical_hash = FALSE,
@@ -26,7 +30,9 @@
   checks
 }
 
-verify_execution_result <- function(request, script, analysis_data, runner_result) {
+verify_execution_result <- function(
+  request, script, analysis_data, runner_result
+) {
   checks <- .verification_checks(request, script, analysis_data, runner_result)
   failed <- names(checks)[!unlist(checks, use.names = FALSE)]
   structure(

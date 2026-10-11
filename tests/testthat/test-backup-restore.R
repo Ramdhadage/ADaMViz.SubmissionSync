@@ -6,7 +6,10 @@ test_that("backup and restore preserve history, projections, and artifacts", {
   db <- fs::path(root, "db.sqlite")
   chain <- fs::path(root, "root.json")
   repo <- sqlite_evidence_repository(db, chain, artifacts)
-  repo$create_revision("plot-1", "rev-1", 1L, "creator", "spec", code_hash, image_hash, "analysis", "create")
+  repo$create_revision(
+    "plot-1", "rev-1", 1L, "creator", "spec", code_hash,
+    image_hash, "analysis", "create"
+  )
   repo$record_attempt("attempt-1", "rev-1", "run-1")
   repo$complete_attempt("attempt-1", "succeeded", "attempt-complete")
   repo$record_evidence(
@@ -104,7 +107,10 @@ test_that("backup remains consistent with a concurrent lifecycle write", {
     )$mark_verified("rev-1", 1L, "verify")
     TRUE
   }
-  copier <- function(source_root, database, chain_root, artifact_root, gate, backup) {
+  copier <- function(
+    source_root, database, chain_root, artifact_root, gate,
+    backup
+  ) {
     if (!is.null(source_root)) devtools::load_all(source_root, quiet = TRUE)
     package <- asNamespace("ADaMViz.SubmissionSync")
     repository <- get("sqlite_evidence_repository", package)

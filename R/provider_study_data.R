@@ -25,7 +25,10 @@ study_data_content_hash <- function(data) {
     paste,
     c(lapply(data, .stable_column_text), sep = "\u001f")
   )
-  result <- data[order(row_keys, method = "radix", na.last = TRUE), , drop = FALSE]
+  result <- data[
+    order(row_keys, method = "radix", na.last = TRUE), ,
+    drop = FALSE
+  ]
   row.names(result) <- NULL
   result
 }
@@ -86,7 +89,10 @@ list_study_catalog <- function(provider) {
     "metadata_version", "content_hash", "permitted_treatment_variables",
     "snapshot_id", "scenario_id", "purpose", "expected_behavior"
   )]
-  catalog <- catalog[order(catalog$dataset_id, method = "radix"), , drop = FALSE]
+  catalog <- catalog[
+    order(catalog$dataset_id, method = "radix"), ,
+    drop = FALSE
+  ]
   row.names(catalog) <- NULL
   catalog
 }
@@ -110,13 +116,17 @@ pin_study_snapshot <- function(provider, dataset_id) {
     logical(1)
   ))
   if (length(matches) != 1L) {
-    cli::cli_abort("{.val {dataset_id}} is not present in the authorized catalog")
+    cli::cli_abort(
+      "{.val {dataset_id}} is not present in the authorized catalog"
+    )
   }
   metadata <- provider$manifest$scenarios[[matches]]
   data <- provider$read_data(metadata)
   observed_hash <- study_data_content_hash(data)
   if (!identical(observed_hash, metadata$content_hash)) {
-    cli::cli_abort("The authorized snapshot content hash does not match its catalog entry")
+    cli::cli_abort(
+      "The authorized snapshot content hash does not match its catalog entry"
+    )
   }
 
   snapshot <- list(
@@ -133,6 +143,8 @@ pin_study_snapshot <- function(provider, dataset_id) {
     ),
     data = .normalize_study_data(data)
   )
-  if (!is.null(metadata$classification)) snapshot$classification <- metadata$classification
+  if (!is.null(metadata$classification)) {
+    snapshot$classification <- metadata$classification
+  }
   structure(snapshot, class = "study_data_snapshot")
 }

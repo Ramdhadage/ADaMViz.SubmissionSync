@@ -76,14 +76,20 @@
   on.exit(DBI::dbDisconnect(con), add = TRUE)
   DBI::dbExecute(
     con,
-    "CREATE TABLE IF NOT EXISTS repository_lock(id INTEGER PRIMARY KEY CHECK(id = 1))"
+    paste0(
+      "CREATE TABLE IF NOT EXISTS repository_lock(id INTEGER PRIMARY KEY ",
+      "CHECK(id = 1))"
+    )
   )
   DBI::dbExecute(con, "INSERT OR IGNORE INTO repository_lock(id) VALUES (1)")
   DBI::dbExecute(con, "BEGIN IMMEDIATE")
   completed <- FALSE
-  on.exit({
-    if (!completed) try(DBI::dbExecute(con, "ROLLBACK"), silent = TRUE)
-  }, add = TRUE)
+  on.exit(
+    {
+      if (!completed) try(DBI::dbExecute(con, "ROLLBACK"), silent = TRUE)
+    },
+    add = TRUE
+  )
   result <- code()
   DBI::dbExecute(con, "COMMIT")
   completed <- TRUE
@@ -93,7 +99,11 @@
 .register_command <- function(con, key, command) {
   .validate_identifier(key, "idempotency_key")
   command_hash <- canonical_hash(command)
-  prior <- DBI::dbGetQuery(con, "SELECT command_hash FROM command_keys WHERE idempotency_key = ?", params = list(key))
+  prior <- DBI::dbGetQuery(
+    con,
+    "SELECT command_hash FROM command_keys WHERE idempotency_key = ?",
+    params = list(key)
+  )
   if (nrow(prior)) {
     if (!identical(prior$command_hash[[1]], command_hash)) {
       cli::cli_abort("Idempotency key was already used for a different command")
@@ -101,7 +111,11 @@
     return(FALSE)
   }
   DBI::dbExecute(
-    con, "INSERT INTO command_keys(idempotency_key, command_hash, created_at) VALUES (?, ?, ?)",
+    con,
+    paste(
+      "INSERT INTO command_keys(idempotency_key, command_hash, created_at)",
+      "VALUES (?, ?, ?)"
+    ),
     params = list(key, command_hash, .utc_timestamp())
   )
   TRUE
@@ -112,38 +126,66 @@
     "SELECT r.*, p.status, p.version FROM revisions r",
     "JOIN revision_projection p USING(revision_id) WHERE r.revision_id = ?"
   ), params = list(revision_id))
-  if (!nrow(result)) cli::cli_abort("Plot revision {.val {revision_id}} was not found")
+  if (!nrow(result)) {
+    cli::cli_abort("Plot revision {.val {revision_id}} was not found")
+  }
   as.list(result[1, , drop = FALSE]) |>
     lapply(\(x) x[[1]])
 }
 
-.append_lifecycle_event <- function(con, revision, event_type, payload, idempotency_key) {
+.append_lifecycle_event <- function(
+  con,
+  revision,
+  event_type,
+  payload,
+  idempotency_key
+) {
   last <- DBI::dbGetQuery(
     con,
-    "SELECT event_sequence, chain_hash FROM lifecycle_events WHERE plot_id = ? ORDER BY event_sequence DESC LIMIT 1",
+    paste(
+      "SELECT event_sequence, chain_hash FROM lifecycle_events",
+      "WHERE plot_id = ? ORDER BY event_sequence DESC LIMIT 1"
+    ),
     params = list(revision$plot_id)
   )
   sequence <- if (nrow(last)) last$event_sequence[[1]] + 1L else 1L
-  previous <- if (nrow(last)) last$chain_hash[[1]] else paste(rep("0", 64L), collapse = "")
+  previous <- if (nrow(last)) {
+    last$chain_hash[[1]]
+  } else {
+    paste(rep("0", 64L), collapse = "")
+  }
   created_at <- .utc_timestamp()
   payload_json <- canonical_serialize(payload)
   chain_hash <- canonical_hash(list(
-    plot_id = revision$plot_id, revision_id = revision$revision_id,
-    event_sequence = sequence, event_type = event_type, payload_json = payload_json,
-    previous_hash = previous, created_at = created_at
+    plot_id = revision$plot_id,
+    revision_id = revision$revision_id,
+    event_sequence = sequence,
+    event_type = event_type,
+    payload_json = payload_json,
+    previous_hash = previous,
+    created_at = created_at
   ))
   event_id <- paste0("evt-", substr(canonical_hash(idempotency_key), 1L, 24L))
   DBI::dbExecute(con, paste(
-    "INSERT INTO lifecycle_events(event_id, plot_id, revision_id, event_sequence, event_type,",
+    "INSERT INTO lifecycle_events(event_id, plot_id, revision_id,",
+    "event_sequence, event_type,",
     "payload_json, previous_hash, chain_hash, created_at, idempotency_key)",
     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-  ), params = list(event_id, revision$plot_id, revision$revision_id, sequence, event_type,
-    payload_json, previous, chain_hash, created_at, idempotency_key))
-  list(plot_id = revision$plot_id, sequence = sequence, chain_hash = chain_hash)
+  ), params = list(
+    event_id, revision$plot_id, revision$revision_id, sequence, event_type,
+    payload_json, previous, chain_hash, created_at, idempotency_key
+  ))
+  list(
+    plot_id = revision$plot_id,
+    sequence = sequence,
+    chain_hash = chain_hash
+  )
 }
 
 .read_chain_roots <- function(path) {
-  if (!fs::file_exists(path)) return(list())
+  if (!fs::file_exists(path)) {
+    return(list())
+  }
   jsonlite::fromJSON(path, simplifyVector = TRUE)
 }
 
@@ -154,21 +196,42 @@
     cli::cli_abort("External chain root is newer than the database history")
   }
   if (!is.null(prior) && prior$sequence == root$sequence &&
-      !identical(prior$chain_hash, root$chain_hash)) {
+    !identical(prior$chain_hash, root$chain_hash)) {
     cli::cli_abort("External chain root conflicts with the database history")
   }
-  if (!is.null(prior) && prior$sequence == root$sequence) return(invisible(path))
-  roots[[root$plot_id]] <- list(sequence = root$sequence, chain_hash = root$chain_hash)
+  if (!is.null(prior) && prior$sequence == root$sequence) {
+    return(invisible(path))
+  }
+  roots[[root$plot_id]] <- list(
+    sequence = root$sequence,
+    chain_hash = root$chain_hash
+  )
   fs::dir_create(fs::path_dir(path), recurse = TRUE)
-  temporary <- fs::file_temp(tmp_dir = fs::path_dir(path), pattern = "chain-root-")
+  temporary <- fs::file_temp(
+    tmp_dir = fs::path_dir(path),
+    pattern = "chain-root-"
+  )
   writeLines(canonical_serialize(roots), temporary, useBytes = TRUE)
   fs::file_move(temporary, path)
 }
 
 .chain_tip <- function(con, plot_id) {
-  tip <- DBI::dbGetQuery(con, "SELECT event_sequence, chain_hash FROM lifecycle_events WHERE plot_id = ? ORDER BY event_sequence DESC LIMIT 1", params = list(plot_id))
-  if (!nrow(tip)) return(NULL)
-  list(plot_id = plot_id, sequence = tip$event_sequence[[1]], chain_hash = tip$chain_hash[[1]])
+  tip <- DBI::dbGetQuery(
+    con,
+    paste(
+      "SELECT event_sequence, chain_hash FROM lifecycle_events",
+      "WHERE plot_id = ? ORDER BY event_sequence DESC LIMIT 1"
+    ),
+    params = list(plot_id)
+  )
+  if (!nrow(tip)) {
+    return(NULL)
+  }
+  list(
+    plot_id = plot_id,
+    sequence = tip$event_sequence[[1]],
+    chain_hash = tip$chain_hash[[1]]
+  )
 }
 
 .reconcile_chain_roots <- function(database_path, chain_root_path) {
@@ -201,11 +264,15 @@
   })
   roots <- .read_chain_roots(chain_root_path)
   root_plot_ids <- names(roots) %||% character()
-  if (!identical(sort(root_plot_ids), sort(tips$plot_id))) return(FALSE)
+  if (!identical(sort(root_plot_ids), sort(tips$plot_id))) {
+    return(FALSE)
+  }
   for (index in seq_len(nrow(tips))) {
     root <- roots[[tips$plot_id[[index]]]]
-    if (!identical(as.integer(root$sequence), as.integer(tips$sequence[[index]])) ||
-        !identical(root$chain_hash, tips$chain_hash[[index]])) {
+    if (!identical(
+      as.integer(root$sequence), as.integer(tips$sequence[[index]])
+    ) ||
+      !identical(root$chain_hash, tips$chain_hash[[index]])) {
       return(FALSE)
     }
   }
@@ -227,7 +294,10 @@
       lapply(tables, function(table) {
         DBI::dbGetQuery(
           con,
-          paste0("SELECT COUNT(*) AS n FROM ", DBI::dbQuoteIdentifier(con, table))
+          paste0(
+            "SELECT COUNT(*) AS n FROM ",
+            DBI::dbQuoteIdentifier(con, table)
+          )
         )$n[[1]]
       }),
       tables
@@ -249,14 +319,14 @@
   database_hash <- digest::digest(file = database_path, algo = "sha256")
   chain_root_hash <- digest::digest(file = chain_root_path, algo = "sha256")
   if (!identical(database_hash, manifest$database_hash) ||
-      !identical(chain_root_hash, manifest$chain_root_hash)) {
+    !identical(chain_root_hash, manifest$chain_root_hash)) {
     cli::cli_abort("Backup file hashes do not match the completion manifest")
   }
   counts <- .database_table_counts(database_path)
   expected_counts <- unlist(manifest$table_counts, use.names = TRUE)
   actual_counts <- unlist(counts[names(expected_counts)], use.names = TRUE)
   if (!identical(as.numeric(actual_counts), as.numeric(expected_counts)) ||
-      !identical(names(actual_counts), names(expected_counts))) {
+    !identical(names(actual_counts), names(expected_counts))) {
     cli::cli_abort("Backup row counts do not match the completion manifest")
   }
   invisible(manifest)
@@ -298,7 +368,11 @@
   result
 }
 
-sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_store = NULL) {
+sqlite_evidence_repository <- function(
+  database_path,
+  chain_root_path,
+  artifact_store = NULL
+) {
   checkmate::assert_string(database_path, min.chars = 1)
   checkmate::assert_string(chain_root_path, min.chars = 1)
   .initialize_evidence_database(database_path)
@@ -330,7 +404,8 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
       root <- .with_evidence_connection(database_path, function(con) {
         DBI::dbWithTransaction(con, code(con))
       })
-      if (is.list(root) && all(c("plot_id", "sequence", "chain_hash") %in% names(root))) {
+      if (is.list(root) &&
+        all(c("plot_id", "sequence", "chain_hash") %in% names(root))) {
         .write_chain_root(chain_root_path, root)
       }
       invisible(root)
@@ -345,15 +420,33 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
     })
   }
 
-  create_revision <- function(plot_id, revision_id, revision_number, creator_id,
-                              spec_hash, code_hash, image_hash, analytical_hash,
-                              idempotency_key, initial_status = "Draft",
-                              parent_revision_id = NULL, correction_rationale = NULL,
-                              correction_provenance = NULL) {
-    lapply(list(plot_id = plot_id, revision_id = revision_id, creator_id = creator_id),
-      \(x) .validate_identifier(x, "identifier"))
+  create_revision <- function(
+    plot_id,
+    revision_id,
+    revision_number,
+    creator_id,
+    spec_hash,
+    code_hash,
+    image_hash,
+    analytical_hash,
+    idempotency_key,
+    initial_status = "Draft",
+    parent_revision_id = NULL,
+    correction_rationale = NULL,
+    correction_provenance = NULL
+  ) {
+    lapply(
+      list(
+        plot_id = plot_id,
+        revision_id = revision_id,
+        creator_id = creator_id
+      ),
+      \(x) .validate_identifier(x, "identifier")
+    )
     checkmate::assert_int(revision_number, lower = 1L)
-    if (!initial_status %in% c("Draft", "Experimental/Draft")) cli::cli_abort("Invalid initial revision status")
+    if (!initial_status %in% c("Draft", "Experimental/Draft")) {
+      cli::cli_abort("Invalid initial revision status")
+    }
     if (!is.null(artifact_store) && !is.null(code_hash)) {
       artifact_store$verify(code_hash)
     }
@@ -382,103 +475,230 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
       if (!is.null(parent_revision_id)) {
         parent <- .current_revision(con, parent_revision_id)
         if (!identical(parent$plot_id, plot_id)) {
-          cli::cli_abort("A correction successor must belong to its parent plot")
+          cli::cli_abort(
+            "A correction successor must belong to its parent plot"
+          )
         }
         if (!parent$status %in% c("Rejected", "Reviewed")) {
-          cli::cli_abort("Only a closed revision can have a correction successor")
+          cli::cli_abort(
+            "Only a closed revision can have a correction successor"
+          )
         }
         if (!checkmate::test_string(correction_rationale, min.chars = 1) ||
-            !checkmate::test_string(correction_provenance, min.chars = 1)) {
+          !checkmate::test_string(correction_provenance, min.chars = 1)) {
           cli::cli_abort(
             "A correction successor requires rationale and provenance"
           )
         }
       } else if (!is.null(correction_rationale) ||
-                 !is.null(correction_provenance)) {
+        !is.null(correction_provenance)) {
         cli::cli_abort(
           "Correction rationale and provenance require a parent revision"
         )
       }
-      DBI::dbExecute(con, "INSERT OR IGNORE INTO plots(plot_id, created_at) VALUES (?, ?)", params = list(plot_id, .utc_timestamp()))
+      DBI::dbExecute(
+        con,
+        "INSERT OR IGNORE INTO plots(plot_id, created_at) VALUES (?, ?)",
+        params = list(plot_id, .utc_timestamp())
+      )
       created_at <- .utc_timestamp()
       nullable <- \(x) if (is.null(x)) NA_character_ else x
       DBI::dbExecute(con, paste(
-        "INSERT INTO revisions(revision_id, plot_id, revision_number, creator_id, parent_revision_id,",
-        "correction_rationale, correction_provenance, spec_hash, code_hash, image_hash, analytical_hash, initial_status, created_at)",
+        "INSERT INTO revisions(revision_id, plot_id, revision_number,",
+        "creator_id, parent_revision_id,",
+        paste(
+          "correction_rationale, correction_provenance, spec_hash,",
+          "code_hash, image_hash, analytical_hash, initial_status, created_at"
+        ),
         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-      ), params = list(revision_id, plot_id, revision_number, creator_id, nullable(parent_revision_id),
-        nullable(correction_rationale), nullable(correction_provenance), spec_hash, code_hash,
-        nullable(image_hash), nullable(analytical_hash), initial_status, created_at))
-      DBI::dbExecute(con, "INSERT INTO revision_projection(revision_id, status, version, updated_at) VALUES (?, ?, 1, ?)",
-        params = list(revision_id, initial_status, created_at))
+      ), params = list(
+        revision_id, plot_id, revision_number, creator_id,
+        nullable(parent_revision_id), nullable(correction_rationale),
+        nullable(correction_provenance), spec_hash, code_hash,
+        nullable(image_hash), nullable(analytical_hash),
+        initial_status, created_at
+      ))
+      DBI::dbExecute(
+        con,
+        paste(
+          "INSERT INTO revision_projection(revision_id, status, version,",
+          "updated_at) VALUES (?, ?, 1, ?)"
+        ),
+        params = list(revision_id, initial_status, created_at)
+      )
       revision <- list(plot_id = plot_id, revision_id = revision_id)
-      .append_lifecycle_event(con, revision, "revision_created", list(status = initial_status), idempotency_key)
+      .append_lifecycle_event(
+        con,
+        revision,
+        "revision_created",
+        list(status = initial_status),
+        idempotency_key
+      )
     })
   }
 
-  list_revisions <- function(plot_id) .with_evidence_connection(database_path, \(con) DBI::dbGetQuery(
-    con, "SELECT * FROM revisions WHERE plot_id = ? ORDER BY revision_number", params = list(plot_id)
-  ))
-  list_events <- function(plot_id) .with_evidence_connection(database_path, \(con) DBI::dbGetQuery(
-    con, "SELECT * FROM lifecycle_events WHERE plot_id = ? ORDER BY event_sequence", params = list(plot_id)
-  ))
-  get_revision <- function(revision_id) .with_evidence_connection(database_path, \(con) .current_revision(con, revision_id))
+  list_revisions <- function(plot_id) {
+    .with_evidence_connection(database_path, \(con) DBI::dbGetQuery(
+      con, "SELECT * FROM revisions WHERE plot_id = ? ORDER BY revision_number",
+      params = list(plot_id)
+    ))
+  }
+  list_events <- function(plot_id) {
+    .with_evidence_connection(database_path, \(con) DBI::dbGetQuery(
+      con,
+      paste(
+        "SELECT * FROM lifecycle_events WHERE plot_id = ?",
+        "ORDER BY event_sequence"
+      ),
+      params = list(plot_id)
+    ))
+  }
+  get_revision <- function(revision_id) {
+    .with_evidence_connection(
+      database_path,
+      \(con) .current_revision(con, revision_id)
+    )
+  }
 
   record_attempt <- function(attempt_id, revision_id, run_id) {
     write_transaction(function(con) {
       .current_revision(con, revision_id)
-      prior <- DBI::dbGetQuery(con, "SELECT revision_id, run_id FROM attempts WHERE attempt_id = ?", params = list(attempt_id))
+      prior <- DBI::dbGetQuery(
+        con,
+        "SELECT revision_id, run_id FROM attempts WHERE attempt_id = ?",
+        params = list(attempt_id)
+      )
       if (nrow(prior)) {
-        if (!identical(prior$revision_id[[1]], revision_id) || !identical(prior$run_id[[1]], run_id)) {
-          cli::cli_abort("Attempt identifier was already used for a different command")
+        if (!identical(prior$revision_id[[1]], revision_id) ||
+          !identical(prior$run_id[[1]], run_id)) {
+          cli::cli_abort(
+            "Attempt identifier was already used for a different command"
+          )
         }
         return(invisible(NULL))
       }
-      DBI::dbExecute(con, "INSERT INTO attempts(attempt_id, revision_id, run_id, created_at) VALUES (?, ?, ?, ?)",
-        params = list(attempt_id, revision_id, run_id, .utc_timestamp()))
+      DBI::dbExecute(
+        con,
+        paste(
+          "INSERT INTO attempts(attempt_id, revision_id, run_id, created_at)",
+          "VALUES (?, ?, ?, ?)"
+        ),
+        params = list(attempt_id, revision_id, run_id, .utc_timestamp())
+      )
     })
     invisible(attempt_id)
   }
-  list_attempts <- function(revision_id) .with_evidence_connection(database_path, \(con) DBI::dbGetQuery(
-    con, paste(
-      "SELECT a.*, o.outcome, o.created_at AS completed_at FROM attempts a",
-      "LEFT JOIN attempt_outcomes o USING(attempt_id) WHERE a.revision_id = ? ORDER BY a.created_at, a.attempt_id"
-    ), params = list(revision_id)
-  ))
+  list_attempts <- function(revision_id) {
+    .with_evidence_connection(database_path, \(con) DBI::dbGetQuery(
+      con, paste(
+        "SELECT a.*, o.outcome, o.created_at AS completed_at FROM attempts a",
+        paste(
+          "LEFT JOIN attempt_outcomes o USING(attempt_id)",
+          "WHERE a.revision_id = ? ORDER BY a.created_at, a.attempt_id"
+        )
+      ),
+      params = list(revision_id)
+    ))
+  }
   complete_attempt <- function(attempt_id, outcome, idempotency_key) {
-    if (!outcome %in% c("succeeded", "failed", "cancelled", "timed_out")) cli::cli_abort("Invalid terminal attempt outcome")
+    if (!outcome %in% c("succeeded", "failed", "cancelled", "timed_out")) {
+      cli::cli_abort("Invalid terminal attempt outcome")
+    }
     write_transaction(function(con) {
       command <- list(attempt_id = attempt_id, outcome = outcome)
-      if (!.register_command(con, idempotency_key, command)) return(invisible(NULL))
-      prior <- DBI::dbGetQuery(con, "SELECT 1 FROM attempt_outcomes WHERE attempt_id = ?", params = list(attempt_id))
-      if (nrow(prior)) cli::cli_abort("An attempt can have only one terminal outcome")
-      if (!nrow(DBI::dbGetQuery(con, "SELECT 1 FROM attempts WHERE attempt_id = ?", params = list(attempt_id)))) cli::cli_abort("Execution attempt was not found")
-      DBI::dbExecute(con, "INSERT INTO attempt_outcomes VALUES (?, ?, ?, ?)", params = list(attempt_id, outcome, .utc_timestamp(), idempotency_key))
+      if (!.register_command(con, idempotency_key, command)) {
+        return(invisible(NULL))
+      }
+      prior <- DBI::dbGetQuery(
+        con,
+        "SELECT 1 FROM attempt_outcomes WHERE attempt_id = ?",
+        params = list(attempt_id)
+      )
+      if (nrow(prior)) {
+        cli::cli_abort("An attempt can have only one terminal outcome")
+      }
+      attempt_exists <- DBI::dbGetQuery(
+        con,
+        "SELECT 1 FROM attempts WHERE attempt_id = ?",
+        params = list(attempt_id)
+      )
+      if (!nrow(attempt_exists)) {
+        cli::cli_abort("Execution attempt was not found")
+      }
+      DBI::dbExecute(
+        con,
+        "INSERT INTO attempt_outcomes VALUES (?, ?, ?, ?)",
+        params = list(
+          attempt_id, outcome, .utc_timestamp(), idempotency_key
+        )
+      )
     })
     invisible(attempt_id)
   }
-  record_evidence <- function(evidence_id, revision_id, evidence_type, outcome, idempotency_key, details = list()) {
+  record_evidence <- function(
+    evidence_id,
+    revision_id,
+    evidence_type,
+    outcome,
+    idempotency_key,
+    details = list()
+  ) {
     if (!checkmate::test_list(details, names = "unique")) {
       cli::cli_abort("Evidence details must be a named list")
     }
     write_transaction(function(con) {
-      command <- list(evidence_id = evidence_id, revision_id = revision_id, evidence_type = evidence_type, outcome = outcome, details = details)
-      if (!.register_command(con, idempotency_key, command)) return(invisible(NULL))
+      command <- list(
+        evidence_id = evidence_id,
+        revision_id = revision_id,
+        evidence_type = evidence_type,
+        outcome = outcome,
+        details = details
+      )
+      if (!.register_command(con, idempotency_key, command)) {
+        return(invisible(NULL))
+      }
       .current_revision(con, revision_id)
       details_json <- canonical_serialize(details)
-      DBI::dbExecute(con, "INSERT INTO evidence_entries VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-        params = list(evidence_id, revision_id, evidence_type, outcome, details_json,
-          canonical_hash(details), .utc_timestamp(), idempotency_key))
+      DBI::dbExecute(
+        con,
+        "INSERT INTO evidence_entries VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        params = list(
+          evidence_id, revision_id, evidence_type, outcome, details_json,
+          canonical_hash(details), .utc_timestamp(), idempotency_key
+        )
+      )
     })
     invisible(evidence_id)
   }
-  list_evidence <- function(revision_id) .with_evidence_connection(database_path, \(con) DBI::dbGetQuery(
-    con, "SELECT * FROM evidence_entries WHERE revision_id = ? ORDER BY created_at, evidence_id", params = list(revision_id)
-  ))
-  accept_artifact_bundle <- function(bundle_id, revision_id, code_hash, image_hash, analytical_hash, idempotency_key) {
+  list_evidence <- function(revision_id) {
+    .with_evidence_connection(database_path, \(con) DBI::dbGetQuery(
+      con,
+      paste(
+        "SELECT * FROM evidence_entries WHERE revision_id = ?",
+        "ORDER BY created_at, evidence_id"
+      ),
+      params = list(revision_id)
+    ))
+  }
+  accept_artifact_bundle <- function(
+    bundle_id,
+    revision_id,
+    code_hash,
+    image_hash,
+    analytical_hash,
+    idempotency_key
+  ) {
     write_transaction(function(con) {
-      command <- list(bundle_id = bundle_id, revision_id = revision_id, code_hash = code_hash, image_hash = image_hash, analytical_hash = analytical_hash)
-      if (!.register_command(con, idempotency_key, command)) return(invisible(NULL))
+      command <- list(
+        bundle_id = bundle_id,
+        revision_id = revision_id,
+        code_hash = code_hash,
+        image_hash = image_hash,
+        analytical_hash = analytical_hash
+      )
+      if (!.register_command(con, idempotency_key, command)) {
+        return(invisible(NULL))
+      }
       revision <- .current_revision(con, revision_id)
       if (is.na(revision$image_hash) && is.na(revision$analytical_hash)) {
         if (!is.null(artifact_store)) {
@@ -489,7 +709,10 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
           con,
           paste(
             "UPDATE revisions SET image_hash = ?, analytical_hash = ?",
-            "WHERE revision_id = ? AND image_hash IS NULL AND analytical_hash IS NULL"
+            paste(
+              "WHERE revision_id = ? AND image_hash IS NULL",
+              "AND analytical_hash IS NULL"
+            )
           ),
           params = list(image_hash, analytical_hash, revision_id)
         )
@@ -513,10 +736,22 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
         artifact_store$verify(code_hash)
         artifact_store$verify(image_hash)
       }
-      prior <- DBI::dbGetQuery(con, "SELECT 1 FROM artifact_bundles WHERE revision_id = ?", params = list(revision_id))
-      if (nrow(prior)) cli::cli_abort("A revision can have only one accepted artifact bundle")
-      DBI::dbExecute(con, "INSERT INTO artifact_bundles VALUES (?, ?, ?, ?, ?, ?, ?)",
-        params = list(bundle_id, revision_id, code_hash, image_hash, analytical_hash, .utc_timestamp(), idempotency_key))
+      prior <- DBI::dbGetQuery(
+        con,
+        "SELECT 1 FROM artifact_bundles WHERE revision_id = ?",
+        params = list(revision_id)
+      )
+      if (nrow(prior)) {
+        cli::cli_abort("A revision can have only one accepted artifact bundle")
+      }
+      DBI::dbExecute(
+        con,
+        "INSERT INTO artifact_bundles VALUES (?, ?, ?, ?, ?, ?, ?)",
+        params = list(
+          bundle_id, revision_id, code_hash, image_hash, analytical_hash,
+          .utc_timestamp(), idempotency_key
+        )
+      )
     })
     invisible(bundle_id)
   }
@@ -554,14 +789,24 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
         return(.chain_tip(con, existing$plot_id))
       }
       revision <- .current_revision(con, revision_id)
-      if (!identical(as.integer(revision$version), as.integer(expected_version))) cli::cli_abort("The revision token is stale")
+      if (!identical(
+        as.integer(revision$version), as.integer(expected_version)
+      )) {
+        cli::cli_abort("The revision token is stale")
+      }
       if (!identical(revision$status, "Draft")) {
         cli::cli_abort(
           "Only a Draft revision can become Verified"
         )
       }
-      DBI::dbExecute(con, "UPDATE revision_projection SET status = ?, version = version + 1, updated_at = ? WHERE revision_id = ?",
-        params = list("Verified", .utc_timestamp(), revision_id))
+      DBI::dbExecute(
+        con,
+        paste(
+          "UPDATE revision_projection SET status = ?, version = version + 1,",
+          "updated_at = ? WHERE revision_id = ?"
+        ),
+        params = list("Verified", .utc_timestamp(), revision_id)
+      )
       .append_lifecycle_event(
         con,
         revision,
@@ -597,26 +842,68 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
         return(.chain_tip(con, existing$plot_id))
       }
       revision <- .current_revision(con, revision_id)
-      if (revision$status == "Reviewed") cli::cli_abort("Reviewed revisions are immutable")
-      if (!identical(as.integer(revision$version), as.integer(expected_version))) cli::cli_abort("The revision token is stale")
-      if (!revision$status %in% c("Verified")) cli::cli_abort("Only a Verified revision can be reviewed")
-      expected_hashes <- unlist(revision[c("code_hash", "image_hash", "analytical_hash")])
-      if (!identical(unlist(hashes[names(expected_hashes)]), expected_hashes)) cli::cli_abort("Review hashes do not match the immutable revision hashes")
-      if (identical(actor$id, revision$creator_id)) cli::cli_abort("A revision creator cannot review their own revision")
-      if (!isTRUE(actor$active)) cli::cli_abort("The authenticated reviewer must be active")
-      eligible <- intersect(actor$roles, c("statistical_programmer", "biostatistician"))
-      if (!length(eligible)) cli::cli_abort("The authenticated actor is not an eligible reviewer")
+      if (revision$status == "Reviewed") {
+        cli::cli_abort("Reviewed revisions are immutable")
+      }
+      if (!identical(
+        as.integer(revision$version), as.integer(expected_version)
+      )) {
+        cli::cli_abort("The revision token is stale")
+      }
+      if (!revision$status %in% c("Verified")) {
+        cli::cli_abort("Only a Verified revision can be reviewed")
+      }
+      expected_hashes <- unlist(
+        revision[c("code_hash", "image_hash", "analytical_hash")]
+      )
+      if (!identical(unlist(hashes[names(expected_hashes)]), expected_hashes)) {
+        cli::cli_abort(
+          "Review hashes do not match the immutable revision hashes"
+        )
+      }
+      if (identical(actor$id, revision$creator_id)) {
+        cli::cli_abort("A revision creator cannot review their own revision")
+      }
+      if (!isTRUE(actor$active)) {
+        cli::cli_abort("The authenticated reviewer must be active")
+      }
+      eligible <- intersect(
+        actor$roles,
+        c("statistical_programmer", "biostatistician")
+      )
+      if (!length(eligible)) {
+        cli::cli_abort("The authenticated actor is not an eligible reviewer")
+      }
       if (is.null(role) && length(eligible) > 1L) {
-        cli::cli_abort("A reviewer with multiple eligible roles must select one role")
+        cli::cli_abort(paste0(
+          "A reviewer with multiple eligible roles must select ",
+          "one role"
+        ))
       }
       role <- role %||% eligible[[1]]
       if (!checkmate::test_choice(role, eligible)) {
-        cli::cli_abort("The claimed reviewer role is not authorized for this actor")
+        cli::cli_abort(paste0(
+          "The claimed reviewer role is not authorized for this actor"
+        ))
       }
-      if (decision == "rejected" && !checkmate::test_string(comment, min.chars = 1)) cli::cli_abort("A rejection rationale is required")
-      prior <- DBI::dbGetQuery(con, "SELECT actor_id FROM review_decisions WHERE revision_id = ?", params = list(revision_id))
-      if (actor$id %in% prior$actor_id) cli::cli_abort("Review decisions require distinct authenticated identities")
-      decision_id <- paste0("decision-", substr(canonical_hash(idempotency_key), 1L, 24L))
+      if (decision == "rejected" &&
+        !checkmate::test_string(comment, min.chars = 1)) {
+        cli::cli_abort("A rejection rationale is required")
+      }
+      prior <- DBI::dbGetQuery(
+        con,
+        "SELECT actor_id FROM review_decisions WHERE revision_id = ?",
+        params = list(revision_id)
+      )
+      if (actor$id %in% prior$actor_id) {
+        cli::cli_abort(
+          "Review decisions require distinct authenticated identities"
+        )
+      }
+      decision_id <- paste0(
+        "decision-",
+        substr(canonical_hash(idempotency_key), 1L, 24L)
+      )
       created_at <- .utc_timestamp()
       authorization_json <- canonical_serialize(list(
         actor_id = actor$id,
@@ -640,21 +927,47 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
       )
       decision_hash <- .review_decision_hash(decision_record)
       DBI::dbExecute(con, paste(
-        "INSERT INTO review_decisions(decision_id, revision_id, actor_id, role, decision, authorization_json, comment,",
-        "code_hash, image_hash, analytical_hash, created_at, idempotency_key, record_hash)",
+        "INSERT INTO review_decisions(",
+        "decision_id, revision_id, actor_id, role, decision,",
+        "authorization_json, comment,",
+        paste(
+          "code_hash, image_hash, analytical_hash, created_at,",
+          "idempotency_key, record_hash)"
+        ),
         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-      ), params = list(decision_id, revision_id, actor$id, role, decision,
-        authorization_json, stored_comment, revision$code_hash, revision$image_hash,
-        revision$analytical_hash, created_at, idempotency_key, decision_hash))
+      ), params = list(
+        decision_id, revision_id, actor$id, role, decision,
+        authorization_json, stored_comment, revision$code_hash,
+        revision$image_hash, revision$analytical_hash, created_at,
+        idempotency_key, decision_hash
+      ))
       next_status <- revision$status
       if (decision == "rejected") next_status <- "Rejected"
       if (decision == "approved") {
-        approvals <- DBI::dbGetQuery(con, "SELECT actor_id, role FROM review_decisions WHERE revision_id = ? AND decision = 'approved'", params = list(revision_id))
-        if (nrow(approvals) >= 2L && length(unique(approvals$actor_id)) >= 2L &&
-            all(c("statistical_programmer", "biostatistician") %in% approvals$role)) next_status <- "Reviewed"
+        approvals <- DBI::dbGetQuery(
+          con,
+          paste(
+            "SELECT actor_id, role FROM review_decisions",
+            "WHERE revision_id = ? AND decision = 'approved'"
+          ),
+          params = list(revision_id)
+        )
+        if (nrow(approvals) >= 2L &&
+          length(unique(approvals$actor_id)) >= 2L &&
+          all(c(
+            "statistical_programmer", "biostatistician"
+          ) %in% approvals$role)) {
+          next_status <- "Reviewed"
+        }
       }
-      DBI::dbExecute(con, "UPDATE revision_projection SET status = ?, version = version + 1, updated_at = ? WHERE revision_id = ?",
-        params = list(next_status, .utc_timestamp(), revision_id))
+      DBI::dbExecute(
+        con,
+        paste(
+          "UPDATE revision_projection SET status = ?, version = version + 1,",
+          "updated_at = ? WHERE revision_id = ?"
+        ),
+        params = list(next_status, .utc_timestamp(), revision_id)
+      )
       .append_lifecycle_event(
         con,
         revision,
@@ -671,24 +984,64 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
     })
   }
 
-  list_review_decisions <- function(revision_id) .with_evidence_connection(database_path, \(con) DBI::dbGetQuery(
-    con, "SELECT * FROM review_decisions WHERE revision_id = ? ORDER BY created_at, decision_id", params = list(revision_id)
-  ))
+  list_review_decisions <- function(revision_id) {
+    .with_evidence_connection(database_path, \(con) DBI::dbGetQuery(
+      con,
+      paste(
+        "SELECT * FROM review_decisions WHERE revision_id = ?",
+        "ORDER BY created_at, decision_id"
+      ),
+      params = list(revision_id)
+    ))
+  }
 
-  record_export_receipt <- function(receipt_id, revision_id, destination_id, code_hash, image_hash, idempotency_key) {
+  record_export_receipt <- function(
+    receipt_id,
+    revision_id,
+    destination_id,
+    code_hash,
+    image_hash,
+    idempotency_key
+  ) {
     write_transaction(function(con) {
-      command <- list(receipt_id = receipt_id, revision_id = revision_id, destination_id = destination_id, code_hash = code_hash, image_hash = image_hash)
-      if (!.register_command(con, idempotency_key, command)) return(invisible(NULL))
+      command <- list(
+        receipt_id = receipt_id,
+        revision_id = revision_id,
+        destination_id = destination_id,
+        code_hash = code_hash,
+        image_hash = image_hash
+      )
+      if (!.register_command(con, idempotency_key, command)) {
+        return(invisible(NULL))
+      }
       revision <- .current_revision(con, revision_id)
-      if (!identical(code_hash, revision$code_hash) || !identical(image_hash, revision$image_hash)) cli::cli_abort("Export receipt hashes do not match the immutable revision")
-      DBI::dbExecute(con, "INSERT INTO export_receipts VALUES (?, ?, ?, ?, ?, ?, ?)",
-        params = list(receipt_id, revision_id, destination_id, code_hash, image_hash, .utc_timestamp(), idempotency_key))
+      if (!identical(code_hash, revision$code_hash) ||
+        !identical(image_hash, revision$image_hash)) {
+        cli::cli_abort(
+          "Export receipt hashes do not match the immutable revision"
+        )
+      }
+      DBI::dbExecute(
+        con,
+        "INSERT INTO export_receipts VALUES (?, ?, ?, ?, ?, ?, ?)",
+        params = list(
+          receipt_id, revision_id, destination_id, code_hash, image_hash,
+          .utc_timestamp(), idempotency_key
+        )
+      )
     })
     invisible(receipt_id)
   }
-  list_export_receipts <- function(revision_id) .with_evidence_connection(database_path, \(con) DBI::dbGetQuery(
-    con, "SELECT * FROM export_receipts WHERE revision_id = ? ORDER BY created_at, receipt_id", params = list(revision_id)
-  ))
+  list_export_receipts <- function(revision_id) {
+    .with_evidence_connection(database_path, \(con) DBI::dbGetQuery(
+      con,
+      paste(
+        "SELECT * FROM export_receipts WHERE revision_id = ?",
+        "ORDER BY created_at, receipt_id"
+      ),
+      params = list(revision_id)
+    ))
+  }
 
   rebuild_projections <- function() {
     .with_repository_lock(database_path, function() {
@@ -738,16 +1091,36 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
         plot_events <- events[events$plot_id == plot_id, , drop = FALSE]
         previous <- paste(rep("0", 64L), collapse = "")
         for (i in seq_len(nrow(plot_events))) {
-          if (plot_events$event_sequence[[i]] != i || !identical(plot_events$previous_hash[[i]], previous)) cli::cli_abort("Lifecycle event chain order is invalid")
-          calculated <- canonical_hash(list(plot_id = plot_id, revision_id = plot_events$revision_id[[i]], event_sequence = i,
-            event_type = plot_events$event_type[[i]], payload_json = plot_events$payload_json[[i]], previous_hash = previous, created_at = plot_events$created_at[[i]]))
-          if (!identical(calculated, plot_events$chain_hash[[i]])) cli::cli_abort("Lifecycle event chain hash is invalid")
+          if (plot_events$event_sequence[[i]] != i ||
+            !identical(plot_events$previous_hash[[i]], previous)) {
+            cli::cli_abort("Lifecycle event chain order is invalid")
+          }
+          calculated <- canonical_hash(list(
+            plot_id = plot_id,
+            revision_id = plot_events$revision_id[[i]],
+            event_sequence = i,
+            event_type = plot_events$event_type[[i]],
+            payload_json = plot_events$payload_json[[i]],
+            previous_hash = previous,
+            created_at = plot_events$created_at[[i]]
+          ))
+          if (!identical(calculated, plot_events$chain_hash[[i]])) {
+            cli::cli_abort("Lifecycle event chain hash is invalid")
+          }
           previous <- calculated
         }
         root <- roots[[plot_id]]
-        if (is.null(root) || root$sequence != nrow(plot_events) || !identical(root$chain_hash, previous)) cli::cli_abort("External chain root does not match persisted history")
+        if (is.null(root) || root$sequence != nrow(plot_events) ||
+          !identical(root$chain_hash, previous)) {
+          cli::cli_abort(
+            "External chain root does not match persisted history"
+          )
+        }
       }
-      projections <- DBI::dbGetQuery(con, "SELECT * FROM revision_projection ORDER BY revision_id")
+      projections <- DBI::dbGetQuery(
+        con,
+        "SELECT * FROM revision_projection ORDER BY revision_id"
+      )
       revisions <- DBI::dbGetQuery(
         con,
         paste(
@@ -761,9 +1134,19 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
           "Complete integrity verification requires an artifact store"
         )
       }
-      actual <- projections[, c("revision_id", "status", "version"), drop = FALSE]
-      expected <- expected[, c("revision_id", "status", "version"), drop = FALSE]
-      if (!identical(actual, expected)) cli::cli_abort("Revision projection does not match append-only history")
+      actual <- projections[
+        , c("revision_id", "status", "version"),
+        drop = FALSE
+      ]
+      expected <- expected[
+        , c("revision_id", "status", "version"),
+        drop = FALSE
+      ]
+      if (!identical(actual, expected)) {
+        cli::cli_abort(
+          "Revision projection does not match append-only history"
+        )
+      }
       evidence <- DBI::dbGetQuery(
         con,
         "SELECT evidence_id, details_json, content_hash FROM evidence_entries"
@@ -776,7 +1159,10 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
         )
         if (!identical(calculated, evidence$content_hash[[index]])) {
           cli::cli_abort(
-            "Evidence content hash is invalid for {.val {evidence$evidence_id[[index]]}}"
+            paste0(
+              "Evidence content hash is invalid for ",
+              "{.val {evidence$evidence_id[[index]]}}"
+            )
           )
         }
       }
@@ -809,8 +1195,7 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
         "SELECT * FROM review_decisions ORDER BY decision_id"
       )
       decision_events <- events[
-        events$event_type %in% c("review_approved", "review_rejected"),
-        ,
+        events$event_type %in% c("review_approved", "review_rejected"), ,
         drop = FALSE
       ]
       event_decisions <- lapply(
@@ -828,7 +1213,10 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
         calculated <- .review_decision_hash(record)
         event_index <- match(record$decision_id, event_ids)
         if (!identical(calculated, record$record_hash) ||
-            !identical(calculated, event_decisions[[event_index]]$decision_hash)) {
+          !identical(
+            calculated,
+            event_decisions[[event_index]]$decision_hash
+          )) {
           cli::cli_abort("Reviewer decision integrity check failed")
         }
       }
@@ -844,7 +1232,10 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
         )
       }
       if (!is.null(artifact_store)) {
-        hashes <- DBI::dbGetQuery(con, "SELECT code_hash, image_hash FROM revisions")
+        hashes <- DBI::dbGetQuery(
+          con,
+          "SELECT code_hash, image_hash FROM revisions"
+        )
         for (hash in unique(unlist(hashes))) artifact_store$verify(hash)
       }
       TRUE
@@ -859,7 +1250,11 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
     )
   }
 
-  foreign_keys_enabled <- function() .with_evidence_connection(database_path, \(con) identical(DBI::dbGetQuery(con, "PRAGMA foreign_keys")[[1]][[1]], 1L))
+  foreign_keys_enabled <- function() {
+    .with_evidence_connection(database_path, \(con) {
+      identical(DBI::dbGetQuery(con, "PRAGMA foreign_keys")[[1]][[1]], 1L)
+    })
+  }
 
   cleanup_orphan_artifacts <- function(minimum_age_seconds = 3600) {
     checkmate::assert_number(
@@ -890,7 +1285,8 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
 
   backup <- function(destination) {
     .with_repository_lock(database_path, function() {
-      if (fs::dir_exists(destination) && length(fs::dir_ls(destination, fail = FALSE))) {
+      if (fs::dir_exists(destination) &&
+        length(fs::dir_ls(destination, fail = FALSE))) {
         cli::cli_abort("Backup destination must be empty")
       }
       verify_integrity_unlocked(require_artifacts = TRUE)
@@ -899,17 +1295,26 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
       staging <- fs::file_temp(tmp_dir = parent, pattern = "evidence-backup-")
       fs::dir_create(staging)
       completed <- FALSE
-      on.exit({
-        if (!completed && fs::dir_exists(staging)) fs::dir_delete(staging)
-      }, add = TRUE)
+      on.exit(
+        {
+          if (!completed && fs::dir_exists(staging)) fs::dir_delete(staging)
+        },
+        add = TRUE
+      )
       source <- .sqlite_connect(database_path)
       target <- .sqlite_connect(fs::path(staging, "evidence.sqlite"))
-      on.exit({
-        if (DBI::dbIsValid(source)) DBI::dbDisconnect(source)
-      }, add = TRUE)
-      on.exit({
-        if (DBI::dbIsValid(target)) DBI::dbDisconnect(target)
-      }, add = TRUE)
+      on.exit(
+        {
+          if (DBI::dbIsValid(source)) DBI::dbDisconnect(source)
+        },
+        add = TRUE
+      )
+      on.exit(
+        {
+          if (DBI::dbIsValid(target)) DBI::dbDisconnect(target)
+        },
+        add = TRUE
+      )
       RSQLite::sqliteCopyDatabase(source, target)
       DBI::dbDisconnect(target)
       DBI::dbDisconnect(source)
@@ -917,7 +1322,11 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
       if (fs::file_exists(chain_root_path)) {
         fs::file_copy(chain_root_path, staged_chain_root)
       } else {
-        writeLines(canonical_serialize(list()), staged_chain_root, useBytes = TRUE)
+        writeLines(
+          canonical_serialize(list()),
+          staged_chain_root,
+          useBytes = TRUE
+        )
       }
       if (!is.null(artifact_store)) {
         fs::dir_copy(
@@ -962,28 +1371,48 @@ sqlite_evidence_repository <- function(database_path, chain_root_path, artifact_
     })
   }
 
-  structure(list(
-    database_path = fs::path_abs(database_path), chain_root_path = fs::path_abs(chain_root_path), artifact_store = artifact_store,
-    create_revision = create_revision, list_revisions = list_revisions, get_revision = get_revision, list_events = list_events,
-    record_attempt = record_attempt, list_attempts = list_attempts, complete_attempt = complete_attempt,
-    record_evidence = record_evidence, list_evidence = list_evidence,
-    accept_artifact_bundle = accept_artifact_bundle,
-    get_artifact_bundle = get_artifact_bundle,
-    mark_verified = mark_verified,
-    record_review_decision = record_review_decision,
-    list_review_decisions = list_review_decisions, record_export_receipt = record_export_receipt,
-    list_export_receipts = list_export_receipts, rebuild_projections = rebuild_projections,
-    verify_integrity = verify_integrity, foreign_keys_enabled = foreign_keys_enabled,
-    cleanup_orphan_artifacts = cleanup_orphan_artifacts, backup = backup,
-    update_revision = function(...) cli::cli_abort("Updating historical revisions is not available"),
-    delete_revision = function(...) cli::cli_abort("Deleting historical revisions is not available")
-  ), class = "sqlite_evidence_repository")
+  structure(
+    list(
+      database_path = fs::path_abs(database_path),
+      chain_root_path = fs::path_abs(chain_root_path),
+      artifact_store = artifact_store,
+      create_revision = create_revision,
+      list_revisions = list_revisions,
+      get_revision = get_revision,
+      list_events = list_events,
+      record_attempt = record_attempt,
+      list_attempts = list_attempts,
+      complete_attempt = complete_attempt,
+      record_evidence = record_evidence,
+      list_evidence = list_evidence,
+      accept_artifact_bundle = accept_artifact_bundle,
+      get_artifact_bundle = get_artifact_bundle,
+      mark_verified = mark_verified,
+      record_review_decision = record_review_decision,
+      list_review_decisions = list_review_decisions,
+      record_export_receipt = record_export_receipt,
+      list_export_receipts = list_export_receipts,
+      rebuild_projections = rebuild_projections,
+      verify_integrity = verify_integrity,
+      foreign_keys_enabled = foreign_keys_enabled,
+      cleanup_orphan_artifacts = cleanup_orphan_artifacts,
+      backup = backup,
+      update_revision = function(...) {
+        cli::cli_abort("Updating historical revisions is not available")
+      },
+      delete_revision = function(...) {
+        cli::cli_abort("Deleting historical revisions is not available")
+      }
+    ),
+    class = "sqlite_evidence_repository"
+  )
 }
 
 restore_evidence_repository <- function(backup_path, destination) {
   checkmate::assert_directory_exists(backup_path)
   .verify_backup_manifest(backup_path)
-  if (fs::dir_exists(destination) && length(fs::dir_ls(destination, fail = FALSE))) {
+  if (fs::dir_exists(destination) &&
+    length(fs::dir_ls(destination, fail = FALSE))) {
     cli::cli_abort("Restore destination must be empty")
   }
   parent <- fs::path_dir(destination)
@@ -991,9 +1420,12 @@ restore_evidence_repository <- function(backup_path, destination) {
   staging <- fs::file_temp(tmp_dir = parent, pattern = "evidence-restore-")
   fs::dir_create(staging)
   completed <- FALSE
-  on.exit({
-    if (!completed && fs::dir_exists(staging)) fs::dir_delete(staging)
-  }, add = TRUE)
+  on.exit(
+    {
+      if (!completed && fs::dir_exists(staging)) fs::dir_delete(staging)
+    },
+    add = TRUE
+  )
   fs::file_copy(
     fs::path(backup_path, "evidence.sqlite"),
     fs::path(staging, "evidence.sqlite")

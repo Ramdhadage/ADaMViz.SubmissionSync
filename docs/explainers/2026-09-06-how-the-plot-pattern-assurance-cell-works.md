@@ -26,6 +26,43 @@ The first supported pattern is a longitudinal boxplot:
 
 This document is a dummy walkthrough of the intended product. It is not evidence that the application has already been implemented or validated.
 
+## Output Structure
+
+This package keeps its application code in the flat `R/` directory. The following shallow tree was captured with `fs::dir_tree(".", recurse = FALSE)`; it shows the repository root without expanding dependency libraries and generated documentation assets.
+
+```text
+.
+├── ADaMViz.SubmissionSync.Rproj
+├── AGENTS.md
+├── app.R
+├── ARCHITECTURE.md
+├── codecov.yml
+├── CODEX_CONTEXT.md
+├── CONCEPTS.md
+├── DESCRIPTION
+├── dev/
+├── docs/
+├── inst/
+├── LICENSE
+├── man/
+├── manifest.json
+├── NAMESPACE
+├── NEWS.md
+├── R/
+├── README.md
+├── renv/
+├── renv.lock
+├── rsconnect/
+├── tests/
+├── vignettes/
+└── _pkgdown.yml
+```
+
+- `app.R` is the launch script; `R/` contains the Shiny modules, domain services, plotting code, providers, and execution logic.
+- `inst/` contains packaged app assets, synthetic fixtures, JSON schemas, and SQL; `tests/testthat/` contains unit, service, module, and browser tests.
+- `docs/` contains product strategy, plans, explainers, feature guides, UX specifications, solutions, and validation documents; `vignettes/articles/` contains package guides.
+- `DESCRIPTION` and `renv.lock` define package metadata and the locked R environment.
+
 ![Prompt-to-reviewed plot workflow showing the blocking validation branch and the governed path to controlled export](assets/plot-pattern-assurance-cell/prompt-to-reviewed-workflow.png)
 
 ## Meet the dummy user and data
@@ -325,9 +362,9 @@ Think of the product as six connected responsibilities:
 
 ## Source documents
 
-- `STRATEGY.md`
-- `docs/ideation/2026-09-05-adamviz-submissionsync-validation-ready-product-ideation.md`
-- `docs/plans/2026-09-06-0014-feat-plot-pattern-assurance-cell-plan.md`
+- [Product strategy](../product/STRATEGY.md)
+- [Product ideation](../ideation/2026-09-05-adamviz-submissionsync-validation-ready-product-ideation.md)
+- [Assurance Cell plan](../plans/2026-09-06-0014-feat-plot-pattern-assurance-cell-plan.md)
 
 ## Check yourself
 

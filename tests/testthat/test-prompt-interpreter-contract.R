@@ -29,7 +29,7 @@ test_that("arbitrary R requests are deferred before provider calls", {
   expect_null(result$candidate)
 })
 
-test_that("arbitrary transformation requests are deferred before provider calls", {
+test_that("arbitrary transformation requests defer before provider calls", {
   snapshot <- make_test_snapshot()
   context <- build_prompt_context(snapshot)
   prompts <- c(
@@ -52,11 +52,17 @@ test_that("arbitrary transformation requests are deferred before provider calls"
     rep("manual_selection", length(prompts))
   )
   expect_identical(
-    vapply(results, function(result) result$metadata$provider_called, logical(1)),
+    vapply(
+      results, function(result) result$metadata$provider_called,
+      logical(1)
+    ),
     rep(FALSE, length(prompts))
   )
   expect_identical(
-    vapply(results, function(result) result$clarifications$reason, character(1)),
+    vapply(
+      results, function(result) result$clarifications$reason,
+      character(1)
+    ),
     rep("arbitrary_r_deferred", length(prompts))
   )
   expect_identical(
@@ -64,7 +70,10 @@ test_that("arbitrary transformation requests are deferred before provider calls"
     rep(TRUE, length(prompts))
   )
   expect_identical(
-    vapply(results, function(result) is.null(result$executable_code), logical(1)),
+    vapply(
+      results, function(result) is.null(result$executable_code),
+      logical(1)
+    ),
     rep(TRUE, length(prompts))
   )
 })
@@ -77,20 +86,30 @@ test_that("extra provider and candidate fields fail closed", {
       provider = "extra-mock",
       model = "extra-v1",
       interpret = function(prompt, context) {
-        list(status = "candidate", fields = list(paramcd = "ALT"), markdown = "ignored")
+        list(
+          status = "candidate", fields = list(paramcd = "ALT"),
+          markdown = "ignored"
+        )
       }
     ),
     class = "prompt_interpreter"
   )
-  result <- interpret_prompt("Create ALT boxplot.", context, extra_response, snapshot = snapshot)
+  result <- interpret_prompt("Create ALT boxplot.", context, extra_response,
+    snapshot = snapshot
+  )
   expect_identical(result$status, "manual_selection")
   expect_identical(result$clarifications$reason, "extra_provider_fields")
 
   extra_field <- extra_response
   extra_field$interpret <- function(prompt, context) {
-    list(status = "candidate", fields = list(paramcd = "ALT", code = "system('whoami')"))
+    list(status = "candidate", fields = list(
+      paramcd = "ALT",
+      code = "system('whoami')"
+    ))
   }
-  result <- interpret_prompt("Create ALT boxplot.", context, extra_field, snapshot = snapshot)
+  result <- interpret_prompt("Create ALT boxplot.", context, extra_field,
+    snapshot = snapshot
+  )
   expect_identical(result$status, "manual_selection")
   expect_identical(result$clarifications$reason, "extra_candidate_fields")
 })

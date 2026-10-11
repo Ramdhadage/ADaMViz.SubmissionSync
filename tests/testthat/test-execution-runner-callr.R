@@ -19,7 +19,9 @@ test_that("callr runner executes in a clean subprocess", {
   )
   skip_if(
     identical(result$status, "failed") &&
-      grepl("Graphics API version mismatch", result$diagnostics$stderr, fixed = TRUE),
+      grepl("Graphics API version mismatch", result$diagnostics$stderr,
+        fixed = TRUE
+      ),
     "callr subprocess graphics device is incompatible in this R environment"
   )
 
@@ -29,7 +31,7 @@ test_that("callr runner executes in a clean subprocess", {
   expect_identical(result$result$snapshot_hash, fixture$request$snapshot_hash)
 })
 
-test_that("callr runner resolves the active source root from a nested working directory", {
+test_that("callr runner resolves the source root from a nested directory", {
   source_root <- normalizePath(
     testthat::test_path("..", ".."),
     winslash = "/",

@@ -1,6 +1,6 @@
 test_that("verification passes only complete runtime evidence", {
   fixture <- execution_fixture()
-  runner_result <- fake_successful_runner_result(fixture)
+  runner_result <- fake_success_runner_result(fixture)
 
   verification <- verify_execution_result(
     request = fixture$request,

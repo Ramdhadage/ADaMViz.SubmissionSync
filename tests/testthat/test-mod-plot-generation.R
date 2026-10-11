@@ -1,4 +1,4 @@
-test_that("plot generation UI gives traceability, review, and export its own step", {
+test_that("plot generation UI gives traceability, review, and export a step", {
   html <- as.character(mod_plot_generation_ui("plot_generation"))
 
   result_condition <- regexpr(
@@ -17,12 +17,18 @@ test_that("plot generation UI gives traceability, review, and export its own ste
     fixed = TRUE
   )[[1]]
   result_content <- vapply(
-    c("Run Status", "Plot preview", "Optional: view automated checks", "Continue to export"),
+    c(
+      "Run Status", "Plot preview", "Optional: view automated checks",
+      "Continue to export"
+    ),
     function(label) regexpr(label, html, fixed = TRUE)[[1]],
     integer(1)
   )
   export_content <- vapply(
-    c("Revision History", "Two-Person Review", "Controlled export", "Back to result"),
+    c(
+      "Revision History", "Two-Person Review", "Controlled export",
+      "Back to result"
+    ),
     function(label) regexpr(label, html, fixed = TRUE)[[1]],
     integer(1)
   )
@@ -33,8 +39,16 @@ test_that("plot generation UI gives traceability, review, and export its own ste
   expect_true(all(result_content < export_condition))
   expect_gt(export_panel, export_condition)
   expect_true(all(export_content > export_panel))
-  expect_length(gregexpr("Traceability, review, and export", html, fixed = TRUE)[[1]], 1L)
-  expect_match(html, "<details class=\"f001-panel\" open>\\s*<summary>Traceability, review, and export</summary>")
+  expect_length(gregexpr("Traceability, review, and export", html,
+    fixed = TRUE
+  )[[1]], 1L)
+  expect_match(
+    html,
+    paste0(
+      "<details class=\"f001-panel\" open>\\s*",
+      "<summary>Traceability, review, and export</summary>"
+    )
+  )
 })
 
 test_that("plot generation navigation reaches Export and returns to Result", {
