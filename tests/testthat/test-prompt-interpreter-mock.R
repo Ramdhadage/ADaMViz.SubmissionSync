@@ -1,4 +1,4 @@
-test_that("mock interpreter converts a representative boxplot prompt to a candidate", {
+test_that("mock interpreter converts a boxplot prompt to a candidate", {
   snapshot <- make_test_snapshot()
   context <- build_prompt_context(snapshot)
   result <- interpret_prompt(
@@ -13,8 +13,14 @@ test_that("mock interpreter converts a representative boxplot prompt to a candid
   expect_s3_class(result$candidate, "plot_spec")
   expect_identical(result$candidate$fields$paramcd, "ALT")
   expect_identical(result$candidate$fields$y_variable, "AVAL")
-  expect_identical(result$candidate$fields$treatment_levels, c("Active", "Placebo"))
-  expect_identical(result$candidate$fields$visits, c("Baseline", "Week 4", "Week 8"))
+  expect_identical(result$candidate$fields$treatment_levels, c(
+    "Active",
+    "Placebo"
+  ))
+  expect_identical(result$candidate$fields$visits, c(
+    "Baseline", "Week 4",
+    "Week 8"
+  ))
   expect_null(result$executable_code)
 })
 

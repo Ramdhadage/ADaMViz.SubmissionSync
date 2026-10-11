@@ -4,7 +4,10 @@ test_that("review module records distinct approvals and reaches Reviewed", {
     fs::path(root, "db.sqlite"),
     fs::path(root, "chain-root.json")
   )
-  repo$create_revision("plot-1", "rev-1", 1L, "creator", "spec", "code", "image", "analysis", "create")
+  repo$create_revision(
+    "plot-1", "rev-1", 1L, "creator", "spec", "code",
+    "image", "analysis", "create"
+  )
   new_lifecycle_service(repo)$mark_verified("rev-1", 1L, "verify")
   identities <- local_identity_provider(list(
     new_actor("creator", "clinical_scientist"),

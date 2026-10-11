@@ -18,7 +18,10 @@ local_artifact_store <- function(root) {
       verify(hash)
     } else {
       fs::dir_create(fs::path_dir(path), recurse = TRUE)
-      temporary <- fs::file_temp(tmp_dir = fs::path_dir(path), pattern = "artifact-")
+      temporary <- fs::file_temp(
+        tmp_dir = fs::path_dir(path),
+        pattern = "artifact-"
+      )
       writeBin(bytes, temporary)
       if (!identical(digest::digest(file = temporary, algo = "sha256"), hash)) {
         fs::file_delete(temporary)
@@ -45,7 +48,7 @@ local_artifact_store <- function(root) {
   verify <- function(hash) {
     path <- artifact_path(hash)
     if (!fs::file_exists(path) ||
-        !identical(digest::digest(file = path, algo = "sha256"), hash)) {
+      !identical(digest::digest(file = path, algo = "sha256"), hash)) {
       cli::cli_abort("Artifact hash verification failed for {.val {hash}}")
     }
     TRUE

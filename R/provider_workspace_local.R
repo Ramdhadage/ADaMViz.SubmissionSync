@@ -4,13 +4,17 @@ local_workspace_provider <- function(destinations) {
   } else if (is.list(destinations)) {
     roots <- destinations
   } else {
-    cli::cli_abort("{.arg destinations} must be a named character vector or list")
+    cli::cli_abort(
+      "{.arg destinations} must be a named character vector or list"
+    )
   }
   destination_ids <- names(roots)
   if (!length(destination_ids) ||
-      any(!nzchar(destination_ids)) ||
-      anyDuplicated(destination_ids)) {
-    cli::cli_abort("Workspace destinations must have unique logical identifiers")
+    any(!nzchar(destination_ids)) ||
+    anyDuplicated(destination_ids)) {
+    cli::cli_abort(
+      "Workspace destinations must have unique logical identifiers"
+    )
   }
   lapply(destination_ids, .validate_workspace_token, name = "destination_id")
   roots <- lapply(roots, function(root) {
@@ -25,9 +29,11 @@ local_workspace_provider <- function(destinations) {
     .validate_workspace_token(destination_id, "destination_id")
     root <- roots[[destination_id]]
     if (is.null(root)) {
-      cli::cli_abort("Workspace destination {.val {destination_id}} is not registered")
+      cli::cli_abort(
+        "Workspace destination {.val {destination_id}} is not registered"
+      )
     }
-    .assert_supported_workspace_root(root)
+    .validate_workspace_root(root)
     root
   }
 
@@ -66,7 +72,10 @@ local_workspace_provider <- function(destinations) {
       useBytes = TRUE
     )
     structure(
-      c(paths, hashes, list(destination_id = destination_id, export_id = export_id)),
+      c(
+        paths, hashes,
+        list(destination_id = destination_id, export_id = export_id)
+      ),
       class = "workspace_staged_export"
     )
   }
@@ -77,25 +86,31 @@ local_workspace_provider <- function(destinations) {
     }
     paths <- export_paths(stage$destination_id, stage$export_id)
     if (!fs::dir_exists(paths$staging)) {
-      cli::cli_abort("Staged workspace export {.val {stage$export_id}} is missing")
+      cli::cli_abort(
+        "Staged workspace export {.val {stage$export_id}} is missing"
+      )
     }
     if (fs::dir_exists(paths$final)) {
       cli::cli_abort("Workspace export {.val {stage$export_id}} already exists")
     }
     hashes <- .workspace_pair_hashes(paths$staging)
     if (is.null(hashes) ||
-        !identical(hashes$code_hash, stage$code_hash) ||
-        !identical(hashes$image_hash, stage$image_hash)) {
+      !identical(hashes$code_hash, stage$code_hash) ||
+      !identical(hashes$image_hash, stage$image_hash)) {
       quarantine_staged(stage, "hash-mismatch")
-      cli::cli_abort("Staged workspace export hashes changed before publication")
+      cli::cli_abort(
+        "Staged workspace export hashes changed before publication"
+      )
     }
     fs::file_delete(fs::path(paths$staging, "manifest.json"))
     fs::file_move(paths$staging, paths$final)
     published <- inspect_published(stage$destination_id, stage$export_id)
     if (is.null(published) ||
-        !identical(published$code_hash, stage$code_hash) ||
-        !identical(published$image_hash, stage$image_hash)) {
-      cli::cli_abort("Published workspace export hashes do not match the staged bundle")
+      !identical(published$code_hash, stage$code_hash) ||
+      !identical(published$image_hash, stage$image_hash)) {
+      cli::cli_abort(
+        "Published workspace export hashes do not match the staged bundle"
+      )
     }
     invisible(published)
   }
@@ -103,7 +118,9 @@ local_workspace_provider <- function(destinations) {
   inspect_published <- function(destination_id, export_id) {
     paths <- export_paths(destination_id, export_id)
     hashes <- .workspace_pair_hashes(paths$final)
-    if (is.null(hashes)) return(NULL)
+    if (is.null(hashes)) {
+      return(NULL)
+    }
     c(
       list(
         destination_id = destination_id,
@@ -121,7 +138,9 @@ local_workspace_provider <- function(destinations) {
       cli::cli_abort("{.arg stage} must be a staged workspace export")
     }
     paths <- export_paths(stage$destination_id, stage$export_id)
-    if (!fs::dir_exists(paths$staging)) return(invisible(NULL))
+    if (!fs::dir_exists(paths$staging)) {
+      return(invisible(NULL))
+    }
     fs::dir_create(paths$quarantine, recurse = TRUE)
     target <- fs::path(
       paths$quarantine,
@@ -153,7 +172,9 @@ local_workspace_provider <- function(destinations) {
       stage <- structure(
         c(
           export_paths(destination_id, export_id),
-          .workspace_pair_hashes(path) %||% list(code_hash = NA_character_, image_hash = NA_character_),
+          .workspace_pair_hashes(path) %||% list(
+            code_hash = NA_character_, image_hash = NA_character_
+          ),
           list(destination_id = destination_id, export_id = export_id)
         ),
         class = "workspace_staged_export"
@@ -193,7 +214,7 @@ local_workspace_provider <- function(destinations) {
   )
 }
 
-.assert_supported_workspace_root <- function(root) {
+.validate_workspace_root <- function(root) {
   if (isTRUE(fs::is_link(root))) {
     cli::cli_abort("Workspace roots cannot be symbolic links or reparse points")
   }

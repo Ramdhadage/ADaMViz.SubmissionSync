@@ -20,12 +20,19 @@ new_artifact_manifest <- function(
   .validate_plot_spec(spec)
   required_contract_fields <- c("version", "fixture_hash", "review_status")
   if (!identical(spec$state, "confirmed") ||
-      !checkmate::test_string(script, min.chars = 1L) ||
-      !inherits(analysis, "boxplot_analysis") ||
-      !is.list(expected_contract) ||
-      !setequal(names(expected_contract), required_contract_fields) ||
-      !all(vapply(expected_contract, checkmate::test_string, logical(1), min.chars = 1L))) {
-    cli::cli_abort("The artifact manifest requires confirmed, complete U4 inputs")
+    !checkmate::test_string(script, min.chars = 1L) ||
+    !inherits(analysis, "boxplot_analysis") ||
+    !is.list(expected_contract) ||
+    !setequal(names(expected_contract), required_contract_fields) ||
+    !all(vapply(
+      expected_contract,
+      checkmate::test_string,
+      logical(1),
+      min.chars = 1L
+    ))) {
+    cli::cli_abort(
+      "The artifact manifest requires confirmed, complete U4 inputs"
+    )
   }
 
   authentic_spec_hash <- canonical_hash(list(
@@ -33,7 +40,9 @@ new_artifact_manifest <- function(
     provenance = spec$provenance
   ))
   if (!identical(spec$hash, authentic_spec_hash)) {
-    cli::cli_abort("The confirmed plot specification hash does not match its contents")
+    cli::cli_abort(
+      "The confirmed plot specification hash does not match its contents"
+    )
   }
 
   analytical_metadata <- list(
@@ -49,13 +58,19 @@ new_artifact_manifest <- function(
   )
   if (any(analytical_mismatch)) {
     cli::cli_abort(
-      "The analytical result does not match the confirmed specification for {.field {names(analytical_metadata)[analytical_mismatch]}}"
+      paste0(
+        "The analytical result does not match the confirmed specification for ",
+        "{.field {names(analytical_metadata)[analytical_mismatch]}}"
+      )
     )
   }
 
   expected_script <- compile_boxplot_script(spec, analysis$low_n_policy)
   if (!identical(script, expected_script)) {
-    cli::cli_abort("The compiled script does not match the confirmed specification and analytical policy")
+    cli::cli_abort(paste0(
+      "The compiled script does not match the confirmed specification ",
+      "and analytical policy"
+    ))
   }
 
   structure(

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="trusted-mini-agent-flow-root" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="trusted-mini-agent-flow-title trusted-mini-agent-flow-desc">
+        <title id="trusted-mini-agent-flow-title">Trusted mini-agent flow in SubmissionSync</title>
+        <desc id="trusted-mini-agent-flow-desc">A user prompt is converted into a bounded candidate specification, reviewed by a human, then processed only by application-owned validation, compilation, execution, evidence, and review services.</desc>
+        <defs>
+          <marker id="trusted-mini-agent-flow-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#71808c"/></marker>
+          <marker id="trusted-mini-agent-flow-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0b3c5d"/></marker>
+          <marker id="trusted-mini-agent-flow-arrow-blocked" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#8a5a44"/></marker>
+        </defs>
+
+        <rect width="1280" height="720" fill="#f8fafb"/>
+        <text x="64" y="64" fill="#0b3c5d" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="30" font-weight="700">Trusted mini-agent flow</text>
+        <text x="64" y="94" fill="#5b6770" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="15">The model proposes bounded inputs; deterministic R services produce and preserve the result.</text>
+
+        <rect x="488" y="132" width="728" height="448" rx="8" fill="#f1f5f7" stroke="#9fabb4" stroke-width="2" stroke-dasharray="8 6"/>
+        <text x="512" y="160" fill="#5b6770" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="1.4">TRUSTED APPLICATION BOUNDARY</text>
+
+        <!-- Connections are drawn before nodes. -->
+        <path d="M 264 260 H 320" fill="none" stroke="#71808c" stroke-width="2" marker-end="url(#trusted-mini-agent-flow-arrow)"/>
+        <path d="M 512 260 H 560" fill="none" stroke="#0b3c5d" stroke-width="3" marker-end="url(#trusted-mini-agent-flow-arrow-accent)"/>
+        <path d="M 752 260 H 800" fill="none" stroke="#0b3c5d" stroke-width="3" marker-end="url(#trusted-mini-agent-flow-arrow-accent)"/>
+        <path d="M 992 260 H 1040" fill="none" stroke="#71808c" stroke-width="2" marker-end="url(#trusted-mini-agent-flow-arrow)"/>
+        <path d="M 1136 312 V 400" fill="none" stroke="#71808c" stroke-width="2" marker-end="url(#trusted-mini-agent-flow-arrow)"/>
+        <path d="M 1040 452 H 992" fill="none" stroke="#71808c" stroke-width="2" marker-end="url(#trusted-mini-agent-flow-arrow)"/>
+        <path d="M 800 452 H 752" fill="none" stroke="#71808c" stroke-width="2" marker-end="url(#trusted-mini-agent-flow-arrow)"/>
+        <path d="M 560 452 H 512" fill="none" stroke="#71808c" stroke-width="2" marker-end="url(#trusted-mini-agent-flow-arrow)"/>
+        <path d="M 416 312 V 344 H 240 V 400" fill="none" stroke="#8a5a44" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#trusted-mini-agent-flow-arrow-blocked)"/>
+        <path d="M 336 452 H 416 V 312" fill="none" stroke="#71808c" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#trusted-mini-agent-flow-arrow)"/>
+
+        <rect x="1100" y="350" width="72" height="14" rx="2" fill="#f1f5f7"/>
+        <text x="1136" y="360" fill="#5b6770" font-family="Consolas,monospace" font-size="9" text-anchor="middle">SCRIPT + DATA</text>
+        <rect x="256" y="344" width="136" height="14" rx="2" fill="#f8fafb"/>
+        <text x="324" y="354" fill="#8a5a44" font-family="Consolas,monospace" font-size="9" text-anchor="middle">AMBIGUOUS OR BLOCKED</text>
+
+        <!-- Nodes -->
+        <rect x="72" y="208" width="192" height="104" rx="8" fill="#ffffff" stroke="#9fabb4" stroke-width="2"/>
+        <text x="88" y="232" fill="#5b6770" font-family="Consolas,monospace" font-size="10" font-weight="700" letter-spacing="1">HUMAN INPUT</text>
+        <text x="88" y="262" fill="#263945" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="700">Clinical question</text>
+        <text x="88" y="286" fill="#5b6770" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12">Permitted data context</text>
+
+        <rect x="320" y="208" width="192" height="104" rx="8" fill="#ffffff" stroke="#9fabb4" stroke-width="2"/>
+        <text x="336" y="232" fill="#5b6770" font-family="Consolas,monospace" font-size="10" font-weight="700" letter-spacing="1">UNTRUSTED MODEL</text>
+        <text x="336" y="262" fill="#263945" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="700">Prompt interpreter</text>
+        <text x="336" y="286" fill="#5b6770" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12">Proposes fields only</text>
+
+        <rect x="560" y="192" width="192" height="136" rx="8" fill="#e9f1f5" stroke="#0b3c5d" stroke-width="3"/>
+        <text x="576" y="218" fill="#0b3c5d" font-family="Consolas,monospace" font-size="10" font-weight="700" letter-spacing="1">STRUCTURED ARTIFACT</text>
+        <text x="576" y="248" fill="#0b3c5d" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="700">Candidate specification</text>
+        <text x="576" y="274" fill="#263945" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12">Parameter · unit · visits</text>
+        <text x="576" y="294" fill="#263945" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12">Treatment · Y variable · scale</text>
+        <text x="576" y="314" fill="#5b6770" font-family="Consolas,monospace" font-size="10">NO EXECUTABLE CODE</text>
+
+        <rect x="800" y="192" width="192" height="136" rx="8" fill="#e9f1f5" stroke="#0b3c5d" stroke-width="3"/>
+        <text x="816" y="218" fill="#0b3c5d" font-family="Consolas,monospace" font-size="10" font-weight="700" letter-spacing="1">HUMAN OVERSIGHT</text>
+        <text x="816" y="248" fill="#0b3c5d" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="700">Review and confirm</text>
+        <text x="816" y="274" fill="#263945" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12">Visible values and provenance</text>
+        <text x="816" y="294" fill="#263945" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12">Resolve every material choice</text>
+        <text x="816" y="314" fill="#5b6770" font-family="Consolas,monospace" font-size="10">CONFIRMED SPEC</text>
+
+        <rect x="1040" y="208" width="192" height="104" rx="8" fill="#ffffff" stroke="#9fabb4" stroke-width="2"/>
+        <text x="1056" y="232" fill="#5b6770" font-family="Consolas,monospace" font-size="10" font-weight="700" letter-spacing="1">TRUSTED TOOL</text>
+        <text x="1056" y="262" fill="#263945" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="700">Validate + compile</text>
+        <text x="1056" y="286" fill="#5b6770" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12">Application-owned R</text>
+
+        <rect x="1040" y="400" width="192" height="104" rx="8" fill="#ffffff" stroke="#9fabb4" stroke-width="2"/>
+        <text x="1056" y="424" fill="#5b6770" font-family="Consolas,monospace" font-size="10" font-weight="700" letter-spacing="1">TRUSTED TOOL</text>
+        <text x="1056" y="454" fill="#263945" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="700">Execute + verify</text>
+        <text x="1056" y="478" fill="#5b6770" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12">Controlled callr worker</text>
+
+        <rect x="800" y="400" width="192" height="104" rx="8" fill="#ffffff" stroke="#9fabb4" stroke-width="2"/>
+        <text x="816" y="424" fill="#5b6770" font-family="Consolas,monospace" font-size="10" font-weight="700" letter-spacing="1">TRUSTED RESULT</text>
+        <text x="816" y="454" fill="#263945" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="700">Accepted artifacts</text>
+        <text x="816" y="478" fill="#5b6770" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12">Plot · script · hashes · checks</text>
+
+        <rect x="560" y="400" width="192" height="104" rx="8" fill="#ffffff" stroke="#9fabb4" stroke-width="2"/>
+        <text x="576" y="424" fill="#5b6770" font-family="Consolas,monospace" font-size="10" font-weight="700" letter-spacing="1">QUALIFIED REVIEW</text>
+        <text x="576" y="454" fill="#263945" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="700">Revision review</text>
+        <text x="576" y="478" fill="#5b6770" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12">Programming + biostatistics</text>
+
+        <rect x="144" y="400" width="192" height="104" rx="8" fill="#fff8f4" stroke="#8a5a44" stroke-width="2"/>
+        <text x="160" y="424" fill="#8a5a44" font-family="Consolas,monospace" font-size="10" font-weight="700" letter-spacing="1">SAFE FALLBACK</text>
+        <text x="160" y="454" fill="#263945" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="700">Manual selection</text>
+        <text x="160" y="478" fill="#5b6770" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12">No execution until complete</text>
+
+        <line x1="64" y1="612" x2="1216" y2="612" stroke="#cbd4da"/>
+        <text x="64" y="642" fill="#0b3c5d" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13" font-weight="700">BOUNDARY</text>
+        <text x="152" y="642" fill="#425461" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13">The model cannot write R, execute code, approve revisions, or select an export destination.</text>
+        <text x="64" y="674" fill="#5b6770" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12">Real-provider activation remains blocked by data-provenance, evidence-minimization, and provider-term requirements.</text>
+      </svg>

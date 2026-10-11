@@ -40,9 +40,9 @@ interpret_prompt <- function(prompt, context, interpreter, snapshot = NULL) {
   }
 
   raw <- interpreter$interpret(prompt = prompt, context = context)
-  result <- .normalize_prompt_provider_result(raw, context, interpreter)
+  result <- .normalize_provider_result(raw, context, interpreter)
   if (identical(result$status, "candidate") && !is.null(snapshot)) {
-    .validate_interpreted_candidate(result$candidate, snapshot)
+    .validate_prompt_candidate(result$candidate, snapshot)
   }
   result
 }
@@ -51,22 +51,32 @@ interpret_prompt <- function(prompt, context, interpreter, snapshot = NULL) {
   checks <- c(
     arbitrary_r_deferred = paste(
       "\\b(run|write|execute|compile)\\b.*\\b(r|code|script)\\b",
-      "\\b(log[- ]?transform|transform|derive|calculate|compute|mutate|normaliz\\w*|standardiz\\w*)\\b",
+      paste0(
+        "\\b(log[- ]?transform|transform|derive|calculate|compute|mutate|",
+        "normaliz\\w*|standardiz\\w*)\\b"
+      ),
       "\\b(AVAL|CHG|PCHG)\\b\\s*[-+*/^]",
       "[-+*/^]\\s*\\b(AVAL|CHG|PCHG)\\b",
       "library\\s*\\(|ggplot\\s*\\(|system\\s*\\(",
       sep = "|"
     ),
-    prompt_injection = "ignore (all )?(previous|system)|developer message|tool instruction",
+    prompt_injection = paste(
+      "ignore (all )?(previous|system)|developer message|tool instruction"
+    ),
     path_or_url = "https?://|[A-Za-z]:[\\\\/]|\\\\\\\\|\\.rds\\b|\\.csv\\b",
     sensitive_content = "USUBJID|patient|secret|credential|workspace"
   )
-  matched <- names(checks)[vapply(checks, grepl, logical(1), x = prompt, ignore.case = TRUE)]
+  matched <- names(checks)[vapply(
+    checks, grepl, logical(1),
+    x = prompt, ignore.case = TRUE
+  )]
   if (length(matched)) matched[[1]] else NULL
 }
 
-.normalize_prompt_provider_result <- function(raw, context, interpreter) {
-  allowed <- c("status", "fields", "clarifications", "required_confirmations", "metadata")
+.normalize_provider_result <- function(raw, context, interpreter) {
+  allowed <- c(
+    "status", "fields", "clarifications", "required_confirmations", "metadata"
+  )
   extras <- setdiff(names(raw), allowed)
   if (length(extras)) {
     return(.prompt_interpretation(
@@ -76,7 +86,9 @@ interpret_prompt <- function(prompt, context, interpreter, snapshot = NULL) {
       metadata = list(provider = interpreter$provider, provider_called = TRUE)
     ))
   }
-  if (!checkmate::test_choice(raw$status, c("candidate", "clarification", "manual_selection"))) {
+  if (!checkmate::test_choice(
+    raw$status, c("candidate", "clarification", "manual_selection")
+  )) {
     return(.prompt_interpretation(
       status = "manual_selection",
       candidate = NULL,
@@ -89,7 +101,10 @@ interpret_prompt <- function(prompt, context, interpreter, snapshot = NULL) {
       status = raw$status,
       candidate = NULL,
       clarifications = raw$clarifications %||% list(reason = raw$status),
-      metadata = c(list(provider = interpreter$provider, provider_called = TRUE), raw$metadata %||% list())
+      metadata = c(
+        list(provider = interpreter$provider, provider_called = TRUE),
+        raw$metadata %||% list()
+      )
     ))
   }
 
@@ -116,7 +131,9 @@ interpret_prompt <- function(prompt, context, interpreter, snapshot = NULL) {
     state = "candidate"
   )
   clarifications <- plot_spec_clarifications(candidate)
-  status <- if (length(clarifications) || length(raw$required_confirmations %||% list())) {
+  status <- if (
+    length(clarifications) || length(raw$required_confirmations %||% list())
+  ) {
     "clarification"
   } else {
     "candidate"
@@ -151,16 +168,22 @@ interpret_prompt <- function(prompt, context, interpreter, snapshot = NULL) {
   provenance
 }
 
-.validate_interpreted_candidate <- function(candidate, snapshot) {
-  selections <- candidate$fields[setdiff(.plot_spec_fields, c("dataset_id", "scale_mode"))]
+.validate_prompt_candidate <- function(candidate, snapshot) {
+  selections <- candidate$fields[
+    setdiff(.plot_spec_fields, c("dataset_id", "scale_mode"))
+  ]
   result <- validate_bds_profile(snapshot, selections)
   if (result$blocked) {
-    cli::cli_abort("The interpreted candidate does not satisfy the supported BDS profile")
+    cli::cli_abort(
+      "The interpreted candidate does not satisfy the supported BDS profile"
+    )
   }
   invisible(candidate)
 }
 
-.prompt_interpretation <- function(status, candidate, clarifications, metadata) {
+.prompt_interpretation <- function(
+  status, candidate, clarifications, metadata
+) {
   structure(
     list(
       version = "prompt-interpretation-v1",

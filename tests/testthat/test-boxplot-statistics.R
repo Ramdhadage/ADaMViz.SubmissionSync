@@ -1,4 +1,4 @@
-read_expected_boxplot_statistics <- function() {
+read_expected_box_stats <- function() {
   expected <- utils::read.csv(
     testthat::test_path("fixtures", "expected-boxplot-statistics.csv"),
     stringsAsFactors = FALSE,
@@ -13,7 +13,10 @@ make_oracle_input <- function(expected) {
   rows <- lapply(seq_len(nrow(expected)), function(index) {
     values <- expected$value_list[[index]]
     data.frame(
-      USUBJID = sprintf("SUBJ-%s-%02d", expected$scenario[[index]], seq_along(values)),
+      USUBJID = sprintf(
+        "SUBJ-%s-%02d", expected$scenario[[index]],
+        seq_along(values)
+      ),
       AVISIT = expected$scenario[[index]],
       AVISITN = index,
       TRT01A = "Active",
@@ -25,7 +28,7 @@ make_oracle_input <- function(expected) {
 }
 
 test_that("independent fixtures match explicit type-7 box statistics", {
-  expected <- read_expected_boxplot_statistics()
+  expected <- read_expected_box_stats()
   analysis <- calculate_boxplot_statistics(
     make_oracle_input(expected),
     treatment_variable = "TRT01A",
@@ -47,18 +50,29 @@ test_that("independent fixtures match explicit type-7 box statistics", {
   observed_outliers <- split(analysis$outliers$value, analysis$outliers$visit)
   expected_outliers <- stats::setNames(
     lapply(as.character(expected$outliers), function(value) {
-      if (is.na(value) || !nzchar(value)) numeric() else as.numeric(strsplit(value, ";", fixed = TRUE)[[1]])
+      if (is.na(value) || !nzchar(value)) {
+        numeric()
+      } else {
+        as.numeric(strsplit(value, ";", fixed = TRUE)[[1]])
+      }
     }),
     expected$scenario
   )
-  expect_identical(observed_outliers[names(expected_outliers)[lengths(expected_outliers) > 0L]],
-                   expected_outliers[lengths(expected_outliers) > 0L])
+  expect_identical(
+    observed_outliers[
+      names(expected_outliers)[lengths(expected_outliers) > 0L]
+    ],
+    expected_outliers[lengths(expected_outliers) > 0L]
+  )
 })
 
 test_that("missing values and empty combinations create no analytical rows", {
   data <- synthetic_bds_fixture()
   data$AVAL[data$TRT01A == "Active" & data$AVISIT == "Week 4"] <- NA_real_
-  profile <- validate_bds_profile(make_test_snapshot(data), default_profile_selections())
+  profile <- validate_bds_profile(
+    make_test_snapshot(data),
+    default_profile_selections()
+  )
   analysis <- calculate_boxplot_statistics(
     profile$selected_data,
     "TRT01A",
@@ -68,11 +82,19 @@ test_that("missing values and empty combinations create no analytical rows", {
     profile$low_n_policy
   )
 
-  expect_false(any(analysis$boxes$treatment == "Active" & analysis$boxes$visit == "Week 4"))
-  expect_false(any(analysis$medians$treatment == "Active" & analysis$medians$visit == "Week 4"))
-  expect_false(any(analysis$n_strip$treatment == "Active" & analysis$n_strip$visit == "Week 4"))
+  expect_false(any(
+    analysis$boxes$treatment == "Active" & analysis$boxes$visit == "Week 4"
+  ))
+  expect_false(any(
+    analysis$medians$treatment == "Active" & analysis$medians$visit == "Week 4"
+  ))
+  expect_false(any(
+    analysis$n_strip$treatment == "Active" & analysis$n_strip$visit == "Week 4"
+  ))
   expect_identical(
-    as.character(analysis$medians$visit[analysis$medians$treatment == "Active"]),
+    as.character(
+      analysis$medians$visit[analysis$medians$treatment == "Active"]
+    ),
     c("Baseline", "Week 8")
   )
 })
@@ -86,7 +108,10 @@ test_that("row order does not change the analytical object or hash", {
     visit_levels = c("Baseline", "Week 4", "Week 8"),
     low_n_policy = governed_low_n_policy()
   )
-  first <- do.call(calculate_boxplot_statistics, c(list(data = data), arguments))
+  first <- do.call(calculate_boxplot_statistics, c(
+    list(data = data),
+    arguments
+  ))
   second <- do.call(
     calculate_boxplot_statistics,
     c(list(data = data[rev(seq_len(nrow(data))), ]), arguments)
@@ -117,7 +142,10 @@ test_that("treatment and visit values cannot collide as grouping keys", {
   )
 
   expect_equal(nrow(analysis$boxes), 2L)
-  expect_identical(analysis$boxes$treatment, c("A", paste0("A", separator, "B")))
+  expect_identical(analysis$boxes$treatment, c("A", paste0(
+    "A", separator,
+    "B"
+  )))
   expect_identical(analysis$boxes$visit, c(paste0("B", separator, "C"), "C"))
   expect_identical(analysis$boxes$middle, c(1, 9))
 })

@@ -37,11 +37,16 @@ new_runtime_config <- function(
     ))
   }
   if (!checkmate::test_null(secret_provider) &&
-      !checkmate::test_function(secret_provider)) {
+    !checkmate::test_function(secret_provider)) {
     cli::cli_abort("{.arg secret_provider} must be a function or {.val NULL}")
   }
-  if (!checkmate::test_character(required_secret_references, any.missing = FALSE)) {
-    cli::cli_abort("{.arg required_secret_references} must contain character values")
+  if (!checkmate::test_character(
+    required_secret_references,
+    any.missing = FALSE
+  )) {
+    cli::cli_abort(
+      "{.arg required_secret_references} must contain character values"
+    )
   }
 
   config <- structure(
@@ -75,8 +80,13 @@ new_runtime_config <- function(
 #' @return The resolved secret value.
 #' @export
 resolve_runtime_secret <- function(runtime_config, reference) {
-  if (!checkmate::test_class(runtime_config, classes = "submission_sync_runtime_config")) {
-    cli::cli_abort("{.arg runtime_config} must be a {.cls submission_sync_runtime_config}")
+  if (!checkmate::test_class(
+    runtime_config,
+    classes = "submission_sync_runtime_config"
+  )) {
+    cli::cli_abort(
+      "{.arg runtime_config} must be a {.cls submission_sync_runtime_config}"
+    )
   }
   if (!checkmate::test_string(reference, min.chars = 1)) {
     cli::cli_abort("{.arg reference} must be one non-empty identifier")

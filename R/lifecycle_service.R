@@ -8,19 +8,29 @@ new_lifecycle_service <- function(repository) {
     repository$mark_verified(revision_id, expected_version, idempotency_key)
     invisible(repository$get_revision(revision_id))
   }
-  create_correction <- function(parent_revision_id, revision_id, creator_id, spec_hash,
-                                code_hash, image_hash, analytical_hash, rationale,
-                                provenance, idempotency_key,
-                                initial_status = "Draft") {
-    if (!checkmate::test_string(rationale, min.chars = 1)) cli::cli_abort("Correction rationale is required")
-    if (!checkmate::test_string(provenance, min.chars = 1)) cli::cli_abort("Correction provenance is required")
+  create_correction <- function(
+    parent_revision_id, revision_id, creator_id, spec_hash,
+    code_hash, image_hash, analytical_hash, rationale,
+    provenance, idempotency_key, initial_status = "Draft"
+  ) {
+    if (!checkmate::test_string(rationale, min.chars = 1)) {
+      cli::cli_abort("Correction rationale is required")
+    }
+    if (!checkmate::test_string(provenance, min.chars = 1)) {
+      cli::cli_abort("Correction provenance is required")
+    }
     parent <- repository$get_revision(parent_revision_id)
-    if (!parent$status %in% c("Rejected", "Reviewed")) cli::cli_abort("Only a closed revision can have a correction successor")
+    if (!parent$status %in% c("Rejected", "Reviewed")) {
+      cli::cli_abort("Only a closed revision can have a correction successor")
+    }
     revisions <- repository$list_revisions(parent$plot_id)
-    repository$create_revision(parent$plot_id, revision_id, max(revisions$revision_number) + 1L,
-      creator_id, spec_hash, code_hash, image_hash, analytical_hash, idempotency_key,
+    repository$create_revision(
+      parent$plot_id, revision_id, max(revisions$revision_number) + 1L,
+      creator_id, spec_hash, code_hash, image_hash, analytical_hash,
+      idempotency_key,
       parent_revision_id = parent_revision_id, correction_rationale = rationale,
-      correction_provenance = provenance, initial_status = initial_status)
+      correction_provenance = provenance, initial_status = initial_status
+    )
     invisible(repository$get_revision(revision_id))
   }
   structure(

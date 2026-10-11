@@ -1,5 +1,8 @@
 test_that("plot preview exposes the exact compiled script", {
-  profile <- validate_bds_profile(make_test_snapshot(), default_profile_selections())
+  profile <- validate_bds_profile(
+    make_test_snapshot(),
+    default_profile_selections()
+  )
   spec <- execution_spec()
   script <- compile_boxplot_script(spec, profile$low_n_policy)
   analysis <- calculate_boxplot_statistics(
@@ -10,7 +13,10 @@ test_that("plot preview exposes the exact compiled script", {
     visit_levels = profile$visit_levels,
     low_n_policy = profile$low_n_policy
   )
-  artifact <- assemble_boxplot(analysis, spec$fields$scale_mode, spec$fields$unit)
+  artifact <- assemble_boxplot(
+    analysis, spec$fields$scale_mode,
+    spec$fields$unit
+  )
   current_revision <- shiny::reactiveVal(list(
     spec = spec,
     profile = profile,

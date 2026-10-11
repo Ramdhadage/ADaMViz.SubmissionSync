@@ -13,16 +13,24 @@ build_prompt_context <- function(snapshot) {
   data <- snapshot$data
   parameters <- .prompt_parameter_choices(data)
   visits <- .prompt_visit_choices(data)
-  treatment_levels <- lapply(snapshot$permitted_treatment_variables, function(variable) {
-    sort(unique(stats::na.omit(as.character(data[[variable]]))), method = "radix")
-  })
+  treatment_levels <- lapply(
+    snapshot$permitted_treatment_variables,
+    function(variable) {
+      sort(
+        unique(stats::na.omit(as.character(data[[variable]]))),
+        method = "radix"
+      )
+    }
+  )
   names(treatment_levels) <- snapshot$permitted_treatment_variables
 
   labels <- list(
     dataset_id = snapshot$dataset_id,
     adam_designation = snapshot$adam_designation
   )
-  if (!is.null(snapshot$classification)) labels$classification <- snapshot$classification
+  if (!is.null(snapshot$classification)) {
+    labels$classification <- snapshot$classification
+  }
 
   new_prompt_context(
     dataset_id = snapshot$dataset_id,
@@ -43,8 +51,13 @@ build_prompt_context <- function(snapshot) {
   if (!all(c("PARAMCD", "PARAM") %in% names(data))) {
     return(list())
   }
-  parameter_rows <- unique(data[c("PARAMCD", "PARAM", intersect("AVALU", names(data)))])
-  parameter_rows <- parameter_rows[order(parameter_rows$PARAMCD, method = "radix"), , drop = FALSE]
+  parameter_rows <- unique(
+    data[c("PARAMCD", "PARAM", intersect("AVALU", names(data)))]
+  )
+  parameter_rows <- parameter_rows[
+    order(parameter_rows$PARAMCD, method = "radix"), ,
+    drop = FALSE
+  ]
   lapply(split(parameter_rows, parameter_rows$PARAMCD), function(rows) {
     unit <- if ("AVALU" %in% names(rows)) {
       sort(unique(stats::na.omit(as.character(rows$AVALU))), method = "radix")
@@ -64,8 +77,14 @@ build_prompt_context <- function(snapshot) {
     return(list())
   }
   visits <- unique(data[c("AVISIT", "AVISITN")])
-  visits <- visits[!is.na(visits$AVISIT) & !is.na(visits$AVISITN), , drop = FALSE]
-  visits <- visits[order(visits$AVISITN, visits$AVISIT, method = "radix"), , drop = FALSE]
+  visits <- visits[
+    !is.na(visits$AVISIT) & !is.na(visits$AVISITN), ,
+    drop = FALSE
+  ]
+  visits <- visits[
+    order(visits$AVISITN, visits$AVISIT, method = "radix"), ,
+    drop = FALSE
+  ]
   lapply(seq_len(nrow(visits)), function(i) {
     list(label = as.character(visits$AVISIT[[i]]), order = visits$AVISITN[[i]])
   })

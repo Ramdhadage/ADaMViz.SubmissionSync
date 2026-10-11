@@ -25,7 +25,9 @@
     cli::cli_abort("The revision token is stale")
   }
   if (!revision$status %in% c("Draft", "Verified", "Reviewed")) {
-    cli::cli_abort("Only Draft, Verified, or Reviewed revisions can be exported")
+    cli::cli_abort(
+      "Only Draft, Verified, or Reviewed revisions can be exported"
+    )
   }
   invisible(revision)
 }
@@ -44,8 +46,8 @@ new_export_service <- function(
     )
   )
   if (!is.list(artifact_store) ||
-      !is.function(artifact_store$get) ||
-      !is.function(artifact_store$verify)) {
+    !is.function(artifact_store$get) ||
+    !is.function(artifact_store$verify)) {
     cli::cli_abort("Export service requires a readable artifact store")
   }
   .validate_workspace_provider(workspace_provider)
@@ -93,15 +95,17 @@ new_export_service <- function(
       current <- repository$get_revision(revision_id)
       .assert_exportable_revision(current, expected_version)
       if (!identical(current$code_hash, bundle$code_hash) ||
-          !identical(current$image_hash, bundle$image_hash)) {
+        !identical(current$image_hash, bundle$image_hash)) {
         workspace_provider$quarantine_staged(stage, "stale-revision")
-        cli::cli_abort("The accepted artifact bundle no longer matches the revision")
+        cli::cli_abort(
+          "The accepted artifact bundle no longer matches the revision"
+        )
       }
       published <- workspace_provider$publish_staged(stage)
     }
 
     if (!identical(published$code_hash, bundle$code_hash) ||
-        !identical(published$image_hash, bundle$image_hash)) {
+      !identical(published$image_hash, bundle$image_hash)) {
       cli::cli_abort("Published export hashes do not match the accepted bundle")
     }
 

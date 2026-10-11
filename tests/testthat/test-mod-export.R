@@ -19,7 +19,8 @@ make_mod_export_state <- function(status = "Verified") {
   }
   repo$create_revision(
     "plot-1", "rev-1", 1L, "creator", "spec", code_hash,
-    image_hash, "analysis", "create", initial_status = initial_status
+    image_hash, "analysis", "create",
+    initial_status = initial_status
   )
   repo$accept_artifact_bundle(
     "bundle-1", "rev-1", code_hash, image_hash, "analysis", "bundle"
@@ -93,7 +94,10 @@ test_that("export module packages revision artifacts as a ZIP download", {
   expect_setequal(listing$Name, c("script.R", "plot.png"))
   extracted <- withr::local_tempdir()
   utils::unzip(zipfile, exdir = extracted)
-  expect_identical(readLines(fs::path(extracted, "script.R"), warn = FALSE), "plot(1)")
+  expect_identical(
+    readLines(fs::path(extracted, "script.R"), warn = FALSE),
+    "plot(1)"
+  )
   expect_equal(
     readBin(fs::path(extracted, "plot.png"), "raw", n = 9L),
     charToRaw("png bytes")

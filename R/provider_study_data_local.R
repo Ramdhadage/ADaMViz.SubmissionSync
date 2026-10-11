@@ -1,5 +1,8 @@
 .synthetic_data_root <- function() {
-  installed <- system.file("extdata", "synthetic", package = "ADaMViz.SubmissionSync")
+  installed <- system.file(
+    "extdata", "synthetic",
+    package = "ADaMViz.SubmissionSync"
+  )
   if (nzchar(installed)) {
     return(installed)
   }
@@ -8,7 +11,11 @@
     file.path("..", "..", "inst", "extdata", "synthetic")
   )
   existing <- candidates[dir.exists(candidates)]
-  if (length(existing)) normalizePath(existing[[1]], winslash = "/") else candidates[[1]]
+  if (length(existing)) {
+    normalizePath(existing[[1]], winslash = "/")
+  } else {
+    candidates[[1]]
+  }
 }
 
 #' Create the governed local study-data provider
@@ -32,12 +39,19 @@ local_study_data_provider <- function(root = .synthetic_data_root()) {
 
   structure(
     list(
-      port = new_provider_port("study_data", c("list_catalog", "read_snapshot")),
+      port = new_provider_port(
+        "study_data", c("list_catalog", "read_snapshot")
+      ),
       manifest = manifest,
       read_data = function(metadata) {
         file_name <- metadata$file
-        if (!checkmate::test_string(file_name, pattern = "^adlb-[a-z0-9-]+\\.rds$")) {
-          cli::cli_abort("The synthetic manifest contains an invalid snapshot file name")
+        if (!checkmate::test_string(
+          file_name,
+          pattern = "^adlb-[a-z0-9-]+\\.rds$"
+        )) {
+          cli::cli_abort(
+            "The synthetic manifest contains an invalid snapshot file name"
+          )
         }
         readRDS(file.path(root, file_name))
       }

@@ -67,27 +67,32 @@ local_export_browser_app <- function() {
       )
       status <- shiny::reactiveVal("Ready")
       exported_files <- shiny::reactiveVal("")
-      shiny::observeEvent(input$export, {
-        tryCatch(
-          {
-            receipt <- service$export_revision(
-              "rev-1",
-              input$actor_id,
-              input$destination_id,
-              as.integer(input$expected_version),
-              paste("browser-export", input$actor_id, input$destination_id, sep = ":")
-            )
-            status(paste("Exported", receipt$receipt_id, receipt$revision_id))
-            exported_files(paste(
-              sort(fs::path_file(fs::dir_ls(receipt$path))),
-              collapse = ", "
-            ))
-          },
-          error = function(error) {
-            status(conditionMessage(error))
-          }
-        )
-      }, ignoreInit = TRUE)
+      shiny::observeEvent(input$export,
+        {
+          tryCatch(
+            {
+              receipt <- service$export_revision(
+                "rev-1",
+                input$actor_id,
+                input$destination_id,
+                as.integer(input$expected_version),
+                paste("browser-export", input$actor_id, input$destination_id,
+                  sep = ":"
+                )
+              )
+              status(paste("Exported", receipt$receipt_id, receipt$revision_id))
+              exported_files(paste(
+                sort(fs::path_file(fs::dir_ls(receipt$path))),
+                collapse = ", "
+              ))
+            },
+            error = function(error) {
+              status(conditionMessage(error))
+            }
+          )
+        },
+        ignoreInit = TRUE
+      )
       output$status <- shiny::renderText(status())
       output$exported_files <- shiny::renderText(exported_files())
       output$receipts <- shiny::renderTable({
@@ -113,7 +118,7 @@ test_that("browser export journey publishes an eligible accepted bundle", {
   expect_match(body, "rev-1", fixed = TRUE)
 })
 
-test_that("browser export journey blocks stale tokens and unauthorized actors", {
+test_that("browser export blocks stale tokens and unauthorized actors", {
   app <- local_browser_app(
     local_export_browser_app(),
     "controlled-export-denial"
@@ -133,5 +138,7 @@ test_that("browser export journey blocks stale tokens and unauthorized actors", 
     "not authorized",
     fixed = TRUE
   )
-  expect_no_match(app$get_text(selector = "body"), "Exported receipt-", fixed = TRUE)
+  expect_no_match(app$get_text(selector = "body"), "Exported receipt-",
+    fixed = TRUE
+  )
 })

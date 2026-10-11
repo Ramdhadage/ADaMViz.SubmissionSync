@@ -24,7 +24,7 @@ test_that("specification module renders confirmed fields and provenance", {
   )
 })
 
-test_that("specification module keeps generated settings visible but read-only", {
+test_that("specification module keeps settings visible but read-only", {
   spec <- new_plot_spec(
     dataset_id = "fixture-adlb",
     paramcd = "ALT",
@@ -233,7 +233,10 @@ test_that("specification module creates corrections from closed revisions", {
 
       expect_length(corrections, 1L)
       expect_identical(corrections[[1]]$fields$visits, c("Baseline", "Week 4"))
-      expect_identical(corrections[[1]]$rationale, "Refine reviewed visit scope")
+      expect_identical(
+        corrections[[1]]$rationale,
+        "Refine reviewed visit scope"
+      )
       expect_identical(corrections[[1]]$provenance, "Reviewer change request")
     }
   )

@@ -3,7 +3,11 @@
 }
 
 .validate_identifier <- function(value, name) {
-  if (!checkmate::test_string(value, min.chars = 1, pattern = "^[A-Za-z0-9._:-]+$")) {
+  if (!checkmate::test_string(
+    value,
+    min.chars = 1,
+    pattern = "^[A-Za-z0-9._:-]+$"
+  )) {
     cli::cli_abort("{.arg {name}} must be a non-empty stable identifier")
   }
   invisible(value)

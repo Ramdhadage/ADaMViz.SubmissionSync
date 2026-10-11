@@ -5,7 +5,9 @@
 mock_prompt_interpreter <- function() {
   structure(
     list(
-      port = new_provider_port("prompt_interpreter", c("structured_candidate", "clarification")),
+      port = new_provider_port(
+        "prompt_interpreter", c("structured_candidate", "clarification")
+      ),
       provider = "deterministic-mock",
       model = "mock-rule-set-v1",
       interpret = .mock_interpret_prompt
@@ -33,7 +35,10 @@ mock_prompt_interpreter <- function() {
   included_treatment_levels <- .mock_exclude_values(prompt, treatment_levels)
   visits <- vapply(profile$visits, `[[`, "", "label")
   included_visits <- .mock_exclude_values(prompt, visits)
-  scale_mode <- if (grepl("free[- ]?scale|free y|separate scale", prompt, ignore.case = TRUE)) {
+  scale_mode <- if (grepl(
+    "free[- ]?scale|free y|separate scale", prompt,
+    ignore.case = TRUE
+  )) {
     "free"
   } else {
     "fixed"
@@ -75,12 +80,18 @@ mock_prompt_interpreter <- function() {
 }
 
 .mock_match_value <- function(prompt, values) {
-  matches <- values[vapply(tolower(values), grepl, logical(1), x = tolower(prompt), fixed = TRUE)]
+  matches <- values[vapply(
+    tolower(values), grepl, logical(1),
+    x = tolower(prompt), fixed = TRUE
+  )]
   if (length(matches) == 1L) matches[[1]] else NULL
 }
 
 .mock_y_variable <- function(prompt, choices) {
-  if ("PCHG" %in% choices && grepl("percent|percentage|pct|PCHG", prompt, ignore.case = TRUE)) {
+  if ("PCHG" %in% choices && grepl(
+    "percent|percentage|pct|PCHG", prompt,
+    ignore.case = TRUE
+  )) {
     return("PCHG")
   }
   if ("CHG" %in% choices && grepl("change|CHG", prompt, ignore.case = TRUE)) {
@@ -92,7 +103,10 @@ mock_prompt_interpreter <- function() {
 .mock_exclude_values <- function(prompt, values) {
   kept <- values
   for (value in values) {
-    pattern <- paste0("\\b(exclude|without|omit)\\b[^.]*\\b", gsub(" ", "\\\\s+", value), "\\b")
+    pattern <- paste0(
+      "\\b(exclude|without|omit)\\b[^.]*\\b",
+      gsub(" ", "\\\\s+", value), "\\b"
+    )
     if (grepl(pattern, prompt, ignore.case = TRUE)) {
       kept <- setdiff(kept, value)
     }

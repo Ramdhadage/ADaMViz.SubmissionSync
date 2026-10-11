@@ -1,4 +1,4 @@
-test_that("local execution runner returns a bounded versioned result manifest", {
+test_that("local runner returns a bounded versioned result manifest", {
   skip_if_graphics_device_unavailable()
   fixture <- execution_fixture()
   result <- run_execution_locally(
@@ -12,7 +12,10 @@ test_that("local execution runner returns a bounded versioned result manifest", 
   expect_identical(result$status, "succeeded")
   expect_s3_class(result$result, "execution_result")
   expect_identical(result$result$manifest_version, "execution-result-v1")
-  expect_identical(result$result$script_hash, .execution_hash_text(fixture$script))
+  expect_identical(
+    result$result$script_hash,
+    .execution_hash_text(fixture$script)
+  )
   expect_identical(
     result$result$analytical_hash,
     canonical_hash(result$analytical_output)

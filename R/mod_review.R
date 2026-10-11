@@ -21,11 +21,17 @@ mod_review_ui <- function(id) {
           "Biostatistician" = "biostatistician"
         )
       ),
-      shiny::textAreaInput(ns("comment"), "Comment or rejection rationale", rows = 3),
+      shiny::textAreaInput(
+        ns("comment"), "Comment or rejection rationale",
+        rows = 3
+      ),
       div(
         class = "review-actions",
         shiny::actionButton(ns("approve"), "Approve", class = "btn-success"),
-        shiny::actionButton(ns("reject"), "Reject", class = "btn-outline-danger")
+        shiny::actionButton(
+          ns("reject"), "Reject",
+          class = "btn-outline-danger"
+        )
       ),
       shiny::uiOutput(ns("message")),
       shiny::tableOutput(ns("decisions"))
@@ -39,7 +45,9 @@ mod_review_server <- function(id, current_revision, set_current_revision) {
 
     output$message <- shiny::renderUI({
       text <- message()
-      if (is.null(text)) return(NULL)
+      if (is.null(text)) {
+        return(NULL)
+      }
       div(class = "assurance-message", role = "status", text)
     })
 
@@ -80,20 +88,44 @@ mod_review_server <- function(id, current_revision, set_current_revision) {
       message(paste("Recorded", decision, "decision."))
     }
 
-    shiny::observeEvent(input$approve, {
-      tryCatch(decide("approved"), error = function(error) message(conditionMessage(error)))
-    }, ignoreInit = TRUE)
+    shiny::observeEvent(input$approve,
+      {
+        tryCatch(
+          decide("approved"),
+          error = function(error) message(conditionMessage(error))
+        )
+      },
+      ignoreInit = TRUE
+    )
 
-    shiny::observeEvent(input$reject, {
-      tryCatch(decide("rejected"), error = function(error) message(conditionMessage(error)))
-    }, ignoreInit = TRUE)
+    shiny::observeEvent(input$reject,
+      {
+        tryCatch(
+          decide("rejected"),
+          error = function(error) message(conditionMessage(error))
+        )
+      },
+      ignoreInit = TRUE
+    )
 
-    output$decisions <- shiny::renderTable({
-      state <- current_revision()
-      if (is.null(state$repository) || is.null(state$revision)) return(data.frame())
-      decisions <- state$repository$list_review_decisions(state$revision$revision_id)
-      if (!nrow(decisions)) return(data.frame())
-      decisions[, c("actor_id", "role", "decision", "created_at"), drop = FALSE]
-    }, striped = TRUE, spacing = "s")
+    output$decisions <- shiny::renderTable(
+      {
+        state <- current_revision()
+        if (is.null(state$repository) || is.null(state$revision)) {
+          return(data.frame())
+        }
+        decisions <- state$repository$list_review_decisions(
+          state$revision$revision_id
+        )
+        if (!nrow(decisions)) {
+          return(data.frame())
+        }
+        decisions[, c(
+          "actor_id", "role", "decision", "created_at"
+        ), drop = FALSE]
+      },
+      striped = TRUE,
+      spacing = "s"
+    )
   })
 }

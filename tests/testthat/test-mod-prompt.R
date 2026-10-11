@@ -1,4 +1,4 @@
-test_that("prompt module sends the selected prompt request to the coordinator", {
+test_that("prompt module sends the selected request to the coordinator", {
   catalog <- shiny::reactiveVal(data.frame(
     dataset_id = "adlb-standard",
     purpose = "Passing profile",

@@ -3,8 +3,14 @@ reconcile_execution_attempts <- function(repository, revision_ids) {
     repository,
     c("list_attempts", "complete_attempt")
   )
-  if (!checkmate::test_character(revision_ids, any.missing = FALSE, unique = TRUE)) {
-    cli::cli_abort("{.arg revision_ids} must contain unique revision identifiers")
+  if (!checkmate::test_character(
+    revision_ids,
+    any.missing = FALSE,
+    unique = TRUE
+  )) {
+    cli::cli_abort(
+      "{.arg revision_ids} must contain unique revision identifiers"
+    )
   }
   reconciled <- list()
   for (revision_id in revision_ids) {

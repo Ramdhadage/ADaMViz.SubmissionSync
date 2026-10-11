@@ -20,5 +20,7 @@ test_that("incomplete specifications require clarification", {
 
 test_that("unsupported y variables and unknown provenance are rejected", {
   expect_snapshot(error = TRUE, new_plot_spec("adlb-v1", y_variable = "BASE"))
-  expect_snapshot(error = TRUE, new_plot_spec("adlb-v1", provenance = list(path = "prompt")))
+  expect_snapshot(error = TRUE, new_plot_spec("adlb-v1",
+    provenance = list(path = "prompt")
+  ))
 })

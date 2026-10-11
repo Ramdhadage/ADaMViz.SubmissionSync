@@ -48,7 +48,9 @@ test_that("app revisions persist complete context evidence for R36", {
   )
   evidence <- state$repository$list_evidence(state$revision$revision_id)
   context <- evidence[evidence$evidence_type == "revision_context", ]
-  details <- jsonlite::fromJSON(context$details_json[[1]], simplifyVector = FALSE)
+  details <- jsonlite::fromJSON(context$details_json[[1]],
+    simplifyVector = FALSE
+  )
 
   expect_equal(nrow(context), 1L)
   expect_identical(details$prompt, "Create an ALT boxplot by treatment.")

@@ -18,7 +18,8 @@ make_export_fixture <- function(status = "Draft") {
   }
   repo$create_revision(
     "plot-1", "rev-1", 1L, "creator", "spec", code_hash,
-    image_hash, "analysis", "create", initial_status = initial_status
+    image_hash, "analysis", "create",
+    initial_status = initial_status
   )
   repo$accept_artifact_bundle(
     "bundle-1", "rev-1", code_hash, image_hash, "analysis", "bundle"
@@ -55,7 +56,7 @@ make_export_fixture <- function(status = "Draft") {
   )
 }
 
-test_that("export service publishes eligible accepted bundles and records receipts", {
+test_that("export service publishes accepted bundles and records receipts", {
   fixture <- make_export_fixture("Verified")
   service <- new_export_service(
     fixture$repo,
@@ -79,9 +80,15 @@ test_that("export service publishes eligible accepted bundles and records receip
     readBin(receipt$image_path, "raw", n = length(fixture$image)),
     fixture$image
   )
-  expect_equal(sort(fs::path_file(fs::dir_ls(receipt$path))), c("plot.png", "script.R"))
+  expect_equal(sort(fs::path_file(fs::dir_ls(receipt$path))), c(
+    "plot.png",
+    "script.R"
+  ))
   expect_equal(nrow(fixture$repo$list_export_receipts("rev-1")), 1L)
-  expect_identical(fixture$repo$verify_integrity(require_artifacts = TRUE), TRUE)
+  expect_identical(
+    fixture$repo$verify_integrity(require_artifacts = TRUE),
+    TRUE
+  )
 
   service$export_revision(
     "rev-1", "creator", "controlled",
@@ -91,7 +98,7 @@ test_that("export service publishes eligible accepted bundles and records receip
   expect_equal(nrow(fixture$repo$list_export_receipts("rev-1")), 1L)
 })
 
-test_that("export service blocks ineligible actors, revisions, destinations, and tokens", {
+test_that("export denies actors, revisions, destinations and tokens", {
   fixture <- make_export_fixture("Draft")
   service <- new_export_service(
     fixture$repo,
@@ -132,7 +139,7 @@ test_that("export service blocks ineligible actors, revisions, destinations, and
   )
 })
 
-test_that("export service requires one accepted bundle and matching final hashes", {
+test_that("export requires one accepted bundle and matching final hashes", {
   root <- withr::local_tempdir()
   store <- local_artifact_store(fs::path(root, "artifacts"))
   code_hash <- store$put(charToRaw("plot(1)\n"))
@@ -146,7 +153,10 @@ test_that("export service requires one accepted bundle and matching final hashes
     "plot-1", "rev-1", 1L, "creator", "spec", code_hash,
     image_hash, "analysis", "create"
   )
-  identities <- local_identity_provider(list(new_actor("creator", "clinical_scientist")))
+  identities <- local_identity_provider(list(new_actor(
+    "creator",
+    "clinical_scientist"
+  )))
   workspace <- fs::path(root, "workspace")
   fs::dir_create(workspace)
   service <- new_export_service(

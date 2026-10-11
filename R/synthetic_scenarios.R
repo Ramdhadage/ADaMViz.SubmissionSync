@@ -36,14 +36,19 @@
   duplicate_keys <- rbind(
     duplicate_keys,
     transform(
-      duplicate_keys[duplicate_keys$USUBJID == "SYNTH001-001" & duplicate_keys$AVISIT == "Week 4", ],
+      duplicate_keys[
+        duplicate_keys$USUBJID == "SYNTH001-001" &
+          duplicate_keys$AVISIT == "Week 4",
+      ],
       AVAL = 999
     )
   )
 
   sparse_missing <- standard
-  sparse_missing$AVAL[sparse_missing$AVISIT == "Week 4" &
-    sparse_missing$USUBJID %in% c("SYNTH001-005", "SYNTH001-006")] <- NA_real_
+  sparse_missing$AVAL[
+    sparse_missing$AVISIT == "Week 4" &
+      sparse_missing$USUBJID %in% c("SYNTH001-005", "SYNTH001-006")
+  ] <- NA_real_
 
   empty_combination <- standard
   empty_combination$AVAL[
@@ -52,7 +57,8 @@
 
   bad_visit_mapping <- standard
   bad_visit_mapping$AVISITN[
-    bad_visit_mapping$USUBJID == "SYNTH001-001" & bad_visit_mapping$AVISIT == "Week 4"
+    bad_visit_mapping$USUBJID == "SYNTH001-001" &
+      bad_visit_mapping$AVISIT == "Week 4"
   ] <- 5
 
   empty_treatment <- standard
@@ -61,22 +67,28 @@
   extra_timepoint_keys <- standard
   extra_timepoint_keys$ATPTN <- 1L
   repeated <- extra_timepoint_keys[
-    extra_timepoint_keys$USUBJID == "SYNTH001-001" & extra_timepoint_keys$AVISIT == "Week 4",
+    extra_timepoint_keys$USUBJID == "SYNTH001-001" &
+      extra_timepoint_keys$AVISIT == "Week 4",
   ]
   repeated$ATPTN <- 2L
   extra_timepoint_keys <- rbind(extra_timepoint_keys, repeated)
 
   identifier_canary <- standard
   canary <- identifier_canary[
-    identifier_canary$USUBJID == "SYNTH001-001" & identifier_canary$AVISIT == "Week 4",
+    identifier_canary$USUBJID == "SYNTH001-001" &
+      identifier_canary$AVISIT == "Week 4",
   ]
   canary$USUBJID <- "SYNTH-CANARY-DO-NOT-RETAIN"
-  identifier_canary <- rbind(identifier_canary, canary, transform(canary, AVAL = 999))
+  identifier_canary <- rbind(
+    identifier_canary, canary, transform(canary, AVAL = 999)
+  )
 
   exclusions <- standard
   exclusions <- rbind(
     exclusions,
-    exclusions[exclusions$USUBJID == "SYNTH001-001" & exclusions$AVISIT == "Week 8", ]
+    exclusions[
+      exclusions$USUBJID == "SYNTH001-001" & exclusions$AVISIT == "Week 8",
+    ]
   )
 
   list(
@@ -100,8 +112,12 @@
   `sparse-missing` = "Six source subjects and four non-missing selected values",
   `empty-combination` = "No display data for one treatment-visit combination",
   `bad-visit-mapping` = "Conflicting AVISIT to AVISITN mapping",
-  `empty-treatment` = "Included treatment level with all selected Y values missing",
-  `extra-timepoint-keys` = "Legitimate additional timepoint key outside the cell profile",
+  `empty-treatment` = paste(
+    "Included treatment level with all selected", "Y values missing"
+  ),
+  `extra-timepoint-keys` = paste(
+    "Legitimate additional timepoint key outside", "the cell profile"
+  ),
   `identifier-canary` = "Authorization-scoped duplicate identifier canary",
   exclusions = "Explicit selections remove an otherwise blocking duplicate"
 )
@@ -201,9 +217,10 @@
         )
     }, logical(1)))
   if (valid) {
-    identifiers <- lapply(c("scenario_id", "dataset_id", "snapshot_id", "file"), function(field) {
-      vapply(manifest$scenarios, `[[`, "", field)
-    })
+    identifiers <- lapply(
+      c("scenario_id", "dataset_id", "snapshot_id", "file"),
+      function(field) vapply(manifest$scenarios, `[[`, "", field)
+    )
     valid <- all(vapply(identifiers, function(x) !anyDuplicated(x), logical(1)))
   }
   if (!valid) {
@@ -234,7 +251,9 @@ synthetic_scenario_manifest <- function(root = .synthetic_data_root()) {
 #'
 #' @return A hash-verified synthetic BDS data frame.
 #' @export
-load_synthetic_scenario <- function(scenario_id, root = .synthetic_data_root()) {
+load_synthetic_scenario <- function(
+  scenario_id, root = .synthetic_data_root()
+) {
   if (!checkmate::test_string(scenario_id, min.chars = 1L)) {
     cli::cli_abort("{.arg scenario_id} must be one non-empty identifier")
   }
@@ -250,7 +269,9 @@ load_synthetic_scenario <- function(scenario_id, root = .synthetic_data_root()) 
   metadata <- manifest$scenarios[[matches]]
   data <- readRDS(file.path(root, metadata$file))
   if (!identical(study_data_content_hash(data), metadata$content_hash)) {
-    cli::cli_abort("The synthetic scenario content hash does not match its manifest")
+    cli::cli_abort(
+      "The synthetic scenario content hash does not match its manifest"
+    )
   }
   data
 }

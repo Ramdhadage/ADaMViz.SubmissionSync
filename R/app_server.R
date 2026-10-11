@@ -5,7 +5,12 @@
 #' @param runtime_config Injected runtime configuration.
 #' @import shiny
 #' @noRd
-app_server <- function(input, output, session, runtime_config = new_runtime_config()) {
+app_server <- function(
+  input,
+  output,
+  session,
+  runtime_config = new_runtime_config()
+) {
   workspace_root <- fs::path(
     fs::path_temp(),
     "adamviz-submissionsync-workspace",
@@ -130,7 +135,7 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     diagnostic <- profile$blocking_diagnostics[[1]]
     cli::cli_abort(c(
       "The selected records are outside the supported BDS profile",
-      "x" = "{diagnostic$code}: {diagnostic$message}"
+      "x" = paste0(diagnostic$code, ": ", diagnostic$message)
     ))
   }
   .materialize_revision(snapshot, prompt, spec, profile, repository_root)
@@ -138,15 +143,17 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
 
 .execute_correction_revision <- function(state, fields, rationale, provenance) {
   if (is.null(state$repository) || is.null(state$revision) ||
-      is.null(state$snapshot)) {
+    is.null(state$snapshot)) {
     cli::cli_abort("Create a revision before starting a correction")
   }
   parent <- state$repository$get_revision(state$revision$revision_id)
   if (!parent$status %in% c("Rejected", "Reviewed")) {
-    cli::cli_abort("Only a Rejected or Reviewed revision can start a correction")
+    cli::cli_abort(
+      "Only a Rejected or Reviewed revision can start a correction"
+    )
   }
   if (!checkmate::test_string(rationale, min.chars = 1L) ||
-      !checkmate::test_string(provenance, min.chars = 1L)) {
+    !checkmate::test_string(provenance, min.chars = 1L)) {
     cli::cli_abort("Correction rationale and provenance are required")
   }
   spec <- .confirmed_spec_from_fields(state$snapshot$dataset_id, fields)
@@ -158,11 +165,11 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     diagnostic <- profile$blocking_diagnostics[[1]]
     cli::cli_abort(c(
       "The selected records are outside the supported BDS profile",
-      "x" = "{diagnostic$code}: {diagnostic$message}"
+      "x" = paste0(diagnostic$code, ": ", diagnostic$message)
     ))
   }
 
-  .materialize_correction_revision(
+  .materialize_correction(
     state,
     spec,
     profile,
@@ -171,17 +178,30 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
   )
 }
 
-.create_assurance_revision <- function(provider, dataset_id, prompt, confirm_free_scale) {
+.create_assurance_revision <- function(
+  provider,
+  dataset_id,
+  prompt,
+  confirm_free_scale
+) {
   snapshot <- pin_study_snapshot(provider, dataset_id)
   context <- build_prompt_context(snapshot)
-  interpretation <- interpret_prompt(prompt, context, mock_prompt_interpreter(), snapshot = NULL)
+  interpretation <- interpret_prompt(
+    prompt,
+    context,
+    mock_prompt_interpreter(),
+    snapshot = NULL
+  )
   if (is.null(interpretation$candidate)) {
     cli::cli_abort("The prompt could not create an executable candidate")
   }
   fields <- interpretation$candidate$fields
   if (identical(fields$scale_mode, "free") && !isTRUE(confirm_free_scale)) {
     cli::cli_abort(
-      "Free Y scales require confirmation because they create an Experimental/Draft revision"
+      paste0(
+        "Free Y scales require confirmation because they create an ",
+        "Experimental/Draft revision"
+      )
     )
   }
   .execute_assurance_revision(snapshot, prompt, fields)
@@ -189,12 +209,25 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
 
 .confirmed_spec_from_fields <- function(dataset_id, fields) {
   if (!checkmate::test_string(fields$paramcd, min.chars = 1L) ||
-      !checkmate::test_choice(fields$y_variable, c("AVAL", "CHG", "PCHG")) ||
-      !checkmate::test_string(fields$unit, min.chars = 1L) ||
-      !checkmate::test_string(fields$treatment_variable, min.chars = 1L) ||
-      !checkmate::test_character(fields$treatment_levels, min.len = 1L, any.missing = FALSE, unique = TRUE) ||
-      !checkmate::test_character(fields$visits, min.len = 1L, any.missing = FALSE, unique = TRUE)) {
-    cli::cli_abort("Confirm one parameter, one Y variable, one unit, one treatment facet, and at least one treatment level and visit")
+    !checkmate::test_choice(fields$y_variable, c("AVAL", "CHG", "PCHG")) ||
+    !checkmate::test_string(fields$unit, min.chars = 1L) ||
+    !checkmate::test_string(fields$treatment_variable, min.chars = 1L) ||
+    !checkmate::test_character(
+      fields$treatment_levels,
+      min.len = 1L,
+      any.missing = FALSE,
+      unique = TRUE
+    ) ||
+    !checkmate::test_character(
+      fields$visits,
+      min.len = 1L,
+      any.missing = FALSE,
+      unique = TRUE
+    )) {
+    cli::cli_abort(paste0(
+      "Confirm one parameter, one Y variable, one unit, one treatment facet, ",
+      "and at least one treatment level and visit"
+    ))
   }
   provenance <- as.list(stats::setNames(
     rep("user_confirmed", length(.plot_spec_fields)),
@@ -239,7 +272,10 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     artifact_store
   )
   plot_id <- paste0("plot-", substr(spec$hash, 1L, 12L))
-  revision_id <- paste0("rev-", substr(canonical_hash(list(spec$hash, Sys.time())), 1L, 12L))
+  revision_id <- paste0(
+    "rev-",
+    substr(canonical_hash(list(spec$hash, Sys.time())), 1L, 12L)
+  )
   initial_status <- if (identical(spec$fields$scale_mode, "free")) {
     "Experimental/Draft"
   } else {
@@ -314,7 +350,7 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
     verification = verification
   )
   if (!is.null(verification)) {
-    .record_revision_context_evidence(
+    .record_revision_context(
       state,
       request = request,
       runner_result = runner_result
@@ -323,7 +359,7 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
   state
 }
 
-.materialize_correction_revision <- function(
+.materialize_correction <- function(
   state,
   spec,
   profile,
@@ -405,7 +441,7 @@ app_server <- function(input, output, session, runtime_config = new_runtime_conf
   state$artifact <- artifact
   state$verification <- verification
   if (!is.null(verification)) {
-    .record_revision_context_evidence(
+    .record_revision_context(
       state,
       request = request,
       runner_result = runner_result

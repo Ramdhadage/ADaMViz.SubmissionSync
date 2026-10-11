@@ -1,8 +1,11 @@
-test_that("profile requires permitted BDS source metadata and required variables", {
+test_that("profile requires permitted BDS metadata and required variables", {
   public_snapshot <- make_test_snapshot()
   public_snapshot$classification <- "confidential"
   public_snapshot$adam_designation <- "OCCDS"
-  public_result <- validate_bds_profile(public_snapshot, default_profile_selections())
+  public_result <- validate_bds_profile(
+    public_snapshot,
+    default_profile_selections()
+  )
   expect_true(public_result$blocked)
   expect_identical(
     public_result$blocking_diagnostics[[1]]$code,
@@ -37,7 +40,7 @@ test_that("profile does not silently filter by analysis flags", {
   expect_setequal(unique(result$selected_data$SAFFL), c("Y", "N"))
 })
 
-test_that("profile keeps stored selected records and counts distinct nonmissing subjects", {
+test_that("profile keeps selected records and distinct nonmissing subjects", {
   result <- validate_bds_profile(
     make_test_snapshot(),
     default_profile_selections(),
@@ -64,7 +67,10 @@ test_that("multiple units require an explicit authorized choice", {
     default_profile_selections(unit = NULL)
   )
   expect_true(unresolved$blocked)
-  expect_identical(unresolved$blocking_diagnostics[[1]]$code, "unit_selection_required")
+  expect_identical(
+    unresolved$blocking_diagnostics[[1]]$code,
+    "unit_selection_required"
+  )
   expect_identical(unresolved$choices$units, c("U/L", "ukat/L"))
   expect_equal(nrow(unresolved$display_data), 0L)
 
@@ -86,20 +92,42 @@ test_that("duplicate visit keys block with ephemeral authorized detail only", {
   )
 
   expect_true(result$blocked)
-  expect_identical(result$blocking_diagnostics[[1]]$code, "unsupported_duplicate_visit_key")
+  expect_identical(
+    result$blocking_diagnostics[[1]]$code,
+    "unsupported_duplicate_visit_key"
+  )
   expect_match(result$blocking_diagnostics[[1]]$message, "unsupported")
-  expect_identical(result$authorized_diagnostics$duplicate_keys$USUBJID, "SYNTH001-001")
-  expect_false(grepl("SYNTH001-001", canonical_serialize(result$durable_diagnostics), fixed = TRUE))
+  expect_identical(
+    result$authorized_diagnostics$duplicate_keys$USUBJID,
+    "SYNTH001-001"
+  )
+  expect_false(grepl("SYNTH001-001",
+    canonical_serialize(result$durable_diagnostics),
+    fixed = TRUE
+  ))
   expect_identical(result$dataset_conformance, "not_assessed")
   expect_equal(nrow(result$display_data), 0L)
 })
 
 test_that("visit mapping defects block deterministically", {
   cases <- list(
-    missing_order = transform(synthetic_bds_fixture(), AVISITN = replace(AVISITN, AVISIT == "Week 4", NA)),
-    conflicting_order = transform(synthetic_bds_fixture(), AVISITN = replace(AVISITN, USUBJID == "SYNTH001-001" & AVISIT == "Week 4", 5)),
-    reused_order = transform(synthetic_bds_fixture(), AVISITN = replace(AVISITN, AVISIT == "Week 8", 4)),
-    missing_label = transform(synthetic_bds_fixture(), AVISIT = replace(AVISIT, AVISIT == "Week 4", NA))
+    missing_order = transform(synthetic_bds_fixture(),
+      AVISITN = replace(AVISITN, AVISIT == "Week 4", NA)
+    ),
+    conflicting_order = transform(
+      synthetic_bds_fixture(),
+      AVISITN = replace(
+        AVISITN,
+        USUBJID == "SYNTH001-001" & AVISIT == "Week 4",
+        5
+      )
+    ),
+    reused_order = transform(synthetic_bds_fixture(),
+      AVISITN = replace(AVISITN, AVISIT == "Week 8", 4)
+    ),
+    missing_label = transform(synthetic_bds_fixture(),
+      AVISIT = replace(AVISIT, AVISIT == "Week 4", NA)
+    )
   )
 
   results <- lapply(cases, function(data) {
@@ -151,7 +179,10 @@ test_that("numeric Y and complete selected profile keys are required", {
 
 test_that("explicit exclusions precede key checks and propagate downstream", {
   data <- synthetic_bds_fixture()
-  excluded_duplicate <- data[data$USUBJID == "SYNTH001-001" & data$AVISIT == "Week 8", ]
+  excluded_duplicate <- data[
+    data$USUBJID == "SYNTH001-001" & data$AVISIT == "Week 8", ,
+    drop = FALSE
+  ]
   data <- rbind(data, excluded_duplicate)
 
   result <- validate_bds_profile(
@@ -168,11 +199,14 @@ test_that("explicit exclusions precede key checks and propagate downstream", {
   expect_identical(result$choices$included_visits, c("Baseline", "Week 4"))
 })
 
-test_that("empty combinations and empty included facets do not create display rows", {
+test_that("empty combinations and empty facets do not create display rows", {
   data <- synthetic_bds_fixture()
   data$AVAL[data$TRT01A == "Active" & data$AVISIT == "Week 4"] <- NA_real_
   data$AVAL[data$TRT01A == "Placebo"] <- NA_real_
-  result <- validate_bds_profile(make_test_snapshot(data), default_profile_selections())
+  result <- validate_bds_profile(
+    make_test_snapshot(data),
+    default_profile_selections()
+  )
 
   expect_false(result$blocked)
   expect_false(any(result$display_data$AVISIT == "Week 4"))
@@ -183,7 +217,7 @@ test_that("empty combinations and empty included facets do not create display ro
   expect_false(any(result$counts$TRT01A == "Placebo"))
 })
 
-test_that("additional legitimate timepoint keys are unsupported rather than invalid ADaM", {
+test_that("additional timepoint keys are unsupported (not invalid ADaM)", {
   data <- synthetic_bds_fixture()
   data$ATPTN <- 1L
   repeated <- data[data$USUBJID == "SYNTH001-001" & data$AVISIT == "Week 4", ]
@@ -196,13 +230,19 @@ test_that("additional legitimate timepoint keys are unsupported rather than inva
   )
 
   expect_true(result$blocked)
-  expect_identical(result$blocking_diagnostics[[1]]$code, "unsupported_additional_timepoint_keys")
+  expect_identical(
+    result$blocking_diagnostics[[1]]$code,
+    "unsupported_additional_timepoint_keys"
+  )
   expect_identical(result$dataset_conformance, "not_assessed")
 })
 
-test_that("row permutation preserves diagnostics counts choices and analytical input", {
+test_that("row permutation preserves choices, diagnostics and analysis", {
   data <- synthetic_bds_fixture()
-  first <- validate_bds_profile(make_test_snapshot(data), default_profile_selections())
+  first <- validate_bds_profile(
+    make_test_snapshot(data),
+    default_profile_selections()
+  )
   second <- validate_bds_profile(
     make_test_snapshot(data[sample.int(nrow(data)), , drop = FALSE]),
     default_profile_selections()
@@ -229,6 +269,9 @@ test_that("non-default low-N thresholds require retained sponsor approval", {
     authority = "Synthetic sponsor policy",
     version = "threshold-policy-v1"
   )
-  result <- validate_bds_profile(make_test_snapshot(), default_profile_selections(), approval)
+  result <- validate_bds_profile(
+    make_test_snapshot(),
+    default_profile_selections(), approval
+  )
   expect_identical(result$low_n_policy, approval)
 })

@@ -28,7 +28,10 @@ test_that("plot layers use the oracle and the N strip remains aligned", {
   expect_equal(built$data[[1]]$ymax, analysis$boxes$ymax)
   expect_identical(levels(artifact$plot_data$boxes$visit), visits)
   expect_identical(levels(artifact$plot_data$n_strip$visit), visits)
-  expect_match(artifact$plot_data$n_strip$label[artifact$plot_data$n_strip$low_n], "Low N")
+  expect_match(
+    artifact$plot_data$n_strip$label[artifact$plot_data$n_strip$low_n],
+    "Low N"
+  )
   expect_identical(main_panels, n_strip_panels)
   expect_equal(n_strip_built$data[[1]]$label, expected_n_strip$label)
   expect_identical(unique(n_strip_built$data[[1]]$fontface), "bold")
@@ -50,8 +53,14 @@ test_that("free scales change status but not analytical values", {
   free <- assemble_boxplot(analysis, "free", "%")
   fixed_built <- ggplot2::ggplot_build(fixed$plot)
   free_built <- ggplot2::ggplot_build(free$plot)
-  fixed_y_ranges <- lapply(fixed_built$layout$panel_params, function(panel) panel$y.range)
-  free_y_ranges <- lapply(free_built$layout$panel_params, function(panel) panel$y.range)
+  fixed_y_ranges <- lapply(
+    fixed_built$layout$panel_params,
+    function(panel) panel$y.range
+  )
+  free_y_ranges <- lapply(
+    free_built$layout$panel_params,
+    function(panel) panel$y.range
+  )
 
   expect_identical(fixed$analysis, free$analysis)
   expect_identical(fixed$status, "Draft")
@@ -111,6 +120,9 @@ test_that("long visit labels render at the governed export dimensions", {
   connection <- file(image_path, open = "rb")
   on.exit(close(connection), add = TRUE)
   readBin(connection, what = "raw", n = 16L)
-  dimensions <- readBin(connection, what = integer(), n = 2L, size = 4L, endian = "big")
+  dimensions <- readBin(connection,
+    what = integer(), n = 2L, size = 4L,
+    endian = "big"
+  )
   expect_identical(dimensions, c(1200L, 840L))
 })

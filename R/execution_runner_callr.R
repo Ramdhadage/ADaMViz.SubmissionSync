@@ -1,5 +1,8 @@
 .execution_source_root <- function() {
-  configured_root <- Sys.getenv("ADAMVIZ_SUBMISSIONSYNC_SOURCE_ROOT", unset = "")
+  configured_root <- Sys.getenv(
+    "ADAMVIZ_SUBMISSIONSYNC_SOURCE_ROOT",
+    unset = ""
+  )
   configured_roots <- if (nzchar(configured_root)) {
     normalizePath(configured_root, winslash = "/", mustWork = FALSE)
   } else {
@@ -32,7 +35,9 @@ run_execution_callr <- function(
   source_root = .execution_source_root()
 ) {
   if (!requireNamespace("callr", quietly = TRUE)) {
-    cli::cli_abort("The callr execution runner requires the {.pkg callr} package")
+    cli::cli_abort(
+      "The callr execution runner requires the {.pkg callr} package"
+    )
   }
   checkmate::assert_number(timeout, lower = 1, finite = TRUE)
   worker <- function(
@@ -43,7 +48,8 @@ run_execution_callr <- function(
     work_dir,
     source_root
   ) {
-    if (!is.null(source_root) && file.exists(file.path(source_root, "DESCRIPTION"))) {
+    if (!is.null(source_root) &&
+      file.exists(file.path(source_root, "DESCRIPTION"))) {
       devtools::load_all(source_root, quiet = TRUE)
     }
     run_locally <- get(
@@ -93,8 +99,18 @@ run_execution_callr <- function(
   )
 }
 
-new_callr_execution_runner <- function(timeout = 60, source_root = .execution_source_root()) {
-  new_execution_runner(function(request, script, analysis_data, data_classification, work_dir) {
+new_callr_execution_runner <- function(
+  timeout = 60,
+  source_root = .execution_source_root()
+) {
+  new_execution_runner(
+  function(
+    request,
+    script,
+    analysis_data,
+    data_classification,
+    work_dir
+  ) {
     run_execution_callr(
       request = request,
       script = script,

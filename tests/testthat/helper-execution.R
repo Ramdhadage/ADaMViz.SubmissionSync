@@ -56,10 +56,16 @@ skip_if_graphics_device_unavailable <- function() {
       if (grDevices::dev.cur() > 1L) grDevices::dev.off()
     }
   )
-  skip_if_not(available, "graphics device is unavailable in this R environment")
+  testthat::skip_if_not(
+    available,
+    "graphics device is unavailable in this R environment"
+  )
 }
 
-fake_successful_runner_result <- function(fixture, image_hash = paste(rep("a", 64L), collapse = "")) {
+fake_success_runner_result <- function(fixture, image_hash = paste(
+                                         rep("a", 64L),
+                                         collapse = ""
+                                       )) {
   env <- new.env(parent = globalenv())
   env$analysis_data <- fixture$profile$selected_data
   connection <- textConnection(fixture$script)
@@ -69,7 +75,7 @@ fake_successful_runner_result <- function(fixture, image_hash = paste(rep("a", 6
     fixture$request,
     analytical_hash = canonical_hash(env$boxplot_analysis),
     image_hash = image_hash,
-    environment_fingerprint = .execution_environment_fingerprint()
+    environment_fingerprint = .environment_fingerprint()
   )
   structure(
     list(
@@ -85,3 +91,9 @@ fake_successful_runner_result <- function(fixture, image_hash = paste(rep("a", 6
     class = "execution_runner_result"
   )
 }
+utils::globalVariables(c(
+  "make_test_snapshot",
+  "default_profile_selections",
+  "x",
+  "y"
+))

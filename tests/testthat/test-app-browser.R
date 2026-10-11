@@ -21,15 +21,26 @@ create_standard_revision <- function(app) {
       package = "ADaMViz.SubmissionSync"
     )
   )
-  app$wait_for_js("document.querySelector('#plot_generation-to_ask')?.disabled === false")
+  app$wait_for_js(paste0(
+    "document.querySelector('#plot_generation-to_ask')?.disabled ===",
+    " false"
+  ))
   app$click("plot_generation-to_ask")
-  app$set_inputs(`plot_generation-question` = "Create a boxplot of ALT AVAL by treatment over all visits.")
+  app$set_inputs(
+    `plot_generation-question` = paste0(
+      "Create a boxplot of ALT AVAL by treatment over all ",
+      "visits."
+    )
+  )
   app$click("plot_generation-to_confirm")
   app$wait_for_value(output = "plot_generation-specification-fields")
   app$click("plot_generation-specification-execute")
   app$wait_for_idle()
   app$wait_for_js(
-    "document.querySelector('#plot_generation-run_status-status')?.textContent.includes('Verified')",
+    paste0(
+      "document.querySelector('#plot_generation-run_status-status')?",
+      ".textContent.includes('Verified')"
+    ),
     timeout = 120000
   )
   invisible(app)
@@ -38,8 +49,14 @@ create_standard_revision <- function(app) {
 open_export_step <- function(app) {
   app$click("plot_generation-to_export")
   app$wait_for_js(paste0(
-    "document.querySelector('#plot_generation-export-heading')?.getClientRects().length > 0 && ",
-    "document.querySelector('#plot_generation-export-message')?.textContent.includes('No export attempted.')"
+    paste0(
+      "document.querySelector('#plot_generation-export-heading')?",
+      ".getClientRects().length > 0 && "
+    ),
+    paste0(
+      "document.querySelector('#plot_generation-export-message')?",
+      ".textContent.includes('No export attempted.')"
+    )
   ))
   app$wait_for_idle()
   invisible(app)
@@ -49,8 +66,14 @@ test_that("browser prompt journey creates a Verified draft with evidence", {
   app <- local_submission_sync_app("prompt-to-verified")
 
   create_standard_revision(app)
-  app$run_js("document.querySelector('#plot_generation-plot_preview-code').closest('details').open = true")
-  app$run_js("document.querySelector('#plot_generation-evidence-checks').closest('details').open = true")
+  app$run_js(paste0(
+    "document.querySelector('#plot_generation-plot_preview-code')",
+    ".closest('details').open = true"
+  ))
+  app$run_js(paste0(
+    "document.querySelector('#plot_generation-evidence-checks')",
+    ".closest('details').open = true"
+  ))
   app$wait_for_value(output = "plot_generation-evidence-checks")
   body <- app$get_text(selector = "body")
 
@@ -67,14 +90,17 @@ test_that("browser prompt journey exports verified image and code", {
   open_export_step(app)
   app$click("plot_generation-export-export")
   app$wait_for_idle()
-  app$wait_for_js("document.querySelector('#plot_generation-export-message').textContent.includes('Exported receipt-')")
+  app$wait_for_js(paste0(
+    "document.querySelector('#plot_generation-export-message')",
+    ".textContent.includes('Exported receipt-')"
+  ))
 
   body <- app$get_text(selector = "body")
   expect_match(body, "Exported receipt-", fixed = TRUE)
   expect_match(body, "rev-", fixed = TRUE)
 })
 
-test_that("browser review journey reaches Reviewed with two distinct approvals", {
+test_that("browser review reaches Reviewed with two distinct approvals", {
   app <- local_submission_sync_app("two-person-review")
 
   create_standard_revision(app)
@@ -86,16 +112,23 @@ test_that("browser review journey reaches Reviewed with two distinct approvals",
   )
   app$click("plot_generation-review-approve")
   app$wait_for_idle()
-  app$wait_for_js("document.querySelector('#plot_generation-review-decisions').textContent.includes('stat-programmer')")
+  app$wait_for_js(paste0(
+    "document.querySelector('#plot_generation-review-decisions')",
+    ".textContent.includes('stat-programmer')"
+  ))
 
   app$set_inputs(
     `plot_generation-review-actor_id` = "biostatistician",
     `plot_generation-review-role` = "biostatistician",
-    `plot_generation-review-comment` = "Biostatistician browser acceptance approval."
+    `plot_generation-review-comment` =
+      "Biostatistician browser acceptance approval."
   )
   app$click("plot_generation-review-approve")
   app$wait_for_idle()
-  app$wait_for_js("document.querySelector('#plot_generation-revision_history-history').textContent.includes('Reviewed')")
+  app$wait_for_js(paste0(
+    "document.querySelector('#plot_generation-revision_history-history')",
+    ".textContent.includes('Reviewed')"
+  ))
 
   body <- app$get_text(selector = "body")
   expect_match(body, "Reviewed", fixed = TRUE)
@@ -104,7 +137,10 @@ test_that("browser review journey reaches Reviewed with two distinct approvals",
 
   app$click("plot_generation-review-approve")
   app$wait_for_idle()
-  app$wait_for_js("document.querySelector('#plot_generation-review-message').textContent.includes('Reviewed revisions are immutable')")
+  app$wait_for_js(paste0(
+    "document.querySelector('#plot_generation-review-message')",
+    ".textContent.includes('Reviewed revisions are immutable')"
+  ))
   expect_match(
     app$get_text(selector = "body"),
     "Reviewed revisions are immutable",
@@ -124,7 +160,10 @@ test_that("browser rejection closes the revision and blocks further review", {
   )
   app$click("plot_generation-review-reject")
   app$wait_for_idle()
-  app$wait_for_js("document.querySelector('#plot_generation-revision_history-history').textContent.includes('Rejected')")
+  app$wait_for_js(paste0(
+    "document.querySelector('#plot_generation-revision_history-history')",
+    ".textContent.includes('Rejected')"
+  ))
 
   body <- app$get_text(selector = "body")
   expect_match(body, "Rejected", fixed = TRUE)
@@ -137,10 +176,14 @@ test_that("browser rejection closes the revision and blocks further review", {
   )
   app$click("plot_generation-review-approve")
   app$wait_for_idle()
-  app$wait_for_js("document.querySelector('#plot_generation-review-message').textContent.includes('Only a Verified revision can be reviewed')")
+  app$wait_for_js(paste0(
+    "document.querySelector('#plot_generation-review-message')",
+    ".textContent.includes('Only a Verified revision can be reviewed')"
+  ))
   expect_match(
     app$get_text(selector = "body"),
     "Only a Verified revision can be reviewed",
     fixed = TRUE
   )
 })
+utils::globalVariables("local_browser_app")

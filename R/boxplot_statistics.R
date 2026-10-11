@@ -1,13 +1,34 @@
 .validate_boxplot_design <- function(facet_levels, visit_levels, low_n_policy) {
-  if (!checkmate::test_character(facet_levels, min.len = 1L, any.missing = FALSE, unique = TRUE) ||
-      !checkmate::test_character(visit_levels, min.len = 1L, any.missing = FALSE, unique = TRUE)) {
-    cli::cli_abort("Facet and visit levels must be ordered, unique character vectors")
+  if (!checkmate::test_character(
+    facet_levels,
+    min.len = 1L,
+    any.missing = FALSE,
+    unique = TRUE
+  ) || !checkmate::test_character(
+    visit_levels,
+    min.len = 1L,
+    any.missing = FALSE,
+    unique = TRUE
+  )) {
+    cli::cli_abort(paste0(
+      "Facet and visit levels must be ordered, ",
+      "unique character vectors"
+    ))
   }
   required_policy <- c("value", "rationale", "authority", "version")
-  if (!is.list(low_n_policy) || !setequal(names(low_n_policy), required_policy) ||
-      !checkmate::test_number(low_n_policy$value, lower = 1, finite = TRUE) ||
-      !all(vapply(low_n_policy[setdiff(required_policy, "value")], checkmate::test_string, logical(1), min.chars = 1L))) {
-    cli::cli_abort("{.arg low_n_policy} must retain value, rationale, authority, and version")
+  if (!is.list(low_n_policy) ||
+    !setequal(names(low_n_policy), required_policy) ||
+    !checkmate::test_number(low_n_policy$value, lower = 1, finite = TRUE) ||
+    !all(vapply(
+      low_n_policy[setdiff(required_policy, "value")],
+      checkmate::test_string,
+      logical(1),
+      min.chars = 1L
+    ))) {
+    cli::cli_abort(paste0(
+      "{.arg low_n_policy} must retain value, rationale, ",
+      "authority, and version"
+    ))
   }
   invisible(TRUE)
 }
@@ -20,11 +41,16 @@
   visit_levels,
   low_n_policy
 ) {
-  required_columns <- c("USUBJID", "AVISIT", "AVISITN", treatment_variable, y_variable)
+  required_columns <- c(
+    "USUBJID", "AVISIT", "AVISITN", treatment_variable, y_variable
+  )
   missing_columns <- setdiff(required_columns, names(data))
   if (!is.data.frame(data) || length(missing_columns)) {
     cli::cli_abort(
-      "{.arg data} must contain the governed analytical columns: {.field {required_columns}}"
+      paste0(
+        "{.arg data} must contain the governed analytical columns: ",
+        "{.field {required_columns}}"
+      )
     )
   }
   if (!is.numeric(data[[y_variable]])) {
@@ -41,10 +67,17 @@
   if (fraction == 0 || lower_index == count) {
     return(values[[lower_index]])
   }
-  values[[lower_index]] + fraction * (values[[lower_index + 1L]] - values[[lower_index]])
+  values[[lower_index]] + fraction * (
+    values[[lower_index + 1L]] - values[[lower_index]]
+  )
 }
 
-.summarize_box <- function(rows, treatment_variable, y_variable, low_n_threshold) {
+.summarize_box <- function(
+  rows,
+  treatment_variable,
+  y_variable,
+  low_n_threshold
+) {
   values <- rows[[y_variable]]
   sorted_values <- sort(values, method = "radix")
   lower <- .type7_quantile_from_sorted(sorted_values, 0.25)
@@ -145,17 +178,24 @@ calculate_boxplot_statistics <- function(
       !is.na(data[[treatment_variable]]) &
       data[[treatment_variable]] %in% facet_levels &
       !is.na(data$AVISIT) &
-      data$AVISIT %in% visit_levels,
-    ,
+      data$AVISIT %in% visit_levels, ,
     drop = FALSE
   ]
   if (any(!is.finite(display[[y_variable]]))) {
     cli::cli_abort("The selected Y variable must contain only finite values")
   }
   if (nrow(display)) {
-    treatment_order <- match(as.character(display[[treatment_variable]]), facet_levels)
+    treatment_order <- match(
+      as.character(display[[treatment_variable]]),
+      facet_levels
+    )
     visit_order <- match(as.character(display$AVISIT), visit_levels)
-    ordering <- order(treatment_order, visit_order, as.character(display$USUBJID), method = "radix")
+    ordering <- order(
+      treatment_order,
+      visit_order,
+      as.character(display$USUBJID),
+      method = "radix"
+    )
     display <- display[ordering, , drop = FALSE]
     row.names(display) <- NULL
     group_start <- c(
