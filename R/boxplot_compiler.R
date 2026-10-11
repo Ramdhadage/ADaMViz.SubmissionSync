@@ -4,8 +4,8 @@
     rlang::sym("calculate_boxplot_statistics"),
     rlang::call2(
       "function",
-      formals(.standalone_boxplot_stats),
-      body(.standalone_boxplot_stats)
+      formals(.standalone_boxplot_stats), # nolint: object_usage_linter.
+      body(.standalone_boxplot_stats) # nolint: object_usage_linter.
     )
   )
   assemble_expression <- rlang::call2(

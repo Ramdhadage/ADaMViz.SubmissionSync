@@ -78,10 +78,9 @@ test_that("manifest expectations agree with profile behavior", {
   )
 
   canary <- "SYNTH-CANARY-DO-NOT-RETAIN"
-  expect_true(any(grepl(canary,
-    results$`identifier-canary`$authorized_diagnostics$duplicate_keys$USUBJID,
-    fixed = TRUE
-  )))
+  authorized_diagnostics <- results$`identifier-canary`$authorized_diagnostics
+  duplicate_keys <- authorized_diagnostics$duplicate_keys$USUBJID
+  expect_true(any(grepl(canary, duplicate_keys, fixed = TRUE)))
   expect_false(grepl(canary,
     canonical_serialize(results$`identifier-canary`$durable_diagnostics),
     fixed = TRUE

@@ -1,7 +1,7 @@
 test_that("callr runner executes in a clean subprocess", {
   skip_if_not_installed("callr")
   skip_if_not_installed("devtools")
-  skip_if_graphics_device_unavailable()
+  skip_if_no_cairo_device()
   fixture <- execution_fixture()
   source_root <- normalizePath(
     testthat::test_path("..", ".."),

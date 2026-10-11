@@ -14,7 +14,8 @@ fake_correction_runner <- function(request, script, analysis_data, ...) {
         request,
         analytical_hash = canonical_hash(environment$boxplot_analysis),
         image_hash = digest::digest(file = image_path, algo = "sha256"),
-        environment_fingerprint = .environment_fingerprint()
+        environment_fingerprint =
+          .environment_fingerprint() # nolint: object_usage_linter.
       ),
       analytical_output = environment$boxplot_analysis,
       image_path = image_path,

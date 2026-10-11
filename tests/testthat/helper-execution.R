@@ -15,8 +15,8 @@ execution_spec <- function() {
 
 execution_fixture <- function() {
   profile <- validate_bds_profile(
-    make_test_snapshot(),
-    default_profile_selections()
+    make_test_snapshot(), # nolint: object_usage_linter.
+    default_profile_selections() # nolint: object_usage_linter.
   )
   spec <- execution_spec()
   script <- compile_boxplot_script(spec, profile$low_n_policy)
@@ -35,14 +35,13 @@ execution_fixture <- function() {
   )
 }
 
-skip_if_graphics_device_unavailable <- function() {
+skip_if_no_cairo_device <- function() {
   path <- tempfile(fileext = ".png")
   available <- tryCatch(
     {
       ggplot2::ggsave(
         filename = path,
-        plot = ggplot2::ggplot(data.frame(x = 1, y = 1), ggplot2::aes(x, y)) +
-          ggplot2::geom_point(),
+        plot = ggplot2::ggplot() + ggplot2::theme_void(),
         device = function(...) grDevices::png(..., type = "cairo"),
         width = 1,
         height = 1,
@@ -63,9 +62,9 @@ skip_if_graphics_device_unavailable <- function() {
 }
 
 fake_success_runner_result <- function(fixture, image_hash = paste(
-                                         rep("a", 64L),
-                                         collapse = ""
-                                       )) {
+  rep("a", 64L),
+  collapse = ""
+)) {
   env <- new.env(parent = globalenv())
   env$analysis_data <- fixture$profile$selected_data
   connection <- textConnection(fixture$script)
@@ -75,7 +74,8 @@ fake_success_runner_result <- function(fixture, image_hash = paste(
     fixture$request,
     analytical_hash = canonical_hash(env$boxplot_analysis),
     image_hash = image_hash,
-    environment_fingerprint = .environment_fingerprint()
+    environment_fingerprint =
+      .environment_fingerprint() # nolint: object_usage_linter.
   )
   structure(
     list(

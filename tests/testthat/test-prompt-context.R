@@ -13,9 +13,11 @@ test_that("prompt context is built from authorized aggregate choices only", {
     vapply(context$aggregate_profile$visits, `[[`, "", "label"),
     c("Baseline", "Week 4", "Week 8")
   )
-  expect_false(any(grepl("USUBJID|SYNTH001-[0-9]+", unlist(context),
-    ignore.case = TRUE
-  )))
+  expect_false(
+    any(grepl(
+      "USUBJID|SYNTH001-[0-9]+", unlist(context), ignore.case = TRUE
+    ))
+  )
 })
 
 test_that("prompt context blocks prohibited labels and metadata", {

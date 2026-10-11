@@ -1,5 +1,5 @@
 test_that("local runner returns a bounded versioned result manifest", {
-  skip_if_graphics_device_unavailable()
+  skip_if_no_cairo_device()
   fixture <- execution_fixture()
   result <- run_execution_locally(
     request = fixture$request,

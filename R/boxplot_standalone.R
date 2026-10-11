@@ -19,9 +19,9 @@
     cli::cli_abort("The selected Y variable must be numeric")
   }
   if (!is.character(facet_levels) || !length(facet_levels) ||
-    anyDuplicated(facet_levels) ||
-    !is.character(visit_levels) || !length(visit_levels) ||
-    anyDuplicated(visit_levels)) {
+        anyDuplicated(facet_levels) ||
+        !is.character(visit_levels) || !length(visit_levels) ||
+        anyDuplicated(visit_levels)) {
     cli::cli_abort(paste0(
       "Facet and visit levels must be ordered, ",
       "unique character vectors"

@@ -6,7 +6,7 @@ local_submission_sync_app <- function(name) {
     ui = function(request) app_ui(request),
     server = app_server
   )
-  driver <- local_browser_app(app, name)
+  driver <- local_browser_app(app, name) # nolint: object_usage_linter.
   cleanup_env <- parent.frame()
   if (!identical(cleanup_env, globalenv())) {
     withr::defer(driver$stop(), envir = cleanup_env)

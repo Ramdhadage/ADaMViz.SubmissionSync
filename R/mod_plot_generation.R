@@ -669,7 +669,9 @@ mod_plot_generation_server <- function(
       ignoreInit = TRUE
     )
 
-    run_revision <- function(fields, correction = FALSE, rationale = NULL, provenance = NULL) {
+    run_revision <- function(
+      fields, correction = FALSE, rationale = NULL, provenance = NULL
+    ) {
       state <- current_revision()
       snapshot <- if (isTRUE(correction)) {
         state$snapshot
@@ -749,8 +751,8 @@ mod_plot_generation_server <- function(
 
 .uploaded_study_data_provider <- function(file) {
   if (!checkmate::test_data_frame(file, min.rows = 1L) || nrow(file) != 1L ||
-    !checkmate::test_string(file$name[[1]], min.chars = 1L) ||
-    !checkmate::test_file_exists(file$datapath[[1]], access = "r")) {
+        !checkmate::test_string(file$name[[1]], min.chars = 1L) ||
+        !checkmate::test_file_exists(file$datapath[[1]], access = "r")) {
     cli::cli_abort("Choose one readable CSV or Excel file")
   }
 

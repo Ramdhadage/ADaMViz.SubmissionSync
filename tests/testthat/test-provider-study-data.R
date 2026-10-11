@@ -11,9 +11,9 @@ test_that("local provider exposes metadata and pins a verified snapshot", {
   ))
   expect_true(all(catalog$classification == "synthetic"))
   expect_true(all(catalog$adam_designation == "BDS"))
-  expect_false(any(grepl("\\.rds$|[/\\\\]", unlist(catalog),
-    ignore.case = TRUE
-  )))
+  expect_false(
+    any(grepl("\\.rds$|[/\\\\]", unlist(catalog), ignore.case = TRUE))
+  )
 
   snapshot <- pin_study_snapshot(provider, "adlb-standard")
   expect_s3_class(snapshot, "study_data_snapshot")

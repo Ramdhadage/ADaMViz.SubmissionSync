@@ -21,9 +21,9 @@
     paste0("COM", 1:9), paste0("LPT", 1:9)
   )
   if (!checkmate::test_string(value, min.chars = 1L) ||
-    !grepl("^[A-Za-z0-9._-]+$", value) ||
-    value %in% c(".", "..") ||
-    toupper(tools::file_path_sans_ext(value)) %in% reserved) {
+        !grepl("^[A-Za-z0-9._-]+$", value) ||
+        value %in% c(".", "..") ||
+        toupper(tools::file_path_sans_ext(value)) %in% reserved) {
     cli::cli_abort("{.arg {name}} must be a safe logical identifier")
   }
   invisible(value)

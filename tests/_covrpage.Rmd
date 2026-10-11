@@ -43,7 +43,7 @@ test_skip <- test_x_long[test_x_long$status != "PASS", c("file", "test")]
 
 test_skip$file <- gsub("#(.*?)$", "", basename(test_skip$file))
 
-test_skip <- merge(test_skip,test_m)
+test_skip <- merge(test_skip, test_m)
 
 failed <- any(test_x_long$status %in% c("ERROR", "FAILED"))
 
@@ -63,8 +63,10 @@ Coverage summary is created using the [covr](https://github.com/r-lib/covr) pack
 if (any(grepl(covrpage::package_name(path = ".."), loadedNamespaces()))) {
   unloadNamespace(covrpage::package_name(path = ".."))
 }
-cvr <- covrpage::coverage_skip(test_path = "../tests/testthat",
-  test_skip = test_skip)
+cvr <- covrpage::coverage_skip(
+  test_path = "../tests/testthat",
+  test_skip = test_skip
+)
 ```
 
 ```{r message on coverage warning,echo=FALSE,eval=failed}
@@ -150,7 +152,6 @@ x$info |>
 
 x$pkgs |>
   knitr::kable()
-
 ```
 
 </details>

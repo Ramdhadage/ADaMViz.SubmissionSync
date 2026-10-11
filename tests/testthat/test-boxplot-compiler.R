@@ -111,7 +111,7 @@ test_that("compiled script reproduces the independent analytical result", {
     environment$boxplot_artifact$plot$theme$panel.border,
     "element_rect"
   )
-  skip_if_graphics_device_unavailable()
+  skip_if_no_cairo_device()
   output <- tempfile(fileext = ".png")
   withr::defer(unlink(output))
   expect_no_error(

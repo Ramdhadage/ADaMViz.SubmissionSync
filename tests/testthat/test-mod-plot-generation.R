@@ -39,9 +39,10 @@ test_that("plot generation UI gives traceability, review, and export a step", {
   expect_true(all(result_content < export_condition))
   expect_gt(export_panel, export_condition)
   expect_true(all(export_content > export_panel))
-  expect_length(gregexpr("Traceability, review, and export", html,
-    fixed = TRUE
-  )[[1]], 1L)
+  expect_length(
+    gregexpr("Traceability, review, and export", html, fixed = TRUE)[[1]],
+    1L
+  )
   expect_match(
     html,
     paste0(
