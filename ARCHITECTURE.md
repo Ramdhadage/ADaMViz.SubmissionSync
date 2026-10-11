@@ -97,7 +97,7 @@ not by itself update the installed application.
 | **2. Plot specification — implemented; interpretation integration partial** | `.create_assurance_candidate()` retains the question and builds aggregate choices. `mod_specification_server()` collects selections; `.confirmed_spec_from_fields()` creates a confirmed specification with provenance. The active path does not call [`interpret_prompt()`](https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference/interpret_prompt.md). [`ellmer_prompt_interpreter()`](https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference/ellmer_prompt_interpreter.md) is disabled. |
 | **3. Profile and compilation — implemented** | `.execute_assurance_revision()` validates the selected BDS profile before compilation. Explicit selections govern inclusion; analysis flags are not silently applied. Missing selected Y values are excluded from display statistics while retained selected records remain available for evidence. Blocking profile diagnostics stop generation. [`compile_boxplot_script()`](https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference/compile_boxplot_script.md) emits application-owned R code. |
 | **4. Execution and artifacts — implemented** | Fixed-scale revisions start as `Draft`. `new_execution_service()` records an attempt and synchronously invokes a clean `callr` subprocess. The worker executes the supplied script with selected records as `analysis_data`, returning analytical output, PNG identity, environment details, and diagnostics. Passing service checks lead to artifact acceptance and `Verified`; failed verification leaves `Draft`. |
-| **5. Preview, evidence, and replay — implemented with separate paths** | The UI preview is assembled again in the application process; it does not display the accepted worker PNG. Revision-context evidence retains the question, specification, selected input records, script, execution metadata, and checks. `new_reproducibility_service()` can rerun retained evidence, but replay is not wired into the normal confirmation, review, or export path. |
+| **5. Preview, evidence, and replay — implemented with separate paths** | Governed revisions display the accepted worker PNG and stored script; experimental free-scale revisions retain an in-process preview. Revision-context evidence retains the question, specification, selected input records, script, execution metadata, and checks. `new_reproducibility_service()` can rerun retained evidence, but replay is not wired into the normal confirmation, review, or export path. |
 | **6. Review and correction — implemented with local identities** | Two distinct active non-creator actors, covering statistical-programmer and biostatistician roles, must approve identical artifact hashes to reach `Reviewed`. Rejection creates `Rejected`. Corrections to `Rejected` or `Reviewed` revisions create linked successors with rationale and provenance. UI identities are selectable local actors, not authenticated users. |
 | **7. Controlled export — implemented for development** | `new_export_service()` accepts `Draft`, `Verified`, or `Reviewed` revisions with an accepted bundle. It checks actor eligibility, revision version, destination, and artifact hashes around staging/publication, then records an internal receipt. The local provider publishes only `script.R` and `plot.png`; the ZIP packages the last successful export. Qualified target-provider guarantees remain deferred. |
 
@@ -117,7 +117,7 @@ claim that tests currently pass.
 | Secrets stay outside source, prompts, scripts, logs, and retained evidence | **Documented policy**, with **runtime checks + automated tests** for injected secret resolution. There is no demonstrated application-wide secret redaction or subprocess environment allowlist. |
 | Prompt/model output must not become arbitrary executable R | **Runtime checks + automated tests** in the interpreter and confirmed-spec compiler. The active UI uses the owned compiler. The runner itself is not a hostile-code sandbox or an independent compiler allowlist. |
 | Selected data must fit the supported plotting envelope | **Runtime checks + automated tests** for required fields, selections, visit mappings, duplicate keys, numeric Y, and statistical input checks. `dataset_conformance = "not_assessed"` explicitly avoids claiming full ADaM conformance. |
-| `Verified` and human approval remain distinct | **Runtime checks + automated tests** in the execution and review services. Passing execution evidence is enforced by the execution service; repository `mark_verified()` checks status/version but does not require that evidence. |
+| `Verified` and human approval remain distinct | **Runtime checks + automated tests** in the execution, repository, and review services. Repository promotion requires a successful attempt, linked passing verification evidence, and an accepted artifact bundle. |
 | Review binds an immutable revision; correction creates a successor | **Runtime checks + automated tests** for reviewer roles, distinct identities, creator exclusion, hashes, stale versions, and correction relationships. Pending image/analytical hashes are bound once during artifact acceptance. |
 | Evidence and artifacts retain identity | **Runtime checks + automated tests** for content-addressed artifacts, SQL relationships, command idempotency, lifecycle hash chains, integrity checking, and backup/restore. This is local integrity machinery, not qualified audit-record custody. |
 | Replay preserves recorded identity | **Runtime checks + automated tests** in the separately callable replay service. Image equality depends on matching environment fingerprints. Replay is not an automatic review/export prerequisite. |
@@ -175,15 +175,13 @@ on warnings.
 4.  **Verification meaning:** runtime verification checks execution
     identity and manifest/hash properties. It does not independently
     establish statistical correctness or automatically rerun the
-    revision. Repository-level promotion can bypass service evidence.
-5.  **Artifact identity:** the preview is reconstructed rather than read
-    from the accepted PNG. The “Executed R script” label also appears
-    for experimental revisions that were not submitted to the worker.
-6.  **Standalone portability:** generated scripts contain a
-    checkout-specific fallback data path and package-installation code.
-    This differs from documentation saying detached files omit internal
-    paths; locked-environment replay depends on supplying the retained
-    selected records.
+    revision.
+5.  **Artifact identity:** governed revisions display the accepted PNG
+    and stored script. Experimental revisions still use an in-process
+    preview and have no accepted worker artifact.
+6.  **Standalone portability:** generated scripts require callers to
+    supply `analysis_data` and locked dependencies; detached exports
+    intentionally do not include selected records.
 7.  **Persistence and operations:** the app creates evidence under
     temporary directories. Retention custody, cross-session discovery,
     automatic recovery, production monitoring, and target-environment

@@ -12,6 +12,8 @@ new_runtime_config(
   profile = Sys.getenv("ADAMVIZ_PROFILE", "local"),
   prompt_provider = Sys.getenv("ADAMVIZ_PROMPT_PROVIDER", "mock"),
   workspace = Sys.getenv("ADAMVIZ_WORKSPACE", "local"),
+  evidence_root = Sys.getenv("ADAMVIZ_EVIDENCE_ROOT",
+    fs::path(tools::R_user_dir("ADaMViz.SubmissionSync", which = "data"), "evidence")),
   secret_provider = NULL,
   required_secret_references = character()
 )
@@ -30,6 +32,10 @@ new_runtime_config(
 - workspace:
 
   Logical workspace identifier.
+
+- evidence_root:
+
+  Directory containing durable revision evidence and artifacts.
 
 - secret_provider:
 

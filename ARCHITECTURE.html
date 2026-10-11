@@ -151,7 +151,7 @@
 </tr><tr><td><strong>4. Execution and artifacts — implemented</strong></td>
 <td>Fixed-scale revisions start as <code>Draft</code>. <code>new_execution_service()</code> records an attempt and synchronously invokes a clean <code>callr</code> subprocess. The worker executes the supplied script with selected records as <code>analysis_data</code>, returning analytical output, PNG identity, environment details, and diagnostics. Passing service checks lead to artifact acceptance and <code>Verified</code>; failed verification leaves <code>Draft</code>.</td>
 </tr><tr><td><strong>5. Preview, evidence, and replay — implemented with separate paths</strong></td>
-<td>The UI preview is assembled again in the application process; it does not display the accepted worker PNG. Revision-context evidence retains the question, specification, selected input records, script, execution metadata, and checks. <code>new_reproducibility_service()</code> can rerun retained evidence, but replay is not wired into the normal confirmation, review, or export path.</td>
+<td>Governed revisions display the accepted worker PNG and stored script; experimental free-scale revisions retain an in-process preview. Revision-context evidence retains the question, specification, selected input records, script, execution metadata, and checks. <code>new_reproducibility_service()</code> can rerun retained evidence, but replay is not wired into the normal confirmation, review, or export path.</td>
 </tr><tr><td><strong>6. Review and correction — implemented with local identities</strong></td>
 <td>Two distinct active non-creator actors, covering statistical-programmer and biostatistician roles, must approve identical artifact hashes to reach <code>Reviewed</code>. Rejection creates <code>Rejected</code>. Corrections to <code>Rejected</code> or <code>Reviewed</code> revisions create linked successors with rationale and provenance. UI identities are selectable local actors, not authenticated users.</td>
 </tr><tr><td><strong>7. Controlled export — implemented for development</strong></td>
@@ -179,7 +179,7 @@
 </tr><tr><td>
 <code>Verified</code> and human approval remain distinct</td>
 <td>
-<strong>Runtime checks + automated tests</strong> in the execution and review services. Passing execution evidence is enforced by the execution service; repository <code>mark_verified()</code> checks status/version but does not require that evidence.</td>
+<strong>Runtime checks + automated tests</strong> in the execution, repository, and review services. Repository promotion requires a successful attempt, linked passing verification evidence, and an accepted artifact bundle.</td>
 </tr><tr><td>Review binds an immutable revision; correction creates a successor</td>
 <td>
 <strong>Runtime checks + automated tests</strong> for reviewer roles, distinct identities, creator exclusion, hashes, stale versions, and correction relationships. Pending image/analytical hashes are bound once during artifact acceptance.</td>
@@ -213,11 +213,11 @@
 <li>
 <strong>Export semantics:</strong> strategy requires unreviewed exports to be drafts; UX describes post-approval eligibility. Code permits unreviewed <code>Verified</code> export and omits status from detached files.</li>
 <li>
-<strong>Verification meaning:</strong> runtime verification checks execution identity and manifest/hash properties. It does not independently establish statistical correctness or automatically rerun the revision. Repository-level promotion can bypass service evidence.</li>
+<strong>Verification meaning:</strong> runtime verification checks execution identity and manifest/hash properties. It does not independently establish statistical correctness or automatically rerun the revision.</li>
 <li>
-<strong>Artifact identity:</strong> the preview is reconstructed rather than read from the accepted PNG. The “Executed R script” label also appears for experimental revisions that were not submitted to the worker.</li>
+<strong>Artifact identity:</strong> governed revisions display the accepted PNG and stored script. Experimental revisions still use an in-process preview and have no accepted worker artifact.</li>
 <li>
-<strong>Standalone portability:</strong> generated scripts contain a checkout-specific fallback data path and package-installation code. This differs from documentation saying detached files omit internal paths; locked-environment replay depends on supplying the retained selected records.</li>
+<strong>Standalone portability:</strong> generated scripts require callers to supply <code>analysis_data</code> and locked dependencies; detached exports intentionally do not include selected records.</li>
 <li>
 <strong>Persistence and operations:</strong> the app creates evidence under temporary directories. Retention custody, cross-session discovery, automatic recovery, production monitoring, and target-environment qualification remain unsettled.</li>
 <li>
