@@ -143,7 +143,7 @@ app_server <- function(
 
 .execute_correction_revision <- function(state, fields, rationale, provenance) {
   if (is.null(state$repository) || is.null(state$revision) ||
-        is.null(state$snapshot)) {
+    is.null(state$snapshot)) {
     cli::cli_abort("Create a revision before starting a correction")
   }
   parent <- state$repository$get_revision(state$revision$revision_id)
@@ -153,7 +153,7 @@ app_server <- function(
     )
   }
   if (!checkmate::test_string(rationale, min.chars = 1L) ||
-        !checkmate::test_string(provenance, min.chars = 1L)) {
+    !checkmate::test_string(provenance, min.chars = 1L)) {
     cli::cli_abort("Correction rationale and provenance are required")
   }
   spec <- .confirmed_spec_from_fields(state$snapshot$dataset_id, fields)

@@ -48,7 +48,7 @@ local_artifact_store <- function(root) {
   verify <- function(hash) {
     path <- artifact_path(hash)
     if (!fs::file_exists(path) ||
-          !identical(digest::digest(file = path, algo = "sha256"), hash)) {
+      !identical(digest::digest(file = path, algo = "sha256"), hash)) {
       cli::cli_abort("Artifact hash verification failed for {.val {hash}}")
     }
     TRUE

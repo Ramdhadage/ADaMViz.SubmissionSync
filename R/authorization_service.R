@@ -19,18 +19,18 @@ new_actor <- function(id, roles, active = TRUE) {
 
 authorize_revision_action <- function(actor, revision, action) {
   if (!inherits(actor, "submission_sync_actor") ||
-        !inherits(revision, "plot_revision")) {
+    !inherits(revision, "plot_revision")) {
     cli::cli_abort("Authorization requires an actor and plot revision")
   }
   if (!actor$active) {
     cli::cli_abort("The current actor is not active")
   }
   if (action %in% c("approve", "reject") &&
-        identical(actor$id, revision$creator_id)) {
+    identical(actor$id, revision$creator_id)) {
     cli::cli_abort("A revision creator cannot review their own revision")
   }
   if (action == "approve" &&
-        !any(actor$roles %in% c("statistical_programmer", "biostatistician"))) {
+    !any(actor$roles %in% c("statistical_programmer", "biostatistician"))) {
     cli::cli_abort("The current actor is not eligible to approve a revision")
   }
   invisible(TRUE)

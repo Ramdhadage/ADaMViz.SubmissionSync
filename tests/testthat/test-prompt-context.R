@@ -15,7 +15,8 @@ test_that("prompt context is built from authorized aggregate choices only", {
   )
   expect_false(
     any(grepl(
-      "USUBJID|SYNTH001-[0-9]+", unlist(context), ignore.case = TRUE
+      "USUBJID|SYNTH001-[0-9]+", unlist(context),
+      ignore.case = TRUE
     ))
   )
 })

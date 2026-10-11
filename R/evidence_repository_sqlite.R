@@ -196,7 +196,7 @@
     cli::cli_abort("External chain root is newer than the database history")
   }
   if (!is.null(prior) && prior$sequence == root$sequence &&
-        !identical(prior$chain_hash, root$chain_hash)) {
+    !identical(prior$chain_hash, root$chain_hash)) {
     cli::cli_abort("External chain root conflicts with the database history")
   }
   if (!is.null(prior) && prior$sequence == root$sequence) {
@@ -319,14 +319,14 @@
   database_hash <- digest::digest(file = database_path, algo = "sha256")
   chain_root_hash <- digest::digest(file = chain_root_path, algo = "sha256")
   if (!identical(database_hash, manifest$database_hash) ||
-        !identical(chain_root_hash, manifest$chain_root_hash)) {
+    !identical(chain_root_hash, manifest$chain_root_hash)) {
     cli::cli_abort("Backup file hashes do not match the completion manifest")
   }
   counts <- .database_table_counts(database_path)
   expected_counts <- unlist(manifest$table_counts, use.names = TRUE)
   actual_counts <- unlist(counts[names(expected_counts)], use.names = TRUE)
   if (!identical(as.numeric(actual_counts), as.numeric(expected_counts)) ||
-        !identical(names(actual_counts), names(expected_counts))) {
+    !identical(names(actual_counts), names(expected_counts))) {
     cli::cli_abort("Backup row counts do not match the completion manifest")
   }
   invisible(manifest)
@@ -405,7 +405,7 @@ sqlite_evidence_repository <- function(
         DBI::dbWithTransaction(con, code(con))
       })
       if (is.list(root) &&
-            all(c("plot_id", "sequence", "chain_hash") %in% names(root))) {
+        all(c("plot_id", "sequence", "chain_hash") %in% names(root))) {
         .write_chain_root(chain_root_path, root)
       }
       invisible(root)
@@ -485,13 +485,13 @@ sqlite_evidence_repository <- function(
           )
         }
         if (!checkmate::test_string(correction_rationale, min.chars = 1) ||
-              !checkmate::test_string(correction_provenance, min.chars = 1)) {
+          !checkmate::test_string(correction_provenance, min.chars = 1)) {
           cli::cli_abort(
             "A correction successor requires rationale and provenance"
           )
         }
       } else if (!is.null(correction_rationale) ||
-                   !is.null(correction_provenance)) {
+        !is.null(correction_provenance)) {
         cli::cli_abort(
           "Correction rationale and provenance require a parent revision"
         )
@@ -578,7 +578,7 @@ sqlite_evidence_repository <- function(
       )
       if (nrow(prior)) {
         if (!identical(prior$revision_id[[1]], revision_id) ||
-              !identical(prior$run_id[[1]], run_id)) {
+          !identical(prior$run_id[[1]], run_id)) {
           cli::cli_abort(
             "Attempt identifier was already used for a different command"
           )
@@ -899,7 +899,7 @@ sqlite_evidence_repository <- function(
         ))
       }
       if (decision == "rejected" &&
-            !checkmate::test_string(comment, min.chars = 1)) {
+        !checkmate::test_string(comment, min.chars = 1)) {
         cli::cli_abort("A rejection rationale is required")
       }
       prior <- DBI::dbGetQuery(
@@ -1030,7 +1030,7 @@ sqlite_evidence_repository <- function(
       }
       revision <- .current_revision(con, revision_id)
       if (!identical(code_hash, revision$code_hash) ||
-            !identical(image_hash, revision$image_hash)) {
+        !identical(image_hash, revision$image_hash)) {
         cli::cli_abort(
           "Export receipt hashes do not match the immutable revision"
         )
@@ -1108,7 +1108,7 @@ sqlite_evidence_repository <- function(
         previous <- paste(rep("0", 64L), collapse = "")
         for (i in seq_len(nrow(plot_events))) {
           if (plot_events$event_sequence[[i]] != i ||
-                !identical(plot_events$previous_hash[[i]], previous)) {
+            !identical(plot_events$previous_hash[[i]], previous)) {
             cli::cli_abort("Lifecycle event chain order is invalid")
           }
           calculated <- canonical_hash(list(
@@ -1127,7 +1127,7 @@ sqlite_evidence_repository <- function(
         }
         root <- roots[[plot_id]]
         if (is.null(root) || root$sequence != nrow(plot_events) ||
-              !identical(root$chain_hash, previous)) {
+          !identical(root$chain_hash, previous)) {
           cli::cli_abort(
             "External chain root does not match persisted history"
           )
@@ -1302,7 +1302,7 @@ sqlite_evidence_repository <- function(
   backup <- function(destination) {
     .with_repository_lock(database_path, function() {
       if (fs::dir_exists(destination) &&
-            length(fs::dir_ls(destination, fail = FALSE))) {
+        length(fs::dir_ls(destination, fail = FALSE))) {
         cli::cli_abort("Backup destination must be empty")
       }
       verify_integrity_unlocked(require_artifacts = TRUE)
@@ -1428,7 +1428,7 @@ restore_evidence_repository <- function(backup_path, destination) {
   checkmate::assert_directory_exists(backup_path)
   .verify_backup_manifest(backup_path)
   if (fs::dir_exists(destination) &&
-        length(fs::dir_ls(destination, fail = FALSE))) {
+    length(fs::dir_ls(destination, fail = FALSE))) {
     cli::cli_abort("Restore destination must be empty")
   }
   parent <- fs::path_dir(destination)

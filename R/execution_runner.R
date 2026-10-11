@@ -107,7 +107,7 @@ run_execution_locally <- function(
         type = "output"
       )
       if (!inherits(env$boxplot_analysis, "boxplot_analysis") ||
-            !inherits(env$boxplot_artifact, "boxplot_artifact")) {
+        !inherits(env$boxplot_artifact, "boxplot_artifact")) {
         cli::cli_abort(
           "Execution script did not create the governed runtime objects"
         )

@@ -49,7 +49,7 @@ run_execution_callr <- function(
     source_root
   ) {
     if (!is.null(source_root) &&
-          file.exists(file.path(source_root, "DESCRIPTION"))) {
+      file.exists(file.path(source_root, "DESCRIPTION"))) {
       devtools::load_all(source_root, quiet = TRUE)
     }
     run_locally <- get(
@@ -103,7 +103,8 @@ new_callr_execution_runner <- function(
   timeout = 60,
   source_root = .execution_source_root()
 ) {
-  new_execution_runner(function(
+  new_execution_runner(
+  function(
     request,
     script,
     analysis_data,

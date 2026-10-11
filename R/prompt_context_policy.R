@@ -7,8 +7,8 @@ new_prompt_context <- function(
   dataset_id, labels = list(), aggregate_profile = list()
 ) {
   if (!checkmate::test_string(dataset_id, min.chars = 1) ||
-        !checkmate::test_list(labels) ||
-        !checkmate::test_list(aggregate_profile)) {
+    !checkmate::test_list(labels) ||
+    !checkmate::test_list(aggregate_profile)) {
     cli::cli_abort(
       "Prompt context requires an opaque dataset identifier and list inputs"
     )

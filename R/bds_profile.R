@@ -12,7 +12,7 @@
 
 .resolve_low_n_policy <- function(low_n_threshold) {
   if (is.numeric(low_n_threshold) && length(low_n_threshold) == 1L &&
-        !is.na(low_n_threshold) && identical(as.numeric(low_n_threshold), 5)) {
+    !is.na(low_n_threshold) && identical(as.numeric(low_n_threshold), 5)) {
     return(list(
       value = 5,
       rationale = "Assurance Cell default",
@@ -162,7 +162,7 @@ validate_bds_profile <- function(snapshot, selections, low_n_threshold = 5) {
     snapshot$classification %in% c("public", "synthetic", "deidentified")
   }
   if (!classification_allowed ||
-        !identical(snapshot$adam_designation, "BDS")) {
+    !identical(snapshot$adam_designation, "BDS")) {
     return(.block_profile(result, .new_profile_diagnostic(
       "unsupported_source_metadata",
       paste0(
@@ -229,7 +229,7 @@ validate_bds_profile <- function(snapshot, selections, low_n_threshold = 5) {
   }
   if (!is.null(selections$unit)) {
     if (!checkmate::test_string(selections$unit, min.chars = 1L) ||
-          !selections$unit %in% units) {
+      !selections$unit %in% units) {
       return(.block_profile(result, .new_profile_diagnostic(
         "unit_not_available",
         "The selected unit is not present for the selected parameter"
@@ -368,7 +368,7 @@ validate_bds_profile <- function(snapshot, selections, low_n_threshold = 5) {
   ]
   available_visit_labels <- as.character(mapping$AVISIT)
   if (!is.null(requested_visits) &&
-        length(setdiff(requested_visits, available_visit_labels))) {
+    length(setdiff(requested_visits, available_visit_labels))) {
     return(.block_profile(result, .new_profile_diagnostic(
       "visit_not_available",
       paste0(

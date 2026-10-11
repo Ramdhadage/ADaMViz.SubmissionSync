@@ -41,7 +41,8 @@ skip_if_no_cairo_device <- function() {
     {
       ggplot2::ggsave(
         filename = path,
-        plot = ggplot2::ggplot() + ggplot2::theme_void(),
+        plot = ggplot2::ggplot() +
+          ggplot2::theme_void(),
         device = function(...) grDevices::png(..., type = "cairo"),
         width = 1,
         height = 1,
@@ -62,9 +63,9 @@ skip_if_no_cairo_device <- function() {
 }
 
 fake_success_runner_result <- function(fixture, image_hash = paste(
-  rep("a", 64L),
-  collapse = ""
-)) {
+                                         rep("a", 64L),
+                                         collapse = ""
+                                       )) {
   env <- new.env(parent = globalenv())
   env$analysis_data <- fixture$profile$selected_data
   connection <- textConnection(fixture$script)

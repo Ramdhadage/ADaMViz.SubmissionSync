@@ -65,8 +65,8 @@ new_reproducibility_service <- function(
     c("get_revision", "list_evidence", "record_evidence")
   )
   if (!is.list(artifact_store) ||
-        !is.function(artifact_store$get) ||
-        !is.function(artifact_store$verify)) {
+    !is.function(artifact_store$get) ||
+    !is.function(artifact_store$verify)) {
     cli::cli_abort("Reproducibility service requires a readable artifact store")
   }
   if (!is.function(runner$run)) {

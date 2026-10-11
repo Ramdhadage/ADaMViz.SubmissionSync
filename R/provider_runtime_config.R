@@ -37,7 +37,7 @@ new_runtime_config <- function(
     ))
   }
   if (!checkmate::test_null(secret_provider) &&
-        !checkmate::test_function(secret_provider)) {
+    !checkmate::test_function(secret_provider)) {
     cli::cli_abort("{.arg secret_provider} must be a function or {.val NULL}")
   }
   if (!checkmate::test_character(

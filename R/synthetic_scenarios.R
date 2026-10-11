@@ -208,7 +208,7 @@
           unique = TRUE
         ) &&
         all(c("USUBJID", "PARAMCD", "AVISITN") %in%
-              unlist(x$declared_keys, use.names = FALSE)) &&
+          unlist(x$declared_keys, use.names = FALSE)) &&
         checkmate::test_character(
           unlist(x$permitted_treatment_variables, use.names = FALSE),
           min.len = 1L,

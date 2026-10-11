@@ -10,8 +10,8 @@ local_workspace_provider <- function(destinations) {
   }
   destination_ids <- names(roots)
   if (!length(destination_ids) ||
-        any(!nzchar(destination_ids)) ||
-        anyDuplicated(destination_ids)) {
+    any(!nzchar(destination_ids)) ||
+    anyDuplicated(destination_ids)) {
     cli::cli_abort(
       "Workspace destinations must have unique logical identifiers"
     )
@@ -95,8 +95,8 @@ local_workspace_provider <- function(destinations) {
     }
     hashes <- .workspace_pair_hashes(paths$staging)
     if (is.null(hashes) ||
-          !identical(hashes$code_hash, stage$code_hash) ||
-          !identical(hashes$image_hash, stage$image_hash)) {
+      !identical(hashes$code_hash, stage$code_hash) ||
+      !identical(hashes$image_hash, stage$image_hash)) {
       quarantine_staged(stage, "hash-mismatch")
       cli::cli_abort(
         "Staged workspace export hashes changed before publication"
@@ -106,8 +106,8 @@ local_workspace_provider <- function(destinations) {
     fs::file_move(paths$staging, paths$final)
     published <- inspect_published(stage$destination_id, stage$export_id)
     if (is.null(published) ||
-          !identical(published$code_hash, stage$code_hash) ||
-          !identical(published$image_hash, stage$image_hash)) {
+      !identical(published$code_hash, stage$code_hash) ||
+      !identical(published$image_hash, stage$image_hash)) {
       cli::cli_abort(
         "Published workspace export hashes do not match the staged bundle"
       )
