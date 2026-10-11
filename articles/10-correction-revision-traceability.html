@@ -163,13 +163,13 @@ in the separate review service. See <a href="09-human-review-decisions.html">hum
 <h2 id="execution-and-status-of-the-successor">Execution and status of the successor<a class="anchor" aria-label="anchor" href="#execution-and-status-of-the-successor"></a>
 </h2>
 <p>A fixed-scale correction starts as <code>Draft</code>.
-<code>.materialize_correction_revision()</code> compiles and stores a
-new script, creates the linked successor with image and analytical
-hashes pending, then submits a new governed execution attempt using the
-selected data. Passing verification and artifact acceptance can promote
-this successor to <code>Verified</code>. A failed verification completes
-a failed attempt and leaves the successor <code>Draft</code>; it does
-not reopen or reject the parent.</p>
+<code>.materialize_correction()</code> compiles and stores a new script,
+creates the linked successor with image and analytical hashes pending,
+then submits a new governed execution attempt using the selected data.
+Passing verification and artifact acceptance can promote this successor
+to <code>Verified</code>. A failed verification completes a failed
+attempt and leaves the successor <code>Draft</code>; it does not reopen
+or reject the parent.</p>
 <p>A free-scale correction starts as <code>Experimental/Draft</code>.
 The coordinator builds its script and in-process preview without
 submitting the governed worker attempt. It cannot inherit the parent’s
@@ -209,7 +209,7 @@ service</a>: <code>create_correction()</code>.</li>
 <li>
 <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/app_server.R" class="external-link">Application
 coordinator</a>: <code>.execute_correction_revision()</code>,
-<code>.materialize_correction_revision()</code>.</li>
+<code>.materialize_correction()</code>.</li>
 <li>
 <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/mod_specification.R" class="external-link">Specification
 controls</a>: <code>.can_create_correction()</code>,

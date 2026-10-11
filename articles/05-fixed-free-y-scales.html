@@ -157,12 +157,11 @@ verification leaves it <code>Draft</code>.</p>
 coordinator skips submission, leaves <code>verification</code> as
 <code>NULL</code>, and calculates the displayed analysis and plot in the
 application process. It also skips
-<code>.record_revision_context_evidence()</code>, because that call
-depends on a non-null verification result. A stored script and visible
-preview therefore do not imply the retained execution evidence available
-on the fixed-scale path. <code>.materialize_correction_revision()</code>
-makes the same scale-based submission distinction for a successor
-revision.</p>
+<code>.record_revision_context()</code>, because that call depends on a
+non-null verification result. A stored script and visible preview
+therefore do not imply the retained execution evidence available on the
+fixed-scale path. <code>.materialize_correction()</code> makes the same
+scale-based submission distinction for a successor revision.</p>
 <p><code>new_execution_service()</code> admits only <code>Draft</code>
 revisions. <code>.workflow_transitions</code> gives
 <code>Experimental/Draft</code> no outgoing status transitions.

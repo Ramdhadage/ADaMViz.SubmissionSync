@@ -86,11 +86,11 @@ verification leaves it `Draft`.
 A free-scale revision starts as `Experimental/Draft`. The coordinator
 skips submission, leaves `verification` as `NULL`, and calculates the
 displayed analysis and plot in the application process. It also skips
-`.record_revision_context_evidence()`, because that call depends on a
-non-null verification result. A stored script and visible preview
-therefore do not imply the retained execution evidence available on the
-fixed-scale path. `.materialize_correction_revision()` makes the same
-scale-based submission distinction for a successor revision.
+`.record_revision_context()`, because that call depends on a non-null
+verification result. A stored script and visible preview therefore do
+not imply the retained execution evidence available on the fixed-scale
+path. `.materialize_correction()` makes the same scale-based submission
+distinction for a successor revision.
 
 `new_execution_service()` admits only `Draft` revisions.
 `.workflow_transitions` gives `Experimental/Draft` no outgoing status

@@ -108,7 +108,7 @@ verification gate.
 ## Retained context and recovery limits
 
 After governed execution,
-[.record_revision_context_evidence()](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/revision_evidence.R)
+[.record_revision_context()](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/revision_evidence.R)
 records `revision-context-evidence-v1`. It retains the prompt, confirmed
 specification, selected records with column classes, snapshot/source
 metadata, generated R code, request/result, environment, profile

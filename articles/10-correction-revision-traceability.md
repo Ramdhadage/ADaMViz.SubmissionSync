@@ -82,13 +82,13 @@ review](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/09-human-re
 
 ## Execution and status of the successor
 
-A fixed-scale correction starts as `Draft`.
-`.materialize_correction_revision()` compiles and stores a new script,
-creates the linked successor with image and analytical hashes pending,
-then submits a new governed execution attempt using the selected data.
-Passing verification and artifact acceptance can promote this successor
-to `Verified`. A failed verification completes a failed attempt and
-leaves the successor `Draft`; it does not reopen or reject the parent.
+A fixed-scale correction starts as `Draft`. `.materialize_correction()`
+compiles and stores a new script, creates the linked successor with
+image and analytical hashes pending, then submits a new governed
+execution attempt using the selected data. Passing verification and
+artifact acceptance can promote this successor to `Verified`. A failed
+verification completes a failed attempt and leaves the successor
+`Draft`; it does not reopen or reject the parent.
 
 A free-scale correction starts as `Experimental/Draft`. The coordinator
 builds its script and in-process preview without submitting the governed
@@ -129,8 +129,7 @@ tests or browser checks were run for this documentation change.
   `create_correction()`.
 - [Application
   coordinator](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/app_server.R):
-  `.execute_correction_revision()`,
-  `.materialize_correction_revision()`.
+  `.execute_correction_revision()`, `.materialize_correction()`.
 - [Specification
   controls](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/mod_specification.R):
   `.can_create_correction()`, `.current_spec_input_fields()`.
