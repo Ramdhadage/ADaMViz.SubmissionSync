@@ -43,7 +43,7 @@ Names below are exact symbols suitable for IDE symbol search.
 | `R/boxplot_*` | Statistics, plot assembly, and deterministic standalone script generation | `calculate_boxplot_statistics()`, `assemble_boxplot()`, `compile_boxplot_script()` |
 | Execution and verification files under `R/` | Coordinate attempts, run the script, check results, and perform separately requested replay | `new_execution_service()`, `run_execution_callr()`, `verify_execution_result()`, `new_reproducibility_service()` |
 | Evidence, artifact, lifecycle, review, and export files under `R/`; `inst/sql/` | Persist revision relationships and evidence; govern review and publication | `sqlite_evidence_repository()`, `local_artifact_store()`, `new_review_service()`, `new_export_service()` |
-| `tests/testthat/`; `inst/schema/`; `inst/extdata/synthetic/`; `.github/workflows/` | Behavioral tests, contract assets, governed synthetic fixtures, and package CI | Relevant `test-*` files, `synthetic_scenario_manifest()`, `R-CMD-check.yaml` |
+| `tests/testthat/`; `inst/schema/`; `inst/extdata/synthetic/`; `.github/workflows/` | Behavioral tests, contract assets, governed synthetic fixtures, and package CI | Relevant `test-*` files, `synthetic_scenario_manifest()`, `check.yaml` |
 
 These components are conceptual groups within a **flat `R/` directory**, not separate packages or directory layers. Provider contracts are classed lists of functions. The application coordinator currently constructs several local implementations directly.
 
@@ -90,7 +90,7 @@ The worker returns execution results; the coordinating process writes evidence. 
 
 **Observability and cancellation.** Stored attempts, timestamps, checks, review decisions, receipts, and worker diagnostics provide operational evidence. The subprocess has a timeout. No user cancellation control or strategy-metric telemetry pipeline was found; schema outcome names such as `cancelled` do not establish cancellation behavior.
 
-**Testing and continuous checks.** Tests cover functions, contracts, services, Shiny servers, and browser journeys. Browser initialization can skip when unavailable. CI documents the package, runs tests, and runs `R CMD check`. Its failure threshold is errors; repository pre-commit policy additionally requires formatting, linting, and failure on warnings.
+**Testing and continuous checks.** Tests cover functions, contracts, services, Shiny servers, and browser journeys. Browser initialization can skip when unavailable. CI retains the `renv`-based documentation, lint, test, and warning-failing `R CMD check` job alongside teal's reusable audit, check, coverage, formatting, spelling, link, version, license, and secret-scan jobs. Some reusable jobs update files, publish reports, or comment on pull requests. The repository pre-commit policy separately requires formatting, linting, and a warning-failing package check from the RStudio Console.
 
 ## Contradictions and open questions
 

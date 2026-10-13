@@ -1,4 +1,4 @@
-# ADaMViz.SubmissionSync 0.0.0.9000
+# ADaMViz.SubmissionSync 0.1.0
 
 ## U1 foundation
 

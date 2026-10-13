@@ -1,0 +1,172 @@
+---
+name: R-CMD-check
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "release"
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake libcurl4-openssl-dev libfontconfig1-dev libfreetype6-dev libgit2-dev libnode-dev libx11-dev pandoc
+      - uses: r-lib/actions/setup-renv@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          dependencies: '"all"'
+          extra-packages: |
+            any::rcmdcheck
+            any::lintr
+      - name: Document package
+        run: Rscript -e 'roxygen2::roxygenise()'
+      - name: Lint package
+        run: Rscript -e 'lints <- lintr::lint_package(); print(lints); if (length(lints)) quit(status = 1)'
+      - name: Run tests
+        run: Rscript -e 'testthat::test_local(reporter = "summary")'
+      - name: Check package
+        run: Rscript -e 'rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning")'
+
+  audit:
+    name: Audit Dependencies 🕵️‍♂️
+    uses: ./.github/workflows/audit.yaml
+  r-cmd:
+    permissions:
+      contents: write
+      checks: write
+      pull-requests: write
+    name: R CMD Check 🧬
+    uses: ./.github/workflows/build-check-install.yaml
+    secrets:
+      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+    with:
+      additional-env-vars: |
+        _R_CHECK_CRAN_INCOMING_REMOTE_=false
+        TESTING_DEPTH=5
+        _R_CHECK_EXAMPLE_TIMING_THRESHOLD_=6
+      additional-r-cmd-check-params: --as-cran
+      enforce-note-blocklist: true
+      note-blocklist: |
+        checking dependencies in R code .* NOTE
+        checking R code for possible problems .* NOTE
+        checking examples .* NOTE
+        checking Rd line widths .* NOTE
+        checking S3 generic/method consistency .* NOTE
+        checking Rd .usage sections .* NOTE
+        checking for unstated dependencies in vignettes .* NOTE
+        checking top-level files .* NOTE
+      deps-installation-method: setup-r-dependencies
+
+  r-cmd-non-cran:
+    permissions:
+      contents: write
+      checks: write
+      pull-requests: write
+    name: R CMD Check (non-CRAN) 🧬
+    uses: ./.github/workflows/build-check-install.yaml
+    secrets:
+      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+    with:
+      additional-env-vars: |
+        _R_CHECK_EXAMPLE_TIMING_THRESHOLD_=6
+        NOT_CRAN=true
+      enforce-note-blocklist: true
+      concurrency-group: non-cran
+      unit-test-report-directory: unit-test-report-non-cran
+      note-blocklist: |
+        checking dependencies in R code .* NOTE
+        checking R code for possible problems .* NOTE
+        checking examples .* NOTE
+        checking Rd line widths .* NOTE
+        checking S3 generic/method consistency .* NOTE
+        checking Rd .usage sections .* NOTE
+        checking for unstated dependencies in vignettes .* NOTE
+        checking top-level files .* NOTE
+      deps-installation-method: setup-r-dependencies
+
+  coverage:
+    permissions:
+      contents: write
+      pull-requests: write
+    name: Coverage 📔
+    uses: ./.github/workflows/test-coverage.yaml
+    secrets:
+      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+    with:
+      additional-env-vars: |
+        NOT_CRAN=true
+      deps-installation-method: setup-r-dependencies
+  linter:
+    permissions:
+      contents: read
+      statuses: write
+    if: github.event_name != 'push'
+    name: SuperLinter 🦸‍♀️
+    uses: ./.github/workflows/linter.yaml
+  roxygen:
+    permissions:
+      contents: write
+    name: Roxygen 🅾
+    uses: ./.github/workflows/roxygen.yaml
+    secrets:
+      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+    with:
+      auto-update: true
+      deps-installation-method: setup-r-dependencies
+  gitleaks:
+    name: gitleaks 💧
+    uses: ./.github/workflows/gitleaks.yaml
+  spelling:
+    permissions:
+      contents: write
+    name: Spell Check 🆎
+    uses: ./.github/workflows/spelling.yaml
+    secrets:
+      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+  links:
+    if: github.event_name != 'push'
+    name: Check URLs 🌐
+    uses: ./.github/workflows/links.yaml
+  vbump:
+    permissions:
+      contents: write
+    name: Version Bump 🤜🤛
+    if: github.event_name == 'push'
+    uses: ./.github/workflows/version-bump.yaml
+    secrets:
+      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+  version:
+    name: Version Check 🏁
+    uses: ./.github/workflows/version.yaml
+  licenses:
+    name: License Check 🃏
+    uses: ./.github/workflows/licenses.yaml
+  style:
+    permissions:
+      contents: write
+    if: github.event_name != 'push'
+    name: Style Check 👗
+    uses: ./.github/workflows/style.yaml
+    with:
+      auto-update: true
+    secrets:
+      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
