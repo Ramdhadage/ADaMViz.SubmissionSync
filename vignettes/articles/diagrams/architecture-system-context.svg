@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="context-title context-desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="context-title context-desc">
   <title id="context-title">ADaMViz SubmissionSync — C4 system context</title>
   <desc id="context-desc">A clinical scientist provides a permitted file and plotting choices to ADaMViz SubmissionSync. Statistical programmer and biostatistician reviewers record decisions. The system produces a local development export. File provenance and authentication are not established by the current app.</desc>
   <defs>

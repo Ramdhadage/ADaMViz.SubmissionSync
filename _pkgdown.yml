@@ -17,6 +17,10 @@ articles:
     contents:
       - ADaMViz.SubmissionSync
 
+  - title: Architecture
+    contents:
+      - articles/architecture
+
   - title: Feature documentation
     navbar: ~
     desc: Current implementation guides for the input-to-export workflow.
