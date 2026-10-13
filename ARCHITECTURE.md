@@ -99,7 +99,7 @@ not by itself update the installed application.
 | **4. Execution and artifacts — implemented** | Fixed-scale revisions start as `Draft`. `new_execution_service()` records an attempt and synchronously invokes a clean `callr` subprocess. The worker executes the supplied script with selected records as `analysis_data`, returning analytical output, PNG identity, environment details, and diagnostics. Passing service checks lead to artifact acceptance and `Verified`; failed verification leaves `Draft`. |
 | **5. Preview, evidence, and replay — implemented with separate paths** | Governed revisions display the accepted worker PNG and stored script; experimental free-scale revisions retain an in-process preview. Revision-context evidence retains the question, specification, selected input records, script, execution metadata, and checks. `new_reproducibility_service()` can rerun retained evidence, but replay is not wired into the normal confirmation, review, or export path. |
 | **6. Review and correction — implemented with local identities** | Two distinct active non-creator actors, covering statistical-programmer and biostatistician roles, must approve identical artifact hashes to reach `Reviewed`. Rejection creates `Rejected`. Corrections to `Rejected` or `Reviewed` revisions create linked successors with rationale and provenance. UI identities are selectable local actors, not authenticated users. |
-| **7. Controlled export — implemented for development** | `new_export_service()` accepts `Draft`, `Verified`, or `Reviewed` revisions with an accepted bundle. It checks actor eligibility, revision version, destination, and artifact hashes around staging/publication, then records an internal receipt. The local provider publishes only `script.R` and `plot.png`; the ZIP packages the last successful export. Qualified target-provider guarantees remain deferred. |
+| **7. Controlled export — implemented for development** | `new_export_service()` accepts only `Reviewed` revisions with an accepted bundle. It checks actor eligibility, revision version, destination, and artifact hashes around staging/publication, then records an internal receipt. The local provider publishes only `script.R` and `plot.png`; the ZIP packages the last successful export. Qualified target-provider guarantees remain deferred. |
 
 Free Y scales require UI confirmation and produce `Experimental/Draft`.
 The coordinator generates their script and preview without submitting a
@@ -121,7 +121,7 @@ claim that tests currently pass.
 | Review binds an immutable revision; correction creates a successor | **Runtime checks + automated tests** for reviewer roles, distinct identities, creator exclusion, hashes, stale versions, and correction relationships. Pending image/analytical hashes are bound once during artifact acceptance. |
 | Evidence and artifacts retain identity | **Runtime checks + automated tests** for content-addressed artifacts, SQL relationships, command idempotency, lifecycle hash chains, integrity checking, and backup/restore. This is local integrity machinery, not qualified audit-record custody. |
 | Replay preserves recorded identity | **Runtime checks + automated tests** in the separately callable replay service. Image equality depends on matching environment fingerprints. Replay is not an automatic review/export prerequisite. |
-| Export uses accepted artifacts and registered logical destinations | **Runtime checks + automated tests** in export/workspace services. `Experimental/Draft` and `Rejected` are excluded. The development provider does not supply qualified filesystem or access-control guarantees. |
+| Export uses accepted artifacts and registered logical destinations | **Runtime checks + automated tests** in export/workspace services. Only `Reviewed` revisions are eligible. The development provider does not supply qualified filesystem or access-control guarantees. |
 | Stay within approved ggplot scope and R-based AI implementation | **Documented policy only** in `CODEX_CONTEXT.md`; no dependency-direction linter or CI architecture rule was found. |
 
 The worker returns execution results; the coordinating process writes
@@ -169,24 +169,21 @@ on warnings.
 2.  **Authentication:** UX and threat-model wording assumes
     authenticated/session-derived actors; the current UI selects local
     identities.
-3.  **Export semantics:** strategy requires unreviewed exports to be
-    drafts; UX describes post-approval eligibility. Code permits
-    unreviewed `Verified` export and omits status from detached files.
-4.  **Verification meaning:** runtime verification checks execution
+3.  **Verification meaning:** runtime verification checks execution
     identity and manifest/hash properties. It does not independently
     establish statistical correctness or automatically rerun the
     revision.
-5.  **Artifact identity:** governed revisions display the accepted PNG
+4.  **Artifact identity:** governed revisions display the accepted PNG
     and stored script. Experimental revisions still use an in-process
     preview and have no accepted worker artifact.
-6.  **Standalone portability:** generated scripts require callers to
+5.  **Standalone portability:** generated scripts require callers to
     supply `analysis_data` and locked dependencies; detached exports
     intentionally do not include selected records.
-7.  **Persistence and operations:** the app creates evidence under
+6.  **Persistence and operations:** the app creates evidence under
     temporary directories. Retention custody, cross-session discovery,
     automatic recovery, production monitoring, and target-environment
     qualification remain unsettled.
-8.  **Document drift:** workflow/product documents leave lifecycle and
+7.  **Document drift:** workflow/product documents leave lifecycle and
     supported-envelope questions open despite implemented choices; the
     traceability matrix still marks implemented areas as planned. The
     readiness report places `STRATEGY.md` at root, but its actual

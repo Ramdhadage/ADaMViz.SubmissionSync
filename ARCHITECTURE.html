@@ -47,7 +47,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Architecture</h1>
-      <small class="dont-index">Source: <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/ARCHITECTURE.md" class="external-link"><code>ARCHITECTURE.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/ARCHITECTURE.md" class="external-link"><code>ARCHITECTURE.md</code></a></small>
     </div>
 
 <div id="architecture" class="section level1">
@@ -156,7 +156,7 @@
 <td>Two distinct active non-creator actors, covering statistical-programmer and biostatistician roles, must approve identical artifact hashes to reach <code>Reviewed</code>. Rejection creates <code>Rejected</code>. Corrections to <code>Rejected</code> or <code>Reviewed</code> revisions create linked successors with rationale and provenance. UI identities are selectable local actors, not authenticated users.</td>
 </tr><tr><td><strong>7. Controlled export — implemented for development</strong></td>
 <td>
-<code>new_export_service()</code> accepts <code>Draft</code>, <code>Verified</code>, or <code>Reviewed</code> revisions with an accepted bundle. It checks actor eligibility, revision version, destination, and artifact hashes around staging/publication, then records an internal receipt. The local provider publishes only <code>script.R</code> and <code>plot.png</code>; the ZIP packages the last successful export. Qualified target-provider guarantees remain deferred.</td>
+<code>new_export_service()</code> accepts only <code>Reviewed</code> revisions with an accepted bundle. It checks actor eligibility, revision version, destination, and artifact hashes around staging/publication, then records an internal receipt. The local provider publishes only <code>script.R</code> and <code>plot.png</code>; the ZIP packages the last successful export. Qualified target-provider guarantees remain deferred.</td>
 </tr></tbody></table><p>Free Y scales require UI confirmation and produce <code>Experimental/Draft</code>. The coordinator generates their script and preview without submitting a governed subprocess attempt. They cannot enter governed verification or controlled export.</p>
 </div>
 <div class="section level2">
@@ -191,7 +191,7 @@
 <strong>Runtime checks + automated tests</strong> in the separately callable replay service. Image equality depends on matching environment fingerprints. Replay is not an automatic review/export prerequisite.</td>
 </tr><tr><td>Export uses accepted artifacts and registered logical destinations</td>
 <td>
-<strong>Runtime checks + automated tests</strong> in export/workspace services. <code>Experimental/Draft</code> and <code>Rejected</code> are excluded. The development provider does not supply qualified filesystem or access-control guarantees.</td>
+<strong>Runtime checks + automated tests</strong> in export/workspace services. Only <code>Reviewed</code> revisions are eligible. The development provider does not supply qualified filesystem or access-control guarantees.</td>
 </tr><tr><td>Stay within approved ggplot scope and R-based AI implementation</td>
 <td>
 <strong>Documented policy only</strong> in <code>CODEX_CONTEXT.md</code>; no dependency-direction linter or CI architecture rule was found.</td>
@@ -210,8 +210,6 @@
 <strong>Data boundary:</strong> strategy permits public, synthetic, or properly de-identified data; the F001 design learning specifies synthetic-only use. Upload checks establish compatibility, not provenance. Which approved boundary and enforcement apply?</li>
 <li>
 <strong>Authentication:</strong> UX and threat-model wording assumes authenticated/session-derived actors; the current UI selects local identities.</li>
-<li>
-<strong>Export semantics:</strong> strategy requires unreviewed exports to be drafts; UX describes post-approval eligibility. Code permits unreviewed <code>Verified</code> export and omits status from detached files.</li>
 <li>
 <strong>Verification meaning:</strong> runtime verification checks execution identity and manifest/hash properties. It does not independently establish statistical correctness or automatically rerun the revision.</li>
 <li>

@@ -75,7 +75,7 @@
       <h1>Human review: reviewer roles, approvals, and rejections</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/vignettes/articles/09-human-review-decisions.Rmd" class="external-link"><code>vignettes/articles/09-human-review-decisions.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/vignettes/articles/09-human-review-decisions.Rmd" class="external-link"><code>vignettes/articles/09-human-review-decisions.Rmd</code></a></small>
       <div class="d-none name"><code>09-human-review-decisions.Rmd</code></div>
     </div>
 
@@ -193,11 +193,9 @@ the distinction between automated checks and human judgment.</p>
 <p>Rejection is implemented directly by the repository’s decision
 transaction. The generic <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/domain_status.R" class="external-link"><code>transition_revision_status()</code></a>
 helper lists <code>Verified</code> to <code>Reviewed</code> but has no
-rejection transition; it is not the complete review lifecycle. Also,
-<code>Reviewed</code> is not an unconditional export prerequisite:
-current export code permits accepted bundles in other eligible statuses,
-as described in <a href="11-controlled-export.html">controlled
-export</a>.</p>
+rejection transition; it is not the complete review lifecycle. Export
+requires <code>Reviewed</code> status plus the remaining bundle,
+authorization, destination, and integrity checks described in <a href="11-controlled-export.html">controlled export</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="inspected-coverage">Inspected coverage<a class="anchor" aria-label="anchor" href="#inspected-coverage"></a>

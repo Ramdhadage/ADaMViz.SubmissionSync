@@ -75,7 +75,7 @@
       <h1>Fixed and free Y scales</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/vignettes/articles/05-fixed-free-y-scales.Rmd" class="external-link"><code>vignettes/articles/05-fixed-free-y-scales.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/vignettes/articles/05-fixed-free-y-scales.Rmd" class="external-link"><code>vignettes/articles/05-fixed-free-y-scales.Rmd</code></a></small>
       <div class="d-none name"><code>05-fixed-free-y-scales.Rmd</code></div>
     </div>
 
@@ -167,10 +167,9 @@ revisions. <code>.workflow_transitions</code> gives
 <code>Experimental/Draft</code> no outgoing status transitions.
 Repository review decisions require <code>Verified</code>, and
 <code>.assert_exportable_revision()</code> accepts only
-<code>Draft</code>, <code>Verified</code>, or <code>Reviewed</code>.
-Free-scale revisions fail those gates. For fixed scales, status alone
-still does not guarantee export: the service also requires accepted
-artifacts and the remaining export checks.</p>
+<code>Reviewed</code>. Free-scale revisions fail those gates. Reviewed
+status alone still does not guarantee export: the service also requires
+accepted artifacts and the remaining export checks.</p>
 <p>Source: <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/execution_service.R" class="external-link">execution
 service</a>, <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/domain_status.R" class="external-link">status
 rules</a>, <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/evidence_repository_sqlite.R" class="external-link">review

@@ -95,10 +95,10 @@ distinction for a successor revision.
 `new_execution_service()` admits only `Draft` revisions.
 `.workflow_transitions` gives `Experimental/Draft` no outgoing status
 transitions. Repository review decisions require `Verified`, and
-`.assert_exportable_revision()` accepts only `Draft`, `Verified`, or
-`Reviewed`. Free-scale revisions fail those gates. For fixed scales,
-status alone still does not guarantee export: the service also requires
-accepted artifacts and the remaining export checks.
+`.assert_exportable_revision()` accepts only `Reviewed`. Free-scale
+revisions fail those gates. Reviewed status alone still does not
+guarantee export: the service also requires accepted artifacts and the
+remaining export checks.
 
 Source: [execution
 service](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/execution_service.R),

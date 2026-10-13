@@ -119,9 +119,9 @@ Rejection is implemented directly by the repository’s decision
 transaction. The generic
 [`transition_revision_status()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/domain_status.R)
 helper lists `Verified` to `Reviewed` but has no rejection transition;
-it is not the complete review lifecycle. Also, `Reviewed` is not an
-unconditional export prerequisite: current export code permits accepted
-bundles in other eligible statuses, as described in [controlled
+it is not the complete review lifecycle. Export requires `Reviewed`
+status plus the remaining bundle, authorization, destination, and
+integrity checks described in [controlled
 export](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/11-controlled-export.md).
 
 ## Inspected coverage

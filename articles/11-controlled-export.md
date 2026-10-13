@@ -2,10 +2,9 @@
 
 Controlled export publishes the accepted `plot.png` and `script.R` pair
 to a registered workspace destination and retains a receipt inside the
-evidence repository. The current implementation permits `Draft`,
-`Verified`, and `Reviewed` revisions with an accepted artifact bundle.
-Human approval is not a service prerequisite. The local workspace
-provider is explicitly development-only.
+evidence repository. The current implementation permits only `Reviewed`
+revisions with an accepted artifact bundle. The local workspace provider
+is explicitly development-only.
 
 [![Rendered export
 diagram](diagrams/11-controlled-export.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/11-controlled-export.html)
@@ -36,8 +35,7 @@ here. Local actor selection does not authenticate a person, despite the
 authorization error referring to an authenticated actor.
 
 `.assert_exportable_revision()` compares the expected version with the
-stored version and allows only `Draft`, `Verified`, or `Reviewed`. It
-excludes `Rejected` and `Experimental/Draft`.
+stored version and allows only `Reviewed`.
 `repository$get_artifact_bundle()` must find an accepted bundle; status
 alone is insufficient. A normal failed execution without acceptance
 therefore has no exportable pair. See
@@ -53,12 +51,12 @@ for their separate boundaries.
 performs these operations:
 
 1.  Validate identifiers and derive a receipt identifier from the
-    idempotency key. If that receipt already exists for the revision,
-    return it immediately.
-2.  Authorize the actor, check status and version, and obtain the
-    accepted script and image hashes. Read their bytes through the
-    artifact store. `local_artifact_store()$get()` verifies content
-    hashes before returning bytes.
+    idempotency key.
+2.  Authorize the actor and check status and version. If a matching
+    receipt already exists, return it; otherwise obtain the accepted
+    script and image hashes. Read their bytes through the artifact
+    store. `local_artifact_store()$get()` verifies content hashes before
+    returning bytes.
 3.  Inspect the destination for an already-published pair. Otherwise
     stage the bytes through `workspace_provider$stage_bundle()`.
 4.  After staging, retrieve and authorize the actor again, reread the
@@ -86,14 +84,11 @@ environment record accompanies the detached files.
 
 ## Retries, recovery, and downloads
 
-The receipt lookup makes repeated successful commands return the stored
-receipt without republishing. That early return precedes fresh actor
-authorization, revision-version checks, and destination inspection. It
-is not proof that the files remain present or unchanged. The returned
-database row also lacks the `code_path` and `image_path` supplied by a
-first publication. The module stores that row in `last_export`, so a
-repeated successful command can leave ZIP creation without the paths it
-expects.
+The receipt lookup makes repeated successful commands inspect and
+hash-check the previously published pair, then return the same complete
+path-bearing result without republishing after fresh actor, status, and
+revision-version checks. Reusing the idempotency key for another
+destination is rejected.
 
 Publication precedes receipt recording. If receipt recording fails after
 publication, a retry can inspect the existing pair, compare hashes, and
@@ -105,30 +100,25 @@ automatic application startup.
 
 `.write_export_zip()` in
 [mod_export.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/mod_export.R)
-copies the last successful export’s two files and invokes
+verifies that the last successful export belongs to the current
+revision, copies its two files, and invokes
 [`utils::zip()`](https://rdrr.io/r/utils/zip.html). Download is a
 separate operation: it does not rerun actor, status, version, or hash
-checks. `last_export` is not reset when the current revision changes,
-while the ZIP filename uses the current revision identifier. After
-navigation or a failed later export, filename and packaged revision can
-differ. The ZIP is therefore not a new controlled-publication decision.
+checks, and it is not a new controlled-publication decision.
 
 ## Policy differences and operating limits
 
-Strategy requires unreviewed output to remain labeled `Draft`, and the
-[draft-status design
+Strategy and the [draft-status design
 learning](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/docs/solutions/draft-status-badge.md)
-describes dual approval for post-approval export. Current detached files
-have no export-added review label, and service eligibility includes
-unreviewed revisions. These differences require a policy decision; this
-documentation does not resolve them.
+require both independent approvals before export. The service enforces
+this by accepting only `Reviewed` revisions.
 
 The pair is also not a complete reproduction package.
 [compile_boxplot_script()](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/boxplot_compiler.R)
-includes package-installation code and an absolute synthetic-example CSV
-fallback path. Export copies that script unchanged. Omission of retained
-input records does not remove this internal path or ensure another
-machine reproduces the accepted plot.
+requires caller-supplied `analysis_data` and the controlled package
+environment. Export copies that script unchanged; another machine still
+needs the governed input and compatible environment to reproduce the
+accepted plot.
 
 Logical tokens reject traversal syntax and Windows reserved names;
 destinations must be registered existing roots. The provider checks the

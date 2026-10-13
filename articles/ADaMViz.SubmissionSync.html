@@ -73,7 +73,7 @@
       <h1>Getting started: from data upload to plot export</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/vignettes/ADaMViz.SubmissionSync.Rmd" class="external-link"><code>vignettes/ADaMViz.SubmissionSync.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/vignettes/ADaMViz.SubmissionSync.Rmd" class="external-link"><code>vignettes/ADaMViz.SubmissionSync.Rmd</code></a></small>
       <div class="d-none name"><code>ADaMViz.SubmissionSync.Rmd</code></div>
     </div>
 
@@ -331,12 +331,11 @@ registered destination.</p>
 not contain the uploaded dataset, review decisions, or a complete replay
 bundle. Download only after successfully exporting the revision you
 intend to keep: the ZIP packages the last successful export.</p>
-<p>The current service permits <code>Draft</code>,
-<code>Verified</code>, and <code>Reviewed</code> exports when an
-accepted artifact bundle and the other export checks are present. It
-does not require both approvals for every export. Treat any unreviewed
-output as a draft; the detached files do not carry the revision’s
-review-status label. Do not infer approval from a successful export.</p>
+<p>The current service permits export only after both approvals move a
+revision to <code>Reviewed</code>, and only when an accepted artifact
+bundle and the other export checks are present. <code>Draft</code>,
+<code>Experimental/Draft</code>, and <code>Verified</code> revisions
+cannot be exported.</p>
 </div>
 <div class="section level2">
 <h2 id="check-what-you-downloaded">Check what you downloaded<a class="anchor" aria-label="anchor" href="#check-what-you-downloaded"></a>

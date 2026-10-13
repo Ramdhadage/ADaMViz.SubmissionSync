@@ -20,6 +20,5 @@ specification, executed R code, resulting plot, validation evidence, and
 reviewer decisions.
 
 Each reviewer independently approves or rejects a revision, and both
-approvals are required for post-approval export eligibility. The
-complete status lifecycle, correction path, and relationship to
-draft-only export remain open.
+approvals are required before export. Unreviewed revisions are not
+exportable.

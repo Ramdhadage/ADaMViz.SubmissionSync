@@ -11,8 +11,8 @@
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Controlled export of plot images and R scripts">
-<meta name="description" content="Controlled export publishes the accepted `plot.png` and `script.R` pair to a registered workspace destination and retains a receipt inside the evidence repository. The current implementation permits `Draft`, `Verified`, and `Reviewed` revisions with an accepted artifact bundle. Human approval is not a service prerequisite. The local workspace provider is explicitly development-only.">
-<meta property="og:description" content="Controlled export publishes the accepted `plot.png` and `script.R` pair to a registered workspace destination and retains a receipt inside the evidence repository. The current implementation permits `Draft`, `Verified`, and `Reviewed` revisions with an accepted artifact bundle. Human approval is not a service prerequisite. The local workspace provider is explicitly development-only.">
+<meta name="description" content="Controlled export publishes the accepted `plot.png` and `script.R` pair to a registered workspace destination and retains a receipt inside the evidence repository. The current implementation permits only `Reviewed` revisions with an accepted artifact bundle. The local workspace provider is explicitly development-only.">
+<meta property="og:description" content="Controlled export publishes the accepted `plot.png` and `script.R` pair to a registered workspace destination and retains a receipt inside the evidence repository. The current implementation permits only `Reviewed` revisions with an accepted artifact bundle. The local workspace provider is explicitly development-only.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -75,7 +75,7 @@
       <h1>Controlled export of plot images and R scripts</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/vignettes/articles/11-controlled-export.Rmd" class="external-link"><code>vignettes/articles/11-controlled-export.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/vignettes/articles/11-controlled-export.Rmd" class="external-link"><code>vignettes/articles/11-controlled-export.Rmd</code></a></small>
       <div class="d-none name"><code>11-controlled-export.Rmd</code></div>
     </div>
 
@@ -84,10 +84,9 @@
 <p>Controlled export publishes the accepted <code>plot.png</code> and
 <code>script.R</code> pair to a registered workspace destination and
 retains a receipt inside the evidence repository. The current
-implementation permits <code>Draft</code>, <code>Verified</code>, and
-<code>Reviewed</code> revisions with an accepted artifact bundle. Human
-approval is not a service prerequisite. The local workspace provider is
-explicitly development-only.</p>
+implementation permits only <code>Reviewed</code> revisions with an
+accepted artifact bundle. The local workspace provider is explicitly
+development-only.</p>
 <p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/11-controlled-export.html" class="external-link"><img src="diagrams/11-controlled-export.png" alt="Rendered export diagram"></a></p>
 <p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/11-controlled-export.html" class="external-link">View
 in Full Screen</a></p>
@@ -114,9 +113,7 @@ creator can export; the independent-reviewer restriction does not apply
 here. Local actor selection does not authenticate a person, despite the
 authorization error referring to an authenticated actor.</p>
 <p><code>.assert_exportable_revision()</code> compares the expected
-version with the stored version and allows only <code>Draft</code>,
-<code>Verified</code>, or <code>Reviewed</code>. It excludes
-<code>Rejected</code> and <code>Experimental/Draft</code>.
+version with the stored version and allows only <code>Reviewed</code>.
 <code>repository$get_artifact_bundle()</code> must find an accepted
 bundle; status alone is insufficient. A normal failed execution without
 acceptance therefore has no exportable pair. See <a href="06-script-generation-execution.html">execution</a> and <a href="09-human-review-decisions.html">human review</a> for their
@@ -129,12 +126,12 @@ separate boundaries.</p>
 performs these operations:</p>
 <ol style="list-style-type: decimal">
 <li>Validate identifiers and derive a receipt identifier from the
-idempotency key. If that receipt already exists for the revision, return
-it immediately.</li>
-<li>Authorize the actor, check status and version, and obtain the
-accepted script and image hashes. Read their bytes through the artifact
-store. <code>local_artifact_store()$get()</code> verifies content hashes
-before returning bytes.</li>
+idempotency key.</li>
+<li>Authorize the actor and check status and version. If a matching
+receipt already exists, return it; otherwise obtain the accepted script
+and image hashes. Read their bytes through the artifact store.
+<code>local_artifact_store()$get()</code> verifies content hashes before
+returning bytes.</li>
 <li>Inspect the destination for an already-published pair. Otherwise
 stage the bytes through
 <code>workspace_provider$stage_bundle()</code>.</li>
@@ -163,14 +160,11 @@ environment record accompanies the detached files.</p>
 <div class="section level2">
 <h2 id="retries-recovery-and-downloads">Retries, recovery, and downloads<a class="anchor" aria-label="anchor" href="#retries-recovery-and-downloads"></a>
 </h2>
-<p>The receipt lookup makes repeated successful commands return the
-stored receipt without republishing. That early return precedes fresh
-actor authorization, revision-version checks, and destination
-inspection. It is not proof that the files remain present or unchanged.
-The returned database row also lacks the <code>code_path</code> and
-<code>image_path</code> supplied by a first publication. The module
-stores that row in <code>last_export</code>, so a repeated successful
-command can leave ZIP creation without the paths it expects.</p>
+<p>The receipt lookup makes repeated successful commands inspect and
+hash-check the previously published pair, then return the same complete
+path-bearing result without republishing after fresh actor, status, and
+revision-version checks. Reusing the idempotency key for another
+destination is rejected.</p>
 <p>Publication precedes receipt recording. If receipt recording fails
 after publication, a retry can inspect the existing pair, compare
 hashes, and record the receipt. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/export_reconciliation.R" class="external-link">reconcile_workspace_exports()</a>
@@ -178,28 +172,24 @@ separately quarantines leftover staging directories; it does not
 complete their publication or create receipts. It is not wired into
 automatic application startup.</p>
 <p><code>.write_export_zip()</code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/mod_export.R" class="external-link">mod_export.R</a>
-copies the last successful export’s two files and invokes
-<code><a href="https://rdrr.io/r/utils/zip.html" class="external-link">utils::zip()</a></code>. Download is a separate operation: it does not
-rerun actor, status, version, or hash checks. <code>last_export</code>
-is not reset when the current revision changes, while the ZIP filename
-uses the current revision identifier. After navigation or a failed later
-export, filename and packaged revision can differ. The ZIP is therefore
-not a new controlled-publication decision.</p>
+verifies that the last successful export belongs to the current
+revision, copies its two files, and invokes <code><a href="https://rdrr.io/r/utils/zip.html" class="external-link">utils::zip()</a></code>.
+Download is a separate operation: it does not rerun actor, status,
+version, or hash checks, and it is not a new controlled-publication
+decision.</p>
 </div>
 <div class="section level2">
 <h2 id="policy-differences-and-operating-limits">Policy differences and operating limits<a class="anchor" aria-label="anchor" href="#policy-differences-and-operating-limits"></a>
 </h2>
-<p>Strategy requires unreviewed output to remain labeled
-<code>Draft</code>, and the <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/docs/solutions/draft-status-badge.md" class="external-link">draft-status
-design learning</a> describes dual approval for post-approval export.
-Current detached files have no export-added review label, and service
-eligibility includes unreviewed revisions. These differences require a
-policy decision; this documentation does not resolve them.</p>
+<p>Strategy and the <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/docs/solutions/draft-status-badge.md" class="external-link">draft-status
+design learning</a> require both independent approvals before export.
+The service enforces this by accepting only <code>Reviewed</code>
+revisions.</p>
 <p>The pair is also not a complete reproduction package. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/boxplot_compiler.R" class="external-link">compile_boxplot_script()</a>
-includes package-installation code and an absolute synthetic-example CSV
-fallback path. Export copies that script unchanged. Omission of retained
-input records does not remove this internal path or ensure another
-machine reproduces the accepted plot.</p>
+requires caller-supplied <code>analysis_data</code> and the controlled
+package environment. Export copies that script unchanged; another
+machine still needs the governed input and compatible environment to
+reproduce the accepted plot.</p>
 <p>Logical tokens reject traversal syntax and Windows reserved names;
 destinations must be registered existing roots. The provider checks the
 root for links/reparse points but does not establish qualified

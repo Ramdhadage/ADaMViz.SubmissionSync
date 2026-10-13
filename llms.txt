@@ -199,9 +199,8 @@ Current implementation guides for the input-to-export workflow.
   Controlled export publishes the accepted `plot.png` and `script.R`
   pair to a registered workspace destination and retains a receipt
   inside the evidence repository. The current implementation permits
-  `Draft`, `Verified`, and `Reviewed` revisions with an accepted
-  artifact bundle. Human approval is not a service prerequisite. The
-  local workspace provider is explicitly development-only.
+  only `Reviewed` revisions with an accepted artifact bundle. The local
+  workspace provider is explicitly development-only.
 
 - [Evidence integrity, lifecycle history, and backup and
   restore](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/12-integrity-lifecycle-backup.md):
