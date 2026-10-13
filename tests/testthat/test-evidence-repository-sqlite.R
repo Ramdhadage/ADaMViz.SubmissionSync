@@ -467,6 +467,65 @@ test_that("linked passing execution evidence allows Draft promotion", {
   expect_identical(repo$get_revision("rev-1")$status, "Verified")
 })
 
+test_that("Draft promotion rejects incomplete execution evidence", {
+  cases <- list(
+    failed_attempt = list(
+      attempt = "failed", evidence = "passed", link = TRUE,
+      bundle = TRUE
+    ),
+    failed_evidence = list(
+      attempt = "succeeded", evidence = "failed",
+      link = TRUE, bundle = TRUE
+    ),
+    mismatched_attempt = list(
+      attempt = "succeeded", evidence = "passed",
+      link = FALSE, bundle = TRUE
+    ),
+    missing_bundle = list(
+      attempt = "succeeded", evidence = "passed",
+      link = TRUE, bundle = FALSE
+    )
+  )
+
+  for (case_name in names(cases)) {
+    case <- cases[[case_name]]
+    root <- withr::local_tempdir()
+    repo <- sqlite_evidence_repository(
+      fs::path(root, "db.sqlite"),
+      fs::path(root, "chain-root.json")
+    )
+    repo$create_revision(
+      "plot-1", "rev-1", 1L, "creator", "spec", "code",
+      "image", "analysis", "create"
+    )
+    repo$record_attempt("attempt-1", "rev-1", "run")
+    repo$record_evidence(
+      "evidence-1", "rev-1", "execution_verification", case$evidence,
+      "evidence",
+      details = list(
+        attempt_id = if (case$link) "attempt-1" else "other-attempt"
+      )
+    )
+    if (case$bundle) {
+      repo$accept_artifact_bundle(
+        "bundle-1", "rev-1", "code", "image", "analysis", "bundle"
+      )
+    }
+    repo$complete_attempt("attempt-1", case$attempt, "complete")
+
+    expect_error(
+      repo$mark_verified("rev-1", 1L, "verify"),
+      "passing execution evidence",
+      info = case_name
+    )
+    expect_identical(
+      repo$get_revision("rev-1")$status,
+      "Draft",
+      info = case_name
+    )
+  }
+})
+
 test_that("revision creation persists every inserted column", {
   root <- withr::local_tempdir()
   repo <- sqlite_evidence_repository(

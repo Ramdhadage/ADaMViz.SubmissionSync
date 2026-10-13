@@ -3,15 +3,13 @@ test_that("callr runner executes in a clean subprocess", {
   skip_if_not_installed("devtools")
   skip_if_no_cairo_device()
   fixture <- execution_fixture()
-  source_root <- test_source_root()
 
   result <- run_execution_callr(
     request = fixture$request,
     script = fixture$script,
-    analysis_data = fixture$profile$selected_data,
+    analysis_data = fixture$profile$analysis_data,
     work_dir = withr::local_tempdir(),
-    timeout = 60,
-    source_root = source_root
+    timeout = 60
   )
   skip_if(
     identical(result$status, "failed") &&
@@ -29,6 +27,7 @@ test_that("callr runner executes in a clean subprocess", {
 
 test_that("callr runner resolves the source root from a nested directory", {
   source_root <- test_source_root()
+  skip_if(is.null(source_root), "source checkout is unavailable")
   withr::local_dir(fs::path(source_root, "tests", "testthat"))
 
   expect_identical(.execution_source_root(), source_root)
@@ -36,6 +35,7 @@ test_that("callr runner resolves the source root from a nested directory", {
 
 test_that("callr runner honors an explicitly configured source root", {
   source_root <- test_source_root()
+  skip_if(is.null(source_root), "source checkout is unavailable")
   withr::local_envvar(ADAMVIZ_SUBMISSIONSYNC_SOURCE_ROOT = source_root)
   withr::local_dir(tempdir())
 

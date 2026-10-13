@@ -39,7 +39,13 @@ test_that("governed preview uses accepted image and code artifacts", {
   store <- local_artifact_store(fs::path(root, "artifacts"))
   accepted_script <- "accepted script\n"
   code_hash <- store$put(charToRaw(accepted_script))
-  image_hash <- store$put(charToRaw("accepted png bytes"))
+  image_path <- tempfile(fileext = ".png")
+  withr::defer(unlink(image_path), envir = parent.frame())
+  grDevices::png(image_path, width = 200L, height = 200L)
+  graphics::plot.new()
+  grDevices::dev.off()
+  accepted_image <- readBin(image_path, "raw", n = fs::file_size(image_path))
+  image_hash <- store$put(accepted_image)
   current_revision <- shiny::reactiveVal(list(
     repository = list(artifact_store = store),
     revision = list(
@@ -66,6 +72,8 @@ test_that("governed preview uses accepted image and code artifacts", {
         output$accepted_plot$src,
         "^data:image/png;base64,"
       )
+      encoded <- sub("^data:image/png;base64,", "", output$accepted_plot$src)
+      expect_identical(jsonlite::base64_dec(encoded), accepted_image)
     }
   )
 })

@@ -5,7 +5,7 @@ test_that("verification passes only complete runtime evidence", {
   verification <- verify_execution_result(
     request = fixture$request,
     script = fixture$script,
-    analysis_data = fixture$profile$selected_data,
+    analysis_data = fixture$profile$analysis_data,
     runner_result = runner_result
   )
   expect_s3_class(verification, "execution_verification")
@@ -16,7 +16,7 @@ test_that("verification passes only complete runtime evidence", {
   failed <- verify_execution_result(
     request = fixture$request,
     script = fixture$script,
-    analysis_data = fixture$profile$selected_data,
+    analysis_data = fixture$profile$analysis_data,
     runner_result = runner_result
   )
   expect_identical(failed$status, "failed")
@@ -31,7 +31,7 @@ test_that("verification binds the result manifest to the execution request", {
   verification <- verify_execution_result(
     request = fixture$request,
     script = fixture$script,
-    analysis_data = fixture$profile$selected_data,
+    analysis_data = fixture$profile$analysis_data,
     runner_result = runner_result
   )
 
@@ -47,10 +47,48 @@ test_that("verification hashes the produced image bytes", {
   verification <- verify_execution_result(
     request = fixture$request,
     script = fixture$script,
-    analysis_data = fixture$profile$selected_data,
+    analysis_data = fixture$profile$analysis_data,
     runner_result = runner_result
   )
 
   expect_identical(verification$status, "failed")
   expect_setequal(verification$failed_checks, "image_hash")
+})
+
+test_that("verification rejects incomplete runner manifests", {
+  cases <- list(
+    runner_manifest = function(result) {
+      result$manifest_version <- "unexpected-runner-manifest"
+      result
+    },
+    result_manifest = function(result) {
+      result$result$manifest_version <- "unexpected-result-manifest"
+      result
+    },
+    image_hash = function(result) {
+      writeBin(raw(), result$image_path)
+      result
+    },
+    environment_fingerprint = function(result) {
+      result$result$environment_fingerprint <- "invalid"
+      result
+    }
+  )
+
+  for (failed_check in names(cases)) {
+    fixture <- execution_fixture()
+    runner_result <- cases[[failed_check]](fake_success_runner_result(fixture))
+    verification <- verify_execution_result(
+      request = fixture$request,
+      script = fixture$script,
+      analysis_data = fixture$profile$analysis_data,
+      runner_result = runner_result
+    )
+
+    expect_identical(verification$status, "failed", info = failed_check)
+    expect_true(
+      failed_check %in% verification$failed_checks,
+      info = failed_check
+    )
+  }
 })

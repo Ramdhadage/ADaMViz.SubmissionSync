@@ -272,11 +272,13 @@ app_server <- function(
     fs::path(root, "chain-root.json"),
     artifact_store
   )
-  revision_id <- paste0(
-    "rev-",
-    substr(canonical_hash(list(spec$hash, Sys.time())), 1L, 12L)
+  revision_suffix <- substr(
+    canonical_hash(list(spec$hash, Sys.time(), tempfile("revision-"))),
+    1L,
+    12L
   )
-  plot_id <- sub("^rev-", "plot-", revision_id)
+  revision_id <- paste0("rev-", revision_suffix)
+  plot_id <- paste0("plot-", revision_suffix)
   initial_status <- if (identical(spec$fields$scale_mode, "free")) {
     "Experimental/Draft"
   } else {

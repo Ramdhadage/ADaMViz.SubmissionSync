@@ -181,11 +181,10 @@ contain the uploaded dataset, review decisions, or a complete replay bundle.
 Download only after successfully exporting the revision you intend to keep:
 the ZIP packages the last successful export.
 
-The current service permits `Draft`, `Verified`, and `Reviewed` exports when an
-accepted artifact bundle and the other export checks are present. It does not
-require both approvals for every export. Treat any unreviewed output as a draft;
-the detached files do not carry the revision's review-status label. Do not infer
-approval from a successful export.
+The current service permits export only after both approvals move a revision to
+`Reviewed`, and only when an accepted artifact bundle and the other export
+checks are present. `Draft`, `Experimental/Draft`, and `Verified` revisions
+cannot be exported.
 
 ## Check what you downloaded
 

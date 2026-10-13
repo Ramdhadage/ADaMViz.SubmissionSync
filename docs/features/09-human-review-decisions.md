@@ -42,7 +42,7 @@ Repeating an identical registered command with the same idempotency key returns 
 
 Governed revisions display the accepted worker PNG and stored script before review. Decisions bind those retained revision hashes. Review does not automatically invoke retained-input replay. See [execution evidence](07-verification-revision-evidence.md) for the distinction between automated checks and human judgment.
 
-Rejection is implemented directly by the repository's decision transaction. The generic [`transition_revision_status()`](../../R/domain_status.R) helper lists `Verified` to `Reviewed` but has no rejection transition; it is not the complete review lifecycle. Also, `Reviewed` is not an unconditional export prerequisite: current export code permits accepted bundles in other eligible statuses, as described in [controlled export](11-controlled-export.md).
+Rejection is implemented directly by the repository's decision transaction. The generic [`transition_revision_status()`](../../R/domain_status.R) helper lists `Verified` to `Reviewed` but has no rejection transition; it is not the complete review lifecycle. Export requires `Reviewed` status and the remaining artifact, actor, version, and destination checks described in [controlled export](11-controlled-export.md).
 
 ## Inspected coverage
 

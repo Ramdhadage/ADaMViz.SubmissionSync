@@ -58,7 +58,7 @@ The first Assurance Cell makes that connection explicit for a narrow, recurring 
 - **Free-scale downgrade.** Free Y scales create `Experimental/Draft` and cannot inherit governed evidence. Governs R25, R29-R30, R38. (session-settled: user-directed — chosen over treating free scales as governed by default: cross-facet comparison is weakened)
 - **Arbitrary R deferred.** The first release does not accept or execute arbitrary R transformations. Governs R26-R28. (session-settled: user-directed — chosen over adding a sandboxed transformation path now: defer the security-critical surface)
 - **Two independent human approvals.** `Reviewed` requires distinct authenticated statistical-programmer and biostatistician identities, and neither may be the revision creator. Governs R31-R35. (session-settled: user-approved — chosen over role-only approval: independent review must be attributable)
-- **Controlled export matrix.** `Draft`, `Verified`, and `Reviewed` may export a complete accepted artifact bundle only to the controlled workspace; `Experimental/Draft` may not export. Governs R38-R40. (session-settled: user-approved — chosen over unrestricted status export: experimental results remain contained)
+- **Controlled export matrix.** Only `Reviewed` may export a complete accepted artifact bundle to the controlled workspace. Governs R38-R40. (session-settled: user-approved on 2026-10-12)
 - **Layered reproducibility.** Specification, code, and analytical results are exact; image bytes are exact only within the pinned rendering environment. Governs R36-R37. (session-settled: user-approved — chosen over universal pixel identity: rendering depends on the qualified environment)
 - **Post-review withdrawal deferred.** The first release does not add withdrawal or supersession behavior for a later-discovered defect. Governs the follow-up boundary. (session-settled: user-directed — chosen over expanding the first lifecycle: revisit after the initial review flow works)
 
@@ -127,7 +127,7 @@ The first pattern must therefore be useful on its own while leaving its assuranc
 
 - R36. Internal revision evidence retains the prompt, resolved specification, permitted input-data identity and metadata, generated R code, execution environment and package versions, checks and results, rendered-output identity, warnings, lifecycle transitions, and reviewer decisions.
 - R37. The system reproduces the canonical specification, generated R code, and analytical results exactly; image bytes must match only within the same pinned R, package, operating-system, font, graphics-device, and system-library environment.
-- R38. A `Draft`, `Verified`, or `Reviewed` revision may export only when it has one complete accepted image/code artifact bundle whose stored hashes still match and the acting user remains authorized for that revision and destination at publication time. `Experimental/Draft` revisions may not export.
+- R38. Only a `Reviewed` revision may export, and only when it has one complete accepted image/code artifact bundle whose stored hashes still match and the acting user remains authorized for that revision and destination at publication time.
 - R39. An export contains only the plot image and its R code. Status, approved scope, reviewer details, and other evidence metadata are not embedded in those exported files.
 - R40. Removing status and scope from the export does not remove or weaken the internal evidence, access controls, audit history, or linkage between the exported artifacts and their source revision.
 
@@ -153,7 +153,7 @@ The first pattern must therefore be useful on its own while leaving its assuranc
 - AE8 — Arbitrary transformation: Given any selected Y variable, when the user requests an arbitrary R transformation, then the system explains that the capability is deferred, creates no executable specification or revision, and preserves the prior revision unchanged.
 - AE9 — Review rejection: Given a Verified revision, when either required reviewer rejects it, then the immutable rejection is retained and that revision cannot receive further review decisions or become Reviewed. After a correction rationale is documented, a separate successor Draft is created and repeats verification and both reviews.
 - AE10 — Reviewed immutability: Given a Reviewed revision, when any editable input or generated code would change, then the Reviewed revision remains immutable and the proposed change starts a new Draft revision.
-- AE11 — Export boundary: Given a Reviewed, Verified, or permitted Draft revision with a complete accepted image/code bundle, when an authorized export targets an approved controlled workspace, then that exact pair is published and receipted. A missing or mismatched bundle, unresolved export, stale authorization, or unapproved destination is blocked, and no status or scope metadata is embedded in the files.
+- AE11 — Export boundary: Given a `Reviewed` revision with a complete accepted image/code bundle, when an authorized export targets an approved controlled workspace, then that exact pair is published and receipted. A non-Reviewed revision, missing or mismatched bundle, unresolved export, stale authorization, or unapproved destination is blocked, and no status or scope metadata is embedded in the files.
 
 ### Success Criteria
 
@@ -769,8 +769,8 @@ The tree records the original target package shape. Unit file lists below descri
 
 **Test scenarios:**
 
-- Covers AE11. An authorized `Draft`, `Verified`, or `Reviewed` revision with one complete accepted bundle exports its exact image and script to a registered destination and records a matching receipt.
-- Covers AE11. A missing/mismatched bundle, unresolved export, `Experimental/Draft`, unauthorized actor, unknown logical destination, revoked access, or stale revision token is blocked before publication.
+- Covers AE11. An authorized `Reviewed` revision with one complete accepted bundle exports its exact image and script to a registered destination and records a matching receipt.
+- Covers AE11. A non-Reviewed revision, missing/mismatched bundle, unresolved export, unauthorized actor, unknown logical destination, revoked access, or stale revision token is blocked before publication.
 - Absolute paths, drive letters, UNC paths, separators, `..`, alternate data streams, reserved Windows names, disallowed extensions, and symlink or junction escapes are rejected.
 - A destination collision never overwrites an existing artifact and produces an actionable failure or new collision-proof name according to the provider contract.
 - Crashes before and after staging, publication, and receipt finalization leave no visible partial pair; restart reconciliation finalizes an exact match or quarantines the orphan.
@@ -808,7 +808,7 @@ The First POC workflow plan is consolidated here rather than copied as another r
 
 ### Open Contract Reconciliation
 
-- `docs/product/STRATEGY.md` says unreviewed outputs may be exported only as drafts. This plan's R38 permits `Draft`, `Verified`, and `Reviewed` exports, while the current code permits unreviewed `Verified` exports and detached files omit status. The strategy and the export contract do not currently agree. Per the 2026-10-05 user decision, leave this policy conflict open; this plan merge does not change export behavior or strategy wording.
+- **Resolved 2026-10-12:** Only `Reviewed` revisions may be exported. Strategy, R38, AE11, implementation, and tests use the same boundary.
 - The strategy sets exact reproducibility at 80% of Reviewed outputs; this plan's success criterion requires 100%. Per the 2026-10-05 user decision, retain 100% as this plan's stricter criterion without changing the strategy metric.
 - The First POC plan specified CSV-only input and four steps. Per the 2026-10-05 user decision, retain the current CSV and Excel input support. The workflow sequence discrepancy remains open: this plan and implementation use five steps, while the older plan described four.
 - The First POC plan requires a permitted-data statement and retained attestation, and prohibits raw subject IDs in durable evidence. Current uploads have no attestation and default to `synthetic` classification; revision evidence retains selected rows including `USUBJID`. Keep these as unresolved privacy and evidence gaps; do not treat format validation or temporary duplicate diagnostics as proof of provenance or identifier minimization.
@@ -880,7 +880,7 @@ The First POC workflow plan is consolidated here rather than copied as another r
 - Only complete automated evidence can produce `Verified`; only two distinct eligible non-creator approvals can produce `Reviewed`.
 - Immutable revisions, attempts, decisions, hashes, and export receipts survive restart and cannot be changed through normal application operations.
 - Append-only projections rebuild from history; event-chain, artifact, and backup/restore reconciliation detect corruption, omission, reordering, stale copies, or broken relationships within the declared POC trust boundary.
-- An eligible `Draft`, `Verified`, or `Reviewed` with one complete accepted bundle exports only to an authorized registered workspace through recoverable pair publication; `Experimental/Draft` cannot export, and exported files contain no status or scope metadata.
+- An eligible `Reviewed` revision with one complete accepted bundle exports only to an authorized registered workspace through recoverable pair publication; all other statuses are blocked, and exported files contain no status or scope metadata.
 - Accessibility, object-level permission denial, session expiry, action replay, concurrency, timeout, crash, retry, prompt injection, content limits, secret/identifier canaries, path traversal, reparse-point race, and recovery scenarios pass at their required test layers.
 - Approved clinical data and a real model provider remain disabled until their separately stated privacy, contractual, execution-isolation, and target-environment gates pass.
 - Requirement-to-risk-to-test-to-result traceability is complete for the first release, with local, CI, human-review, and target-environment evidence clearly separated.

@@ -37,7 +37,7 @@ Confidential patient-level data is outside the POC boundary until the product an
 9. Independent reviewers decide whether to approve or reject the immutable revision. Both reviewers must approve for the revision to be eligible for the post-approval export.
 10. After both approvals, an eligible revision can be exported with its exact R script for subsequent human review.
 
-The strategy also allows unreviewed outputs to be exported as `Draft`. The relationship between this draft-only path and the post-approval export remains open; see [Open Questions](#13-open-questions).
+Unreviewed outputs cannot be exported. Both independent approvals are required before export.
 
 ## 5. Alternative Flows
 
@@ -45,7 +45,7 @@ The strategy also allows unreviewed outputs to be exported as `Draft`. The relat
 - **Unsupported records:** If any record in the selected input is unsupported, the application blocks the entire input from code generation and plot execution.
 - **Verification does not pass:** The failed check is retained. The revision status and the correction or retry path remain open.
 - **Reviewer rejects:** The rejection and subsequent actions are retained. The user can address the feedback and make corrections; whether this creates a successor revision and the exact return path remain open.
-- **Revision is not eligible for post-approval export:** The post-approval export is unavailable until both reviewers approve. The separate draft-only export path and its relationship to this gate remain open.
+- **Revision is not eligible for export:** Export is unavailable until both reviewers approve.
 
 ## 6. Error States
 
@@ -74,7 +74,7 @@ Wait limits will be set based on expected processing times. Cancellation should 
 - **No question or confirmed choices:** No plot can proceed without a question and confirmed proposal. The exact prompt and recovery behavior are open.
 - **No plot or verified revision:** No result is available until execution and checks complete.
 - **No review decision:** Reviewer decisions have not yet been recorded for the revision.
-- **No eligible revision:** No revision is available for the post-approval export unless both reviewers have approved it. A separate draft-only export may apply; its relationship to this state remains open.
+- **No eligible revision:** No revision is available for export unless both reviewers have approved it.
 
 Empty-state wording and visual presentation are not defined here.
 
@@ -92,7 +92,7 @@ Automated verification covers code correctness, data integrity, result accuracy,
 - After both approvals, export is for subsequent human review.
 - A rejection is retained. The user can address reviewer feedback and make corrections; the precise lifecycle and successor-revision behavior remain open.
 - The product contract does not define whether `Reviewed` means both reviewers approved, whether an `Approved` state exists, or how a rejection changes the revision lifecycle.
-- Unreviewed exports, if available, must be labeled `Draft`. The exact relationship between that path and the export requiring both approvals remains open.
+- Unreviewed revisions cannot be exported. Both independent approvals are required to reach `Reviewed` and become export-eligible.
 
 ## 11. Traceability Information
 
@@ -121,14 +121,13 @@ The retention period will follow applicable regulatory requirements and organiza
 - R code is generated deterministically from the confirmed specification, and the exact generated script is executed in a controlled process.
 - Automated checks cover code correctness, data integrity, result accuracy, and reproducibility; their evidence is linked to the run. Specific checks and pass thresholds remain open.
 - Reviewers decide independently on an immutable revision. Both reviewers must approve before the revision is eligible for post-approval export.
-- The post-approval export includes the exact R script used to produce the plot and is available for subsequent human review.
-- If unreviewed outputs can be exported, they are labeled `Draft`; the relationship between this path and the post-approval export remains open.
+- The export includes the exact R script used to produce the plot and is available after both approvals.
 - The question, input data, code, output, review status, and validation evidence remain traceable. The exported script is linked to its source revision by unique identifiers and metadata.
 - Product-level targets remain those in the strategy: at least 80% first-pass reviewer acceptance, at least 80% exact reproducibility for `Reviewed` outputs, and median prompt-to-`Verified` time under one minute. Human-review turnaround is measured separately and has no target yet.
 
 ### Pending definition
 
-Acceptance cannot be fully tested until the supported data and plot envelope, permitted-data checks, verification thresholds, status transitions, draft-only export relationship, detailed review lifecycle, and operational timing/retry rules are defined.
+Acceptance cannot be fully tested until the supported data and plot envelope, permitted-data checks, verification thresholds, status transitions, detailed review lifecycle, and operational timing/retry rules are defined.
 
 ## 13. Open Questions
 
@@ -138,7 +137,7 @@ Acceptance cannot be fully tested until the supported data and plot envelope, pe
 4. **Resolved (workflow behavior):** Refinement stays linear: going back and revising an earlier input replaces the current proposal in the flow; it does not create a separately versioned proposal. Audit-history and retention requirements remain open under Q9. See [the five-step wizard flow](../solutions/four-step-wizard-flow.md).
 5. Which automated checks and measurable pass thresholds establish code correctness, data integrity, result accuracy, and reproducibility?
 6. What are the exact meanings and transition criteria for `Draft`, `Experimental`, `Verified`, `Reviewed`, and approved outputs?
-7. **Partially resolved:** The Plot result shows a `Draft · not reviewed` badge, and its info tooltip states that both independent approvals are required for post-approval export eligibility. This defines the review-status cue and approval gate only; whether unreviewed outputs can use a draft-only export path and how that path relates to post-approval export remain open. See [the draft status badge pattern](../solutions/draft-status-badge.md).
+7. **Resolved:** The Plot result shows a `Draft · not reviewed` badge, and its info tooltip states that both independent approvals are required for export eligibility. Unreviewed outputs cannot be exported. See [the draft status badge pattern](../solutions/draft-status-badge.md).
 8. After rejection, what correction path applies, how is a successor immutable revision created, and what makes the reviewers independent for this workflow?
 9. What is the retention period and exact metadata set, identifier scheme, and integrity mechanism for traceability?
 10. What wait limits, cancellation behavior for partially completed work, retry conditions, and retry limits apply to each processing step?

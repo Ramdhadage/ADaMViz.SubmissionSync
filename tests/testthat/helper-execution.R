@@ -1,19 +1,5 @@
 test_source_root <- function() {
-  source_root <- normalizePath(
-    testthat::test_path("..", ".."),
-    winslash = "/",
-    mustWork = TRUE
-  )
-  nested_source_root <- file.path(source_root, "ADaMViz.SubmissionSync")
-  if (!file.exists(file.path(source_root, "DESCRIPTION")) &&
-    file.exists(file.path(nested_source_root, "DESCRIPTION"))) {
-    source_root <- normalizePath(
-      nested_source_root,
-      winslash = "/",
-      mustWork = TRUE
-    )
-  }
-  source_root
+  .execution_source_root()
 }
 
 execution_spec <- function() {
@@ -42,7 +28,7 @@ execution_fixture <- function() {
     spec = spec,
     script_hash = .execution_hash_text(script),
     snapshot_id = profile$snapshot_id,
-    snapshot_hash = canonical_hash(profile$selected_data),
+    snapshot_hash = canonical_hash(profile$analysis_data),
     harness_version = "execution-harness-v1"
   )
   list(
@@ -82,16 +68,17 @@ skip_if_no_cairo_device <- function() {
 
 fake_success_runner_result <- function(fixture) {
   env <- new.env(parent = globalenv())
-  env$analysis_data <- fixture$profile$selected_data
+  env$analysis_data <- fixture$profile$analysis_data
   connection <- textConnection(fixture$script)
   withr::defer(close(connection), envir = parent.frame())
   source(connection, local = env, keep.source = FALSE)
   image_path <- tempfile(fileext = ".png")
+  withr::defer(unlink(image_path), envir = parent.frame())
   writeBin(charToRaw("png bytes"), image_path)
   result <- new_execution_result(
     fixture$request,
     analytical_hash = canonical_hash(env$boxplot_analysis),
-    image_hash = digest::digest(file = image_path, algo = "sha256"),
+    image_hash = .execution_hash_file(image_path),
     environment_fingerprint =
       .environment_fingerprint() # nolint: object_usage_linter.
   )

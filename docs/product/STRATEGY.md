@@ -29,7 +29,7 @@ code, supported by statistical programmers and biostatisticians.
 
 ## Boundaries
 
-- Unreviewed outputs may be exported only as drafts.
+- Only `Reviewed` outputs may be exported.
 - Unevaluated plot patterns must be clearly labeled experimental or draft.
 - The POC accepts only public, synthetic, or properly de-identified data.
 - Confidential patient-level data remains prohibited until the product and its

@@ -52,7 +52,7 @@ test_that("the app server completes execution synchronously", {
     execute_revision(as.list(execution_spec()$fields))
 
     expect_identical(current_revision(), result)
-  )
+  })
 })
 
 test_that("app sessions share the configured evidence root", {

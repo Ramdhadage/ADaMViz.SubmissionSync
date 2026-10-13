@@ -15,13 +15,13 @@ execution: code
 
 **Objective:** Close the whole-repository audit findings without weakening the POC's clinical-data, evidence, review, or export boundaries.
 
-**Means:** Repair the broken evidence SQL, minimize retained analytical data, bind verification to the submitted request and accepted artifacts, serve the accepted image, remove non-portable generated-script behavior, require evidence-backed lifecycle promotion, persist one configured evidence store per app instance, and align CI with repository checks. Resolve the three documented product-policy gaps before changing upload classification, production identity, or unreviewed export behavior.
+**Means:** Repair the broken evidence SQL, minimize retained analytical data, bind verification to the submitted request and accepted artifacts, serve the accepted image, remove non-portable generated-script behavior, require evidence-backed lifecycle promotion, persist one configured evidence store per app instance, and align CI with repository checks. Resolve each documented product-policy gap before changing upload classification, production identity, or export behavior.
 
 **Success signal:** Focused regression tests pass for every changed boundary, the package test suite passes, and package check reports no warnings or errors. Browser rendering, target-environment qualification, and formal validation remain separate evidence.
 
-**Authority:** [Product strategy](../product/STRATEGY.md), [architecture](../../ARCHITECTURE.md), and the current repository behavior define the boundary. The user's whole-repository audit and request to fix all findings authorize implementation, but do not settle contradictory product-policy records.
+**Authority:** [Product strategy](../product/STRATEGY.md), [architecture](../../ARCHITECTURE.md), and the current repository behavior define the boundary. The user's whole-repository audit and request to fix all findings authorize implementation. The user separately resolved export eligibility as Reviewed-only.
 
-**Stop conditions:** Do not infer upload provenance from file shape, trust browser-supplied identity, or silently choose between Reviewed-only and draft-labelled unreviewed exports. Do not commit, push, publish, or merge without explicit authorization.
+**Stop conditions:** Do not infer upload provenance from file shape or trust browser-supplied identity. Do not commit, push, publish, or merge without explicit authorization.
 
 ## Product Contract
 
@@ -41,14 +41,14 @@ Make the existing assurance workflow fail closed at its trust boundaries and ens
 - R8. CI runs lint and fails package check on warnings as required by repository policy.
 - R9. Direct uploads fail closed unless an approved, attributable classification mechanism supplies provenance; no synthetic default is permitted.
 - R10. Production creator, reviewer, and exporter identity is server-derived; client controls cannot select or spoof the acting identity.
-- R11. Export policy follows the user's selected resolution of the current conflict: Reviewed-only, or visibly and durably Draft-labelled unreviewed exports.
+- R11. Only `Reviewed` revisions may be exported.
 
 ### Scope Boundaries
 
 - No new dependencies, plot patterns, statistical rules, authentication platform, or qualified deployment claims.
 - No alteration to accepted plot statistics or review-role separation.
 - No commit, push, pull request, or merge in this run.
-- Upload classification, production identity claims, and unreviewed export semantics remain blocked until the user selects their documented alternatives.
+- Upload classification and production identity claims remain blocked until the user selects their documented alternatives.
 
 ### Acceptance Examples
 
@@ -65,7 +65,7 @@ Make the existing assurance workflow fail closed at its trust boundaries and ens
 
 - Which upload policy applies: governed synthetic fixtures only, or authenticated uploader attestation for public/synthetic/de-identified data?
 - Which production identity source and claims map the authenticated subject and roles?
-- Are exports Reviewed-only, or are Draft/Verified exports retained with a durable visible Draft label?
+- **Resolved:** Exports are Reviewed-only; `Draft`, `Experimental/Draft`, and `Verified` revisions are blocked.
 
 ## Planning Contract
 
@@ -133,11 +133,11 @@ Make the existing assurance workflow fail closed at its trust boundaries and ens
 
 **Blocked by:** production identity-source and claim-mapping decision.
 
-#### U10. Resolve unreviewed export semantics
+#### U10. Enforce Reviewed-only export
 
-**Execution: test-first.** Implement the selected Reviewed-only or durable Draft-labelled behavior consistently across service, provider, ZIP, receipt, UI, tests, and contract documents.
+**Execution: test-first.** Require `Reviewed` status before receipt reuse or publication, and align tests and contract documents with that boundary.
 
-**Blocked by:** export-policy decision.
+**Decision:** The user selected Reviewed-only export on 2026-10-12.
 
 ### Verification Contract
 

@@ -58,27 +58,31 @@ mod_plot_preview_server <- function(id, current_revision) {
       }
     )
 
-    output$accepted_plot <- shiny::renderImage({
-      state <- current_revision()
-      image_hash <- state$revision$image_hash %||% NA_character_
-      store <- state$repository$artifact_store
-      shiny::validate(shiny::need(
-        !is.null(store) && checkmate::test_string(
-          image_hash,
-          pattern = "^[0-9a-f]{64}$"
-        ),
-        "No accepted plot artifact yet."
-      ))
-      store$verify(image_hash)
-      list(
-        src = store$path(image_hash),
-        contentType = "image/png",
-        alt = paste(
-          "Accepted longitudinal boxplot for",
-          state$spec$fields$paramcd
+    output$accepted_plot <- shiny::renderImage(
+      {
+        state <- current_revision()
+        image_hash <- state$revision$image_hash %||% NA_character_
+        store <- state$repository$artifact_store
+        shiny::validate(shiny::need(
+          !is.null(store) && checkmate::test_string(
+            image_hash,
+            pattern = "^[0-9a-f]{64}$"
+          ),
+          "No accepted plot artifact yet."
+        ))
+        image_path <- tempfile(fileext = ".png")
+        writeBin(store$get(image_hash), image_path)
+        list(
+          src = image_path,
+          contentType = "image/png",
+          alt = paste(
+            "Accepted longitudinal boxplot for",
+            state$spec$fields$paramcd
+          )
         )
-      )
-    }, deleteFile = FALSE)
+      },
+      deleteFile = TRUE
+    )
 
     output$code <- shiny::renderText({
       state <- current_revision()

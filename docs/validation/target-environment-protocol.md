@@ -16,7 +16,7 @@ a substitute for execution in the qualified target environment.
 
 1. Confirm the acting user is active and authorized for the exact revision and
    destination.
-2. Confirm the revision status is `Draft`, `Verified`, or `Reviewed`.
+2. Confirm the revision status is `Reviewed`.
 3. Confirm exactly one accepted image/code artifact bundle exists and hashes
    match the revision.
 4. Export to the registered logical destination.

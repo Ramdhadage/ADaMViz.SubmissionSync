@@ -67,6 +67,6 @@
 
   <line x1="64" y1="915" x2="1216" y2="915" stroke="#cbd4da"/>
   <text x="64" y="941" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" fill="#425461">The UI preview is assembled separately from the accepted worker PNG. Failed checks leave the revision Draft.</text>
-  <text x="64" y="963" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" fill="#425461">Code permits unreviewed Draft / Verified export with an accepted bundle; strategy requires unreviewed exports as drafts.</text>
+  <text x="64" y="963" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" fill="#425461">Only Reviewed revisions with an accepted bundle may be exported.</text>
   <text x="64" y="985" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" fill="#425461">Free-scale Experimental/Draft bypasses the worker and cannot enter governed verification or export.</text>
 </svg>

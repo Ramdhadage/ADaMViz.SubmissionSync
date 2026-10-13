@@ -1,4 +1,20 @@
 local_export_browser_fixture <- function(root = NULL) {
+  local_artifact_store <- getFromNamespace(
+    "local_artifact_store", "ADaMViz.SubmissionSync"
+  )
+  sqlite_evidence_repository <- getFromNamespace(
+    "sqlite_evidence_repository", "ADaMViz.SubmissionSync"
+  )
+  local_identity_provider <- getFromNamespace(
+    "local_identity_provider", "ADaMViz.SubmissionSync"
+  )
+  new_actor <- getFromNamespace("new_actor", "ADaMViz.SubmissionSync")
+  local_workspace_provider <- getFromNamespace(
+    "local_workspace_provider", "ADaMViz.SubmissionSync"
+  )
+  new_review_service <- getFromNamespace(
+    "new_review_service", "ADaMViz.SubmissionSync"
+  )
   if (is.null(root)) {
     root <- fs::file_temp("export-browser-fixture-")
     fs::dir_create(root)
@@ -21,7 +37,20 @@ local_export_browser_fixture <- function(root = NULL) {
   repo$accept_artifact_bundle(
     "bundle-1", "rev-1", code_hash, image_hash, "analysis", "bundle"
   )
-  record_passing_execution(repo, "rev-1")
+  repo$record_attempt("attempt-1", "rev-1", "attempt")
+  repo$record_evidence(
+    "evidence-1", "rev-1", "execution_verification", "passed", "evidence",
+    details = list(attempt_id = "attempt-1")
+  )
+  repo$complete_attempt("attempt-1", "succeeded", "complete")
+  repo$mark_verified("rev-1", 1L, "verify")
+  reviewers <- local_identity_provider(list(
+    new_actor("sp", "statistical_programmer"),
+    new_actor("bio", "biostatistician")
+  ))
+  review <- new_review_service(repo, reviewers)
+  review$approve("rev-1", "sp", 2L, "sp-approval")
+  review$approve("rev-1", "bio", 3L, "bio-approval")
 
   workspace_root <- fs::path(root, "workspace")
   fs::dir_create(workspace_root)
@@ -46,13 +75,16 @@ local_export_browser_app <- function() {
         choices = c("Creator" = "creator", "Viewer" = "viewer")
       ),
       shiny::textInput("destination_id", "Destination", value = "controlled"),
-      shiny::numericInput("expected_version", "Version", value = 2, min = 1),
+      shiny::numericInput("expected_version", "Version", value = 4, min = 1),
       shiny::actionButton("export", "Export"),
       shiny::verbatimTextOutput("status"),
       shiny::verbatimTextOutput("exported_files"),
       shiny::tableOutput("receipts")
     ),
     server = function(input, output, session) {
+      new_export_service <- getFromNamespace(
+        "new_export_service", "ADaMViz.SubmissionSync"
+      )
       root <- fs::file_temp("export-browser-fixture-")
       fs::dir_create(root)
       session$onSessionEnded(function() {
@@ -110,7 +142,9 @@ test_that("browser export journey publishes an eligible accepted bundle", {
   withr::defer(app$stop(), envir = parent.frame())
 
   app$click("export")
-  app$wait_for_value(output = "status")
+  app$wait_for_js(
+    "document.getElementById('status').textContent.includes('Exported')"
+  )
   body <- app$get_text(selector = "body")
 
   expect_match(body, "Exported receipt-", fixed = TRUE)
@@ -127,12 +161,19 @@ test_that("browser export blocks stale tokens and unauthorized actors", {
 
   app$set_inputs(expected_version = 99)
   app$click("export")
-  app$wait_for_value(output = "status")
+  app$wait_for_js(
+    "document.getElementById('status').textContent.toLowerCase().includes('stale')"
+  )
   expect_match(app$get_text(selector = "body"), "stale", ignore.case = TRUE)
 
-  app$set_inputs(expected_version = 2, actor_id = "viewer")
+  app$set_inputs(expected_version = 4, actor_id = "viewer")
   app$click("export")
-  app$wait_for_value(output = "status")
+  app$wait_for_js(
+    paste0(
+      "document.getElementById('status').textContent",
+      ".includes('not authorized')"
+    )
+  )
   expect_match(
     app$get_text(selector = "body"),
     "not authorized",

@@ -301,7 +301,7 @@ An authorized user selects a registered controlled-workspace name, not an arbitr
 
 The files do not contain lifecycle status, reviewer identity, approval scope, prompt text, or internal evidence. Those remain linked internally to the source revision and export receipt.
 
-`Experimental/Draft` cannot be exported. The Product Contract intends eligible `Draft`, `Verified`, and `Reviewed` revisions with complete artifact bundles to be exportable, although the implementation plan still has an open design decision about accepting a Draft bundle independently of verification promotion.
+Only `Reviewed` revisions with complete accepted artifact bundles can be exported. `Draft`, `Experimental/Draft`, and `Verified` revisions remain blocked.
 
 ## What the user sees versus what happens behind the screen
 

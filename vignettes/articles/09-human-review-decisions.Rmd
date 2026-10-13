@@ -48,7 +48,7 @@ Repeating an identical registered command with the same idempotency key returns 
 
 The displayed preview is rebuilt in the application process rather than loaded from the accepted worker PNG. Decisions bind retained revision hashes, but the current interface does not establish that the image visually inspected was the accepted image. Review does not automatically invoke retained-input replay. See [execution evidence](07-verification-revision-evidence.html) for the distinction between automated checks and human judgment.
 
-Rejection is implemented directly by the repository's decision transaction. The generic [`transition_revision_status()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/domain_status.R) helper lists `Verified` to `Reviewed` but has no rejection transition; it is not the complete review lifecycle. Also, `Reviewed` is not an unconditional export prerequisite: current export code permits accepted bundles in other eligible statuses, as described in [controlled export](11-controlled-export.html).
+Rejection is implemented directly by the repository's decision transaction. The generic [`transition_revision_status()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/domain_status.R) helper lists `Verified` to `Reviewed` but has no rejection transition; it is not the complete review lifecycle. Export requires `Reviewed` status plus the remaining bundle, authorization, destination, and integrity checks described in [controlled export](11-controlled-export.html).
 
 ## Inspected coverage
 
