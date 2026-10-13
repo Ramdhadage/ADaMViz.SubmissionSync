@@ -129,8 +129,8 @@ jobs:
         env:
           SKIP_INSTRUCTION: "[skip links]"
 
-      - name: Restore urlchecker from renv lockfile 📦
-        run: renv::restore(packages = "urlchecker", prompt = FALSE)
+      - name: Restore URL and vignette tools from renv lockfile 📦
+        run: renv::restore(packages = c("urlchecker", "knitr"), prompt = FALSE)
         shell: Rscript {0}
 
       - name: Check URLs with urlchecker 🔬
