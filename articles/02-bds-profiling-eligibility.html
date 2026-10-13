@@ -75,7 +75,7 @@
       <h1>BDS data profiling and plotting eligibility</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/vignettes/articles/02-bds-profiling-eligibility.Rmd" class="external-link"><code>vignettes/articles/02-bds-profiling-eligibility.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/vignettes/articles/02-bds-profiling-eligibility.Rmd" class="external-link"><code>vignettes/articles/02-bds-profiling-eligibility.Rmd</code></a></small>
       <div class="d-none name"><code>02-bds-profiling-eligibility.Rmd</code></div>
     </div>
 
@@ -150,7 +150,7 @@ label. Visits are ordered by <code>AVISITN</code>, then label. Requested
 visits must still exist after parameter, unit, and treatment
 selection.</p>
 <p>Duplicate
-<code>USUBJID</code>â€“<code>PARAMCD</code>â€“<code>AVISIT</code> keys
+<code>USUBJID</code>–<code>PARAMCD</code>–<code>AVISIT</code> keys
 block. If duplicates coexist with additional declared keys beyond
 <code>STUDYID</code>, <code>USUBJID</code>, <code>PARAMCD</code>,
 <code>AVISIT</code>, and <code>AVISITN</code>, the diagnostic is
@@ -168,13 +168,12 @@ display records exclude them. Stored <code>CHG</code> and
 <code>PCHG</code> values are used directly. The profile does not derive
 them or silently apply <code>SAFFL</code> or analysis flags such as
 <code>ANL01FL</code>.</p>
-<p>For each displayed treatmentâ€“visit combination,
-<code>source_n</code> counts distinct selected subjects and
-<code>n</code> counts distinct subjects with non-missing Y. The default
-sparse-data threshold is <code>n &lt; 5</code>. A different threshold
-requires a list containing a finite value of at least one, rationale,
-authority, and version. The API retains these fields; it does not
-authenticate sponsor approval.</p>
+<p>For each displayed treatment–visit combination, <code>source_n</code>
+counts distinct selected subjects and <code>n</code> counts distinct
+subjects with non-missing Y. The default sparse-data threshold is
+<code>n &lt; 5</code>. A different threshold requires a list containing
+a finite value of at least one, rationale, authority, and version. The
+API retains these fields; it does not authenticate sponsor approval.</p>
 <p>Low N, combinations with no non-missing Y, and entirely empty
 included treatment levels produce nonblocking warnings. Empty groups do
 not receive invented observations or count rows; included facet and

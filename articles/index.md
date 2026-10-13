@@ -5,11 +5,6 @@
 - [Getting started: from data upload to plot
   export](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/ADaMViz.SubmissionSync.md):
 
-### Architecture
-
-- [Architecture and implementation
-  boundaries](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/architecture.md):
-
 ### Feature documentation
 
 Current implementation guides for the input-to-export workflow.

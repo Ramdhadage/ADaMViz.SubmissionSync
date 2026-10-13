@@ -71,9 +71,9 @@ non-missing `AVISITN`, and each order value to exactly one label. Visits
 are ordered by `AVISITN`, then label. Requested visits must still exist
 after parameter, unit, and treatment selection.
 
-Duplicate `USUBJID`â€“`PARAMCD`â€“`AVISIT` keys block. If duplicates
-coexist with additional declared keys beyond `STUDYID`, `USUBJID`,
-`PARAMCD`, `AVISIT`, and `AVISITN`, the diagnostic is
+Duplicate `USUBJID`–`PARAMCD`–`AVISIT` keys block. If duplicates coexist
+with additional declared keys beyond `STUDYID`, `USUBJID`, `PARAMCD`,
+`AVISIT`, and `AVISITN`, the diagnostic is
 `unsupported_additional_timepoint_keys`; otherwise it is
 `unsupported_duplicate_visit_key`. Legitimate within-visit timepoints
 remain outside this cell’s supported envelope. Neither diagnostic
@@ -87,7 +87,7 @@ Stored `CHG` and `PCHG` values are used directly. The profile does not
 derive them or silently apply `SAFFL` or analysis flags such as
 `ANL01FL`.
 
-For each displayed treatmentâ€“visit combination, `source_n` counts
+For each displayed treatment–visit combination, `source_n` counts
 distinct selected subjects and `n` counts distinct subjects with
 non-missing Y. The default sparse-data threshold is `n < 5`. A different
 threshold requires a list containing a finite value of at least one,

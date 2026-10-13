@@ -17,28 +17,28 @@ to the code and the implementation limits described below.
 
 **System context** — people, the application, permitted input, and the
 local development export. [Open full-size
-view](https://ramdhadage.github.io/ADaMViz.SubmissionSync/vignettes/articles/diagrams/architecture-system-context.svg).
+view](https://ramdhadage.github.io/ADaMViz.SubmissionSync/docs/architecture/system-context.md).
 
 ![C4-style system context for ADaMViz
-SubmissionSync](articles/articles/diagrams/architecture-system-context.svg)
+SubmissionSync](docs/architecture/system-context.svg)
 
 C4-style system context for ADaMViz SubmissionSync
 
 **Container view** — the Shiny application, clean `callr` worker, local
 stores, and development workspace. [Open full-size
-view](https://ramdhadage.github.io/ADaMViz.SubmissionSync/vignettes/articles/diagrams/architecture-container-view.svg).
+view](https://ramdhadage.github.io/ADaMViz.SubmissionSync/docs/architecture/container-view.md).
 
 ![C4 container view for ADaMViz
-SubmissionSync](articles/articles/diagrams/architecture-container-view.svg)
+SubmissionSync](docs/architecture/container-view.svg)
 
 C4 container view for ADaMViz SubmissionSync
 
 **Governed flow** — a representative fixed-scale sequence, with optional
 human review and the code’s export gate. [Open full-size
-view](https://ramdhadage.github.io/ADaMViz.SubmissionSync/vignettes/articles/diagrams/architecture-governed-flow.svg).
+view](https://ramdhadage.github.io/ADaMViz.SubmissionSync/docs/architecture/governed-flow.md).
 
 ![C4 dynamic workflow for ADaMViz
-SubmissionSync](articles/articles/diagrams/architecture-governed-flow.svg)
+SubmissionSync](docs/architecture/governed-flow.svg)
 
 C4 dynamic workflow for ADaMViz SubmissionSync
 
@@ -79,7 +79,7 @@ Names below are exact symbols suitable for IDE symbol search.
 | `R/boxplot_*` | Statistics, plot assembly, and deterministic standalone script generation | [`calculate_boxplot_statistics()`](https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference/calculate_boxplot_statistics.md), [`assemble_boxplot()`](https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference/assemble_boxplot.md), [`compile_boxplot_script()`](https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference/compile_boxplot_script.md) |
 | Execution and verification files under `R/` | Coordinate attempts, run the script, check results, and perform separately requested replay | `new_execution_service()`, `run_execution_callr()`, `verify_execution_result()`, `new_reproducibility_service()` |
 | Evidence, artifact, lifecycle, review, and export files under `R/`; `inst/sql/` | Persist revision relationships and evidence; govern review and publication | `sqlite_evidence_repository()`, `local_artifact_store()`, `new_review_service()`, `new_export_service()` |
-| `tests/testthat/`; `inst/schema/`; `inst/extdata/synthetic/`; `.github/workflows/` | Behavioral tests, contract assets, governed synthetic fixtures, and package CI | Relevant `test-*` files, [`synthetic_scenario_manifest()`](https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference/synthetic_scenario_manifest.md), `R-CMD-check.yaml` |
+| `tests/testthat/`; `inst/schema/`; `inst/extdata/synthetic/`; `.github/workflows/` | Behavioral tests, contract assets, governed synthetic fixtures, and package CI | Relevant `test-*` files, [`synthetic_scenario_manifest()`](https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference/synthetic_scenario_manifest.md), `check.yaml` |
 
 These components are conceptual groups within a **flat `R/` directory**,
 not separate packages or directory layers. Provider contracts are
@@ -155,10 +155,13 @@ as `cancelled` do not establish cancellation behavior.
 
 **Testing and continuous checks.** Tests cover functions, contracts,
 services, Shiny servers, and browser journeys. Browser initialization
-can skip when unavailable. CI documents the package, runs tests, and
-runs `R CMD check`. Its failure threshold is errors; repository
-pre-commit policy additionally requires formatting, linting, and failure
-on warnings.
+can skip when unavailable. CI retains the `renv`-based documentation,
+lint, test, and warning-failing `R CMD check` job alongside teal’s
+reusable audit, check, coverage, formatting, spelling, link, version,
+license, and secret-scan jobs. Some reusable jobs update files, publish
+reports, or comment on pull requests. The repository pre-commit policy
+separately requires formatting, linting, and a warning-failing package
+check from the RStudio Console.
 
 ## Contradictions and open questions
 

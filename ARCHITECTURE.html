@@ -47,7 +47,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Architecture</h1>
-      <small class="dont-index">Source: <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/ARCHITECTURE.md" class="external-link"><code>ARCHITECTURE.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/ARCHITECTURE.md" class="external-link"><code>ARCHITECTURE.md</code></a></small>
     </div>
 
 <div id="architecture" class="section level1">
@@ -57,17 +57,17 @@
 <div class="section level2">
 <h2 id="diagrams">Diagrams<a class="anchor" aria-label="anchor" href="#diagrams"></a></h2>
 <p>The diagrams show the current proof of concept. They are visual guides to the code and the implementation limits described below.</p>
-<p><strong>System context</strong> — people, the application, permitted input, and the local development export. <a href="vignettes/articles/diagrams/architecture-system-context.svg">Open full-size view</a>.</p>
+<p><strong>System context</strong> — people, the application, permitted input, and the local development export. <a href="docs/architecture/system-context.html">Open full-size view</a>.</p>
 <div class="float">
-<img src="articles/articles/diagrams/architecture-system-context.svg" alt="C4-style system context for ADaMViz SubmissionSync"><div class="figcaption">C4-style system context for ADaMViz SubmissionSync</div>
+<img src="docs/architecture/system-context.svg" alt="C4-style system context for ADaMViz SubmissionSync"><div class="figcaption">C4-style system context for ADaMViz SubmissionSync</div>
 </div>
-<p><strong>Container view</strong> — the Shiny application, clean <code>callr</code> worker, local stores, and development workspace. <a href="vignettes/articles/diagrams/architecture-container-view.svg">Open full-size view</a>.</p>
+<p><strong>Container view</strong> — the Shiny application, clean <code>callr</code> worker, local stores, and development workspace. <a href="docs/architecture/container-view.html">Open full-size view</a>.</p>
 <div class="float">
-<img src="articles/articles/diagrams/architecture-container-view.svg" alt="C4 container view for ADaMViz SubmissionSync"><div class="figcaption">C4 container view for ADaMViz SubmissionSync</div>
+<img src="docs/architecture/container-view.svg" alt="C4 container view for ADaMViz SubmissionSync"><div class="figcaption">C4 container view for ADaMViz SubmissionSync</div>
 </div>
-<p><strong>Governed flow</strong> — a representative fixed-scale sequence, with optional human review and the code’s export gate. <a href="vignettes/articles/diagrams/architecture-governed-flow.svg">Open full-size view</a>.</p>
+<p><strong>Governed flow</strong> — a representative fixed-scale sequence, with optional human review and the code’s export gate. <a href="docs/architecture/governed-flow.html">Open full-size view</a>.</p>
 <div class="float">
-<img src="articles/articles/diagrams/architecture-governed-flow.svg" alt="C4 dynamic workflow for ADaMViz SubmissionSync"><div class="figcaption">C4 dynamic workflow for ADaMViz SubmissionSync</div>
+<img src="docs/architecture/governed-flow.svg" alt="C4 dynamic workflow for ADaMViz SubmissionSync"><div class="figcaption">C4 dynamic workflow for ADaMViz SubmissionSync</div>
 </div>
 </div>
 <div class="section level2">
@@ -130,7 +130,7 @@
 <code>tests/testthat/</code>; <code>inst/schema/</code>; <code>inst/extdata/synthetic/</code>; <code>.github/workflows/</code>
 </td>
 <td>Behavioral tests, contract assets, governed synthetic fixtures, and package CI</td>
-<td>Relevant <code>test-*</code> files, <code><a href="reference/synthetic_scenario_manifest.html">synthetic_scenario_manifest()</a></code>, <code>R-CMD-check.yaml</code>
+<td>Relevant <code>test-*</code> files, <code><a href="reference/synthetic_scenario_manifest.html">synthetic_scenario_manifest()</a></code>, <code>check.yaml</code>
 </td>
 </tr></tbody></table><p>These components are conceptual groups within a <strong>flat <code>R/</code> directory</strong>, not separate packages or directory layers. Provider contracts are classed lists of functions. The application coordinator currently constructs several local implementations directly.</p>
 <p><code>app.R</code> calls the installed namespace. Reading or editing source does not by itself update the installed application.</p>
@@ -202,7 +202,7 @@
 <p><strong>Configuration and injection.</strong> <code><a href="reference/new_runtime_config.html">new_runtime_config()</a></code> provides profile and logical provider/workspace identifiers plus an injected secret resolver. Services accept repository, runner, identity, artifact, and workspace implementations. Injection is partial at application level: the coordinator constructs local providers, and runtime prompt-provider selection does not select an interpreter in the active workflow. <code>get_golem_config()</code> exists separately from these runtime defaults.</p>
 <p><strong>Errors and recovery.</strong> Boundaries use <code>checkmate</code> and <code>cli</code>; modules expose caught errors as messages. Execution failures produce failed results and terminal attempt evidence. <code>reconcile_execution_attempts()</code> and <code>reconcile_workspace_exports()</code> exist as callable recovery functions, without automatic application startup wiring.</p>
 <p><strong>Observability and cancellation.</strong> Stored attempts, timestamps, checks, review decisions, receipts, and worker diagnostics provide operational evidence. The subprocess has a timeout. No user cancellation control or strategy-metric telemetry pipeline was found; schema outcome names such as <code>cancelled</code> do not establish cancellation behavior.</p>
-<p><strong>Testing and continuous checks.</strong> Tests cover functions, contracts, services, Shiny servers, and browser journeys. Browser initialization can skip when unavailable. CI documents the package, runs tests, and runs <code>R CMD check</code>. Its failure threshold is errors; repository pre-commit policy additionally requires formatting, linting, and failure on warnings.</p>
+<p><strong>Testing and continuous checks.</strong> Tests cover functions, contracts, services, Shiny servers, and browser journeys. Browser initialization can skip when unavailable. CI retains the <code>renv</code>-based documentation, lint, test, and warning-failing <code>R CMD check</code> job alongside teal’s reusable audit, check, coverage, formatting, spelling, link, version, license, and secret-scan jobs. Some reusable jobs update files, publish reports, or comment on pull requests. The repository pre-commit policy separately requires formatting, linting, and a warning-failing package check from the RStudio Console.</p>
 </div>
 <div class="section level2">
 <h2 id="contradictions-and-open-questions">Contradictions and open questions<a class="anchor" aria-label="anchor" href="#contradictions-and-open-questions"></a></h2>

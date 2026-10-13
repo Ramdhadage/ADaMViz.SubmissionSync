@@ -7,7 +7,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/DESCRIPTION)
 
 Dhadage R (2026). *ADaMViz.SubmissionSync: From Clinical Questions to
 Review-Ready Figures and Reproducible R Code*. R package version 0.1.0,
