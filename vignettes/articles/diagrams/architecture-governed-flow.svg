@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 1020" role="img" aria-labelledby="flow-title flow-desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1020" viewBox="0 0 1280 1020" role="img" aria-labelledby="flow-title flow-desc">
   <title id="flow-title">ADaMViz SubmissionSync — C4 dynamic workflow</title>
-  <desc id="flow-desc">Representative fixed-scale sequence: people upload data and confirm choices; the Shiny application records a Draft and invokes a callr worker; the application accepts the returned result and records evidence, showing a separately assembled preview. Two reviewers may approve. A permitted user can request export of an accepted bundle even without Reviewed status; the app checks hashes, publishes a development workspace pair, and records a receipt. Free-scale experimental revisions bypass the governed worker and cannot export.</desc>
+  <desc id="flow-desc">Representative fixed-scale sequence: people upload data and confirm choices; the Shiny application records a Draft and invokes a callr worker; the application accepts the returned result and records evidence, displaying the accepted worker PNG. Two distinct reviewers must approve before export. For a Reviewed revision with an accepted bundle, the app checks hashes, publishes a development workspace pair, and records a receipt. Free-scale experimental revisions bypass the governed worker and cannot export.</desc>
   <defs><marker id="flow-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#71808c"/></marker></defs>
   <rect width="1280" height="1020" fill="#f8fafb"/>
   <text x="64" y="68" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="30" font-weight="700" fill="#0b3c5d">Governed flow</text>
@@ -62,11 +62,11 @@
 
   <rect x="72" y="513" width="1120" height="135" rx="6" fill="none" stroke="#9fabb4" stroke-width="1.5" stroke-dasharray="7 5"/>
   <rect x="84" y="502" width="168" height="22" fill="#f8fafb"/>
-  <text x="92" y="517" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="1" fill="#5b6770">OPTIONAL HUMAN REVIEW</text>
+  <text x="92" y="517" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="1" fill="#5b6770">REVIEW REQUIRED FOR EXPORT</text>
   <text x="790" y="594" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11" fill="#5b6770">Two distinct non-creator roles</text>
 
   <line x1="64" y1="915" x2="1216" y2="915" stroke="#cbd4da"/>
-  <text x="64" y="941" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" fill="#425461">The UI preview is assembled separately from the accepted worker PNG. Failed checks leave the revision Draft.</text>
+  <text x="64" y="941" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" fill="#425461">Governed revisions display the accepted worker PNG. Failed checks leave the revision Draft.</text>
   <text x="64" y="963" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" fill="#425461">Only Reviewed revisions with an accepted bundle may be exported.</text>
   <text x="64" y="985" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" fill="#425461">Free-scale Experimental/Draft bypasses the worker and cannot enter governed verification or export.</text>
 </svg>

@@ -8,17 +8,17 @@ It is **designed for validated clinical submission workflows; it is not FDA vali
 
 The diagrams show the current proof of concept. They are visual guides to the code and the implementation limits described below.
 
-**System context** — people, the application, permitted input, and the local development export. [Open full-size view](docs/architecture/system-context.html).
+**System context** — people, the application, permitted input, and the local development export. [Open full-size view](vignettes/articles/diagrams/architecture-system-context.svg).
 
-![C4-style system context for ADaMViz SubmissionSync](docs/architecture/system-context.svg)
+![C4-style system context for ADaMViz SubmissionSync](vignettes/articles/diagrams/architecture-system-context.svg)
 
-**Container view** — the Shiny application, clean `callr` worker, local stores, and development workspace. [Open full-size view](docs/architecture/container-view.html).
+**Container view** — the Shiny application, clean `callr` worker, local stores, and development workspace. [Open full-size view](vignettes/articles/diagrams/architecture-container-view.svg).
 
-![C4 container view for ADaMViz SubmissionSync](docs/architecture/container-view.svg)
+![C4 container view for ADaMViz SubmissionSync](vignettes/articles/diagrams/architecture-container-view.svg)
 
-**Governed flow** — a representative fixed-scale sequence, with optional human review and the code's export gate. [Open full-size view](docs/architecture/governed-flow.html).
+**Governed flow** — a representative fixed-scale sequence, with optional human review and the code's export gate. [Open full-size view](vignettes/articles/diagrams/architecture-governed-flow.svg).
 
-![C4 dynamic workflow for ADaMViz SubmissionSync](docs/architecture/governed-flow.svg)
+![C4 dynamic workflow for ADaMViz SubmissionSync](vignettes/articles/diagrams/architecture-governed-flow.svg)
 
 ## Current scope
 
