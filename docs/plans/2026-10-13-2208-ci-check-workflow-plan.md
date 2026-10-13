@@ -68,10 +68,10 @@ Run a YAML-aware workflow validation across the caller and all twelve local reus
 
 ## Definition of Done
 
-All fourteen jobs are configured, the old workflow is removed, the package checkpoint and independent review pass, `main` is the repository default, hosted checks and intended writes are observed, and the issue/Project/PR workflow is complete. Any failed gate leaves delivery open.
+All fourteen jobs are configured, the old workflow is removed, the package checkpoint passes or is explicitly waived, independent review passes, `main` is the repository default, hosted checks and intended writes are observed, and the issue/Project/PR workflow is complete. Any failed gate leaves delivery open.
 
 ## Execution Status
 
-- [Issue #26](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/issues/26) is open. The isolated worktree is on `ci/26-teal-check`.
-- The workflow files are implemented and pass `actionlint` and `git diff --check`; independent review identified the roxygen push-branch defect, which is fixed.
-- The user waived the RStudio Console checks for this change. GitHub Project steps, default-branch migration, commit, PR, hosted checks, and merge remain open.
+- [Issue #26](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/issues/26) and [PR #27](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/pull/27) are In Review in the [SubmissionSync Project](https://github.com/users/Ramdhadage/projects/2). The isolated worktree is on `ci/26-teal-check`; `main` is the repository default.
+- The workflow files pass `actionlint` and `git diff --check`, independent review found no new defect, and [PR check run 38442294375](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/actions/runs/38442294375) and pkgdown passed.
+- The user waived the RStudio Console checks for this change. Final documentation CI, merge, post-merge write verification, and Project completion remain open.
