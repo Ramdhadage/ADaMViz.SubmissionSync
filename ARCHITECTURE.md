@@ -17,28 +17,28 @@ to the code and the implementation limits described below.
 
 **System context** — people, the application, permitted input, and the
 local development export. [Open full-size
-view](https://ramdhadage.github.io/ADaMViz.SubmissionSync/docs/architecture/system-context.md).
+view](https://ramdhadage.github.io/ADaMViz.SubmissionSync/vignettes/articles/diagrams/architecture-system-context.svg).
 
 ![C4-style system context for ADaMViz
-SubmissionSync](docs/architecture/system-context.svg)
+SubmissionSync](articles/articles/diagrams/architecture-system-context.svg)
 
 C4-style system context for ADaMViz SubmissionSync
 
 **Container view** — the Shiny application, clean `callr` worker, local
 stores, and development workspace. [Open full-size
-view](https://ramdhadage.github.io/ADaMViz.SubmissionSync/docs/architecture/container-view.md).
+view](https://ramdhadage.github.io/ADaMViz.SubmissionSync/vignettes/articles/diagrams/architecture-container-view.svg).
 
 ![C4 container view for ADaMViz
-SubmissionSync](docs/architecture/container-view.svg)
+SubmissionSync](articles/articles/diagrams/architecture-container-view.svg)
 
 C4 container view for ADaMViz SubmissionSync
 
 **Governed flow** — a representative fixed-scale sequence, with optional
 human review and the code’s export gate. [Open full-size
-view](https://ramdhadage.github.io/ADaMViz.SubmissionSync/docs/architecture/governed-flow.md).
+view](https://ramdhadage.github.io/ADaMViz.SubmissionSync/vignettes/articles/diagrams/architecture-governed-flow.svg).
 
 ![C4 dynamic workflow for ADaMViz
-SubmissionSync](docs/architecture/governed-flow.svg)
+SubmissionSync](articles/articles/diagrams/architecture-governed-flow.svg)
 
 C4 dynamic workflow for ADaMViz SubmissionSync
 
