@@ -134,6 +134,10 @@ jobs:
         env:
           SKIP_INSTRUCTION: "[skip linter]"
 
+      - name: Install lint dependencies
+        run: install.packages(c("jsonlite", "lintr"), repos = "https://cloud.r-project.org")
+        shell: Rscript {0}
+
       - name: Changed files 🖋️
         if: github.event_name != 'workflow_dispatch'
         id: files

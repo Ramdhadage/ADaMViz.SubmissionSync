@@ -63,6 +63,8 @@ jobs:
         && github.event.pull_request.draft == false
     container:
       image: ghcr.io/insightsengineering/rstudio:latest
+    env:
+      RENV_CONFIG_AUTOLOADER_ENABLED: "false"
 
     steps:
       - name: Setup token 🔑

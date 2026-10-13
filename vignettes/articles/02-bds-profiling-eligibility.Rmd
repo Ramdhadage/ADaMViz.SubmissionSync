@@ -26,13 +26,13 @@ Missing or empty subject identifiers and treatment values block at this point, *
 
 Visit exclusions precede mapping and duplicate checks. Missing visit labels are deliberately retained during this filtering so they can trigger a diagnostic. Every retained visit label must map to exactly one non-missing `AVISITN`, and each order value to exactly one label. Visits are ordered by `AVISITN`, then label. Requested visits must still exist after parameter, unit, and treatment selection.
 
-Duplicate `USUBJID`â€“`PARAMCD`â€“`AVISIT` keys block. If duplicates coexist with additional declared keys beyond `STUDYID`, `USUBJID`, `PARAMCD`, `AVISIT`, and `AVISITN`, the diagnostic is `unsupported_additional_timepoint_keys`; otherwise it is `unsupported_duplicate_visit_key`. Legitimate within-visit timepoints remain outside this cell's supported envelope. Neither diagnostic declares the source invalid ADaM.
+Duplicate `USUBJID`–`PARAMCD`–`AVISIT` keys block. If duplicates coexist with additional declared keys beyond `STUDYID`, `USUBJID`, `PARAMCD`, `AVISIT`, and `AVISITN`, the diagnostic is `unsupported_additional_timepoint_keys`; otherwise it is `unsupported_duplicate_visit_key`. Legitimate within-visit timepoints remain outside this cell's supported envelope. Neither diagnostic declares the source invalid ADaM.
 
 ## Retained records, displayed records, and warnings
 
 A successful profile returns sorted `selected_data` and `display_data`. Selected records retain missing Y values; display records exclude them. Stored `CHG` and `PCHG` values are used directly. The profile does not derive them or silently apply `SAFFL` or analysis flags such as `ANL01FL`.
 
-For each displayed treatmentâ€“visit combination, `source_n` counts distinct selected subjects and `n` counts distinct subjects with non-missing Y. The default sparse-data threshold is `n < 5`. A different threshold requires a list containing a finite value of at least one, rationale, authority, and version. The API retains these fields; it does not authenticate sponsor approval.
+For each displayed treatment–visit combination, `source_n` counts distinct selected subjects and `n` counts distinct subjects with non-missing Y. The default sparse-data threshold is `n < 5`. A different threshold requires a list containing a finite value of at least one, rationale, authority, and version. The API retains these fields; it does not authenticate sponsor approval.
 
 Low N, combinations with no non-missing Y, and entirely empty included treatment levels produce nonblocking warnings. Empty groups do not receive invented observations or count rows; included facet and visit levels remain explicit. The analytical input hash covers normalized display records, selections, facet levels, visit levels, and the retained low-N policy.
 

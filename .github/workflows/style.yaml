@@ -87,6 +87,7 @@ jobs:
         run: |
           install.packages("styler", repos = "https://cloud.r-project.org")
         shell: Rscript {0}
+        working-directory: ${{ github.event.repository.name }}/${{ inputs.package-subdirectory }}
 
       - name: Get changed files 🗞
         id: changed-files

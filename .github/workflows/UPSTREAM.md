@@ -14,5 +14,7 @@ Local changes remove each copied workflow's standalone push, pull request, and
 manual triggers. `check.yaml` calls them through `workflow_call` so the checks
 and write jobs run once per event. Further local fixes select the push branch
 for roxygen auto-updates and correct invalid expressions and token references
-in `test-coverage.yaml`. Repository-specific edits after this copy should be
-reviewed against the upstream source before updating it.
+in `test-coverage.yaml`. CI feedback also required renv-compatible package
+setup in the R checks, coverage, roxygen, linter, style, and link jobs.
+Repository-specific edits after this copy should be reviewed against the
+upstream source before updating it.

@@ -116,6 +116,9 @@ jobs:
         NOT_CRAN=true
       deps-installation-method: setup-r-dependencies
   linter:
+    permissions:
+      contents: read
+      statuses: write
     if: github.event_name != 'push'
     name: SuperLinter 🦸‍♀️
     uses: ./.github/workflows/linter.yaml

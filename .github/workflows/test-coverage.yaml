@@ -102,6 +102,8 @@ jobs:
         && github.event.pull_request.draft == false
     container:
       image: ghcr.io/insightsengineering/rstudio:latest
+    env:
+      RENV_CONFIG_AUTOLOADER_ENABLED: "false"
     outputs:
       publish-coverage-html-report: ${{ steps.coverage-output.outputs.coverage-upload }}
       current-branch-or-tag: ${{ steps.current-branch-or-tag.outputs.ref-name }}
@@ -237,6 +239,8 @@ jobs:
           repository-path: ${{ github.event.repository.name }}/${{ inputs.package-subdirectory }}
 
       - name: Install R package 🚧
+        env:
+          RENV_CONFIG_AUTOLOADER_ENABLED: "true"
         run: |
           if (file.exists("renv.lock")) renv::restore()
           install.packages(".", repos=NULL, type="source")
@@ -244,6 +248,8 @@ jobs:
         working-directory: ${{ github.event.repository.name }}/${{ inputs.package-subdirectory }}
 
       - name: Install covr 🎪
+        env:
+          RENV_CONFIG_AUTOLOADER_ENABLED: "true"
         run: |
           if (file.exists("renv.lock")) {
             renv::restore()
@@ -251,10 +257,12 @@ jobs:
           }
           if (!require("covr")) install.packages("covr")
         shell: Rscript {0}
+        working-directory: ${{ github.event.repository.name }}/${{ inputs.package-subdirectory }}
 
       - name: Run coverage 👟
+        env:
+          RENV_CONFIG_AUTOLOADER_ENABLED: "true"
         run: |
-          setwd("${{ github.event.repository.name }}/${{ inputs.package-subdirectory }}")
           if (file.exists("renv.lock")) {
             renv::restore()
           }
@@ -294,6 +302,7 @@ jobs:
           covr_html <- "coverage-report.html"
           if (!file.exists(covr_html)) writeLines(c("No coverage report."), covr_html)
         shell: Rscript {0}
+        working-directory: ${{ github.event.repository.name }}/${{ inputs.package-subdirectory }}
 
       - name: Check whether coverage reports exists 💭
         id: check_coverage_reports

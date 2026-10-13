@@ -267,6 +267,8 @@ jobs:
         && github.event.pull_request.draft == false
     container:
       image: ${{ matrix.config.image }}:${{ matrix.config.tag }}
+    env:
+      RENV_CONFIG_AUTOLOADER_ENABLED: "false"
     outputs:
       publish-unit-test-html-report: ${{ steps.junit-output.outputs.junit-upload }}
       current-branch-or-tag: ${{ steps.current-branch-or-tag.outputs.ref-name }}

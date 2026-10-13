@@ -8,8 +8,6 @@ product_contract_source: ce-plan-bootstrap
 execution: code
 ---
 
-# Teal-Style Package Checks - Plan
-
 ## Goal Capsule
 
 **Objective:** Run teal's complete package quality workflow for ADaMViz SubmissionSync while retaining this repository's approved package check.
