@@ -24,10 +24,8 @@
   if (!identical(as.integer(revision$version), as.integer(expected_version))) {
     cli::cli_abort("The revision token is stale")
   }
-  if (!revision$status %in% c("Draft", "Verified", "Reviewed")) {
-    cli::cli_abort(
-      "Only Draft, Verified, or Reviewed revisions can be exported"
-    )
+  if (!identical(revision$status, "Reviewed")) {
+    cli::cli_abort("Only Reviewed revisions can be exported")
   }
   invisible(revision)
 }
@@ -65,16 +63,34 @@ new_export_service <- function(
     .validate_identifier(idempotency_key, "idempotency_key")
 
     receipt_id <- .export_receipt_id(idempotency_key)
-    prior <- repository$list_export_receipts(revision_id)
-    prior <- prior[prior$receipt_id == receipt_id, , drop = FALSE]
-    if (nrow(prior)) {
-      return(invisible(as.list(prior[1, , drop = FALSE])))
-    }
-
     actor <- identity_provider$get_actor(actor_id)
     .authorize_export_actor(actor)
     revision <- repository$get_revision(revision_id)
     .assert_exportable_revision(revision, expected_version)
+    prior <- repository$list_export_receipts(revision_id)
+    prior <- prior[prior$receipt_id == receipt_id, , drop = FALSE]
+    if (nrow(prior)) {
+      prior <- as.list(prior[1, , drop = FALSE])
+      if (!identical(prior$destination_id, destination_id)) {
+        cli::cli_abort(
+          "The idempotency key was already used for a different destination"
+        )
+      }
+      published <- workspace_provider$inspect_published(
+        destination_id, receipt_id
+      )
+      if (is.null(published)) {
+        cli::cli_abort("The previously published export is missing")
+      }
+      if (!identical(published$code_hash, prior$code_hash) ||
+        !identical(published$image_hash, prior$image_hash)) {
+        cli::cli_abort("Published export hashes do not match the receipt")
+      }
+      return(invisible(c(
+        list(receipt_id = receipt_id, revision_id = revision_id),
+        published
+      )))
+    }
     bundle <- repository$get_artifact_bundle(revision_id)
 
     code_bytes <- artifact_store$get(bundle$code_hash)

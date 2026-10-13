@@ -23,7 +23,7 @@ This contract extracts the strategy without adding requirements. Missing definit
 
 - The proof of concept (POC) accepts only public, synthetic, or properly de-identified data.
 - Confidential patient-level data remains prohibited until the product and outputs are validated, privacy and security controls are qualified, and the client approves its use.
-- Unreviewed outputs may be exported only as drafts.
+- Only `Reviewed` outputs may be exported.
 - Unevaluated plot patterns must be clearly labeled experimental or draft.
 - Broader table, listing, and figure support is deferred until after the ggplot POC.
 - Do not assume business logic or the target environment. Do not change requirements or existing interfaces, install packages, or add custom error handling without first asking the user.
@@ -65,7 +65,7 @@ This contract extracts the strategy without adding requirements. Missing definit
 
 The strategy names these terms but does not define a complete state model:
 
-- **Draft:** Unreviewed outputs may be exported only as drafts.
+- **Draft:** Unreviewed outputs cannot be exported.
 - **Experimental or draft:** Unevaluated plot patterns must carry one of these labels.
 - **Verified:** The automated-turnaround metric ends when a plot and reproducible R code reach this state.
 - **Reviewed:** The reproducibility metric applies to `Reviewed` outputs; the strategy measures elapsed time from `Verified` to `Reviewed`.

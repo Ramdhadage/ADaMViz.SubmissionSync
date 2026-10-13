@@ -21,8 +21,12 @@
     roots,
     getNamespaceInfo(asNamespace("ADaMViz.SubmissionSync"), "path")
   )
-  root <- roots[file.exists(file.path(roots, "DESCRIPTION"))][1]
-  if (length(root)) root else NULL
+  is_source_root <- vapply(roots, function(root) {
+    file.exists(file.path(root, "DESCRIPTION")) &&
+      length(list.files(file.path(root, "R"), pattern = "\\.[Rr]$")) > 0L
+  }, logical(1))
+  source_roots <- roots[is_source_root]
+  if (length(source_roots)) source_roots[[1]] else NULL
 }
 
 run_execution_callr <- function(

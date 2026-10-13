@@ -24,7 +24,7 @@ test_that("execution service promotes only a complete passing attempt", {
     revision_id = "rev-1",
     request = fixture$request,
     script = fixture$script,
-    analysis_data = fixture$profile$selected_data,
+    analysis_data = fixture$profile$analysis_data,
     idempotency_key = "execute-1"
   )
 
@@ -68,7 +68,7 @@ test_that("failed verification records terminal failure without promotion", {
     revision_id = "rev-1",
     request = fixture$request,
     script = fixture$script,
-    analysis_data = fixture$profile$selected_data,
+    analysis_data = fixture$profile$analysis_data,
     idempotency_key = "execute-1"
   )
 
@@ -106,7 +106,7 @@ test_that("experimental drafts cannot inherit governed verification", {
       revision_id = "rev-1",
       request = fixture$request,
       script = fixture$script,
-      analysis_data = fixture$profile$selected_data,
+      analysis_data = fixture$profile$analysis_data,
       idempotency_key = "execute-1"
     ),
     "Only Draft revisions"
@@ -133,7 +133,7 @@ test_that("runner errors leave one terminal failed attempt", {
 
   result <- service$submit(
     "rev-1", fixture$request, fixture$script,
-    fixture$profile$selected_data, "execute-1"
+    fixture$profile$analysis_data, "execute-1"
   )
 
   expect_identical(result$status, "failed")

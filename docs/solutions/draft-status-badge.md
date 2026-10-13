@@ -19,18 +19,18 @@ tags:
 
 ## Context
 
-F001 displays review status on the Plot result page. The design places a `Draft · not reviewed` badge at the top-right of the title row and explains the two-approval requirement in an adjacent information tooltip. This is a display pattern; it does not define the status lifecycle or export policy, which remain open in the [F001 workflow spec](../ux/F001-plot-generation.md).
+F001 displays review status on the Plot result page. The design places a `Draft · not reviewed` badge at the top-right of the title row and explains the two-approval requirement in an adjacent information tooltip. This is a display pattern; the [F001 workflow spec](../ux/F001-plot-generation.md) and export service define the Reviewed-only export policy.
 
 ## Guidance
 
 - Place the `Draft · not reviewed` badge at the top-right of the Plot result title row.
 - Use an adjacent information tooltip to explain that both independent approvals are required for post-approval export eligibility.
 - Reuse this display pattern for outputs that require dual review before post-approval export.
-- Do not infer status transitions, the full meaning of `Draft`, or draft-only export availability from the badge and tooltip.
+- Do not infer status transitions or the full meaning of `Draft` from the badge and tooltip.
 
 ## Why This Matters
 
-The badge makes the current review state visible where the output is presented. The tooltip explains the approval condition without implying that the badge defines the full review lifecycle or export policy.
+The badge makes the current review state visible where the output is presented. The tooltip explains the approval condition without making the badge responsible for enforcing the lifecycle or export policy.
 
 ## When to Apply
 
@@ -39,7 +39,7 @@ The badge makes the current review state visible where the output is presented. 
 
 ## Examples
 
-In the [F001 prototype](../ux/F001-plot-generation-prototype.html), the Plot result title row shows `Draft · not reviewed` at the right, with an information tooltip explaining the dual-approval requirement. The badge does not define what happens after approval, rejection, or a failed check, and it does not settle whether unreviewed output can be exported as Draft.
+In the [F001 prototype](../ux/F001-plot-generation-prototype.html), the Plot result title row shows `Draft · not reviewed` at the right, with an information tooltip explaining the dual-approval requirement. The badge does not define what happens after approval, rejection, or a failed check; the export service separately enforces `Reviewed` status.
 
 ## Related
 

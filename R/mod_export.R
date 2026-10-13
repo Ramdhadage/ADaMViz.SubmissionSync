@@ -80,7 +80,9 @@ mod_export_server <- function(id, current_revision, workspace_provider) {
         paste0(state$revision$revision_id, "-image-code.zip")
       },
       content = function(file) {
-        .write_export_zip(last_export(), file)
+        state <- current_revision()
+        revision_id <- state$revision$revision_id %||% NULL
+        .write_export_zip(last_export(), file, revision_id)
       },
       contentType = "application/zip"
     )
@@ -99,9 +101,12 @@ mod_export_server <- function(id, current_revision, workspace_provider) {
   })
 }
 
-.write_export_zip <- function(export, file) {
+.write_export_zip <- function(export, file, revision_id) {
   if (is.null(export)) {
     cli::cli_abort("Export the revision before download")
+  }
+  if (!identical(export$revision_id, revision_id)) {
+    cli::cli_abort("Export the current revision before download")
   }
 
   root <- fs::dir_create(fs::file_temp("revision-download-"))

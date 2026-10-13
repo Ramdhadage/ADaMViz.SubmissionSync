@@ -1,6 +1,7 @@
 ^renv$
 ^renv\.lock$
 ^\.git$
+^\.compound-engineering$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.github$
@@ -13,6 +14,7 @@ $run_dev.*
 ^.here$
 ^(AGENTS\.md|CODEX_CONTEXT\.md|CONCEPTS\.md|app\.R|docs|rsconnect)$
 ^R/AGENTS\.md$
+^R/_disable_autoload\.R$
 ^inst/\.codexignore$
 ^docs/ideation$
 ^docs/explainers/assets/plot-pattern-assurance-cell/.*\.(png|svg)$
@@ -23,3 +25,7 @@ $run_dev.*
 ^docs/plans/\.quarto-render-output$
 ^codecov\.yml$
 ^\.lintr$
+^ARCHITECTURE\.md$
+^_pkgdown\.yml$
+^lint_output\.txt$
+^manifest\.json$

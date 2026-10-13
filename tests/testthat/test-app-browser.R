@@ -62,49 +62,7 @@ open_export_step <- function(app) {
   invisible(app)
 }
 
-test_that("browser prompt journey creates a Verified draft with evidence", {
-  app <- local_submission_sync_app("prompt-to-verified")
-
-  create_standard_revision(app)
-  app$run_js(paste0(
-    "document.querySelector('#plot_generation-plot_preview-code')",
-    ".closest('details').open = true"
-  ))
-  app$run_js(paste0(
-    "document.querySelector('#plot_generation-evidence-checks')",
-    ".closest('details').open = true"
-  ))
-  app$wait_for_value(output = "plot_generation-evidence-checks")
-  body <- app$get_text(selector = "body")
-
-  expect_match(body, "Verified", fixed = TRUE)
-  expect_match(body, "Executed R script", fixed = TRUE)
-  expect_match(body, "Analytical output", fixed = TRUE)
-  expect_match(body, "runner_success", fixed = TRUE)
-})
-
-test_that("browser prompt journey exports verified image and code", {
-  app <- local_submission_sync_app("prompt-to-export")
-
-  create_standard_revision(app)
-  open_export_step(app)
-  app$click("plot_generation-export-export")
-  app$wait_for_idle()
-  app$wait_for_js(paste0(
-    "document.querySelector('#plot_generation-export-message')",
-    ".textContent.includes('Exported receipt-')"
-  ))
-
-  body <- app$get_text(selector = "body")
-  expect_match(body, "Exported receipt-", fixed = TRUE)
-  expect_match(body, "rev-", fixed = TRUE)
-})
-
-test_that("browser review reaches Reviewed with two distinct approvals", {
-  app <- local_submission_sync_app("two-person-review")
-
-  create_standard_revision(app)
-  open_export_step(app)
+review_standard_revision <- function(app) {
   app$set_inputs(
     `plot_generation-review-actor_id` = "stat-programmer",
     `plot_generation-review-role` = "statistical_programmer",
@@ -129,6 +87,53 @@ test_that("browser review reaches Reviewed with two distinct approvals", {
     "document.querySelector('#plot_generation-revision_history-history')",
     ".textContent.includes('Reviewed')"
   ))
+  invisible(app)
+}
+
+test_that("browser prompt journey creates a Verified draft with evidence", {
+  app <- local_submission_sync_app("prompt-to-verified")
+
+  create_standard_revision(app)
+  app$run_js(paste0(
+    "document.querySelector('#plot_generation-plot_preview-code')",
+    ".closest('details').open = true"
+  ))
+  app$run_js(paste0(
+    "document.querySelector('#plot_generation-evidence-checks')",
+    ".closest('details').open = true"
+  ))
+  app$wait_for_value(output = "plot_generation-evidence-checks")
+  body <- app$get_text(selector = "body")
+
+  expect_match(body, "Verified", fixed = TRUE)
+  expect_match(body, "Analytical output", fixed = TRUE)
+  expect_match(body, "runner_success", fixed = TRUE)
+})
+
+test_that("browser prompt journey exports Reviewed image and code", {
+  app <- local_submission_sync_app("prompt-to-export")
+
+  create_standard_revision(app)
+  open_export_step(app)
+  review_standard_revision(app)
+  app$click("plot_generation-export-export")
+  app$wait_for_idle()
+  app$wait_for_js(paste0(
+    "document.querySelector('#plot_generation-export-message')",
+    ".textContent.includes('Exported receipt-')"
+  ))
+
+  body <- app$get_text(selector = "body")
+  expect_match(body, "Exported receipt-", fixed = TRUE)
+  expect_match(body, "rev-", fixed = TRUE)
+})
+
+test_that("browser review reaches Reviewed with two distinct approvals", {
+  app <- local_submission_sync_app("two-person-review")
+
+  create_standard_revision(app)
+  open_export_step(app)
+  review_standard_revision(app)
 
   body <- app$get_text(selector = "body")
   expect_match(body, "Reviewed", fixed = TRUE)

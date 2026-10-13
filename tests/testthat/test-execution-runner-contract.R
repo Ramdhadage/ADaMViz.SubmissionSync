@@ -4,7 +4,7 @@ test_that("local runner returns a bounded versioned result manifest", {
   result <- run_execution_locally(
     request = fixture$request,
     script = fixture$script,
-    analysis_data = fixture$profile$selected_data,
+    analysis_data = fixture$profile$analysis_data,
     work_dir = withr::local_tempdir()
   )
 
@@ -31,7 +31,7 @@ test_that("runner rejects mismatched scripts and non-POC classifications", {
     run_execution_locally(
       request = fixture$request,
       script = paste0(fixture$script, "\n"),
-      analysis_data = fixture$profile$selected_data,
+      analysis_data = fixture$profile$analysis_data,
       work_dir = withr::local_tempdir()
     ),
     "script hash"
@@ -40,7 +40,7 @@ test_that("runner rejects mismatched scripts and non-POC classifications", {
     run_execution_locally(
       request = fixture$request,
       script = fixture$script,
-      analysis_data = fixture$profile$selected_data,
+      analysis_data = fixture$profile$analysis_data,
       data_classification = "clinical",
       work_dir = withr::local_tempdir()
     ),

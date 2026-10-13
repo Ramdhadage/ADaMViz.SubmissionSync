@@ -35,7 +35,7 @@ The diagrams use the application's navy and slate colors and Inter font stack fr
 - Fixed-scale revisions use the governed subprocess path. Free-scale revisions remain `Experimental/Draft` and do not submit that governed attempt.
 - Governed previews use the accepted worker PNG and stored script. Experimental free-scale previews remain in-process and cannot enter review or export.
 - Reviewer identities in the current UI come from a selectable local catalog. Production authentication and qualified record custody remain outside this implementation.
-- The export service permits accepted bundles in `Draft`, `Verified`, or `Reviewed` status. Detached files do not carry an enforced draft status label.
+- The export service permits only `Reviewed` revisions with accepted bundles.
 - Local evidence integrity and backup mechanisms exist. The app's temporary storage, operational recovery, retention custody, and target-environment qualification still need explicit decisions.
 
 The [architecture map](../../ARCHITECTURE.md) explains component boundaries and current gaps. [Strategy](../product/STRATEGY.md) remains the authority for product scope and terminology. When a page needs revision, inspect the linked implementation and tests together, then update its diagram and this source-baseline note.

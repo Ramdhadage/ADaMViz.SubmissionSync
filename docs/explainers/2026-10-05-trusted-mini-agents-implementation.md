@@ -78,7 +78,7 @@ The plan's U7 boundary already calls for allowlisted context, structured candida
 
 The project prohibits confidential patient-level data in prompts and external services. The canonical plan also records that uploads lack permitted-data attestation and revision evidence retains selected rows including `USUBJID`. The real provider stays disabled pending approval of retention, training, region, transport, incident-handling, and disclosure terms ([CODEX_CONTEXT.md](../../CODEX_CONTEXT.md), [canonical assurance-cell plan](../plans/2026-09-06-0014-feat-plot-pattern-assurance-cell-plan.md), [data-flow threat model](../validation/data-flow-threat-model.md)).
 
-Confirmation checks whether the proposed specification matches user intent. Statistical-programmer and biostatistician review checks the resulting revision. Keep both stages. The existing export-policy conflict also remains: Strategy says unreviewed output may be exported only as drafts, while the plan and current code allow some `Verified` exports. Adding an agent does not settle that conflict.
+Confirmation checks whether the proposed specification matches user intent. Statistical-programmer and biostatistician review checks the resulting revision. Keep both stages. Export is available only after both approvals move the revision to `Reviewed`.
 
 **Action:** Keep real-provider use disabled until the data-provenance and retained-evidence gaps are addressed and provider terms are approved.
 
@@ -100,7 +100,7 @@ Check items as evidence is completed; source presence alone does not establish a
 - [ ] **Align displayed results with accepted evidence.** The architecture notes that the preview is reconstructed in the app instead of showing the accepted worker PNG. Resolve this before claiming the displayed result came directly from the verified execution path.
 - [ ] **Capture reproducibility evidence.** Record prompt/specification identity, schema/interpreter/provider versions, input identity, code and environment, checks, artifact hashes, and reviewer decisions while minimizing sensitive content.
 - [ ] **Evaluate before provider activation.** Run a versioned synthetic prompt corpus for ambiguity, malformed output, prompt injection, invented fields, timeouts, and fallback. Review provider terms and run separate integration evaluation.
-- [ ] **Keep operational claims bounded.** Track authentication, qualified isolation, target-environment validation, and export-policy alignment as separate work.
+- [ ] **Keep operational claims bounded.** Track authentication, qualified isolation, and target-environment validation as separate work.
 
 ## Risks
 
@@ -109,7 +109,7 @@ Check items as evidence is completed; source presence alone does not establish a
 - **Result-path bypass:** model text or an alternate tool could be mistaken for computed output.
 - **Evidence mismatch:** the displayed preview may differ from the artifact that passed execution verification.
 - **False assurance:** mock tests and prompt-corpus scores do not establish provider behavior or validation for intended use.
-- **Policy drift:** agent integration could make unresolved export and data-boundary decisions appear settled.
+- **Policy drift:** agent integration could bypass the Reviewed-only export or unresolved data boundaries.
 
 ## Immediate next step
 

@@ -1,4 +1,4 @@
-make_mod_export_state <- function(status = "Verified") {
+make_mod_export_state <- function(status = "Reviewed") {
   root <- fs::file_temp("mod-export-fixture-")
   fs::dir_create(root)
   withr::defer(fs::dir_delete(root), envir = parent.frame())
@@ -25,8 +25,17 @@ make_mod_export_state <- function(status = "Verified") {
   repo$accept_artifact_bundle(
     "bundle-1", "rev-1", code_hash, image_hash, "analysis", "bundle"
   )
-  if (identical(status, "Verified")) {
-    record_passing_execution(repo, "rev-1")
+  if (status %in% c("Verified", "Reviewed")) {
+    record_passing_execution(repo, "rev-1") # nolint: object_usage_linter.
+  }
+  if (identical(status, "Reviewed")) {
+    reviewers <- local_identity_provider(list(
+      new_actor("sp", "statistical_programmer"),
+      new_actor("bio", "biostatistician")
+    ))
+    review <- new_review_service(repo, reviewers)
+    review$approve("rev-1", "sp", 2L, "sp-approval")
+    review$approve("rev-1", "bio", 3L, "bio-approval")
   }
   list(
     repository = repo,
@@ -88,7 +97,7 @@ test_that("export module packages revision artifacts as a ZIP download", {
   )
   zipfile <- tempfile(fileext = ".zip")
 
-  .write_export_zip(export, zipfile)
+  .write_export_zip(export, zipfile, "rev-1")
 
   listing <- utils::unzip(zipfile, list = TRUE)
   expect_setequal(listing$Name, c("script.R", "plot.png"))
@@ -101,6 +110,10 @@ test_that("export module packages revision artifacts as a ZIP download", {
   expect_equal(
     readBin(fs::path(extracted, "plot.png"), "raw", n = 9L),
     charToRaw("png bytes")
+  )
+  expect_error(
+    .write_export_zip(export, tempfile(fileext = ".zip"), "rev-2"),
+    "current revision"
   )
 })
 

@@ -38,7 +38,7 @@
     checks$image_hash <- image_exists &&
       checkmate::test_string(result$image_hash, pattern = "^[0-9a-f]{64}$") &&
       identical(
-        digest::digest(file = runner_result$image_path, algo = "sha256"),
+        .execution_hash_file(runner_result$image_path),
         result$image_hash
       )
     checks$environment_fingerprint <- checkmate::test_string(
