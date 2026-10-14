@@ -2,6 +2,11 @@ name: Audit Dependencies 🕵️‍♀️
 
 on:
   workflow_call:
+    secrets:
+      OSSINDEX_USER:
+        required: true
+      OSSINDEX_TOKEN:
+        required: true
     inputs:
       package-subdirectory:
         description: Subdirectory in the repository, where the R package is located.
@@ -51,6 +56,8 @@ jobs:
 
       - name: Run oysteR scan on dependencies 🔍
         env:
+          OSSINDEX_USER: ${{ secrets.OSSINDEX_USER }}
+          OSSINDEX_TOKEN: ${{ secrets.OSSINDEX_TOKEN }}
           RENV_CONFIG_AUTOLOADER_ENABLED: "true"
           ALLOW_FINDINGS: ${{ inputs.allow-failure }}
         run: |
@@ -76,6 +83,8 @@ jobs:
       - name: Run oysteR scan on renv.lock 🔒
         if: ${{ !cancelled() }}
         env:
+          OSSINDEX_USER: ${{ secrets.OSSINDEX_USER }}
+          OSSINDEX_TOKEN: ${{ secrets.OSSINDEX_TOKEN }}
           RENV_CONFIG_AUTOLOADER_ENABLED: "true"
           ALLOW_FINDINGS: ${{ inputs.allow-failure }}
         run: |

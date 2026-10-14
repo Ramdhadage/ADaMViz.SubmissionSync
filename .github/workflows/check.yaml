@@ -51,6 +51,9 @@ jobs:
   audit:
     name: Audit Dependencies 🕵️‍♂️
     uses: ./.github/workflows/audit.yaml
+    secrets:
+      OSSINDEX_USER: ${{ secrets.OSSINDEX_USER }}
+      OSSINDEX_TOKEN: ${{ secrets.OSSINDEX_TOKEN }}
   r-cmd:
     permissions:
       contents: write
