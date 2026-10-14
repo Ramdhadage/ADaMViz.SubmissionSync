@@ -27,25 +27,28 @@
         "License": "MIT + file LICENSE",
         "Depends": "R (>= 4.1.0)",
         "Imports": "bslib, checkmate, cli, config, DBI, digest, fs, golem,\nggplot2, jsonlite, patchwork, readxl, rlang, RSQLite, shiny",
-        "Suggests": "callr, devtools, htmltools, roxygen2, shinytest2, testthat\n(>= 3.0.0), withr",
+        "Suggests": "callr, devtools, htmltools, knitr, roxygen2, rmarkdown,\nshinytest2, testthat (>= 3.0.0), withr",
+        "VignetteBuilder": "knitr",
+        "URL": "https://ramdhadage.github.io/ADaMViz.SubmissionSync/,\nhttps://github.com/Ramdhadage/ADaMViz.SubmissionSync",
         "Config/testthat/edition": "3",
         "Encoding": "UTF-8",
-        "Config/roxygen2/version": "8.1.0",
+        "Config/roxygen2/version": "8.1.1",
         "RemoteType": "github",
         "RemoteHost": "api.github.com",
         "RemoteRepo": "ADaMViz.SubmissionSync",
         "RemoteUsername": "Ramdhadage",
+        "RemotePkgRef": "Ramdhadage/ADaMViz.SubmissionSync",
         "RemoteRef": "HEAD",
-        "RemoteSha": "f7eb080b7114f95ffd122ecf49dfadbed1c96ab1",
+        "RemoteSha": "ff4f6f5a630e0bc20f0841614dc485c677d421de",
         "GithubRepo": "ADaMViz.SubmissionSync",
         "GithubUsername": "Ramdhadage",
         "GithubRef": "HEAD",
-        "GithubSHA1": "f7eb080b7114f95ffd122ecf49dfadbed1c96ab1",
+        "GithubSHA1": "ff4f6f5a630e0bc20f0841614dc485c677d421de",
         "NeedsCompilation": "no",
-        "Packaged": "2026-09-29 21:44:07 UTC; admin",
+        "Packaged": "2026-10-14 06:54:48 UTC; admin",
         "Author": "Ramnath Dhadage [aut, cre]",
         "Maintainer": "Ramnath Dhadage <ram.dhadage123@gmail.com>",
-        "Built": "R 4.6.0; ; 2026-09-29 21:44:10 UTC; windows"
+        "Built": "R 4.6.0; ; 2026-10-14 06:54:53 UTC; windows"
       }
     },
     "AsioHeaders": {
@@ -1087,10 +1090,11 @@
         "Built": "R 4.6.0; x86_64-w64-mingw32; 2026-04-24 18:32:48 UTC; windows",
         "Archs": "x64",
         "RemoteType": "standard",
-        "RemotePkgRef": "covr",
         "RemoteRef": "covr",
+        "RemotePkgRef": "covr",
         "RemoteRepos": "https://packagemanager.posit.co/cran/latest",
-        "RemotePkgPlatform": "i386+x86_64-w64-mingw32",
+        "RemoteReposName": "CRAN",
+        "RemotePkgPlatform": "x86_64-w64-mingw32",
         "RemoteSha": "3.6.5"
       }
     },
@@ -5161,26 +5165,977 @@
     }
   },
   "files": {
-    ".github/workflows/R-CMD-check.yaml": {
-      "checksum": "8c9290667cad7d242786ffb69bd6c0e1"
+    ".compound-engineering/config.example.yaml": {
+      "checksum": "ba548acd528376af8fb818f0b6830134"
+    },
+    ".compound-engineering/config.yaml": {
+      "checksum": "98f104ed7e1e9ba9724d341fe43d0d67"
+    },
+    ".github/workflows/audit.yaml": {
+      "checksum": "7228d7b9e5f8d6304b05a53e7671ead0"
+    },
+    ".github/workflows/build-check-install.yaml": {
+      "checksum": "ea900c0a13a1f649436ea085abad7593"
+    },
+    ".github/workflows/check.yaml": {
+      "checksum": "710cb7b35f5ce34869267eeef5c99f14"
+    },
+    ".github/workflows/gitleaks.yaml": {
+      "checksum": "812c9752dd04f0018024d4244ce92e27"
+    },
+    ".github/workflows/LICENSE-APACHE-2.0.txt": {
+      "checksum": "d273d63619c9aeaf15cdaf76422c4f87"
+    },
+    ".github/workflows/licenses.yaml": {
+      "checksum": "8a9fe46085440c6a37731b4a2e141483"
+    },
+    ".github/workflows/links.yaml": {
+      "checksum": "7f2e8ac6292dbd1dfc1ea7e39200c3cc"
+    },
+    ".github/workflows/linter.yaml": {
+      "checksum": "0cc055b321f13c1fadf8229a5a709dac"
+    },
+    ".github/workflows/pkgdown.yaml": {
+      "checksum": "be9daab64dec802385364baee5c3e491"
+    },
+    ".github/workflows/roxygen.yaml": {
+      "checksum": "33435627e68b986a12da526881b69c12"
+    },
+    ".github/workflows/spelling.yaml": {
+      "checksum": "57f8358279e1ce7cec62c319c0388bf3"
+    },
+    ".github/workflows/style.yaml": {
+      "checksum": "b4f003d2271d63f4579ebb4fc4754a88"
+    },
+    ".github/workflows/test-coverage.yaml": {
+      "checksum": "8c186539c9bf74dbebc1d8d1ece42e70"
+    },
+    ".github/workflows/UPSTREAM.md": {
+      "checksum": "929b9a271005cd02f1e71dd7fa1c928b"
+    },
+    ".github/workflows/version-bump.yaml": {
+      "checksum": "9f355b38e42daa916c86b13b1148299d"
+    },
+    ".github/workflows/version.yaml": {
+      "checksum": "acabf76b89df33a4497c76a3b8663375"
     },
     ".here": {
       "checksum": "d41d8cd98f00b204e9800998ecf8427e"
     },
+    ".lintr": {
+      "checksum": "bab062714817d8157354ee2ee0cd43d0"
+    },
     ".Rbuildignore": {
-      "checksum": "3b262d723af0431168e1a6d8515872bc"
+      "checksum": "73d904cff5b5687098cc44e1f0f4d1f0"
     },
     ".Rprofile": {
-      "checksum": "5311b49f53dfac2e4fe1f968d8d69e7b"
+      "checksum": "54ef3f2d8e97f6e98c761e4709e65731"
+    },
+    ".worktrees/ci-teal-check/.compound-engineering/config.example.yaml": {
+      "checksum": "ba548acd528376af8fb818f0b6830134"
+    },
+    ".worktrees/ci-teal-check/.compound-engineering/config.yaml": {
+      "checksum": "98f104ed7e1e9ba9724d341fe43d0d67"
+    },
+    ".worktrees/ci-teal-check/.github/workflows/audit.yaml": {
+      "checksum": "1dc1c129c8ac6026751061984159b100"
+    },
+    ".worktrees/ci-teal-check/.github/workflows/build-check-install.yaml": {
+      "checksum": "6814d957e4efb9ce3e91cc8565d1319a"
+    },
+    ".worktrees/ci-teal-check/.github/workflows/check.yaml": {
+      "checksum": "710cb7b35f5ce34869267eeef5c99f14"
+    },
+    ".worktrees/ci-teal-check/.github/workflows/gitleaks.yaml": {
+      "checksum": "00c3fcf4175c52e94505b7842cc9896a"
+    },
+    ".worktrees/ci-teal-check/.github/workflows/LICENSE-APACHE-2.0.txt": {
+      "checksum": "3b83ef96387f14655fc854ddc3c6bd57"
+    },
+    ".worktrees/ci-teal-check/.github/workflows/licenses.yaml": {
+      "checksum": "8f400088fcbeb494e7d654813653a8ff"
+    },
+    ".worktrees/ci-teal-check/.github/workflows/links.yaml": {
+      "checksum": "7f2e8ac6292dbd1dfc1ea7e39200c3cc"
+    },
+    ".worktrees/ci-teal-check/.github/workflows/linter.yaml": {
+      "checksum": "3779b0ad01a7b3d3fa016577f7a0c714"
+    },
+    ".worktrees/ci-teal-check/.github/workflows/pkgdown.yaml": {
+      "checksum": "be9daab64dec802385364baee5c3e491"
+    },
+    ".worktrees/ci-teal-check/.github/workflows/roxygen.yaml": {
+      "checksum": "57b4d5f4ab7ffc492de0fc1bd72b39b6"
+    },
+    ".worktrees/ci-teal-check/.github/workflows/spelling.yaml": {
+      "checksum": "3f0e012bbfdd69ca07a731ebc63e3193"
+    },
+    ".worktrees/ci-teal-check/.github/workflows/style.yaml": {
+      "checksum": "77be2ae0d13a7056a580e65d14c6923c"
+    },
+    ".worktrees/ci-teal-check/.github/workflows/test-coverage.yaml": {
+      "checksum": "82bfc754b9b61305da951b7fd55bfa90"
+    },
+    ".worktrees/ci-teal-check/.github/workflows/UPSTREAM.md": {
+      "checksum": "c6fd06912710b5a08fc2823027c84766"
+    },
+    ".worktrees/ci-teal-check/.github/workflows/version-bump.yaml": {
+      "checksum": "b0eeab59b243766675d714a3629968df"
+    },
+    ".worktrees/ci-teal-check/.github/workflows/version.yaml": {
+      "checksum": "95d4452c51285165de546e8563d957af"
+    },
+    ".worktrees/ci-teal-check/.here": {
+      "checksum": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    ".worktrees/ci-teal-check/.lintr": {
+      "checksum": "bab062714817d8157354ee2ee0cd43d0"
+    },
+    ".worktrees/ci-teal-check/.Rbuildignore": {
+      "checksum": "73d904cff5b5687098cc44e1f0f4d1f0"
+    },
+    ".worktrees/ci-teal-check/.Rprofile": {
+      "checksum": "3f061fc984ca9dfde61487fffef603a0"
+    },
+    ".worktrees/ci-teal-check/_pkgdown.yml": {
+      "checksum": "139a1116734539173636bfa65945496d"
+    },
+    ".worktrees/ci-teal-check/AGENTS.md": {
+      "checksum": "5e21f1bb290d576b905fcf0dcf6da3e3"
+    },
+    ".worktrees/ci-teal-check/app.R": {
+      "checksum": "1f344fc2641058da48682ece16e496dc"
+    },
+    ".worktrees/ci-teal-check/ARCHITECTURE.md": {
+      "checksum": "544bc9747789f81691ffd6d452786cbf"
+    },
+    ".worktrees/ci-teal-check/codecov.yml": {
+      "checksum": "e20df979617a9f8c55da8b1506da4078"
+    },
+    ".worktrees/ci-teal-check/CODEX_CONTEXT.md": {
+      "checksum": "f543d20eff1ef7172f4d9b4da57fe885"
+    },
+    ".worktrees/ci-teal-check/CONCEPTS.md": {
+      "checksum": "7f8ffc24170a7261f802bbef168860ce"
+    },
+    ".worktrees/ci-teal-check/DESCRIPTION": {
+      "checksum": "ffc42c05279bb18c6340cb4d10d66ce9"
+    },
+    ".worktrees/ci-teal-check/dev/01_start.R": {
+      "checksum": "c6b8cef7e3dbbc55a06d784e01eeef5e"
+    },
+    ".worktrees/ci-teal-check/dev/02_dev.R": {
+      "checksum": "988d3e45157a0a0d73f13b0b65bee44c"
+    },
+    ".worktrees/ci-teal-check/dev/03_deploy.R": {
+      "checksum": "1817ee386d6dccfbf7d0fa051539ea47"
+    },
+    ".worktrees/ci-teal-check/dev/run_dev.R": {
+      "checksum": "e16497b4e7787e5fd1495f9e1aa81182"
+    },
+    ".worktrees/ci-teal-check/docs/architecture/container-view.svg": {
+      "checksum": "66fe158373b1a1c1408553c0aa9aa55c"
+    },
+    ".worktrees/ci-teal-check/docs/architecture/governed-flow.svg": {
+      "checksum": "19bfdd120c7b80c70b55e295619e11d9"
+    },
+    ".worktrees/ci-teal-check/docs/architecture/system-context.svg": {
+      "checksum": "73b94bcca6014808dd52efe75f261453"
+    },
+    ".worktrees/ci-teal-check/docs/explainers/2026-09-06-how-the-plot-pattern-assurance-cell-works.md": {
+      "checksum": "bf953f5734cf31e6ba9d96658f685aa5"
+    },
+    ".worktrees/ci-teal-check/docs/explainers/2026-10-05-trusted-mini-agents-implementation.md": {
+      "checksum": "aa435d2e892f7589e0bdd33900a017e6"
+    },
+    ".worktrees/ci-teal-check/docs/explainers/assets/plot-pattern-assurance-cell/poc-vs-qualified-architecture.svg": {
+      "checksum": "7951a3edba61f4f03a228399c636813e"
+    },
+    ".worktrees/ci-teal-check/docs/explainers/assets/plot-pattern-assurance-cell/prompt-to-reviewed-workflow.svg": {
+      "checksum": "d56c686f9b16b3450b4c9757b54871b7"
+    },
+    ".worktrees/ci-teal-check/docs/explainers/assets/plot-pattern-assurance-cell/revision-lifecycle.svg": {
+      "checksum": "1990ea6809abe61b60f99b17f57ef0ed"
+    },
+    ".worktrees/ci-teal-check/docs/explainers/assets/trusted-mini-agents/trusted-mini-agent-flow.svg": {
+      "checksum": "79bafec300dc30f54e7d2221d3b099f7"
+    },
+    ".worktrees/ci-teal-check/docs/features/01-uploads-snapshots-input-identity.md": {
+      "checksum": "03731dafdfd57a76179214e3ba05ce5d"
+    },
+    ".worktrees/ci-teal-check/docs/features/02-bds-profiling-eligibility.md": {
+      "checksum": "13a8d4b51bcae7698cf747aa5d97a542"
+    },
+    ".worktrees/ci-teal-check/docs/features/03-confirming-analysis-selections.md": {
+      "checksum": "030c498fda036ca1dbea0a596f459096"
+    },
+    ".worktrees/ci-teal-check/docs/features/04-longitudinal-boxplot-statistics.md": {
+      "checksum": "92ba2c2656617c2c1ac4729c8d2cb0f7"
+    },
+    ".worktrees/ci-teal-check/docs/features/05-fixed-free-y-scales.md": {
+      "checksum": "fe430b32c0e00fcbf5e7a4d3005713e9"
+    },
+    ".worktrees/ci-teal-check/docs/features/06-script-generation-execution.md": {
+      "checksum": "82ff800cc3cd108a03180c152474ed67"
+    },
+    ".worktrees/ci-teal-check/docs/features/07-verification-revision-evidence.md": {
+      "checksum": "5ed49a044e27f3429dc708889db1ad1f"
+    },
+    ".worktrees/ci-teal-check/docs/features/08-reproducing-retained-results.md": {
+      "checksum": "0e5d5d95dec2bb86549d9b15336fb79d"
+    },
+    ".worktrees/ci-teal-check/docs/features/09-human-review-decisions.md": {
+      "checksum": "962b4011f1c706dfb901100c12e5e308"
+    },
+    ".worktrees/ci-teal-check/docs/features/10-correction-revision-traceability.md": {
+      "checksum": "21254c5c07193d0af0746e6f48882996"
+    },
+    ".worktrees/ci-teal-check/docs/features/11-controlled-export.md": {
+      "checksum": "b4660438ed47430884852735fc389322"
+    },
+    ".worktrees/ci-teal-check/docs/features/12-integrity-lifecycle-backup.md": {
+      "checksum": "37e65724e14111ca38852d44232bd6de"
+    },
+    ".worktrees/ci-teal-check/docs/features/diagrams/01-uploads-snapshots-input-identity.html": {
+      "checksum": "54dbc31f78a8dbc395d52e467660adbc"
+    },
+    ".worktrees/ci-teal-check/docs/features/diagrams/02-bds-profiling-eligibility.html": {
+      "checksum": "1170ca1ec62b349c806bc3dd85f54e7d"
+    },
+    ".worktrees/ci-teal-check/docs/features/diagrams/03-confirming-analysis-selections.html": {
+      "checksum": "941e8c03e228362006eb852ff6522eb7"
+    },
+    ".worktrees/ci-teal-check/docs/features/diagrams/04-longitudinal-boxplot-statistics.html": {
+      "checksum": "70cf7f5083302b67788c5da37da2d52c"
+    },
+    ".worktrees/ci-teal-check/docs/features/diagrams/05-fixed-free-y-scales.html": {
+      "checksum": "c5760138888110f8722ac2f8a2b676bc"
+    },
+    ".worktrees/ci-teal-check/docs/features/diagrams/06-script-generation-execution.html": {
+      "checksum": "899cf14ce0fe5c5dcb264f6b91de2ff5"
+    },
+    ".worktrees/ci-teal-check/docs/features/diagrams/07-verification-revision-evidence.html": {
+      "checksum": "0a396b8c24190beecf6398609df99d6a"
+    },
+    ".worktrees/ci-teal-check/docs/features/diagrams/08-reproducing-retained-results.html": {
+      "checksum": "778e8c372fc7ba31a183658dedc6d079"
+    },
+    ".worktrees/ci-teal-check/docs/features/diagrams/09-human-review-decisions.html": {
+      "checksum": "530c06444cfa07c1a272a862fca89e17"
+    },
+    ".worktrees/ci-teal-check/docs/features/diagrams/10-correction-revision-traceability.html": {
+      "checksum": "121297d75fabb941eddc18c2b4474740"
+    },
+    ".worktrees/ci-teal-check/docs/features/diagrams/11-controlled-export.html": {
+      "checksum": "278a40840b7921f0cc1309993d56a820"
+    },
+    ".worktrees/ci-teal-check/docs/features/diagrams/12-integrity-lifecycle-backup.html": {
+      "checksum": "a02c0baa6ee33e0d633effd272736f61"
+    },
+    ".worktrees/ci-teal-check/docs/features/README.md": {
+      "checksum": "b09c890ef535202fdc4c2da8df0fa6e3"
+    },
+    ".worktrees/ci-teal-check/docs/features/verification.md": {
+      "checksum": "92ebd041bd1cd6d9e99202bffebb27ed"
+    },
+    ".worktrees/ci-teal-check/docs/ideation/2026-09-05-adamviz-submissionsync-validation-ready-product-ideation.md": {
+      "checksum": "da0392658a2b22f1d1602d4ae0cbf13e"
+    },
+    ".worktrees/ci-teal-check/docs/implementation-readiness-report.md": {
+      "checksum": "9ba0d27763135193007cd1dcbf282cf9"
+    },
+    ".worktrees/ci-teal-check/docs/plans/2026-09-06-0014-feat-plot-pattern-assurance-cell-plan.md": {
+      "checksum": "fc82519148c1a692904087490e55e28a"
+    },
+    ".worktrees/ci-teal-check/docs/plans/2026-10-11-2327-fix-repository-audit-findings-plan.md": {
+      "checksum": "3160b59f9a5eb14d1f7032ef51653291"
+    },
+    ".worktrees/ci-teal-check/docs/plans/2026-10-13-2208-ci-check-workflow-plan.md": {
+      "checksum": "a64c6d0988800e3a9cc5619a7bbe3251"
+    },
+    ".worktrees/ci-teal-check/docs/plans/diagrams/first-poc-revision-lifecycle.svg": {
+      "checksum": "86c9f8852d2a31324b144e19155fa682"
+    },
+    ".worktrees/ci-teal-check/docs/plans/diagrams/first-poc-workflow.svg": {
+      "checksum": "3fdb7f11b0f2a5ec7ed0d5a208a8d170"
+    },
+    ".worktrees/ci-teal-check/docs/plans/Exec-plan/active/README.md": {
+      "checksum": "e6f4b78a17529f85875f5bd8ba7e656d"
+    },
+    ".worktrees/ci-teal-check/docs/plans/Exec-plan/completed/README.md": {
+      "checksum": "04498e16d012a41d674ceca6b64556df"
+    },
+    ".worktrees/ci-teal-check/docs/plans/Exec-plan/README.md": {
+      "checksum": "9b1e534c046820a154a5d1609fe862b8"
+    },
+    ".worktrees/ci-teal-check/docs/plans/Exec-plan/tech-debt-tracker.md": {
+      "checksum": "e34e333a69bfe51d478db852c15ab411"
+    },
+    ".worktrees/ci-teal-check/docs/product/product-contract.md": {
+      "checksum": "f31ae97c5b2d256abb60cf16756aecb9"
+    },
+    ".worktrees/ci-teal-check/docs/product/STRATEGY.md": {
+      "checksum": "bc806bd65a52ed4d1389df3875b70282"
+    },
+    ".worktrees/ci-teal-check/docs/references/assets/study-summary-flow.svg": {
+      "checksum": "4da015dc07a3e9cfbfa4b6824a2905c3"
+    },
+    ".worktrees/ci-teal-check/docs/references/gxp-coding-agent-guidance.md": {
+      "checksum": "48d0b084486fae64d930fb7f266155e1"
+    },
+    ".worktrees/ci-teal-check/docs/solutions/collapsible-panel-pattern.md": {
+      "checksum": "4d40e8159690de65912b7d2a49555047"
+    },
+    ".worktrees/ci-teal-check/docs/solutions/data-profile-side-drawer.md": {
+      "checksum": "30098cc7ddbd3782bf073cced95cb6da"
+    },
+    ".worktrees/ci-teal-check/docs/solutions/design-patterns/task-first-clinical-plot-workbench.md": {
+      "checksum": "6bcadc8cce14687fd0c22aeedfd87149"
+    },
+    ".worktrees/ci-teal-check/docs/solutions/draft-status-badge.md": {
+      "checksum": "7b9307e08244fab527759f8afda547db"
+    },
+    ".worktrees/ci-teal-check/docs/solutions/four-step-wizard-flow.md": {
+      "checksum": "d12f19cd8289a33ef340b2e5a3642192"
+    },
+    ".worktrees/ci-teal-check/docs/ux/F001-plot-generation-prototype.html": {
+      "checksum": "7d48c848d1c9a182a788bd375052dce9"
+    },
+    ".worktrees/ci-teal-check/docs/ux/F001-plot-generation.md": {
+      "checksum": "004f1bf10d72220bcca417476415931b"
+    },
+    ".worktrees/ci-teal-check/docs/validation/data-flow-threat-model.md": {
+      "checksum": "e7a204eee9b9901a8a6c73c65ffa412f"
+    },
+    ".worktrees/ci-teal-check/docs/validation/evidence-retention.md": {
+      "checksum": "4eb6b72aa4f4d793bbfa551dbfc2b75b"
+    },
+    ".worktrees/ci-teal-check/docs/validation/risk-assessment.md": {
+      "checksum": "b9a63ed9cb1a6604670abb80ccb0b579"
+    },
+    ".worktrees/ci-teal-check/docs/validation/target-environment-protocol.md": {
+      "checksum": "83b6db77e2b89f2e6fe69fc0a730ae15"
+    },
+    ".worktrees/ci-teal-check/docs/validation/test-evidence.md": {
+      "checksum": "ee4cce11eb2c0f599936715beff29e99"
+    },
+    ".worktrees/ci-teal-check/docs/validation/traceability-matrix.md": {
+      "checksum": "c52e992fa1d2e257906c1e895577b91f"
+    },
+    ".worktrees/ci-teal-check/inst/.codexignore": {
+      "checksum": "bdf98d3ee995f058ffc56e3ca3db4335"
+    },
+    ".worktrees/ci-teal-check/inst/app/www/app.css": {
+      "checksum": "574b8ce855bfa0ad58130f0b79de2873"
+    },
+    ".worktrees/ci-teal-check/inst/app/www/favicon.ico": {
+      "checksum": "81560d1b906a530c87fa0acbb2f5cca4"
+    },
+    ".worktrees/ci-teal-check/inst/app/www/wireframe.png": {
+      "checksum": "a9e56c8a693286739673f71bbb6fed35"
+    },
+    ".worktrees/ci-teal-check/inst/extdata/synthetic/adlb-bad-visit-mapping.rds": {
+      "checksum": "fd7a5218395c1e7f71049a539674785a"
+    },
+    ".worktrees/ci-teal-check/inst/extdata/synthetic/adlb-duplicate-keys.rds": {
+      "checksum": "a1b27c24aba13bacb4c480620b681e30"
+    },
+    ".worktrees/ci-teal-check/inst/extdata/synthetic/adlb-empty-combination.rds": {
+      "checksum": "d0e2b71056a73f9a13a885f27427c1a4"
+    },
+    ".worktrees/ci-teal-check/inst/extdata/synthetic/adlb-empty-treatment.rds": {
+      "checksum": "e7d54950d63021600074b542148a6aa2"
+    },
+    ".worktrees/ci-teal-check/inst/extdata/synthetic/adlb-exclusions.rds": {
+      "checksum": "281bb817182fb78a7574e5e8d40bd5fb"
+    },
+    ".worktrees/ci-teal-check/inst/extdata/synthetic/adlb-extra-timepoint-keys.rds": {
+      "checksum": "3c762cbb9bd52b3711bbbd9d2cc1fce1"
+    },
+    ".worktrees/ci-teal-check/inst/extdata/synthetic/adlb-identifier-canary.rds": {
+      "checksum": "5975acf341101d00e7b947cc70334cbe"
+    },
+    ".worktrees/ci-teal-check/inst/extdata/synthetic/adlb-multiple-units.rds": {
+      "checksum": "ddf84feda1aead891f6621842cf4cbdf"
+    },
+    ".worktrees/ci-teal-check/inst/extdata/synthetic/adlb-sparse-missing.rds": {
+      "checksum": "2f7e004a1945d010986b9638b10f6a56"
+    },
+    ".worktrees/ci-teal-check/inst/extdata/synthetic/adlb-standard.csv": {
+      "checksum": "e312e8d277a9afab3250e0a93b796dc5"
+    },
+    ".worktrees/ci-teal-check/inst/extdata/synthetic/adlb-standard.rds": {
+      "checksum": "cc852e7ef59bf2ea7bd094f5ff626fb1"
+    },
+    ".worktrees/ci-teal-check/inst/extdata/synthetic/scenario-manifest.json": {
+      "checksum": "b0f2f4dc15890b0032524e437fc32dfe"
+    },
+    ".worktrees/ci-teal-check/inst/golem-config.yml": {
+      "checksum": "025945bf77e9c7e8e0c6e654b0e687d6"
+    },
+    ".worktrees/ci-teal-check/inst/schema/execution-request-v1.json": {
+      "checksum": "d1fa447495c193876bb58977591afd85"
+    },
+    ".worktrees/ci-teal-check/inst/schema/execution-result-v1.json": {
+      "checksum": "b452aa2ac8fa41a69078eed9d1e890ef"
+    },
+    ".worktrees/ci-teal-check/inst/schema/plot-spec-v1.json": {
+      "checksum": "c7bfd6614106452d9bd65b6a75434a63"
+    },
+    ".worktrees/ci-teal-check/inst/sql/migrations/001-initial.sql": {
+      "checksum": "626ed602fe03448504eaa5509aa1b1e2"
+    },
+    ".worktrees/ci-teal-check/inst/sql/migrations/002-pending-revision-hashes.sql": {
+      "checksum": "0dc473369717472abbcad09c19854549"
+    },
+    ".worktrees/ci-teal-check/inst/sql/schema.sql": {
+      "checksum": "76a0665385f0743416749b5dda39e37d"
+    },
+    ".worktrees/ci-teal-check/inst/WORDLIST": {
+      "checksum": "33b8c1a06ac1f15e69dc3f8f27948b47"
+    },
+    ".worktrees/ci-teal-check/LICENSE": {
+      "checksum": "7ab0314d49df2737ff838c435751d586"
+    },
+    ".worktrees/ci-teal-check/lint_output.txt": {
+      "checksum": "ecb26be93943b41dcdbe400c431ccd87"
+    },
+    ".worktrees/ci-teal-check/man/assemble_boxplot.Rd": {
+      "checksum": "e287cb0844cfa3444fcf507f7dacaf4c"
+    },
+    ".worktrees/ci-teal-check/man/build_prompt_context.Rd": {
+      "checksum": "fdf358ec3dbfb9c755e2ae673ba1fd13"
+    },
+    ".worktrees/ci-teal-check/man/calculate_boxplot_statistics.Rd": {
+      "checksum": "9f093727db2477da5c50b377a1d09f71"
+    },
+    ".worktrees/ci-teal-check/man/compile_boxplot_script.Rd": {
+      "checksum": "dd5e8c2f4cfddc99463720f651d2d5cf"
+    },
+    ".worktrees/ci-teal-check/man/ellmer_prompt_interpreter.Rd": {
+      "checksum": "2e37bd711bdfbd28c30a738e0a7b3e47"
+    },
+    ".worktrees/ci-teal-check/man/interpret_prompt.Rd": {
+      "checksum": "33dc0c722c69ff7c975280b06aaa9f5c"
+    },
+    ".worktrees/ci-teal-check/man/list_study_catalog.Rd": {
+      "checksum": "e7dd98d04ddb459fe593d327ba3b0e65"
+    },
+    ".worktrees/ci-teal-check/man/load_synthetic_scenario.Rd": {
+      "checksum": "c2cc5a50c90727605b4391dbfcc743ec"
+    },
+    ".worktrees/ci-teal-check/man/local_study_data_provider.Rd": {
+      "checksum": "993c995c0255c461626bf84875348233"
+    },
+    ".worktrees/ci-teal-check/man/mock_prompt_interpreter.Rd": {
+      "checksum": "f3642a1a3c710f4fa31f4df7beae8971"
+    },
+    ".worktrees/ci-teal-check/man/new_artifact_manifest.Rd": {
+      "checksum": "41c8795ec2c6f4a067a86a8db895028f"
+    },
+    ".worktrees/ci-teal-check/man/new_runtime_config.Rd": {
+      "checksum": "5e847f4f969970377d493b51c1a04a2a"
+    },
+    ".worktrees/ci-teal-check/man/pin_study_snapshot.Rd": {
+      "checksum": "4b85efd5f0f5cf28cec639470e82b5d2"
+    },
+    ".worktrees/ci-teal-check/man/resolve_runtime_secret.Rd": {
+      "checksum": "00426ee8b43fec7998325e67c911347b"
+    },
+    ".worktrees/ci-teal-check/man/run_app.Rd": {
+      "checksum": "d4220d24242b91c84974f9314c168899"
+    },
+    ".worktrees/ci-teal-check/man/study_data_content_hash.Rd": {
+      "checksum": "3453951fe1c229ee2f9a81cf39a7d664"
+    },
+    ".worktrees/ci-teal-check/man/synthetic_scenario_manifest.Rd": {
+      "checksum": "921ace3bc01af1c7122e8fae1f94f12d"
+    },
+    ".worktrees/ci-teal-check/man/validate_bds_profile.Rd": {
+      "checksum": "a3075e7245a0b84141b6aabe001ca130"
+    },
+    ".worktrees/ci-teal-check/NAMESPACE": {
+      "checksum": "8536d7aeae95f923e91232547d08e284"
+    },
+    ".worktrees/ci-teal-check/NEWS.md": {
+      "checksum": "a0b8c00d20848866a48f7d1bc4a81d40"
+    },
+    ".worktrees/ci-teal-check/R/_disable_autoload.R": {
+      "checksum": "9d8f7f20e88b559c046ec1f59fe82cba"
+    },
+    ".worktrees/ci-teal-check/R/aaa-globals.R": {
+      "checksum": "6fd9e4852f08a1034d8538d5d50c94d0"
+    },
+    ".worktrees/ci-teal-check/R/AGENTS.md": {
+      "checksum": "6628c73af3d64005e0840eeee8705206"
+    },
+    ".worktrees/ci-teal-check/R/app_config.R": {
+      "checksum": "e911d386ae9f33c9851d5b2a28db8eba"
+    },
+    ".worktrees/ci-teal-check/R/app_server.R": {
+      "checksum": "12118e89e67e0f46d1a110a812bec19e"
+    },
+    ".worktrees/ci-teal-check/R/app_theme.R": {
+      "checksum": "65533aff0a50884f65454bac4b7501d2"
+    },
+    ".worktrees/ci-teal-check/R/app_ui.R": {
+      "checksum": "b6ff933a1119864d3572226ffab5e15a"
+    },
+    ".worktrees/ci-teal-check/R/artifact_manifest.R": {
+      "checksum": "b9c7c9b75527390cd75e013bf4b87598"
+    },
+    ".worktrees/ci-teal-check/R/artifact_store.R": {
+      "checksum": "3165130967aacebf6b01a8603b1c63e5"
+    },
+    ".worktrees/ci-teal-check/R/artifact_store_local.R": {
+      "checksum": "d9b27b3681b2d12a52cf39b9614448a1"
+    },
+    ".worktrees/ci-teal-check/R/attempt_reconciliation.R": {
+      "checksum": "daac44e483b84a5135aa45fc14c1c2de"
+    },
+    ".worktrees/ci-teal-check/R/authorization_service.R": {
+      "checksum": "757f2bcce4c08e56a468b3850198f7ef"
+    },
+    ".worktrees/ci-teal-check/R/bds_profile.R": {
+      "checksum": "90753c5f3ebd9b83a8426400b7bb4cae"
+    },
+    ".worktrees/ci-teal-check/R/boxplot_assembly.R": {
+      "checksum": "59eaeec76394e9deb747550d86be43b1"
+    },
+    ".worktrees/ci-teal-check/R/boxplot_compiler.R": {
+      "checksum": "8ae77b5e6e9e1e478ce19286adcc4f39"
+    },
+    ".worktrees/ci-teal-check/R/boxplot_standalone.R": {
+      "checksum": "860342a4bd85775a927d34a5df19af5c"
+    },
+    ".worktrees/ci-teal-check/R/boxplot_statistics.R": {
+      "checksum": "c0685a561f4ad55b50ae5db0cfdf2ab5"
+    },
+    ".worktrees/ci-teal-check/R/canonical_serialization.R": {
+      "checksum": "a9d134b3b032350699f461ffaf2fed5f"
+    },
+    ".worktrees/ci-teal-check/R/domain_execution_protocol.R": {
+      "checksum": "da83b679fce84cde008656613338bd0c"
+    },
+    ".worktrees/ci-teal-check/R/domain_plot_spec.R": {
+      "checksum": "0a9bc0afd9961eb5ab5229fdd3e4f82d"
+    },
+    ".worktrees/ci-teal-check/R/domain_revision.R": {
+      "checksum": "20d5362358ad5e7464f9825aa8831e32"
+    },
+    ".worktrees/ci-teal-check/R/domain_status.R": {
+      "checksum": "9a77d55a3ec1d406a1fc1a69c6c721e1"
+    },
+    ".worktrees/ci-teal-check/R/evidence_repository.R": {
+      "checksum": "b21affe2cd74fd256c460ce1da31769e"
+    },
+    ".worktrees/ci-teal-check/R/evidence_repository_sqlite.R": {
+      "checksum": "abd6bfb4f1ca27d7b8c9c2246894aa8f"
+    },
+    ".worktrees/ci-teal-check/R/execution_runner.R": {
+      "checksum": "391750e71400dc61c405b99e08c7cf1f"
+    },
+    ".worktrees/ci-teal-check/R/execution_runner_callr.R": {
+      "checksum": "deebe6f6402cc2d6ed06c1f136fda2f0"
+    },
+    ".worktrees/ci-teal-check/R/execution_service.R": {
+      "checksum": "2dd8c1cf93216f9272e1e343d404cc1f"
+    },
+    ".worktrees/ci-teal-check/R/export_reconciliation.R": {
+      "checksum": "5795e198efdb4fec17bfc012820d3d45"
+    },
+    ".worktrees/ci-teal-check/R/export_service.R": {
+      "checksum": "d108ebebc0a32334c4a302dc8c079b7c"
+    },
+    ".worktrees/ci-teal-check/R/lifecycle_service.R": {
+      "checksum": "551806b269723d6a8e350fee115bbd44"
+    },
+    ".worktrees/ci-teal-check/R/limits_policy.R": {
+      "checksum": "9f3c233c5c77fe5092f725108be359d2"
+    },
+    ".worktrees/ci-teal-check/R/mod_evidence.R": {
+      "checksum": "df1dcebf59e61287f4f4f238f0a4a9a5"
+    },
+    ".worktrees/ci-teal-check/R/mod_export.R": {
+      "checksum": "68dba89a15ee106f845fc5a829875047"
+    },
+    ".worktrees/ci-teal-check/R/mod_plot_generation.R": {
+      "checksum": "5d4f95d242151ad5551d7283bd50225e"
+    },
+    ".worktrees/ci-teal-check/R/mod_plot_preview.R": {
+      "checksum": "ab5c6788ea9f3684a9248c1860e8d63b"
+    },
+    ".worktrees/ci-teal-check/R/mod_prompt.R": {
+      "checksum": "2bcfd32aad20982f9009cac620d69f80"
+    },
+    ".worktrees/ci-teal-check/R/mod_review.R": {
+      "checksum": "93852afc37a75c8952989c1fe77770e2"
+    },
+    ".worktrees/ci-teal-check/R/mod_revision_history.R": {
+      "checksum": "944642d38013596ee1db3b4e2f0ec5b6"
+    },
+    ".worktrees/ci-teal-check/R/mod_run_status.R": {
+      "checksum": "76281981138260879721711273b26197"
+    },
+    ".worktrees/ci-teal-check/R/mod_specification.R": {
+      "checksum": "d4412e069eba9078844010745d228b3d"
+    },
+    ".worktrees/ci-teal-check/R/ports.R": {
+      "checksum": "c7b149f2b569ce371fecc0248b35ff44"
+    },
+    ".worktrees/ci-teal-check/R/prompt_context.R": {
+      "checksum": "f53e1317ccd8076a696cbac46e53d7d5"
+    },
+    ".worktrees/ci-teal-check/R/prompt_context_policy.R": {
+      "checksum": "4ae1271b632289c941db97f8624ac2ac"
+    },
+    ".worktrees/ci-teal-check/R/prompt_interpreter.R": {
+      "checksum": "d7f1827933b67f21a62bb5d326af53f7"
+    },
+    ".worktrees/ci-teal-check/R/prompt_interpreter_ellmer.R": {
+      "checksum": "eeaa88c886a793c0850398f9a5b174ff"
+    },
+    ".worktrees/ci-teal-check/R/prompt_interpreter_mock.R": {
+      "checksum": "1eb1bb419a7ae284117d761416af9378"
+    },
+    ".worktrees/ci-teal-check/R/provider_identity.R": {
+      "checksum": "830e87b46937fc629b9699a09b07721a"
+    },
+    ".worktrees/ci-teal-check/R/provider_identity_local.R": {
+      "checksum": "a21fb360158231628b751bc98c20248e"
+    },
+    ".worktrees/ci-teal-check/R/provider_runtime_config.R": {
+      "checksum": "8bc718bc1bfdc567558861d172359dbb"
+    },
+    ".worktrees/ci-teal-check/R/provider_study_data.R": {
+      "checksum": "ce033b097e7aa867669b6c7959ea85b3"
+    },
+    ".worktrees/ci-teal-check/R/provider_study_data_local.R": {
+      "checksum": "76c523c598403b03481eca3e5a880057"
+    },
+    ".worktrees/ci-teal-check/R/provider_workspace.R": {
+      "checksum": "ceab664a82f3412440fc196ac261f8c8"
+    },
+    ".worktrees/ci-teal-check/R/provider_workspace_local.R": {
+      "checksum": "c0d4c800348effd4e3c8ed1c81fb8266"
+    },
+    ".worktrees/ci-teal-check/R/reproducibility_service.R": {
+      "checksum": "1d83043c860d3f826ec1a59d7b113f5f"
+    },
+    ".worktrees/ci-teal-check/R/review_service.R": {
+      "checksum": "cba9e98830c6963f87b2ee32d64d4f05"
+    },
+    ".worktrees/ci-teal-check/R/revision_evidence.R": {
+      "checksum": "1bbc1d9bd5744a5fa668ee4973c077a6"
+    },
+    ".worktrees/ci-teal-check/R/run_app.R": {
+      "checksum": "b8c6b9eb7597af70b87bba87477c29bb"
+    },
+    ".worktrees/ci-teal-check/R/synthetic_scenarios.R": {
+      "checksum": "ccd82c7777cafcf151959cbe39a40b54"
+    },
+    ".worktrees/ci-teal-check/R/verification_service.R": {
+      "checksum": "c08329bba0922a67698ff4ccd7581686"
+    },
+    ".worktrees/ci-teal-check/README.md": {
+      "checksum": "c5df8e7ff83d3fd90a864a97b686515f"
+    },
+    ".worktrees/ci-teal-check/renv.lock": {
+      "checksum": "d94da50b19f753afeb2d0ad573fd43ce"
+    },
+    ".worktrees/ci-teal-check/tests/_covrpage.Rmd": {
+      "checksum": "927fff3407760fd543d311f58545afc5"
+    },
+    ".worktrees/ci-teal-check/tests/AGENTS.md": {
+      "checksum": "2ea79ad6ec582fa47484ac76334d2785"
+    },
+    ".worktrees/ci-teal-check/tests/testthat.R": {
+      "checksum": "b1befc9dd8dc923d84768212b713f766"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/_snaps/authorization-service.md": {
+      "checksum": "62e078650f73f84c34cc0fc118b3a846"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/_snaps/domain-plot-spec.md": {
+      "checksum": "1edd7242a93177ebfa8ec97b75ca3352"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/_snaps/domain-status.md": {
+      "checksum": "77f2b76f7ca4d8884851ba003c35d36c"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/_snaps/limits-policy.md": {
+      "checksum": "6e5053cee36049d9fff6d50a855e37b7"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/_snaps/prompt-context-policy.md": {
+      "checksum": "31c6d7c2a1871466164f8f9997f1a732"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/_snaps/runtime-config.md": {
+      "checksum": "4dee56d961d261a84c266db8ea78fe56"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/fixtures/expected-boxplot-statistics.csv": {
+      "checksum": "c7d4294cc68e7aa044d66311af4d9ae8"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/helper-app-browser.R": {
+      "checksum": "0674cfbc67a908549215bddec743231c"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/helper-execution.R": {
+      "checksum": "ff44952ce3943ddd38bf8e6b9b596996"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/helper-governed-revision.R": {
+      "checksum": "9cdf14fb183633c412e01b560625cfdb"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/helper-synthetic-bds.R": {
+      "checksum": "d1df1828d35c2705697699b6ce540330"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-app-browser.R": {
+      "checksum": "b9dbdd09043229cec02f5fe416d8f660"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-app-export-browser.R": {
+      "checksum": "c5727740b8ddb5aebd77e75e64c08ddb"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-app-server-correction.R": {
+      "checksum": "d43ddc25c176d7a646a20d5b2d7f8284"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-app-smoke.R": {
+      "checksum": "e7be3477563316becf4ba10d668c6fa0"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-artifact-store-contract.R": {
+      "checksum": "9f9e669b0264bf9bcf43d09038718fe4"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-attempt-reconciliation.R": {
+      "checksum": "a15cb0d5aab3c06184b7c16fb74d6180"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-authorization-service.R": {
+      "checksum": "4b5e491c753070d473d409d32b555962"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-backup-restore.R": {
+      "checksum": "5dc1071ebda14d243fe1d87bc74a35b3"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-bds-profile.R": {
+      "checksum": "891fc39068799c65cfb86313d9ffa239"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-boxplot-assembly.R": {
+      "checksum": "d5338b253c11ce2e6aecef52ef8cb622"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-boxplot-compiler.R": {
+      "checksum": "cb88ab15d08681191f89f745c5ce3072"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-boxplot-statistics.R": {
+      "checksum": "ce3c53b8eed94c7b5b6ea160f8b4bfb8"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-domain-execution-protocol.R": {
+      "checksum": "7140690cf67678997b73a0cbd8ee0994"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-domain-plot-spec.R": {
+      "checksum": "98aa8ec2093c87a767e29ac768e6acfd"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-domain-status.R": {
+      "checksum": "96b743dec5df11c6933b835d5ff23383"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-evidence-repository-contract.R": {
+      "checksum": "ba3d3c49c83cd21f38ca62faf26d008c"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-evidence-repository-sqlite.R": {
+      "checksum": "c03050f72ac0b741852da669935b7b4d"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-execution-runner-callr.R": {
+      "checksum": "502b6bfd0e6242cb100b10d3e941700c"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-execution-runner-contract.R": {
+      "checksum": "bddfaddd682a42b07223aa4956dfa23f"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-execution-service.R": {
+      "checksum": "cc666b38cdb2036199e105a4b0ca0e79"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-export-reconciliation.R": {
+      "checksum": "b27ed7fc255b810534a0a1ecbb44a2d9"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-export-service.R": {
+      "checksum": "fc5a81afd5510d169b4940d6bbb3611f"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-lifecycle-service.R": {
+      "checksum": "cfb4372b216d8243aade0f7b3b061452"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-limits-policy.R": {
+      "checksum": "e9134073d5595350b5aec14d160f9228"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-mod-export.R": {
+      "checksum": "8021ae610959ccfe9454d2517357ec9d"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-mod-plot-generation.R": {
+      "checksum": "a476b4fecda45c7395f15977343bd44d"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-mod-plot-preview.R": {
+      "checksum": "bf66b0c5e29c3f370eecec65e753951a"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-mod-prompt.R": {
+      "checksum": "75526f81d2b63de656f2b9b2c4b183af"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-mod-review.R": {
+      "checksum": "49ba549962b01de6cd877c7f09fa49b2"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-mod-revision-history.R": {
+      "checksum": "7ba21f8c59095148f7207803a80a73f8"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-mod-specification.R": {
+      "checksum": "da2803f6a633fd47f6f55e83e3de89f6"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-prompt-context-policy.R": {
+      "checksum": "50966956cc677c343e01673cf6474a43"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-prompt-context.R": {
+      "checksum": "0e957637185ab87e5d3cdfbdf472ef56"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-prompt-interpreter-contract.R": {
+      "checksum": "0ece7535b2cf5ed4f5d6fd703008b5fc"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-prompt-interpreter-mock.R": {
+      "checksum": "7bf0e29bfaa8f817da767d6d09d08d11"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-provider-contracts.R": {
+      "checksum": "70bc850d330194886d2c9dec3342fa4c"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-provider-study-data.R": {
+      "checksum": "cbe375d87e3a0560c92ef2af4c7054a5"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-provider-workspace-contract.R": {
+      "checksum": "f93e84e91058966822e00b8c7e38c6c5"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-review-service.R": {
+      "checksum": "b49ca2b7a6fb55c48b98e235b158b034"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-revision-evidence.R": {
+      "checksum": "66f7ca1816bb2d64275636c310cbfafd"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-runtime-config.R": {
+      "checksum": "123cd4c278aa8651f016cf6f055dbbac"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-synthetic-scenarios.R": {
+      "checksum": "3380b2790620a5319816d473eb97914a"
+    },
+    ".worktrees/ci-teal-check/tests/testthat/test-verification-service.R": {
+      "checksum": "16678ebc67eda4358cc749ce4970afb3"
+    },
+    ".worktrees/ci-teal-check/vignettes/ADaMViz.SubmissionSync.Rmd": {
+      "checksum": "566a9c0722250b33d34a9234a8ab4d83"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/01-uploads-snapshots-input-identity.Rmd": {
+      "checksum": "64df6eeae183e4516a0e0f61d13302a6"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/02-bds-profiling-eligibility.Rmd": {
+      "checksum": "3a6ed0c9c0396e15a06d31d30d4d8d78"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/03-confirming-analysis-selections.Rmd": {
+      "checksum": "d11ad733da1aff309ed6168819551219"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/04-longitudinal-boxplot-statistics.Rmd": {
+      "checksum": "32f86076bbff1eb83153784426b992ed"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/05-fixed-free-y-scales.Rmd": {
+      "checksum": "263322ff4fb601d9fb345eb7b4773dd2"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/06-script-generation-execution.Rmd": {
+      "checksum": "40f7537a62daf2fe620a040ba420c0fe"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/07-verification-revision-evidence.Rmd": {
+      "checksum": "5a05e9454c96113a49d8debe678e89a3"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/08-reproducing-retained-results.Rmd": {
+      "checksum": "5b81d89f53b4d9303fbd43d24fdb247e"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/09-human-review-decisions.Rmd": {
+      "checksum": "a04fe35359e707c4b16576d317e39d9c"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/10-correction-revision-traceability.Rmd": {
+      "checksum": "b1a94a9ff0e3e74b016b3b7166de6f59"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/11-controlled-export.Rmd": {
+      "checksum": "c6fd98b75637520390a85ba585b6d977"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/12-integrity-lifecycle-backup.Rmd": {
+      "checksum": "57aa2a6aad7e3a46b2d12d364606e1d0"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/01-uploads-snapshots-input-identity.html": {
+      "checksum": "54dbc31f78a8dbc395d52e467660adbc"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/01-uploads-snapshots-input-identity.png": {
+      "checksum": "d39f5d4eebf56c87dfb442f82ba3aeb5"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/02-bds-profiling-eligibility.html": {
+      "checksum": "1170ca1ec62b349c806bc3dd85f54e7d"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/02-bds-profiling-eligibility.png": {
+      "checksum": "41255c21e79da4a1adef8293a9b595dd"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/03-confirming-analysis-selections.html": {
+      "checksum": "941e8c03e228362006eb852ff6522eb7"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/03-confirming-analysis-selections.png": {
+      "checksum": "72edc9c7503464f8e30416100d04a2c3"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/04-longitudinal-boxplot-statistics.html": {
+      "checksum": "70cf7f5083302b67788c5da37da2d52c"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/04-longitudinal-boxplot-statistics.png": {
+      "checksum": "12f59fe977b4c5d4606788fedeb22fd2"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/05-fixed-free-y-scales.html": {
+      "checksum": "c5760138888110f8722ac2f8a2b676bc"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/05-fixed-free-y-scales.png": {
+      "checksum": "db71ce07baf7f1142ce39e3318fd00fd"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/06-script-generation-execution.html": {
+      "checksum": "899cf14ce0fe5c5dcb264f6b91de2ff5"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/06-script-generation-execution.png": {
+      "checksum": "5a5ba26c560ade1ec4674149477b19bf"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/07-verification-revision-evidence.html": {
+      "checksum": "0a396b8c24190beecf6398609df99d6a"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/07-verification-revision-evidence.png": {
+      "checksum": "b128f9edfc0adbbbdebfb8ffdd2a855d"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/08-reproducing-retained-results.html": {
+      "checksum": "778e8c372fc7ba31a183658dedc6d079"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/08-reproducing-retained-results.png": {
+      "checksum": "9779cac7ca62533acb6fef6c41362729"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/09-human-review-decisions.html": {
+      "checksum": "530c06444cfa07c1a272a862fca89e17"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/09-human-review-decisions.png": {
+      "checksum": "c061ac904bdaf9bd000dbec96f646e32"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/10-correction-revision-traceability.html": {
+      "checksum": "121297d75fabb941eddc18c2b4474740"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/10-correction-revision-traceability.png": {
+      "checksum": "77694282521f18506e491e646bd61bcd"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/11-controlled-export.html": {
+      "checksum": "278a40840b7921f0cc1309993d56a820"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/11-controlled-export.png": {
+      "checksum": "caac28dacdd615dbe854d39dfc9707d4"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/12-integrity-lifecycle-backup.html": {
+      "checksum": "a02c0baa6ee33e0d633effd272736f61"
+    },
+    ".worktrees/ci-teal-check/vignettes/articles/diagrams/12-integrity-lifecycle-backup.png": {
+      "checksum": "f858c5aa6209ac173cae6a6e51b2a14b"
+    },
+    "_pkgdown.yml": {
+      "checksum": "aad72793ff6cf4d6a3986e94d86667c0"
     },
     "AGENTS.md": {
-      "checksum": "2b9ef04dc1a258fae4afb9e1f5c26ee2"
+      "checksum": "5e21f1bb290d576b905fcf0dcf6da3e3"
     },
     "app.R": {
-      "checksum": "6ab6fd00b6f8165cd203606abfad64d5"
+      "checksum": "1f344fc2641058da48682ece16e496dc"
     },
-    "inst/app/www/wireframe.png": {
-      "checksum": "a9e56c8a693286739673f71bbb6fed35"
+    "ARCHITECTURE.md": {
+      "checksum": "7a0edcd36ff41828d99c28e89f4a29bd"
     },
     "codecov.yml": {
       "checksum": "e20df979617a9f8c55da8b1506da4078"
@@ -5189,10 +6144,10 @@
       "checksum": "f543d20eff1ef7172f4d9b4da57fe885"
     },
     "CONCEPTS.md": {
-      "checksum": "7210c35548c10f01442481c00316305f"
+      "checksum": "7f8ffc24170a7261f802bbef168860ce"
     },
     "DESCRIPTION": {
-      "checksum": "24db34e93e88604fb2b03565804e3a86"
+      "checksum": "ffc42c05279bb18c6340cb4d10d66ce9"
     },
     "dev/01_start.R": {
       "checksum": "c6b8cef7e3dbbc55a06d784e01eeef5e"
@@ -5206,8 +6161,62 @@
     "dev/run_dev.R": {
       "checksum": "e16497b4e7787e5fd1495f9e1aa81182"
     },
+    "docs/architecture/container-view.html": {
+      "checksum": "7e354b0dcd8fbb2be3585827d5ee4046"
+    },
+    "docs/architecture/governed-flow.html": {
+      "checksum": "bedc0378afb1b9073c7846105d7f927a"
+    },
+    "docs/architecture/system-context.html": {
+      "checksum": "78e25b6c2e258185d14b65a6885849ca"
+    },
     "docs/explainers/2026-09-06-how-the-plot-pattern-assurance-cell-works.md": {
-      "checksum": "a2f62df15ec8b330e48a46e68a4b40cf"
+      "checksum": "bf953f5734cf31e6ba9d96658f685aa5"
+    },
+    "docs/explainers/2026-10-05-trusted-mini-agents-implementation.html": {
+      "checksum": "cabe4bd355f434712ced2eec8660c245"
+    },
+    "docs/explainers/2026-10-05-trusted-mini-agents-implementation.md": {
+      "checksum": "aa435d2e892f7589e0bdd33900a017e6"
+    },
+    "docs/explainers/2026-10-05-trusted-mini-agents-implementation_files/libs/bootstrap/bootstrap-527a29cc8f375b86ac8beb45432ed94e.min.css": {
+      "checksum": "527a29cc8f375b86ac8beb45432ed94e"
+    },
+    "docs/explainers/2026-10-05-trusted-mini-agents-implementation_files/libs/bootstrap/bootstrap-icons.css": {
+      "checksum": "2318f137d201fbf51601fa0faba6bef7"
+    },
+    "docs/explainers/2026-10-05-trusted-mini-agents-implementation_files/libs/bootstrap/bootstrap-icons.woff": {
+      "checksum": "1a51dfbe5467607389d603c02a77cd10"
+    },
+    "docs/explainers/2026-10-05-trusted-mini-agents-implementation_files/libs/bootstrap/bootstrap.min.js": {
+      "checksum": "e2b09c06f0e714b6144a6788a28e3950"
+    },
+    "docs/explainers/2026-10-05-trusted-mini-agents-implementation_files/libs/clipboard/clipboard.min.js": {
+      "checksum": "15f52a1ee547f2bdd46e56747332ca2d"
+    },
+    "docs/explainers/2026-10-05-trusted-mini-agents-implementation_files/libs/quarto-html/anchor.min.js": {
+      "checksum": "91bcf6cd1fd88fec3f109811e5fc3546"
+    },
+    "docs/explainers/2026-10-05-trusted-mini-agents-implementation_files/libs/quarto-html/axe/axe-check.js": {
+      "checksum": "b4f6a44157bfe20b68b69aabf2f8125d"
+    },
+    "docs/explainers/2026-10-05-trusted-mini-agents-implementation_files/libs/quarto-html/popper.min.js": {
+      "checksum": "3a4a291ccf3f1ea0f82b641542fd3827"
+    },
+    "docs/explainers/2026-10-05-trusted-mini-agents-implementation_files/libs/quarto-html/quarto-syntax-highlighting-09b140d2d032adf2aedb8b099be3ee13.css": {
+      "checksum": "09b140d2d032adf2aedb8b099be3ee13"
+    },
+    "docs/explainers/2026-10-05-trusted-mini-agents-implementation_files/libs/quarto-html/quarto.js": {
+      "checksum": "a65a7780c10232b6515cdfb8beaaa221"
+    },
+    "docs/explainers/2026-10-05-trusted-mini-agents-implementation_files/libs/quarto-html/tabsets/tabsets.js": {
+      "checksum": "e8d6a8862b33ccc461f8fd532e05b365"
+    },
+    "docs/explainers/2026-10-05-trusted-mini-agents-implementation_files/libs/quarto-html/tippy.css": {
+      "checksum": "ebd6f8ce46a677e1a4f5f8a8317109a9"
+    },
+    "docs/explainers/2026-10-05-trusted-mini-agents-implementation_files/libs/quarto-html/tippy.umd.min.js": {
+      "checksum": "d828775275749701b48bd9d958814111"
     },
     "docs/explainers/assets/plot-pattern-assurance-cell/poc-vs-qualified-architecture.svg": {
       "checksum": "7951a3edba61f4f03a228399c636813e"
@@ -5218,6 +6227,90 @@
     "docs/explainers/assets/plot-pattern-assurance-cell/revision-lifecycle.svg": {
       "checksum": "1990ea6809abe61b60f99b17f57ef0ed"
     },
+    "docs/explainers/assets/trusted-mini-agents/trusted-mini-agent-flow.html": {
+      "checksum": "b0f4ca06ad7c6a256470ad17af687f72"
+    },
+    "docs/explainers/assets/trusted-mini-agents/trusted-mini-agent-flow.svg": {
+      "checksum": "79bafec300dc30f54e7d2221d3b099f7"
+    },
+    "docs/features/01-uploads-snapshots-input-identity.md": {
+      "checksum": "03731dafdfd57a76179214e3ba05ce5d"
+    },
+    "docs/features/02-bds-profiling-eligibility.md": {
+      "checksum": "13a8d4b51bcae7698cf747aa5d97a542"
+    },
+    "docs/features/03-confirming-analysis-selections.md": {
+      "checksum": "030c498fda036ca1dbea0a596f459096"
+    },
+    "docs/features/04-longitudinal-boxplot-statistics.md": {
+      "checksum": "92ba2c2656617c2c1ac4729c8d2cb0f7"
+    },
+    "docs/features/05-fixed-free-y-scales.md": {
+      "checksum": "fe430b32c0e00fcbf5e7a4d3005713e9"
+    },
+    "docs/features/06-script-generation-execution.md": {
+      "checksum": "82ff800cc3cd108a03180c152474ed67"
+    },
+    "docs/features/07-verification-revision-evidence.md": {
+      "checksum": "5ed49a044e27f3429dc708889db1ad1f"
+    },
+    "docs/features/08-reproducing-retained-results.md": {
+      "checksum": "0e5d5d95dec2bb86549d9b15336fb79d"
+    },
+    "docs/features/09-human-review-decisions.md": {
+      "checksum": "962b4011f1c706dfb901100c12e5e308"
+    },
+    "docs/features/10-correction-revision-traceability.md": {
+      "checksum": "21254c5c07193d0af0746e6f48882996"
+    },
+    "docs/features/11-controlled-export.md": {
+      "checksum": "b4660438ed47430884852735fc389322"
+    },
+    "docs/features/12-integrity-lifecycle-backup.md": {
+      "checksum": "37e65724e14111ca38852d44232bd6de"
+    },
+    "docs/features/diagrams/01-uploads-snapshots-input-identity.html": {
+      "checksum": "54dbc31f78a8dbc395d52e467660adbc"
+    },
+    "docs/features/diagrams/02-bds-profiling-eligibility.html": {
+      "checksum": "1170ca1ec62b349c806bc3dd85f54e7d"
+    },
+    "docs/features/diagrams/03-confirming-analysis-selections.html": {
+      "checksum": "941e8c03e228362006eb852ff6522eb7"
+    },
+    "docs/features/diagrams/04-longitudinal-boxplot-statistics.html": {
+      "checksum": "70cf7f5083302b67788c5da37da2d52c"
+    },
+    "docs/features/diagrams/05-fixed-free-y-scales.html": {
+      "checksum": "c5760138888110f8722ac2f8a2b676bc"
+    },
+    "docs/features/diagrams/06-script-generation-execution.html": {
+      "checksum": "899cf14ce0fe5c5dcb264f6b91de2ff5"
+    },
+    "docs/features/diagrams/07-verification-revision-evidence.html": {
+      "checksum": "0a396b8c24190beecf6398609df99d6a"
+    },
+    "docs/features/diagrams/08-reproducing-retained-results.html": {
+      "checksum": "778e8c372fc7ba31a183658dedc6d079"
+    },
+    "docs/features/diagrams/09-human-review-decisions.html": {
+      "checksum": "530c06444cfa07c1a272a862fca89e17"
+    },
+    "docs/features/diagrams/10-correction-revision-traceability.html": {
+      "checksum": "121297d75fabb941eddc18c2b4474740"
+    },
+    "docs/features/diagrams/11-controlled-export.html": {
+      "checksum": "278a40840b7921f0cc1309993d56a820"
+    },
+    "docs/features/diagrams/12-integrity-lifecycle-backup.html": {
+      "checksum": "a02c0baa6ee33e0d633effd272736f61"
+    },
+    "docs/features/README.md": {
+      "checksum": "b09c890ef535202fdc4c2da8df0fa6e3"
+    },
+    "docs/features/verification.md": {
+      "checksum": "92ebd041bd1cd6d9e99202bffebb27ed"
+    },
     "docs/ideation/2026-09-05-adamviz-submissionsync-validation-ready-product-ideation.md": {
       "checksum": "da0392658a2b22f1d1602d4ae0cbf13e"
     },
@@ -5225,13 +6318,13 @@
       "checksum": "9ba0d27763135193007cd1dcbf282cf9"
     },
     "docs/plans/2026-09-06-0014-feat-plot-pattern-assurance-cell-plan.md": {
-      "checksum": "56cda832b535dce59c84b65d9381a29f"
+      "checksum": "fc82519148c1a692904087490e55e28a"
     },
-    "docs/plans/2026-09-20-1315-feat-first-poc-workflow-plan.md": {
-      "checksum": "a5e9fa88ff399bf7f4476516da967cb2"
+    "docs/plans/2026-10-11-2327-fix-repository-audit-findings-plan.md": {
+      "checksum": "3160b59f9a5eb14d1f7032ef51653291"
     },
-    "docs/plans/2026-09-24-2026-feat-export-tab-plan.md": {
-      "checksum": "9ce8dc7a67aa17013caecb4194b34b15"
+    "docs/plans/2026-10-13-2208-ci-check-workflow-plan.md": {
+      "checksum": "a53b85ba90361bd0a10450927ddd9c87"
     },
     "docs/plans/diagrams/first-poc-revision-lifecycle.svg": {
       "checksum": "86c9f8852d2a31324b144e19155fa682"
@@ -5239,11 +6332,23 @@
     "docs/plans/diagrams/first-poc-workflow.svg": {
       "checksum": "3fdb7f11b0f2a5ec7ed0d5a208a8d170"
     },
+    "docs/plans/Exec-plan/active/README.md": {
+      "checksum": "e6f4b78a17529f85875f5bd8ba7e656d"
+    },
+    "docs/plans/Exec-plan/completed/README.md": {
+      "checksum": "b65e72d3bcbcdf5e4ea85ffd5c90eaf5"
+    },
+    "docs/plans/Exec-plan/README.md": {
+      "checksum": "a27ae255a79d1b369704f3204a1a823e"
+    },
+    "docs/plans/Exec-plan/tech-debt-tracker.md": {
+      "checksum": "e34e333a69bfe51d478db852c15ab411"
+    },
     "docs/product/product-contract.md": {
-      "checksum": "c750062fade16ff8ac0c1129d2c66e4f"
+      "checksum": "f31ae97c5b2d256abb60cf16756aecb9"
     },
     "docs/product/STRATEGY.md": {
-      "checksum": "b5d97b838cc0ff1291923df085382e76"
+      "checksum": "bc806bd65a52ed4d1389df3875b70282"
     },
     "docs/references/assets/study-summary-flow.svg": {
       "checksum": "4da015dc07a3e9cfbfa4b6824a2905c3"
@@ -5261,7 +6366,7 @@
       "checksum": "6bcadc8cce14687fd0c22aeedfd87149"
     },
     "docs/solutions/draft-status-badge.md": {
-      "checksum": "ee14345da529b9b4a5582ad263a0bb19"
+      "checksum": "7b9307e08244fab527759f8afda547db"
     },
     "docs/solutions/four-step-wizard-flow.md": {
       "checksum": "d12f19cd8289a33ef340b2e5a3642192"
@@ -5270,7 +6375,7 @@
       "checksum": "7d48c848d1c9a182a788bd375052dce9"
     },
     "docs/ux/F001-plot-generation.md": {
-      "checksum": "5e4f3000c6b0ad7460521cdcc36a2c1f"
+      "checksum": "004f1bf10d72220bcca417476415931b"
     },
     "docs/validation/data-flow-threat-model.md": {
       "checksum": "e7a204eee9b9901a8a6c73c65ffa412f"
@@ -5282,13 +6387,13 @@
       "checksum": "b9a63ed9cb1a6604670abb80ccb0b579"
     },
     "docs/validation/target-environment-protocol.md": {
-      "checksum": "fadb62c9104ad0ee83b58a855f8e5d68"
+      "checksum": "83b6db77e2b89f2e6fe69fc0a730ae15"
     },
     "docs/validation/test-evidence.md": {
       "checksum": "ee4cce11eb2c0f599936715beff29e99"
     },
     "docs/validation/traceability-matrix.md": {
-      "checksum": "391e6382d8fd3a7453c1cc5a49b2b679"
+      "checksum": "c52e992fa1d2e257906c1e895577b91f"
     },
     "inst/.codexignore": {
       "checksum": "bdf98d3ee995f058ffc56e3ca3db4335"
@@ -5298,6 +6403,9 @@
     },
     "inst/app/www/favicon.ico": {
       "checksum": "81560d1b906a530c87fa0acbb2f5cca4"
+    },
+    "inst/app/www/wireframe.png": {
+      "checksum": "1bf0fa31d234758527d58495089336b7"
     },
     "inst/extdata/synthetic/adlb-bad-visit-mapping.rds": {
       "checksum": "fd7a5218395c1e7f71049a539674785a"
@@ -5356,8 +6464,14 @@
     "inst/sql/schema.sql": {
       "checksum": "76a0665385f0743416749b5dda39e37d"
     },
+    "inst/WORDLIST": {
+      "checksum": "885d617c4b177ee3daf06536929e1227"
+    },
     "LICENSE": {
       "checksum": "7ab0314d49df2737ff838c435751d586"
+    },
+    "lint_output.txt": {
+      "checksum": "ecb26be93943b41dcdbe400c431ccd87"
     },
     "man/assemble_boxplot.Rd": {
       "checksum": "e287cb0844cfa3444fcf507f7dacaf4c"
@@ -5369,7 +6483,7 @@
       "checksum": "9f093727db2477da5c50b377a1d09f71"
     },
     "man/compile_boxplot_script.Rd": {
-      "checksum": "8f3320889341456305e27c907a6ca5d5"
+      "checksum": "dd5e8c2f4cfddc99463720f651d2d5cf"
     },
     "man/ellmer_prompt_interpreter.Rd": {
       "checksum": "2e37bd711bdfbd28c30a738e0a7b3e47"
@@ -5393,7 +6507,7 @@
       "checksum": "41c8795ec2c6f4a067a86a8db895028f"
     },
     "man/new_runtime_config.Rd": {
-      "checksum": "cb562a376455158f1c4491635e39755e"
+      "checksum": "5e847f4f969970377d493b51c1a04a2a"
     },
     "man/pin_study_snapshot.Rd": {
       "checksum": "4b85efd5f0f5cf28cec639470e82b5d2"
@@ -5417,7 +6531,7 @@
       "checksum": "8536d7aeae95f923e91232547d08e284"
     },
     "NEWS.md": {
-      "checksum": "cc598f14d50898f6c405717100278d0b"
+      "checksum": "a0b8c00d20848866a48f7d1bc4a81d40"
     },
     "R/_disable_autoload.R": {
       "checksum": "9d8f7f20e88b559c046ec1f59fe82cba"
@@ -5429,10 +6543,10 @@
       "checksum": "6628c73af3d64005e0840eeee8705206"
     },
     "R/app_config.R": {
-      "checksum": "99cf36982be9dc4f475b58c8ff2e2151"
+      "checksum": "e911d386ae9f33c9851d5b2a28db8eba"
     },
     "R/app_server.R": {
-      "checksum": "19b815730d43555b13b2f28bf4a3a21f"
+      "checksum": "12118e89e67e0f46d1a110a812bec19e"
     },
     "R/app_theme.R": {
       "checksum": "65533aff0a50884f65454bac4b7501d2"
@@ -5441,169 +6555,169 @@
       "checksum": "b6ff933a1119864d3572226ffab5e15a"
     },
     "R/artifact_manifest.R": {
-      "checksum": "63acba2b0fb02d33027269e4895fbb0f"
+      "checksum": "b9c7c9b75527390cd75e013bf4b87598"
     },
     "R/artifact_store.R": {
       "checksum": "3165130967aacebf6b01a8603b1c63e5"
     },
     "R/artifact_store_local.R": {
-      "checksum": "b216187bc5c57b9097171f28d8554495"
+      "checksum": "d9b27b3681b2d12a52cf39b9614448a1"
     },
     "R/attempt_reconciliation.R": {
-      "checksum": "ec83e4f63d6a3373d46e6d2806338a08"
+      "checksum": "daac44e483b84a5135aa45fc14c1c2de"
     },
     "R/authorization_service.R": {
-      "checksum": "26394166213a0f39f9199098b9487ac6"
+      "checksum": "757f2bcce4c08e56a468b3850198f7ef"
     },
     "R/bds_profile.R": {
-      "checksum": "5782bdf7bd9bdb5210ec960239d04485"
+      "checksum": "90753c5f3ebd9b83a8426400b7bb4cae"
     },
     "R/boxplot_assembly.R": {
-      "checksum": "4fff1d8be0109c156176425651101217"
+      "checksum": "59eaeec76394e9deb747550d86be43b1"
     },
     "R/boxplot_compiler.R": {
-      "checksum": "3295eb924c2697af6a7dbd922498de1b"
+      "checksum": "8ae77b5e6e9e1e478ce19286adcc4f39"
     },
     "R/boxplot_standalone.R": {
-      "checksum": "7f46815196b3ed8960a465839eaac181"
+      "checksum": "860342a4bd85775a927d34a5df19af5c"
     },
     "R/boxplot_statistics.R": {
-      "checksum": "7e4e1e4557b66bc8bcf7b2ca1d8cfacc"
+      "checksum": "c0685a561f4ad55b50ae5db0cfdf2ab5"
     },
     "R/canonical_serialization.R": {
-      "checksum": "26549272278f4fd6083482e7eeb23893"
+      "checksum": "a9d134b3b032350699f461ffaf2fed5f"
     },
     "R/domain_execution_protocol.R": {
-      "checksum": "0e8efa927ae2dc57df8fac58f7ed40f6"
+      "checksum": "da83b679fce84cde008656613338bd0c"
     },
     "R/domain_plot_spec.R": {
-      "checksum": "39c23cfb7f0440f911c04736a7ba6b90"
+      "checksum": "0a9bc0afd9961eb5ab5229fdd3e4f82d"
     },
     "R/domain_revision.R": {
-      "checksum": "e7ca161cf68190b0d5cf9e4ef0929f9d"
+      "checksum": "20d5362358ad5e7464f9825aa8831e32"
     },
     "R/domain_status.R": {
-      "checksum": "78f1026917240af9f5cc9f46e7f66f4d"
+      "checksum": "9a77d55a3ec1d406a1fc1a69c6c721e1"
     },
     "R/evidence_repository.R": {
-      "checksum": "674e8307ab87ef9dd5be7e94f6ef0eb8"
+      "checksum": "b21affe2cd74fd256c460ce1da31769e"
     },
     "R/evidence_repository_sqlite.R": {
-      "checksum": "428beded75aa0153bf606fb65a8ad1f9"
+      "checksum": "abd6bfb4f1ca27d7b8c9c2246894aa8f"
     },
     "R/execution_runner.R": {
-      "checksum": "fa038745c59a38f32e97c56b01aca753"
+      "checksum": "879faea883a4e4630b213ca292edeb9f"
     },
     "R/execution_runner_callr.R": {
-      "checksum": "80e7693a9bf9213a70e1464497a1dc90"
+      "checksum": "deebe6f6402cc2d6ed06c1f136fda2f0"
     },
     "R/execution_service.R": {
-      "checksum": "8f85ef6d726e1d992561ade8e301069c"
+      "checksum": "2dd8c1cf93216f9272e1e343d404cc1f"
     },
     "R/export_reconciliation.R": {
       "checksum": "5795e198efdb4fec17bfc012820d3d45"
     },
     "R/export_service.R": {
-      "checksum": "d858348cd01d6c5d343643cd0a2e8f4c"
+      "checksum": "d108ebebc0a32334c4a302dc8c079b7c"
     },
     "R/lifecycle_service.R": {
-      "checksum": "6b3d6c6ce70d59f0966e2be6cecb4ce9"
+      "checksum": "551806b269723d6a8e350fee115bbd44"
     },
     "R/limits_policy.R": {
-      "checksum": "d4f1d857f8b3997c7a5b17b83a204e7a"
+      "checksum": "9f3c233c5c77fe5092f725108be359d2"
     },
     "R/mod_evidence.R": {
-      "checksum": "34a7586d0c2127a29b34215ce519d1c9"
+      "checksum": "df1dcebf59e61287f4f4f238f0a4a9a5"
     },
     "R/mod_export.R": {
-      "checksum": "808b4e52687c24220e6afbc4ab97efc3"
+      "checksum": "68dba89a15ee106f845fc5a829875047"
     },
     "R/mod_plot_generation.R": {
-      "checksum": "a5fa80809cdcebae5d8589ffb7c4583e"
+      "checksum": "1b0e177dc23ecdba6e6015f923f4e0d4"
     },
     "R/mod_plot_preview.R": {
-      "checksum": "deb61afa8bb14836400ce6803e01a01e"
+      "checksum": "0efff50905d85f1ec8e90db9e556a8c7"
     },
     "R/mod_prompt.R": {
-      "checksum": "3c4add04d78d21bc84d69f236ec6b8c5"
+      "checksum": "2bcfd32aad20982f9009cac620d69f80"
     },
     "R/mod_review.R": {
-      "checksum": "b2c8dc0aa649ab3d1f39f415579a71bf"
+      "checksum": "93852afc37a75c8952989c1fe77770e2"
     },
     "R/mod_revision_history.R": {
-      "checksum": "09c8af9c0e09a7b2d1c0bb3633f35ef5"
+      "checksum": "944642d38013596ee1db3b4e2f0ec5b6"
     },
     "R/mod_run_status.R": {
-      "checksum": "a06a4663a8001018cda438d74cb691a8"
+      "checksum": "76281981138260879721711273b26197"
     },
     "R/mod_specification.R": {
-      "checksum": "67106db3f89853a4a1c16f65a5a2dac1"
+      "checksum": "d4412e069eba9078844010745d228b3d"
     },
     "R/ports.R": {
-      "checksum": "30e1166392bfda8cf5ee8dabbd9f2c41"
+      "checksum": "c7b149f2b569ce371fecc0248b35ff44"
     },
     "R/prompt_context.R": {
-      "checksum": "d99bc34e2cec90e094b55236a2221cca"
+      "checksum": "f53e1317ccd8076a696cbac46e53d7d5"
     },
     "R/prompt_context_policy.R": {
-      "checksum": "72a2b0707258f18a2bc5896fe45c79e5"
+      "checksum": "4ae1271b632289c941db97f8624ac2ac"
     },
     "R/prompt_interpreter.R": {
-      "checksum": "6d60cbfcf0a28196eac221d8dbf9364e"
+      "checksum": "d7f1827933b67f21a62bb5d326af53f7"
     },
     "R/prompt_interpreter_ellmer.R": {
-      "checksum": "04be2fcdba5317de80aec3b31e64628f"
+      "checksum": "eeaa88c886a793c0850398f9a5b174ff"
     },
     "R/prompt_interpreter_mock.R": {
-      "checksum": "dca615a5e1cb7994b8ded2a7c0bc4d9d"
+      "checksum": "1eb1bb419a7ae284117d761416af9378"
     },
     "R/provider_identity.R": {
       "checksum": "830e87b46937fc629b9699a09b07721a"
     },
     "R/provider_identity_local.R": {
-      "checksum": "3172728247bf674aa588c94959dfbeca"
+      "checksum": "a21fb360158231628b751bc98c20248e"
     },
     "R/provider_runtime_config.R": {
-      "checksum": "d9fe916c07969fd925195ea689961d83"
+      "checksum": "8bc718bc1bfdc567558861d172359dbb"
     },
     "R/provider_study_data.R": {
-      "checksum": "4bc5a2caf342dada0e94225d50718187"
+      "checksum": "ce033b097e7aa867669b6c7959ea85b3"
     },
     "R/provider_study_data_local.R": {
-      "checksum": "0b76c5083dda50543bf05285db0bd076"
+      "checksum": "76c523c598403b03481eca3e5a880057"
     },
     "R/provider_workspace.R": {
-      "checksum": "01d65a0531c64f8ca84d8ad37e90b870"
+      "checksum": "ceab664a82f3412440fc196ac261f8c8"
     },
     "R/provider_workspace_local.R": {
-      "checksum": "42e9083969edaf2735e8e1922e2b1f04"
+      "checksum": "c0d4c800348effd4e3c8ed1c81fb8266"
     },
     "R/reproducibility_service.R": {
-      "checksum": "5b12274d928417bc4e39a527fc0a4de0"
+      "checksum": "1d83043c860d3f826ec1a59d7b113f5f"
     },
     "R/review_service.R": {
       "checksum": "cba9e98830c6963f87b2ee32d64d4f05"
     },
     "R/revision_evidence.R": {
-      "checksum": "9b3724881ecce2d07183bacec1bdeaab"
+      "checksum": "1bbc1d9bd5744a5fa668ee4973c077a6"
     },
     "R/run_app.R": {
-      "checksum": "0ec6408cbc84a8fe6ca2fc54ffae415e"
+      "checksum": "b8c6b9eb7597af70b87bba87477c29bb"
     },
     "R/synthetic_scenarios.R": {
-      "checksum": "02c0e960aa0b111bc55bb994832c591a"
+      "checksum": "ccd82c7777cafcf151959cbe39a40b54"
     },
     "R/verification_service.R": {
-      "checksum": "8521a4fe32a56877cc7a0e1e56d773c8"
+      "checksum": "c08329bba0922a67698ff4ccd7581686"
     },
     "README.md": {
-      "checksum": "b3465b2821dd801d2a1a8795e923240a"
+      "checksum": "4cb1be765faf41fecad87e57ffaebc09"
     },
     "renv.lock": {
-      "checksum": "5e67588bd37845d093c1abc3eb26e09f"
+      "checksum": "0e8749b6e8f170437a00cb80c6e5a82d"
     },
     "tests/_covrpage.Rmd": {
-      "checksum": "4e3533217bd85c6f30949a0438c202ad"
+      "checksum": "927fff3407760fd543d311f58545afc5"
     },
     "tests/AGENTS.md": {
       "checksum": "2ea79ad6ec582fa47484ac76334d2785"
@@ -5633,142 +6747,268 @@
       "checksum": "c7d4294cc68e7aa044d66311af4d9ae8"
     },
     "tests/testthat/helper-app-browser.R": {
-      "checksum": "46be50adc7401b73d9dcdcdbe249b92b"
+      "checksum": "0674cfbc67a908549215bddec743231c"
     },
     "tests/testthat/helper-execution.R": {
-      "checksum": "93c13e65187be688b342605173482349"
+      "checksum": "ff44952ce3943ddd38bf8e6b9b596996"
+    },
+    "tests/testthat/helper-governed-revision.R": {
+      "checksum": "9cdf14fb183633c412e01b560625cfdb"
     },
     "tests/testthat/helper-synthetic-bds.R": {
-      "checksum": "d78587d650999b35592a08fbc3debfff"
+      "checksum": "d1df1828d35c2705697699b6ce540330"
     },
     "tests/testthat/test-app-browser.R": {
-      "checksum": "f9c2a610bc44cce6713aba538c538d08"
+      "checksum": "b9dbdd09043229cec02f5fe416d8f660"
     },
     "tests/testthat/test-app-export-browser.R": {
-      "checksum": "f477fc8c900dbccf2022c79a997f8c29"
+      "checksum": "c5727740b8ddb5aebd77e75e64c08ddb"
     },
     "tests/testthat/test-app-server-correction.R": {
-      "checksum": "37ad435e68aa1b86aac8f97b708fce13"
+      "checksum": "d43ddc25c176d7a646a20d5b2d7f8284"
     },
     "tests/testthat/test-app-smoke.R": {
-      "checksum": "21bc008b4bcfb80e48755eef19a56cac"
+      "checksum": "e7be3477563316becf4ba10d668c6fa0"
     },
     "tests/testthat/test-artifact-store-contract.R": {
-      "checksum": "6e2c0599c3858eaa98620f719728ff3f"
+      "checksum": "9f9e669b0264bf9bcf43d09038718fe4"
     },
     "tests/testthat/test-attempt-reconciliation.R": {
       "checksum": "a15cb0d5aab3c06184b7c16fb74d6180"
     },
     "tests/testthat/test-authorization-service.R": {
-      "checksum": "cedbecd0b17fcfae35822a9dcbac3051"
+      "checksum": "4b5e491c753070d473d409d32b555962"
     },
     "tests/testthat/test-backup-restore.R": {
-      "checksum": "714840a4fc4a52b3a70e8d48b8cabe01"
+      "checksum": "5dc1071ebda14d243fe1d87bc74a35b3"
     },
     "tests/testthat/test-bds-profile.R": {
-      "checksum": "9a72b4e7a723661143b13439a9aa0496"
+      "checksum": "891fc39068799c65cfb86313d9ffa239"
     },
     "tests/testthat/test-boxplot-assembly.R": {
-      "checksum": "ccef34365a215c29dd27a693a0b45456"
+      "checksum": "d5338b253c11ce2e6aecef52ef8cb622"
     },
     "tests/testthat/test-boxplot-compiler.R": {
-      "checksum": "515575a9c0f8443057b100b07e0b1c74"
+      "checksum": "cb88ab15d08681191f89f745c5ce3072"
     },
     "tests/testthat/test-boxplot-statistics.R": {
-      "checksum": "dbaac457e3a14907cd5e048a33887fe6"
+      "checksum": "ce3c53b8eed94c7b5b6ea160f8b4bfb8"
     },
     "tests/testthat/test-domain-execution-protocol.R": {
-      "checksum": "232cd509df0972e2a13b14a26121d338"
+      "checksum": "7140690cf67678997b73a0cbd8ee0994"
     },
     "tests/testthat/test-domain-plot-spec.R": {
-      "checksum": "d57dcde3281513d0ec019a67f8ce1596"
+      "checksum": "98aa8ec2093c87a767e29ac768e6acfd"
     },
     "tests/testthat/test-domain-status.R": {
       "checksum": "96b743dec5df11c6933b835d5ff23383"
     },
     "tests/testthat/test-evidence-repository-contract.R": {
-      "checksum": "c4233e47ad9e75e6316566eefbea0e68"
+      "checksum": "ba3d3c49c83cd21f38ca62faf26d008c"
     },
     "tests/testthat/test-evidence-repository-sqlite.R": {
-      "checksum": "ea1ca45ab7d3d900b881cef888bde5ca"
+      "checksum": "c03050f72ac0b741852da669935b7b4d"
     },
     "tests/testthat/test-execution-runner-callr.R": {
-      "checksum": "27d826f70431f6f8a86bb7a0024ba930"
+      "checksum": "502b6bfd0e6242cb100b10d3e941700c"
     },
     "tests/testthat/test-execution-runner-contract.R": {
-      "checksum": "1a570f90c92bcd46e48befe820404af8"
+      "checksum": "355c18cbe9ed8530b850878539675f74"
     },
     "tests/testthat/test-execution-service.R": {
-      "checksum": "77dac3de85e949a5d7eafd96b2f327cf"
+      "checksum": "cc666b38cdb2036199e105a4b0ca0e79"
     },
     "tests/testthat/test-export-reconciliation.R": {
-      "checksum": "03c375d17cfccfa1d0b8b2558efae407"
+      "checksum": "b27ed7fc255b810534a0a1ecbb44a2d9"
     },
     "tests/testthat/test-export-service.R": {
-      "checksum": "6ff935c484ad5b6da8cddb3930648b00"
+      "checksum": "fc5a81afd5510d169b4940d6bbb3611f"
     },
     "tests/testthat/test-lifecycle-service.R": {
-      "checksum": "3de0d59e391b6afd94d09e3644bce12d"
+      "checksum": "cfb4372b216d8243aade0f7b3b061452"
     },
     "tests/testthat/test-limits-policy.R": {
-      "checksum": "18cc143140c240884b58aed303eb20e9"
+      "checksum": "e9134073d5595350b5aec14d160f9228"
     },
     "tests/testthat/test-mod-export.R": {
-      "checksum": "f6edc8c3409e8c7a4c3b875943f57529"
+      "checksum": "8021ae610959ccfe9454d2517357ec9d"
     },
     "tests/testthat/test-mod-plot-generation.R": {
-      "checksum": "3aeee93c8ae84e38b8147be8c9f4a881"
+      "checksum": "c16561c559f49931c941d6929295581a"
     },
     "tests/testthat/test-mod-plot-preview.R": {
-      "checksum": "d396f13e9d713a36d30c4b3f5502cb29"
+      "checksum": "569c277266539fcb65c3858e6100bac8"
     },
     "tests/testthat/test-mod-prompt.R": {
-      "checksum": "3fd741e4ec4a08267006ee948f9c2d93"
+      "checksum": "75526f81d2b63de656f2b9b2c4b183af"
     },
     "tests/testthat/test-mod-review.R": {
-      "checksum": "fe0644244def074e639aeb71c0af097e"
+      "checksum": "49ba549962b01de6cd877c7f09fa49b2"
     },
     "tests/testthat/test-mod-revision-history.R": {
-      "checksum": "29bc752fb8c1a79aed3808143f5d43ff"
+      "checksum": "7ba21f8c59095148f7207803a80a73f8"
     },
     "tests/testthat/test-mod-specification.R": {
-      "checksum": "1fc569f77000dc936e3f15b578afa367"
+      "checksum": "da2803f6a633fd47f6f55e83e3de89f6"
     },
     "tests/testthat/test-prompt-context-policy.R": {
-      "checksum": "6ef9219e831a800e3cf07514456bceb8"
+      "checksum": "50966956cc677c343e01673cf6474a43"
     },
     "tests/testthat/test-prompt-context.R": {
-      "checksum": "6a6cf05b4d4449d1ccb5ba4093709b29"
+      "checksum": "0e957637185ab87e5d3cdfbdf472ef56"
     },
     "tests/testthat/test-prompt-interpreter-contract.R": {
-      "checksum": "c2e38b530f578f1c634cb1bb5e926915"
+      "checksum": "0ece7535b2cf5ed4f5d6fd703008b5fc"
     },
     "tests/testthat/test-prompt-interpreter-mock.R": {
-      "checksum": "d4b677aa8e46f5e0e5acabd6117380ca"
+      "checksum": "7bf0e29bfaa8f817da767d6d09d08d11"
     },
     "tests/testthat/test-provider-contracts.R": {
       "checksum": "70bc850d330194886d2c9dec3342fa4c"
     },
     "tests/testthat/test-provider-study-data.R": {
-      "checksum": "0fe9403643c095d6f10e0c421ae06a6e"
+      "checksum": "cbe375d87e3a0560c92ef2af4c7054a5"
     },
     "tests/testthat/test-provider-workspace-contract.R": {
-      "checksum": "7d749419d60dac4e5358100c71f22e8d"
+      "checksum": "f93e84e91058966822e00b8c7e38c6c5"
     },
     "tests/testthat/test-review-service.R": {
-      "checksum": "b8590e4928c28bd63e7a7efa581f60a8"
+      "checksum": "b49ca2b7a6fb55c48b98e235b158b034"
     },
     "tests/testthat/test-revision-evidence.R": {
-      "checksum": "6c39df561d4d1e4eba8ad1c54ad60ae0"
+      "checksum": "66f7ca1816bb2d64275636c310cbfafd"
     },
     "tests/testthat/test-runtime-config.R": {
-      "checksum": "16534009b4750279ed3367b4f3ef069a"
+      "checksum": "123cd4c278aa8651f016cf6f055dbbac"
     },
     "tests/testthat/test-synthetic-scenarios.R": {
-      "checksum": "a1b494020ff5c34cc4832ff86fec34a9"
+      "checksum": "3380b2790620a5319816d473eb97914a"
     },
     "tests/testthat/test-verification-service.R": {
-      "checksum": "15aa49db7a614c4b421ff6d25e6cf656"
+      "checksum": "16678ebc67eda4358cc749ce4970afb3"
+    },
+    "vignettes/ADaMViz.SubmissionSync.Rmd": {
+      "checksum": "566a9c0722250b33d34a9234a8ab4d83"
+    },
+    "vignettes/articles/01-uploads-snapshots-input-identity.Rmd": {
+      "checksum": "57ceb85e0235f9d6bfac928d0c36a38a"
+    },
+    "vignettes/articles/02-bds-profiling-eligibility.Rmd": {
+      "checksum": "371b490db6ee5d1eaf04570cdcbcee50"
+    },
+    "vignettes/articles/03-confirming-analysis-selections.Rmd": {
+      "checksum": "738d32f3e1ba4b5f7a9fef8738f7cae2"
+    },
+    "vignettes/articles/04-longitudinal-boxplot-statistics.Rmd": {
+      "checksum": "3a1f1f288262cfa0584baac0f7ccab45"
+    },
+    "vignettes/articles/05-fixed-free-y-scales.Rmd": {
+      "checksum": "add8e6c541d5b244ef4983ac45ea39dd"
+    },
+    "vignettes/articles/06-script-generation-execution.Rmd": {
+      "checksum": "8cb0178a81294e17833ffe0be2ca5455"
+    },
+    "vignettes/articles/07-verification-revision-evidence.Rmd": {
+      "checksum": "48eccfe5b890bf721ba3e921ec5d5650"
+    },
+    "vignettes/articles/08-reproducing-retained-results.Rmd": {
+      "checksum": "cdc92e9f1e827e2d3c4fab4bdc97f81b"
+    },
+    "vignettes/articles/09-human-review-decisions.Rmd": {
+      "checksum": "368d91822ee6a4abc752f6ed0cefe1ca"
+    },
+    "vignettes/articles/10-correction-revision-traceability.Rmd": {
+      "checksum": "6028e58120d7afa0ee786c44723b2be7"
+    },
+    "vignettes/articles/11-controlled-export.Rmd": {
+      "checksum": "863a94501cbd2504d9eb4c2d9efe9899"
+    },
+    "vignettes/articles/12-integrity-lifecycle-backup.Rmd": {
+      "checksum": "b0b031d7378875f7313c5a4bfe4ece57"
+    },
+    "vignettes/articles/architecture.Rmd": {
+      "checksum": "75815965be1901b33cf92f2b5c6b1377"
+    },
+    "vignettes/articles/diagrams/01-uploads-snapshots-input-identity.html": {
+      "checksum": "54dbc31f78a8dbc395d52e467660adbc"
+    },
+    "vignettes/articles/diagrams/01-uploads-snapshots-input-identity.png": {
+      "checksum": "d39f5d4eebf56c87dfb442f82ba3aeb5"
+    },
+    "vignettes/articles/diagrams/02-bds-profiling-eligibility.html": {
+      "checksum": "1170ca1ec62b349c806bc3dd85f54e7d"
+    },
+    "vignettes/articles/diagrams/02-bds-profiling-eligibility.png": {
+      "checksum": "41255c21e79da4a1adef8293a9b595dd"
+    },
+    "vignettes/articles/diagrams/03-confirming-analysis-selections.html": {
+      "checksum": "941e8c03e228362006eb852ff6522eb7"
+    },
+    "vignettes/articles/diagrams/03-confirming-analysis-selections.png": {
+      "checksum": "72edc9c7503464f8e30416100d04a2c3"
+    },
+    "vignettes/articles/diagrams/04-longitudinal-boxplot-statistics.html": {
+      "checksum": "70cf7f5083302b67788c5da37da2d52c"
+    },
+    "vignettes/articles/diagrams/04-longitudinal-boxplot-statistics.png": {
+      "checksum": "12f59fe977b4c5d4606788fedeb22fd2"
+    },
+    "vignettes/articles/diagrams/05-fixed-free-y-scales.html": {
+      "checksum": "c5760138888110f8722ac2f8a2b676bc"
+    },
+    "vignettes/articles/diagrams/05-fixed-free-y-scales.png": {
+      "checksum": "db71ce07baf7f1142ce39e3318fd00fd"
+    },
+    "vignettes/articles/diagrams/06-script-generation-execution.html": {
+      "checksum": "899cf14ce0fe5c5dcb264f6b91de2ff5"
+    },
+    "vignettes/articles/diagrams/06-script-generation-execution.png": {
+      "checksum": "5a5ba26c560ade1ec4674149477b19bf"
+    },
+    "vignettes/articles/diagrams/07-verification-revision-evidence.html": {
+      "checksum": "0a396b8c24190beecf6398609df99d6a"
+    },
+    "vignettes/articles/diagrams/07-verification-revision-evidence.png": {
+      "checksum": "b128f9edfc0adbbbdebfb8ffdd2a855d"
+    },
+    "vignettes/articles/diagrams/08-reproducing-retained-results.html": {
+      "checksum": "778e8c372fc7ba31a183658dedc6d079"
+    },
+    "vignettes/articles/diagrams/08-reproducing-retained-results.png": {
+      "checksum": "9779cac7ca62533acb6fef6c41362729"
+    },
+    "vignettes/articles/diagrams/09-human-review-decisions.html": {
+      "checksum": "530c06444cfa07c1a272a862fca89e17"
+    },
+    "vignettes/articles/diagrams/09-human-review-decisions.png": {
+      "checksum": "c061ac904bdaf9bd000dbec96f646e32"
+    },
+    "vignettes/articles/diagrams/10-correction-revision-traceability.html": {
+      "checksum": "121297d75fabb941eddc18c2b4474740"
+    },
+    "vignettes/articles/diagrams/10-correction-revision-traceability.png": {
+      "checksum": "77694282521f18506e491e646bd61bcd"
+    },
+    "vignettes/articles/diagrams/11-controlled-export.html": {
+      "checksum": "278a40840b7921f0cc1309993d56a820"
+    },
+    "vignettes/articles/diagrams/11-controlled-export.png": {
+      "checksum": "caac28dacdd615dbe854d39dfc9707d4"
+    },
+    "vignettes/articles/diagrams/12-integrity-lifecycle-backup.html": {
+      "checksum": "a02c0baa6ee33e0d633effd272736f61"
+    },
+    "vignettes/articles/diagrams/12-integrity-lifecycle-backup.png": {
+      "checksum": "f858c5aa6209ac173cae6a6e51b2a14b"
+    },
+    "vignettes/articles/diagrams/architecture-container-view.svg": {
+      "checksum": "b627911d09ed17e4294ba5ff3f43fbc8"
+    },
+    "vignettes/articles/diagrams/architecture-governed-flow.svg": {
+      "checksum": "6b129876214dbf9f5e895127724c4834"
+    },
+    "vignettes/articles/diagrams/architecture-system-context.svg": {
+      "checksum": "703d6311416281488824a00407f29811"
     }
   },
   "users": null
