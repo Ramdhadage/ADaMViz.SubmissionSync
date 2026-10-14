@@ -28,34 +28,20 @@ jobs:
   style:
     name: Check code style 🔠
     runs-on: ubuntu-latest
-    if: >
-      !contains(github.event.commits[0].message, '[skip style]')
-        && github.event.pull_request.draft == false
     container:
-      image: ghcr.io/insightsengineering/rstudio:latest
+      image: ghcr.io/insightsengineering/rstudio@sha256:b7fce5f56d0f979f33304b8d74ab878fd4f78db81278aeedc3a8ad6f22e86428
 
     steps:
       - name: Setup token 🔑
         id: github-token
-        run: |
-          if [ "${{ secrets.REPO_GITHUB_TOKEN }}" == "" ]; then
-            echo "REPO_GITHUB_TOKEN is empty. Substituting it with GITHUB_TOKEN."
-            echo "token=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
-          else
-            echo "Using REPO_GITHUB_TOKEN."
-            echo "token=${{ secrets.REPO_GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
-          fi
+        run: echo "token=${{ github.event_name == 'pull_request' && secrets.REPO_GITHUB_TOKEN || github.token }}" >> "$GITHUB_OUTPUT"
         shell: bash
-
-      - name: Get branch names 🌿
-        id: branch-name
-        uses: tj-actions/branch-names@e497ceb8ccd43fd9573cf2e375216625bc411d1f # v9.0.0
 
       - name: Checkout repo (PR) 🛎
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         if: github.event_name == 'pull_request'
         with:
-          ref: ${{ steps.branch-name.outputs.head_ref_branch }}
+          ref: ${{ github.event.pull_request.head.sha }}
           path: ${{ github.event.repository.name }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           fetch-depth: 0
@@ -65,23 +51,23 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         if: github.event_name != 'pull_request'
         with:
-          ref: ${{ steps.branch-name.outputs.current_branch }}
+          ref: ${{ github.sha }}
           path: ${{ github.event.repository.name }}
           token: ${{ steps.github-token.outputs.token }}
 
-      - name: Check commit message 💬
-        run: |
-          git config --global --add safe.directory $(pwd)
-          export head_commit_message="$(git show -s --format=%B | tr '\r\n' ' ' | tr '\n' ' ')"
-          echo "head_commit_message = $head_commit_message"
-          if [[ $head_commit_message == *"$SKIP_INSTRUCTION"* ]]; then
-            echo "Skip instruction detected - cancelling the workflow."
-            exit 1
-          fi
-        shell: bash
-        working-directory: ${{ github.event.repository.name }}
-        env:
-          SKIP_INSTRUCTION: "[skip style]"
+      - name: Check live PR write target
+        id: write-target
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const {data: pr} = await github.rest.pulls.get({...context.repo, pull_number: context.issue.number});
+            const sameRepo = pr.head.repo?.full_name === context.payload.repository.full_name;
+            core.setOutput('active', pr.state === 'open' && sameRepo);
+            core.setOutput('allowed', pr.state === 'open' && sameRepo && pr.head.sha === context.payload.pull_request.head.sha && ${{ secrets.REPO_GITHUB_TOKEN != '' }});
+            if (pr.state === 'open' && sameRepo && !${{ secrets.REPO_GITHUB_TOKEN != '' }}) core.warning('PR updates require REPO_GITHUB_TOKEN to trigger checks on the generated head; apply generated changes manually when no write token is configured.');
+            core.setOutput('ref', pr.head.ref);
+            core.setOutput('sha', pr.head.sha);
 
       - name: Install styler 👚
         run: |
@@ -102,7 +88,7 @@ jobs:
             **/*.Rnw
             **/*.Rmarkdown
             **/*.qmd
-        continue-on-error: true
+
 
       - name: Run styler 👟
         run: |
@@ -115,7 +101,7 @@ jobs:
               ext %in% c("R", "Rmd", "Rnw", "Rmarkdown", "qmd")
           }
           changed_r_files <- Filter(is_r_file, changed_files)
-          dry <- if(isTRUE(as.logical("${{ inputs.auto-update }}"))) "off" else "on"
+          dry <- if (identical("${{ steps.write-target.outputs.allowed }}", "true") && identical("${{ inputs.auto-update }}", "true")) "off" else "on"
           detect <- styler::style_file(changed_r_files, dry = dry)
           if (TRUE %in% detect$changed) {
             problems <- subset(detect$file, detect$changed == T)
@@ -123,7 +109,7 @@ jobs:
             writeLines(
               problems,
               con = "/tmp/style-problems.txt",
-              sep = " "
+              sep = "\n"
             )
           }
         shell: Rscript {0}
@@ -142,34 +128,40 @@ jobs:
         if: steps.check_files.outputs.files_exists  == 'true'
         run: |
           perl -p -i -e 's/\R//g;' /tmp/style-problems.R
-          echo "unstyled-files=$(cat /tmp/style-problems.txt)" >> $GITHUB_OUTPUT
+          echo "Styled file list saved in /tmp/style-problems.txt"
         shell: bash
 
       - name: Autocommit styled files ↗️
         id: autocommit-styled-files
         if: >
           inputs.auto-update
+            && steps.write-target.outputs.allowed == 'true'
             && steps.check_files.outputs.files_exists == 'true'
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git config pull.rebase false
-          git pull origin ${{ steps.branch-name.outputs.head_ref_branch }} || true
-          git add ${{ steps.problem-files.outputs.unstyled-files }}
-          git commit -m '[skip style] [skip vbump] Restyle files'
-          git push -v origin HEAD:${{ steps.branch-name.outputs.head_ref_branch }} || \
-            echo "⚠️ Could not push to ${BRANCH_NAME} on $(git remote -v show -n origin | grep Push)"
+          Rscript -e 'files <- readLines("/tmp/style-problems.txt"); stopifnot(!any(styler::style_file(files, dry = "on")$changed))'
+          git add --pathspec-from-file=/tmp/style-problems.txt
+          git commit -m 'Restyle files'
+          test "$(git ls-remote origin "refs/heads/${BRANCH_NAME}" | cut -f1)" = "$EXPECTED_SHA"
+          git push origin "HEAD:refs/heads/${BRANCH_NAME}"
         shell: bash
         working-directory: ${{ github.event.repository.name }}/${{ inputs.package-subdirectory }}
-        continue-on-error: true
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha }}
 
       - name: Styler check summary 🅾
         if: >
-          (inputs.auto-update != true
+          ((inputs.auto-update != true || steps.write-target.outputs.allowed != 'true')
             && steps.check_files.outputs.files_exists == 'true')
             || (steps.autocommit-styled-files.outcome != 'success'
             && steps.autocommit-styled-files.outcome != 'skipped')
         run: |
+          if (identical("${{ github.event_name }}", "pull_request") && identical("${{ github.event.pull_request.head.repo.full_name == github.repository }}", "true") && !identical("${{ steps.write-target.outputs.active }}", "true")) {
+            message("PR closed or branch removed; style updates are not published.")
+            quit(status = 0)
+          }
           cat(paste(
             "☠ One or more files had styling errors.",
             "Please see the log above for remediations,",

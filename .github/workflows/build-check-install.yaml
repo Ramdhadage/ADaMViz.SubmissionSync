@@ -260,13 +260,11 @@ jobs:
         config:
           - image: ghcr.io/insightsengineering/rstudio
             tag: latest
+            digest: sha256:b7fce5f56d0f979f33304b8d74ab878fd4f78db81278aeedc3a8ad6f22e86428
     name: ${{ matrix.config.image }}, version ${{ matrix.config.tag }}
     runs-on: ubuntu-latest
-    if: >
-      !contains(github.event.commits[0].message, '[skip r-cmd]')
-        && github.event.pull_request.draft == false
     container:
-      image: ${{ matrix.config.image }}:${{ matrix.config.tag }}
+      image: ${{ matrix.config.digest && format('{0}@{1}', matrix.config.image, matrix.config.digest) || format('{0}:{1}', matrix.config.image, matrix.config.tag) }}
     env:
       RENV_CONFIG_AUTOLOADER_ENABLED: "false"
     outputs:
@@ -297,7 +295,7 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         if: github.event_name == 'pull_request'
         with:
-          ref: ${{ steps.branch-name.outputs.head_ref_branch }}
+          ref: ${{ github.event.pull_request.head.sha }}
           path: ${{ github.event.repository.name }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           fetch-depth: 0
@@ -306,22 +304,8 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         if: github.event_name != 'pull_request'
         with:
-          ref: ${{ steps.branch-name.outputs.current_branch }}
+          ref: ${{ github.sha }}
           path: ${{ github.event.repository.name }}
-
-      - name: Check commit message 💬
-        run: |
-          git config --global --add safe.directory $(pwd)
-          export head_commit_message="$(git show -s --format=%B | tr '\r\n' ' ' | tr '\n' ' ')"
-          echo "head_commit_message = $head_commit_message"
-          if [[ $head_commit_message == *"$SKIP_INSTRUCTION"* ]]; then
-            echo "Skip instruction detected - cancelling the workflow."
-            exit 1
-          fi
-        shell: bash
-        working-directory: ${{ github.event.repository.name }}
-        env:
-          SKIP_INSTRUCTION: "[skip r-cmd]"
 
       - name: Checkout gh-pages 🛎
         if: >-
@@ -376,6 +360,10 @@ jobs:
           echo "junit_xml_storage=${junit_xml_storage_input:-_junit_xml_reports}" >> $GITHUB_ENV
           echo "junit_xml_diff_branch=${junit_xml_diff_branch_input:-main}" >> $GITHUB_ENV
           echo "junit_xml_comparison=${junit_xml_comparison_input:-true}" >> $GITHUB_ENV
+          if [ "${{ github.event_name }}" == "pull_request" ] &&
+             [ "${{ github.event.pull_request.head.repo.full_name }}" != "${{ github.repository }}" ]; then
+            echo "junit_xml_comparison=false" >> $GITHUB_ENV
+          fi
           echo "junit_xml_positive_threshold=${junit_xml_positive_threshold:-1.0}" >> $GITHUB_ENV
           echo "junit_xml_negative_threshold=${junit_xml_negative_threshold:-1.0}" >> $GITHUB_ENV
           echo "enable_sd=${enable_sd:-true}" >> $GITHUB_ENV
@@ -517,7 +505,6 @@ jobs:
         with:
           path: "${{ inputs.additional-caches }}"
           key: additional-caches-${{ runner.os }}
-          steps:
       - name: Get changed files 📃
         id: changed-files
         if: inputs.selected-shinytests == true
@@ -621,6 +608,7 @@ jobs:
         shell: bash
 
       - name: Run R CMD check 🏁
+        id: r-cmd-check
         run: |
           if [ "${{ inputs.skip-r-cmd-check }}" == "true" ]
           then {
@@ -665,48 +653,33 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           path: ${{ env.junit_xml_storage }}
+          token: ${{ steps.github-token.outputs.token }}
           fetch-depth: 0
 
-      - name: Initialize storage branch ${{ env.junit_xml_storage }} 🗄️
+      - name: Initialize storage branch for comparisons
         if: env.junit_xml_comparison == 'true'
         working-directory: ${{ env.junit_xml_storage }}
+        env:
+          STORAGE_BRANCH: ${{ env.junit_xml_storage }}
         run: |
-          git config --global --add safe.directory ${PWD}
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-          # Switch to the branch if it already exists
-          git switch ${{ env.junit_xml_storage }} || true
-          git pull origin ${{ env.junit_xml_storage }} || true
-          # Create the branch if it doesn't exist yet
-          git checkout --orphan ${{ env.junit_xml_storage }} || true
-          # Ensure that the bare minimum components exist in the branch
-          mkdir -p data
-          touch README.md data/.gitkeep
-          # Copy necessary files and folders to a temporary location
-          mkdir -p /tmp/${{ github.sha }}
-          echo "Copying data to /tmp/${{ github.sha }}"
-          cp -r .git README.md data /tmp/${{ github.sha }}
-          # Remove everything else
-          # Attribution: https://unix.stackexchange.com/a/77313
-          rm -rf ..?* .[!.]* *
-          # Restore files from the temporary location
-          echo "Copying data from /tmp/${{ github.sha }}"
-          cp -r /tmp/${{ github.sha }}/.git /tmp/${{ github.sha }}/README.md /tmp/${{ github.sha }}/data .
-          rm -rf /tmp/${{ github.sha }}
-          git add --all -f
-          git commit -m "Update storage branch: $(date)" || true
+          set -euo pipefail
+          git config --global --add safe.directory "$PWD"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          if git ls-remote --exit-code origin "refs/heads/$STORAGE_BRANCH"; then
+            git fetch origin "$STORAGE_BRANCH"
+            git checkout -B "$STORAGE_BRANCH" FETCH_HEAD
+          else
+            status=$?
+            if [ "$status" -ne 2 ]; then exit "$status"; fi
+            git checkout --orphan "$STORAGE_BRANCH"
+            git rm -rf .
+            mkdir -p data
+            touch README.md data/.gitkeep
+            git add -f README.md data/.gitkeep
+            git commit -m "Initialize JUnit report storage"
+          fi
         shell: bash
-
-      - name: Push storage branch ${{ env.junit_xml_storage }} 🗄️
-        if: env.junit_xml_comparison == 'true'
-        uses: ad-m/github-push-action@4cc74773234f74829a8c21bc4d69dd4be9cfa599
-        with:
-          github_token: ${{ steps.github-token.outputs.token }}
-          branch: ${{ env.junit_xml_storage }}
-          directory: ${{ env.junit_xml_storage }}
-          force: true
-        continue-on-error: true
-
       - name: Check whether JUnit XML report exists 🚦
         id: check-junit-xml
         uses: andstor/file-existence-action@076e0072799f4942c8bc574a82233e1e4d13e9d6 # v3
@@ -759,50 +732,49 @@ jobs:
           check_name: Unit Tests Summary
           junit_files: "${{ env.PKGNAME }}.Rcheck/tests/testthat/junit-result.xml"
 
-      - name: Fetch JUnit XML reports from ${{ env.junit_xml_storage }} ⤵️
-        if: steps.check-junit-xml.outputs.files_exists == 'true' && env.junit_xml_comparison == 'true'
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-        with:
-          path: ${{ env.junit_xml_storage }}
-          fetch-depth: 0
-
       - name: Set up ${{ env.junit_xml_storage }} branch for reports 🗃️
         if: steps.check-junit-xml.outputs.files_exists == 'true' && env.junit_xml_comparison == 'true'
         run: |
-          BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
+          BRANCH="${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}/${{ inputs.concurrency-group }}"
           echo "diff_storage_branch=$BRANCH" >> $GITHUB_ENV
           mkdir -p ${{ env.junit_xml_storage }}/data/${BRANCH}
         shell: bash
 
-      - name: Commit JUnit XML report 📄
+      - name: Commit and publish JUnit XML with concurrent-update retry
         if: steps.check-junit-xml.outputs.files_exists == 'true' && env.junit_xml_comparison == 'true'
-        working-directory: ${{ env.junit_xml_storage }}/data
+        working-directory: ${{ env.junit_xml_storage }}
+        env:
+          STORAGE_BRANCH: ${{ env.junit_xml_storage }}
+          REPORT_BRANCH: ${{ env.diff_storage_branch }}
+          PACKAGE_NAME: ${{ env.PKGNAME }}
         run: |
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-          git switch ${{ env.junit_xml_storage }} || true
-          git config pull.rebase false
-          git pull origin ${{ env.junit_xml_storage }} || true
-          cp ../../${{ env.PKGNAME }}.Rcheck/tests/testthat/junit-result.xml \
-            './${{ env.diff_storage_branch }}/junit-result.xml'
-          git add -f '${{ env.diff_storage_branch }}/junit-result.xml'
-          git commit -m "Add/Update JUnit report: ${{ github.sha }}" || true
+          set -euo pipefail
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          for attempt in {1..5}; do
+            if git ls-remote --exit-code origin "refs/heads/$STORAGE_BRANCH"; then
+              git fetch origin "$STORAGE_BRANCH"
+              git reset --hard FETCH_HEAD
+            else
+              status=$?
+              if [ "$status" -ne 2 ]; then exit "$status"; fi
+            fi
+            mkdir -p "data/$REPORT_BRANCH"
+            cp "../$PACKAGE_NAME.Rcheck/tests/testthat/junit-result.xml" "data/$REPORT_BRANCH/junit-result.xml"
+            git add -f -- "data/$REPORT_BRANCH/junit-result.xml"
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m "Update JUnit report for ${{ github.sha }}"
+            if git push origin "HEAD:$STORAGE_BRANCH"; then exit 0; fi
+            echo "Retrying JUnit storage publication ($attempt/5)."
+          done
+          echo "JUnit storage publication failed after five attempts." >&2
+          exit 1
         shell: bash
-
-      - name: Push JUnit XML report to ${{ env.junit_xml_storage }} 📄
-        if: steps.check-junit-xml.outputs.files_exists == 'true' && env.junit_xml_comparison == 'true'
-        uses: ad-m/github-push-action@4cc74773234f74829a8c21bc4d69dd4be9cfa599
-        with:
-          github_token: ${{ steps.github-token.outputs.token }}
-          branch: ${{ env.junit_xml_storage }}
-          directory: ${{ env.junit_xml_storage }}/data
-        continue-on-error: true
-
       - name: Run XML comparison 🔍
         if: steps.check-junit-xml.outputs.files_exists == 'true' && env.junit_xml_comparison == 'true'
         run: |
           cp '${{ env.junit_xml_storage }}/data/${{ env.diff_storage_branch }}/junit-result.xml' new.xml
-          if [ ! -f ${{ env.junit_xml_storage }}/data/${{ env.junit_xml_diff_branch }}/junit-result.xml ]; then
+          if [ ! -f ${{ env.junit_xml_storage }}/data/${{ env.junit_xml_diff_branch }}/${{ inputs.concurrency-group }}/junit-result.xml ]; then
             # If XML for the branch against which we're comparing doesn't exist, we're skipping the comparison.
             echo "JUnit report for branch \`${{ env.junit_xml_diff_branch }}\` " \
               "doesn't exist on \`${{ env.junit_xml_storage }}\` branch yet." > output.md
@@ -810,7 +782,7 @@ jobs:
               "you'll see comparison of tests performance between \`${{ env.junit_xml_diff_branch }}\` " \
               "and \`${{ env.diff_storage_branch }}\` as a PR comment." >> output.md
           else
-            cp ${{ env.junit_xml_storage }}/data/${{ env.junit_xml_diff_branch }}/junit-result.xml old.xml
+            cp ${{ env.junit_xml_storage }}/data/${{ env.junit_xml_diff_branch }}/${{ inputs.concurrency-group }}/junit-result.xml old.xml
             wget https://github.com/insightsengineering/junit-xml-diff/releases/download/v0.4.0/junit-xml-diff_0.4.0_linux_amd64.tar.gz \
              -O junit-xml-diff.tar.gz
             tar xzf junit-xml-diff.tar.gz
@@ -879,8 +851,13 @@ jobs:
 
       - name: Catch warnings in R CMD check output 🗳
         id: catch-errors
+        if: ${{ !cancelled() && inputs.skip-r-cmd-check != true }}
         run: |
+          if ("${{ steps.r-cmd-check.outcome }}" != "success") {
+            stop("R CMD check exited unsuccessfully")
+          }
           check_log <- "${{ env.PKGNAME }}.Rcheck/00check.log"
+          if (!file.exists(check_log)) stop("Requested R CMD check did not produce 00check.log")
           if (file.exists(check_log)) {
             x <- tail(readLines(check_log), 1)
             if (grepl("ERROR", x)) {
@@ -971,6 +948,7 @@ jobs:
           overwrite: true
 
       - name: Upload logs artifact 🗞️
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           path: |
@@ -989,9 +967,6 @@ jobs:
     if: >
       needs.build-install-check.outputs.publish-unit-test-html-report == 'true'
         && github.event_name != 'pull_request'
-    # Only one job can publish to gh-pages branch concurrently.
-    concurrency:
-      group: ghpages
     steps:
       - name: Setup token 🔑
         id: github-token
@@ -1011,41 +986,53 @@ jobs:
           name: unit-test-report-${{ inputs.concurrency-group }}
           path: unit-test-report
 
-      - name: Upload JUnit HTML report to GitHub pages 🗞️
-        if: needs.build-install-check.outputs.multiversion-docs == 'true'
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
+      - name: Checkout latest report branch
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
-          github_token: ${{ steps.github-token.outputs.token }}
-          publish_dir: ./unit-test-report
-          destination_dir: ${{ needs.build-install-check.outputs.current-branch-or-tag }}/${{ inputs.unit-test-report-directory }}
+          ref: gh-pages
+          path: report-pages
+          token: ${{ steps.github-token.outputs.token }}
+          fetch-depth: 0
 
-      - name: Upload JUnit HTML report to GitHub pages (latest-tag) 🏷️
-        if: >
-          needs.build-install-check.outputs.is-latest-tag == 'true'
-            && needs.build-install-check.outputs.multiversion-docs == 'true'
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
-        with:
-          github_token: ${{ steps.github-token.outputs.token }}
-          publish_dir: ./unit-test-report
-          destination_dir: ${{ inputs.latest-tag-alt-name }}/${{ inputs.unit-test-report-directory }}
-
-      - name: Upload JUnit HTML report to GitHub pages (release-candidate) 🏷️
-        if: >
-          needs.build-install-check.outputs.is-rc-tag == 'true'
-            && needs.build-install-check.outputs.multiversion-docs == 'true'
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
-        with:
-          github_token: ${{ steps.github-token.outputs.token }}
-          publish_dir: ./unit-test-report
-          destination_dir: ${{ inputs.release-candidate-alt-name }}/${{ inputs.unit-test-report-directory }}
-
-      - name: Upload JUnit HTML report to GitHub pages (non-multiversion) 🗞️
-        if: needs.build-install-check.outputs.multiversion-docs == 'false'
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
-        with:
-          github_token: ${{ steps.github-token.outputs.token }}
-          publish_dir: ./unit-test-report
-          destination_dir: ${{ inputs.unit-test-report-directory }}
+      - name: Publish reports with concurrent-update retry
+        shell: bash
+        working-directory: report-pages
+        env:
+          MULTIVERSION: ${{ needs.build-install-check.outputs.multiversion-docs }}
+          REF_NAME: ${{ needs.build-install-check.outputs.current-branch-or-tag }}
+          LATEST_TAG: ${{ needs.build-install-check.outputs.is-latest-tag }}
+          RC_TAG: ${{ needs.build-install-check.outputs.is-rc-tag }}
+          LATEST_ALIAS: ${{ inputs.latest-tag-alt-name }}
+          RC_ALIAS: ${{ inputs.release-candidate-alt-name }}
+          REPORT_DIRECTORY: ${{ inputs.unit-test-report-directory }}
+        run: |
+          set -euo pipefail
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          destinations=("$REPORT_DIRECTORY")
+          if [ "$MULTIVERSION" == "true" ]; then
+            destinations=("$REF_NAME/$REPORT_DIRECTORY")
+            if [ "$LATEST_TAG" == "true" ]; then destinations+=("$LATEST_ALIAS/$REPORT_DIRECTORY"); fi
+            if [ "$RC_TAG" == "true" ]; then destinations+=("$RC_ALIAS/$REPORT_DIRECTORY"); fi
+          fi
+          for attempt in {1..5}; do
+            git fetch origin gh-pages
+            git reset --hard origin/gh-pages
+            for destination in "${destinations[@]}"; do
+              mkdir -p "$destination"
+              cp -a "../unit-test-report/." "$destination/"
+              git add -- "$destination"
+            done
+            if git diff --cached --quiet; then
+              echo "Report already current."
+              exit 0
+            fi
+            git commit -m "Update ${{ inputs.unit-test-report-directory }} report for ${{ github.sha }}"
+            if git push origin HEAD:gh-pages; then exit 0; fi
+            echo "Report branch changed; retrying from its latest revision ($attempt/5)."
+          done
+          echo "Report publication failed after five attempts." >&2
+          exit 1
 
   upload-release-assets:
     name: Upload build tar.gz
@@ -1053,8 +1040,7 @@ jobs:
     runs-on: ubuntu-latest
     if: >
       startsWith(github.ref, 'refs/tags/v')
-        && (!contains(github.event.commits[0].message, '[skip r-cmd]'))
-        && github.event.pull_request.draft == false
+
 
     steps:
       - name: Checkout repo 🛎

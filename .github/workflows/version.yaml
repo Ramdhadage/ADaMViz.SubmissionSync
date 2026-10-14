@@ -18,40 +18,20 @@ jobs:
   version:
     name: Version check 🏁
     runs-on: ubuntu-latest
-    if: >
-      !contains(github.event.commits[0].message, '[skip version]')
-        && github.event.pull_request.draft == false
 
     steps:
-      - name: Get branch names 🌿
-        id: branch-name
-        uses: tj-actions/branch-names@e497ceb8ccd43fd9573cf2e375216625bc411d1f # v9.0.0
-
       - name: Checkout repo (PR) 🛎
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         if: github.event_name == 'pull_request'
         with:
-          ref: ${{ steps.branch-name.outputs.head_ref_branch }}
+          ref: ${{ github.event.pull_request.head.sha }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
 
       - name: Checkout repo 🛎
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         if: github.event_name != 'pull_request'
         with:
-          ref: ${{ steps.branch-name.outputs.current_branch }}
-
-      - name: Check commit message 💬
-        run: |
-          git config --global --add safe.directory $(pwd)
-          export head_commit_message="$(git show -s --format=%B | tr '\r\n' ' ' | tr '\n' ' ')"
-          echo "head_commit_message = $head_commit_message"
-          if [[ $head_commit_message == *"$SKIP_INSTRUCTION"* ]]; then
-            echo "Skip instruction detected - cancelling the workflow."
-            exit 1
-          fi
-        shell: bash
-        env:
-          SKIP_INSTRUCTION: "[skip version]"
+          ref: ${{ github.sha }}
 
       - name: NEWS.md and DESCRIPTION Version check 🏁
         run: |
@@ -82,39 +62,19 @@ jobs:
   emoji:
     name: Emoji in NEWS.md 📰
     runs-on: ubuntu-latest
-    if: >
-      !contains(github.event.commits[0].message, '[skip version]')
-        && github.event.pull_request.draft == false
     steps:
-      - name: Get branch names 🌿
-        id: branch-name
-        uses: tj-actions/branch-names@e497ceb8ccd43fd9573cf2e375216625bc411d1f # v9.0.0
-
       - name: Checkout repo (PR) 🛎
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         if: github.event_name == 'pull_request'
         with:
-          ref: ${{ steps.branch-name.outputs.head_ref_branch }}
+          ref: ${{ github.event.pull_request.head.sha }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
 
       - name: Checkout repo 🛎
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         if: github.event_name != 'pull_request'
         with:
-          ref: ${{ steps.branch-name.outputs.current_branch }}
-
-      - name: Check commit message 💬
-        run: |
-          git config --global --add safe.directory $(pwd)
-          export head_commit_message="$(git show -s --format=%B | tr '\r\n' ' ' | tr '\n' ' ')"
-          echo "head_commit_message = $head_commit_message"
-          if [[ $head_commit_message == *"$SKIP_INSTRUCTION"* ]]; then
-            echo "Skip instruction detected - cancelling the workflow."
-            exit 1
-          fi
-        shell: bash
-        env:
-          SKIP_INSTRUCTION: "[skip version]"
+          ref: ${{ github.sha }}
 
       - name: Set up Python 🐍
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
@@ -134,13 +94,14 @@ jobs:
               text = file.read()
           lines = text.split('\n')
           emoji_pattern = regex.compile(r"(?![\d\p{P}])\p{Emoji}")
+          found_emoji = False
           for line_num, line in enumerate(lines, start=1):
               matches = [(match.group(), match.start(), match.end()) for match in emoji_pattern.finditer(line)]
+              found_emoji = found_emoji or bool(matches)
               for emoji, start, end in matches:
                   print(f"Emoji: {emoji} | Line: {line_num} | Start: {start} | End: {end}")
-          if matches:
+          if found_emoji:
               print("🚨 Emojis were found in the NEWS.md file! Please remove them 🙏")
-              print("ℹ️ Refer to https://github.com/insightsengineering/tern.gee/issues/37#issue-1714621201 for more information")
               sys.exit(1)
           print("🥰 No emojis found in the NEWS.md, good to go!")
         shell: python
