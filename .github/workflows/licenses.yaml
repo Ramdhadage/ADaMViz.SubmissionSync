@@ -17,43 +17,64 @@ jobs:
   licenses:
     runs-on: ubuntu-latest
     name: Check 🚩
-    if: >
-      !contains(github.event.commits[0].message, '[skip licenses]')
-        && github.event.pull_request.draft == false
+    container:
+      image: ghcr.io/insightsengineering/rstudio@sha256:b7fce5f56d0f979f33304b8d74ab878fd4f78db81278aeedc3a8ad6f22e86428
+    env:
+      RENV_CONFIG_AUTOLOADER_ENABLED: "true"
 
     steps:
-      - name: Get branch names 🌿
-        id: branch-name
-        uses: tj-actions/branch-names@e497ceb8ccd43fd9573cf2e375216625bc411d1f # v9.0.0
-
       - name: Checkout repo (PR) 🛎
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         if: github.event_name == 'pull_request'
         with:
-          ref: ${{ steps.branch-name.outputs.head_ref_branch }}
+          ref: ${{ github.event.pull_request.head.sha }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
 
       - name: Checkout repo 🛎
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         if: github.event_name != 'pull_request'
         with:
-          ref: ${{ steps.branch-name.outputs.current_branch }}
+          ref: ${{ github.sha }}
 
-      - name: Check commit message 💬
+      - name: Restore scanner dependencies
         run: |
-          git config --global --add safe.directory $(pwd)
-          export head_commit_message="$(git show -s --format=%B | tr '\r\n' ' ' | tr '\n' ' ')"
-          echo "head_commit_message = $head_commit_message"
-          if [[ $head_commit_message == *"$SKIP_INSTRUCTION"* ]]; then
-            echo "Skip instruction detected - cancelling the workflow."
-            exit 1
-          fi
-        shell: bash
-        env:
-          SKIP_INSTRUCTION: "[skip licenses]"
+          renv::restore(prompt = FALSE)
+          stopifnot(requireNamespace("jsonlite", quietly = TRUE))
+        shell: Rscript {0}
+        working-directory: ${{ inputs.package-subdirectory }}
 
       - name: Generate license report 📜
-        uses: insightsengineering/r-license-report@v1
+        run: |
+          description <- read.dcf("DESCRIPTION")
+          fields <- intersect(c("Depends", "Imports"), colnames(description))
+          direct <- trimws(unlist(strsplit(paste(description[1, fields], collapse = ","), ",")))
+          direct <- setdiff(sub("\\s*\\(.*", "", direct), c("R", ""))
+          installed <- installed.packages(fields = "License")
+          dependencies <- unique(c(direct, unlist(tools::package_dependencies(
+            direct, db = installed, which = c("Depends", "Imports", "LinkingTo"),
+            recursive = TRUE
+          ))))
+          missing <- setdiff(dependencies, rownames(installed))
+          if (length(missing)) stop("License metadata unavailable: ", paste(missing, collapse = ", "))
+          report <- as.data.frame(installed[dependencies, c("Package", "Version", "License"), drop = FALSE])
+          if (!nrow(report) || anyNA(report$License) || any(!nzchar(report$License))) {
+            stop("License scan returned incomplete results")
+          }
+          print(report, row.names = FALSE)
+          write.csv(report, "license-report.csv", row.names = FALSE)
+          writeLines(jsonlite::toJSON(report, dataframe = "rows", pretty = TRUE), "license-report.json")
+          if (any(grepl("^AGPL.*", report$License))) {
+            stop("AGPL dependency licenses require review")
+          }
+        shell: Rscript {0}
+        working-directory: ${{ inputs.package-subdirectory }}
+
+      - name: Upload license results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          regex: "^AGPL.*"
-          path: ${{ inputs.package-subdirectory }}
+          name: license-report
+          path: |
+            ${{ inputs.package-subdirectory }}/license-report.csv
+            ${{ inputs.package-subdirectory }}/license-report.json
+          if-no-files-found: error

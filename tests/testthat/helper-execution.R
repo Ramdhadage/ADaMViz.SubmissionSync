@@ -2,6 +2,14 @@ test_source_root <- function() {
   .execution_source_root()
 }
 
+test_subprocess_libpaths <- function() {
+  # covr's instrumented package library can sit outside .libPaths().
+  package_path <- getNamespaceInfo(
+    asNamespace("ADaMViz.SubmissionSync"), "path"
+  )
+  unique(c(dirname(package_path), .libPaths()))
+}
+
 execution_spec <- function() {
   new_plot_spec(
     dataset_id = "fixture-adlb",

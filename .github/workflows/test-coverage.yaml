@@ -97,11 +97,8 @@ jobs:
   coverage:
     name: Coverage 📔
     runs-on: ubuntu-latest
-    if: >
-      !contains(github.event.commits[0].message, '[skip coverage]')
-        && github.event.pull_request.draft == false
     container:
-      image: ghcr.io/insightsengineering/rstudio:latest
+      image: ghcr.io/insightsengineering/rstudio@sha256:b7fce5f56d0f979f33304b8d74ab878fd4f78db81278aeedc3a8ad6f22e86428
     env:
       RENV_CONFIG_AUTOLOADER_ENABLED: "false"
     outputs:
@@ -172,7 +169,7 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         if: github.event_name == 'pull_request'
         with:
-          ref: ${{ steps.branch-name.outputs.head_ref_branch }}
+          ref: ${{ github.event.pull_request.head.sha }}
           path: ${{ github.event.repository.name }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
 
@@ -180,22 +177,8 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         if: github.event_name != 'pull_request'
         with:
-          ref: ${{ steps.branch-name.outputs.current_branch }}
+          ref: ${{ github.sha }}
           path: ${{ github.event.repository.name }}
-
-      - name: Check commit message 💬
-        run: |
-          git config --global --add safe.directory $(pwd)
-          export head_commit_message="$(git show -s --format=%B | tr '\r\n' ' ' | tr '\n' ' ')"
-          echo "head_commit_message = $head_commit_message"
-          if [[ $head_commit_message == *"$SKIP_INSTRUCTION"* ]]; then
-            echo "Skip instruction detected - cancelling the workflow."
-            exit 1
-          fi
-        shell: bash
-        working-directory: ${{ github.event.repository.name }}
-        env:
-          SKIP_INSTRUCTION: "[skip coverage]"
 
       - name: Normalize inputs ⊳
         id: normalizer
@@ -273,34 +256,16 @@ jobs:
             if (!require("dotenv")) install.packages("dotenv", repos = "https://cloud.r-project.org")
             dotenv::load_dot_env("/tmp/dotenv.env")
           }
-          tryCatch(
-            expr = {
-                x <- covr::package_coverage(
-                  clean = FALSE,
-                  quiet = FALSE
-                )
-                print(x)
-                covr::report(
-                    x,
-                    file = "coverage-report.html",
-                    browse = FALSE
-                )
-                covr::to_cobertura(x, filename = "coverage.xml")
-                p <- covr::percent_coverage(x)
-                cat(p, file = "coverage.txt", sep = "")
-            },
-            error = function(e) {
-              message("Errors generated during coverage analysis:")
-              print(e)
-              error_file <- list.files(path = "/tmp", pattern="*.fail$", recursive = T, full.names = T)[1]
-              if (length(error_file) && file.exists(error_file)) {
-                cat("__________FULL OUTPUT__________")
-                writeLines(readLines(error_file))
-              }
-            }
-          )
-          covr_html <- "coverage-report.html"
-          if (!file.exists(covr_html)) writeLines(c("No coverage report."), covr_html)
+          unlink(c("coverage-report.html", "coverage.xml", "coverage.txt"))
+          x <- covr::package_coverage(clean = FALSE, quiet = FALSE)
+          print(x)
+          p <- covr::percent_coverage(x)
+          stopifnot(length(p) == 1L, is.finite(p), p >= 0, p <= 100)
+          covr::report(x, file = "coverage-report.html", browse = FALSE)
+          covr::to_cobertura(x, filename = "coverage.xml")
+          cat(p, file = "coverage.txt", sep = "")
+          reports <- c("coverage-report.html", "coverage.xml", "coverage.txt")
+          stopifnot(all(file.exists(reports)), all(file.info(reports)$size > 0))
         shell: Rscript {0}
         working-directory: ${{ github.event.repository.name }}/${{ inputs.package-subdirectory }}
 
@@ -314,7 +279,10 @@ jobs:
             ${{ github.event.repository.name }}/${{ inputs.package-subdirectory }}/coverage-report.html
 
       - name: Post coverage report 🗞
-        if: steps.check_coverage_reports.outputs.files_exists == 'true'
+        if: >-
+          steps.check_coverage_reports.outputs.files_exists == 'true' &&
+          (github.event_name != 'pull_request' ||
+           github.event.pull_request.head.repo.full_name == github.repository)
         uses: insightsengineering/coverage-action@v3
         with:
           path: ${{ github.event.repository.name }}/${{ inputs.package-subdirectory }}/coverage.xml
@@ -330,8 +298,10 @@ jobs:
           name: coverage-report
           path: |
             ${{ github.event.repository.name }}/${{ inputs.package-subdirectory }}/coverage-report.html
+            ${{ github.event.repository.name }}/${{ inputs.package-subdirectory }}/coverage.xml
+            ${{ github.event.repository.name }}/${{ inputs.package-subdirectory }}/coverage.txt
             ${{ github.event.repository.name }}/${{ inputs.package-subdirectory }}/lib/
-        continue-on-error: true
+          if-no-files-found: error
 
       - name: Set output ⚙️
         id: coverage-output
@@ -343,12 +313,9 @@ jobs:
   covtracer:
     name: Covtracer 🐄
     runs-on: ubuntu-latest
-    if: >
-      !contains(github.event.commits[0].message, '[skip coverage]')
-        && github.event.pull_request.draft == false
-        && inputs.enable-covtracer == true
+    if: inputs.enable-covtracer == true
     container:
-      image: ghcr.io/insightsengineering/rstudio:latest
+      image: ghcr.io/insightsengineering/rstudio@sha256:b7fce5f56d0f979f33304b8d74ab878fd4f78db81278aeedc3a8ad6f22e86428
 
     steps:
       - name: Get branch names 🌿
@@ -359,7 +326,7 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         if: github.event_name == 'pull_request'
         with:
-          ref: ${{ steps.branch-name.outputs.head_ref_branch }}
+          ref: ${{ github.event.pull_request.head.sha }}
           path: ${{ github.event.repository.name }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
 
@@ -367,22 +334,8 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         if: github.event_name != 'pull_request'
         with:
-          ref: ${{ steps.branch-name.outputs.current_branch }}
+          ref: ${{ github.sha }}
           path: ${{ github.event.repository.name }}
-
-      - name: Check commit message 💬
-        run: |
-          git config --global --add safe.directory $(pwd)
-          export head_commit_message="$(git show -s --format=%B | tr '\r\n' ' ' | tr '\n' ' ')"
-          echo "head_commit_message = $head_commit_message"
-          if [[ $head_commit_message == *"$SKIP_INSTRUCTION"* ]]; then
-            echo "Skip instruction detected - cancelling the workflow."
-            exit 1
-          fi
-        shell: bash
-        working-directory: ${{ github.event.repository.name }}
-        env:
-          SKIP_INSTRUCTION: "[skip coverage]"
 
       - name: Restore SD cache 💰
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
@@ -415,9 +368,6 @@ jobs:
     if: >
       needs.coverage.outputs.publish-coverage-html-report == 'true'
         && github.event_name != 'pull_request'
-    # Only one job can publish to gh-pages branch concurrently.
-    concurrency:
-      group: ghpages
     steps:
       - name: Setup token 🔑
         id: github-token
@@ -440,38 +390,50 @@ jobs:
       - name: Rename report ⚙️
         run: mv coverage-report/coverage-report.html coverage-report/index.html
 
-      - name: Upload coverage report to GitHub pages 🗞️
-        if: needs.coverage.outputs.multiversion-docs == 'true'
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
+      - name: Checkout latest report branch
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
-          github_token: ${{ steps.github-token.outputs.token }}
-          publish_dir: ./coverage-report
-          destination_dir: ${{ needs.coverage.outputs.current-branch-or-tag }}/coverage-report
+          ref: gh-pages
+          path: report-pages
+          token: ${{ steps.github-token.outputs.token }}
+          fetch-depth: 0
 
-      - name: Upload coverage report to GitHub pages (latest-tag) 🏷️
-        if: >
-          needs.coverage.outputs.is-latest-tag == 'true'
-            && needs.coverage.outputs.multiversion-docs == 'true'
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
-        with:
-          github_token: ${{ steps.github-token.outputs.token }}
-          publish_dir: ./coverage-report
-          destination_dir: ${{ inputs.latest-tag-alt-name }}/coverage-report
-
-      - name: Upload coverage report to GitHub pages (release-candidate) 🏷️
-        if: >
-          needs.coverage.outputs.is-rc-tag == 'true'
-            && needs.coverage.outputs.multiversion-docs == 'true'
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
-        with:
-          github_token: ${{ steps.github-token.outputs.token }}
-          publish_dir: ./coverage-report
-          destination_dir: ${{ inputs.release-candidate-alt-name }}/coverage-report
-
-      - name: Upload coverage report to GitHub pages (non-multiversion) 🗞️
-        if: needs.coverage.outputs.multiversion-docs == 'false'
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
-        with:
-          github_token: ${{ steps.github-token.outputs.token }}
-          publish_dir: ./coverage-report
-          destination_dir: coverage-report
+      - name: Publish reports with concurrent-update retry
+        shell: bash
+        working-directory: report-pages
+        env:
+          MULTIVERSION: ${{ needs.coverage.outputs.multiversion-docs }}
+          REF_NAME: ${{ needs.coverage.outputs.current-branch-or-tag }}
+          LATEST_TAG: ${{ needs.coverage.outputs.is-latest-tag }}
+          RC_TAG: ${{ needs.coverage.outputs.is-rc-tag }}
+          LATEST_ALIAS: ${{ inputs.latest-tag-alt-name }}
+          RC_ALIAS: ${{ inputs.release-candidate-alt-name }}
+          REPORT_DIRECTORY: coverage-report
+        run: |
+          set -euo pipefail
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          destinations=("$REPORT_DIRECTORY")
+          if [ "$MULTIVERSION" == "true" ]; then
+            destinations=("$REF_NAME/$REPORT_DIRECTORY")
+            if [ "$LATEST_TAG" == "true" ]; then destinations+=("$LATEST_ALIAS/$REPORT_DIRECTORY"); fi
+            if [ "$RC_TAG" == "true" ]; then destinations+=("$RC_ALIAS/$REPORT_DIRECTORY"); fi
+          fi
+          for attempt in {1..5}; do
+            git fetch origin gh-pages
+            git reset --hard origin/gh-pages
+            for destination in "${destinations[@]}"; do
+              mkdir -p "$destination"
+              cp -a "../coverage-report/." "$destination/"
+              git add -- "$destination"
+            done
+            if git diff --cached --quiet; then
+              echo "Report already current."
+              exit 0
+            fi
+            git commit -m "Update coverage-report report for ${{ github.sha }}"
+            if git push origin HEAD:gh-pages; then exit 0; fi
+            echo "Report branch changed; retrying from its latest revision ($attempt/5)."
+          done
+          echo "Report publication failed after five attempts." >&2
+          exit 1

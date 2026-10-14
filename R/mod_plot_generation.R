@@ -1,5 +1,6 @@
 mod_plot_generation_ui <- function(id) {
   ns <- shiny::NS(id)
+  tags <- shiny::tags
 
   tags$div(
     tags$style(shiny::HTML(paste(c(
@@ -353,6 +354,7 @@ mod_plot_generation_server <- function(
   create_correction,
   workspace_provider
 ) {
+  tags <- shiny::tags
   shiny::moduleServer(id, function(input, output, session) {
     step_ids <- c("data", "ask", "confirm", "result", "export")
     step_labels <- c("Data", "Ask", "Confirm", "Result", "Export")

@@ -27,34 +27,20 @@ jobs:
   spelling:
     name: Check spelling 🔠
     runs-on: ubuntu-latest
-    if: >
-      !contains(github.event.commits[0].message, '[skip spelling]')
-        && github.event.pull_request.draft == false
     container:
-      image: ghcr.io/insightsengineering/rstudio:latest
+      image: ghcr.io/insightsengineering/rstudio@sha256:b7fce5f56d0f979f33304b8d74ab878fd4f78db81278aeedc3a8ad6f22e86428
 
     steps:
       - name: Setup token 🔑
         id: github-token
-        run: |
-          if [ "${{ secrets.REPO_GITHUB_TOKEN }}" == "" ]; then
-            echo "REPO_GITHUB_TOKEN is empty. Substituting it with GITHUB_TOKEN."
-            echo "token=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
-          else
-            echo "Using REPO_GITHUB_TOKEN."
-            echo "token=${{ secrets.REPO_GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
-          fi
+        run: echo "token=${{ github.token }}" >> "$GITHUB_OUTPUT"
         shell: bash
-
-      - name: Get branch names 🌿
-        id: branch-name
-        uses: tj-actions/branch-names@e497ceb8ccd43fd9573cf2e375216625bc411d1f # v9.0.0
 
       - name: Checkout repo (PR) 🛎
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         if: github.event_name == 'pull_request'
         with:
-          ref: ${{ steps.branch-name.outputs.head_ref_branch }}
+          ref: ${{ github.event.pull_request.head.sha }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           fetch-depth: 1
           token: ${{ steps.github-token.outputs.token }}
@@ -63,21 +49,8 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         if: github.event_name != 'pull_request'
         with:
-          ref: ${{ steps.branch-name.outputs.current_branch }}
+          ref: ${{ github.ref_name }}
           token: ${{ steps.github-token.outputs.token }}
-
-      - name: Check commit message 💬
-        run: |
-          git config --global --add safe.directory $(pwd)
-          export head_commit_message="$(git show -s --format=%B | tr '\r\n' ' ' | tr '\n' ' ')"
-          echo "head_commit_message = $head_commit_message"
-          if [[ $head_commit_message == *"$SKIP_INSTRUCTION"* ]]; then
-            echo "Skip instruction detected - cancelling the workflow."
-            exit 1
-          fi
-        shell: bash
-        env:
-          SKIP_INSTRUCTION: "[skip spelling]"
 
       - name: Normalize variables 📏
         run: |
@@ -95,22 +68,16 @@ jobs:
         if: github.event_name == 'push'
         run: |
           x <- readLines('inst/WORDLIST')
-          file.remove('inst/WORDLIST')
+          stopifnot(file.remove('inst/WORDLIST'))
           spelling::update_wordlist(confirm = FALSE)
           y <- readLines('inst/WORDLIST')
+          findings <- spelling::spell_check_package()
+          if (nrow(findings)) stop("Generated WORDLIST does not pass spell checking")
           if (length(setdiff(y, x)) == 0 && length(setdiff(x, y)) > 0) {
             message("Unnecessary entries on WORDLIST:")
             message(cat(setdiff(x, y), sep='\n'))
           }
         shell: Rscript {0}
-
-      - name: Checkout to main 🛎
-        if: github.event_name == 'push'
-        run: |
-          git config --global --add safe.directory $(pwd)
-          git fetch origin main
-          git checkout main
-          git pull origin main
 
       - name: Set file pattern to commit ⚙️
         if: github.event_name == 'push'
@@ -128,9 +95,8 @@ jobs:
         if: github.event_name == 'push'
         uses: stefanzweifel/git-auto-commit-action@b863ae1933cb653a53c021fe36dbb774e1fb9403 # v5
         with:
-          commit_message: "[skip ci] Update WORDLIST"
+          commit_message: "Update WORDLIST"
           file_pattern: "${{ steps.file-pattern.outputs.file-pattern }}"
           commit_user_name: github-actions
           commit_user_email: >-
             41898282+github-actions[bot]@users.noreply.github.com
-        continue-on-error: true

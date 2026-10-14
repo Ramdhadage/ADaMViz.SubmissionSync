@@ -371,7 +371,9 @@ test_that("writes, projection rebuilds, and integrity checks serialize", {
     winslash = "/",
     mustWork = FALSE
   )
-  if (!file.exists(file.path(source_root, "DESCRIPTION"))) source_root <- NULL
+  if (!file.exists(file.path(source_root, "R", "evidence_repository_sqlite.R"))) {
+    source_root <- NULL
+  }
   worker <- function(source_root, database, chain_root, gate, action) {
     if (!is.null(source_root)) devtools::load_all(source_root, quiet = TRUE)
     package <- asNamespace("ADaMViz.SubmissionSync")
@@ -391,7 +393,7 @@ test_that("writes, projection rebuilds, and integrity checks serialize", {
     callr::r_bg(
       worker,
       args = list(source_root, database, chain_root, gate, action),
-      libpath = .libPaths()
+      libpath = test_subprocess_libpaths()
     )
   })
   file.create(gate)

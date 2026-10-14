@@ -92,7 +92,9 @@ test_that("backup remains consistent with a concurrent lifecycle write", {
     winslash = "/",
     mustWork = FALSE
   )
-  if (!file.exists(file.path(source_root, "DESCRIPTION"))) source_root <- NULL
+  if (!file.exists(file.path(source_root, "R", "evidence_repository_sqlite.R"))) {
+    source_root <- NULL
+  }
   writer <- function(source_root, database, chain_root, artifact_root, gate) {
     if (!is.null(source_root)) devtools::load_all(source_root, quiet = TRUE)
     package <- asNamespace("ADaMViz.SubmissionSync")
@@ -125,14 +127,14 @@ test_that("backup remains consistent with a concurrent lifecycle write", {
   writer_process <- callr::r_bg(
     writer,
     args = list(source_root, database, chain_root, artifact_root, gate),
-    libpath = .libPaths()
+    libpath = test_subprocess_libpaths()
   )
   backup_process <- callr::r_bg(
     copier,
     args = list(
       source_root, database, chain_root, artifact_root, gate, backup
     ),
-    libpath = .libPaths()
+    libpath = test_subprocess_libpaths()
   )
   file.create(gate)
   writer_process$wait(timeout = 60000)

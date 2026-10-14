@@ -42,7 +42,7 @@
 }
 
 .environment_fingerprint <- function() {
-  canonical_hash(.execution_environment_details())
+  canonical_hash(.execution_environment_details()) # nolint: object_usage_linter.
 }
 
 .validate_execution_input <- function(
@@ -69,7 +69,7 @@
   if (!identical(script_hash, request$script_hash)) {
     cli::cli_abort("Execution script hash does not match the immutable request")
   }
-  snapshot_hash <- canonical_hash(analysis_data)
+  snapshot_hash <- canonical_hash(analysis_data) # nolint: object_usage_linter.
   if (!identical(snapshot_hash, request$snapshot_hash)) {
     cli::cli_abort("Execution data hash does not match the immutable request")
   }
@@ -147,13 +147,13 @@ run_execution_locally <- function(
     ))
   }
 
-  analytical_hash <- canonical_hash(env$boxplot_analysis)
+  analytical_hash <- canonical_hash(env$boxplot_analysis) # nolint: object_usage_linter.
   image_hash <- .execution_hash_file(image_path)
   environment <- .execution_environment_details()
   environment$image_width <- image_width
   environment$image_height <- image_height
-  environment_fingerprint <- canonical_hash(environment)
-  manifest <- new_execution_result(
+  environment_fingerprint <- canonical_hash(environment) # nolint: object_usage_linter.
+  manifest <- new_execution_result( # nolint: object_usage_linter.
     request,
     analytical_hash = analytical_hash,
     image_hash = image_hash,

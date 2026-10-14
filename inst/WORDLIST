@@ -4,8 +4,10 @@ AVAL
 BDS
 CDISC
 GxP
+Invariants
 Idempotency
 LLM
+Observability
 Lifecycle
 POC
 Pharmaverse
@@ -15,6 +17,7 @@ SHA
 Shiny
 SubmissionSync
 UI
+UX
 acknowledgement
 allowlist
 bds
@@ -26,6 +29,7 @@ de
 deduplication
 deidentified
 ellmer
+explainers
 fallbacks
 filesystem
 ggplot2
@@ -36,6 +40,7 @@ idempotency
 inlined
 json
 lifecycle
+linter
 nonblocking
 paramcd
 parseable

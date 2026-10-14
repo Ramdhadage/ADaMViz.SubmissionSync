@@ -32,71 +32,48 @@ jobs:
   vbump:
     name: Bump version ⤴
     runs-on: ubuntu-latest
-    if: |
-      !(contains(github.event.commits[0].message, '[skip vbump]') ||
-        contains(github.event.head_commit.message, '[skip vbump]')
-      )
     container:
-      image: docker.io/rocker/tidyverse:latest
+      image: docker.io/rocker/tidyverse@sha256:94a4cdb7be4d1214f9039bca4937e8919253d2ad90d8bed084e9a8af685a50c7
 
     steps:
       - name: Setup token 🔑
         id: github-token
-        run: |
-          if [ "${{ secrets.REPO_GITHUB_TOKEN }}" == "" ]; then
-            echo "REPO_GITHUB_TOKEN is empty. Substituting it with GITHUB_TOKEN."
-            echo "token=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
-          else
-            echo "Using REPO_GITHUB_TOKEN."
-            echo "token=${{ secrets.REPO_GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
-          fi
+        run: echo "token=${{ github.token }}" >> "$GITHUB_OUTPUT"
         shell: bash
-
-      - name: Get branch names 🌿
-        id: branch-name
-        uses: tj-actions/branch-names@e497ceb8ccd43fd9573cf2e375216625bc411d1f # v9.0.0
 
       - name: Checkout repo 🛎
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
-          ref: ${{ steps.branch-name.outputs.current_branch }}
+          ref: ${{ inputs.vbump-after-release && 'main' || github.ref_name }}
           token: ${{ steps.github-token.outputs.token }}
 
-      - name: Bump version in DESCRIPTION 📜
-        if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main') || inputs.vbump-after-release == true }}
-        run: desc::desc_bump_version("dev", normalize = TRUE)
+      - name: Restore locked version tools
+        run: renv::restore(packages = "desc", prompt = FALSE)
         shell: Rscript {0}
         working-directory: ${{ inputs.package-subdirectory }}
 
-      - name: Update Date field 📅
-        run: if (desc::desc_has_fields("Date")) desc::desc_set("Date", Sys.Date())
-        shell: Rscript {0}
-        working-directory: ${{ inputs.package-subdirectory }}
-
-      - name: Bump version in NEWS.md 📰
+      - name: Update development version and NEWS
         run: |
-          if [ -f NEWS.md ]
-          then {
-            git config --global --add safe.directory $(pwd)
-            DESC_VERSION=$(R --slave -e 'cat(paste(desc::desc_get_version()))' | tr -d '\n' | xargs)
-            NEWS_VERSION=$(awk '/^#+ /{print $3,$4; exit}' NEWS.md | tr -d '\n' | xargs)
-            FIRST_NEWS_LINE=$(head -1 NEWS.md)
-            if [ "${{ inputs.vbump-after-release }}" == "true" ]; then
-              # Add a new section with the released version that will be vbumped below.
-              printf "$FIRST_NEWS_LINE\n\n" | cat - NEWS.md > temp-news.md
-              mv temp-news.md NEWS.md
-            fi
-            # Replace only the first occurence of $NEWS_VERSION,
-            # but only if it's not already set to (development version)
-            if [ $NEWS_VERSION != "(development version)" ]
-            then {
-              sed -i "0,/$NEWS_VERSION/s/$NEWS_VERSION/$DESC_VERSION/" NEWS.md
+          version <- as.character(desc::desc_get_version())
+          desc::desc_bump_version("dev", normalize = TRUE)
+          if (desc::desc_has_fields("Date")) desc::desc_set("Date", as.character(Sys.Date()))
+          version <- as.character(desc::desc_get_version())
+          if (file.exists("NEWS.md")) {
+            news <- readLines("NEWS.md", warn = FALSE)
+            heading <- grep("^#+ ", news)[1L]
+            stopifnot(!is.na(heading))
+            package <- desc::desc_get("Package")
+            if (identical("${{ inputs.vbump-after-release }}", "true")) {
+              news <- c(paste("#", package, version), "", news)
+              heading <- 1L
+            } else {
+              news[heading] <- paste("#", package, version)
             }
-            fi
-            echo "NEW_PKG_VERSION=${DESC_VERSION}" >> $GITHUB_ENV
+            writeLines(news, "NEWS.md")
+            stopifnot(identical(readLines("NEWS.md", warn = FALSE)[heading], paste("#", package, version)))
           }
-          fi
-        shell: bash
+          cat(paste0("NEW_PKG_VERSION=", version, "\n"), file = Sys.getenv("GITHUB_ENV"), append = TRUE)
+        shell: Rscript {0}
         working-directory: ${{ inputs.package-subdirectory }}
 
       - name: Check if a pre-commit config exists
@@ -122,13 +99,6 @@ jobs:
           python -m pip -q install pre-commit
           pre-commit autoupdate
 
-      - name: Checkout to main 🛎
-        if: ${{ inputs.vbump-after-release == true }}
-        run: |
-          git fetch origin main
-          git checkout main
-          git pull origin main
-
       - name: Set file pattern to commit ⚙️
         id: file-pattern
         run: |
@@ -147,9 +117,8 @@ jobs:
         if: ${{ env.NEW_PKG_VERSION }}
         uses: stefanzweifel/git-auto-commit-action@b863ae1933cb653a53c021fe36dbb774e1fb9403 # v5
         with:
-          commit_message: "[skip actions] Bump version to ${{ env.NEW_PKG_VERSION }}"
+          commit_message: "Bump version to ${{ env.NEW_PKG_VERSION }}"
           file_pattern: "${{ steps.file-pattern.outputs.file-pattern }}"
           commit_user_name: github-actions
           commit_user_email: >-
             41898282+github-actions[bot]@users.noreply.github.com
-        continue-on-error: true

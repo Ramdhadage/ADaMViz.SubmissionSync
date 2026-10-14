@@ -23,20 +23,13 @@ jobs:
   lint:
     name: SuperLinter 🦸‍♂️
     runs-on: ubuntu-latest
-    if: >
-      !contains(github.event.commits[0].message, '[skip linter]')
-        && github.event.pull_request.draft == false
 
     steps:
-      - name: Get branch names 🌿
-        id: branch-name
-        uses: tj-actions/branch-names@e497ceb8ccd43fd9573cf2e375216625bc411d1f # v9.0.0
-
       - name: Checkout repo (PR) 🛎
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         if: github.event_name == 'pull_request'
         with:
-          ref: ${{ steps.branch-name.outputs.head_ref_branch }}
+          ref: ${{ github.event.pull_request.head.sha }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           fetch-depth: 0
 
@@ -44,21 +37,8 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         if: github.event_name != 'pull_request'
         with:
-          ref: ${{ steps.branch-name.outputs.current_branch }}
+          ref: ${{ github.sha }}
           fetch-depth: 0
-
-      - name: Check commit message 💬
-        run: |
-          git config --global --add safe.directory $(pwd)
-          export head_commit_message="$(git show -s --format=%B | tr '\r\n' ' ' | tr '\n' ' ')"
-          echo "head_commit_message = $head_commit_message"
-          if [[ $head_commit_message == *"$SKIP_INSTRUCTION"* ]]; then
-            echo "Skip instruction detected - cancelling the workflow."
-            exit 1
-          fi
-        shell: bash
-        env:
-          SKIP_INSTRUCTION: "[skip linter]"
 
       - name: Override SuperLinter configs 💾
         run: |
@@ -91,7 +71,7 @@ jobs:
           DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
           FILTER_REGEX_EXCLUDE: NEWS.md|design/.*|testthat/_snaps/.*
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_ALL_CODEBASE: ${{ inputs.lint-all-files }}
           VALIDATE_BASH: true
           VALIDATE_DOCKERFILE: true
           VALIDATE_MARKDOWN: true
@@ -101,11 +81,8 @@ jobs:
   lint-r-code:
     name: Lint R code 🧶
     runs-on: ubuntu-latest
-    if: >
-      !contains(github.event.commits[0].message, '[skip linter]')
-        && github.event.pull_request.draft == false
     container:
-      image: ghcr.io/insightsengineering/rstudio:latest
+      image: ghcr.io/insightsengineering/rstudio@sha256:b7fce5f56d0f979f33304b8d74ab878fd4f78db81278aeedc3a8ad6f22e86428
 
     steps:
       - name: Checkout repo (PR) 🛎
@@ -120,19 +97,6 @@ jobs:
         if: github.event_name != 'pull_request'
         with:
           fetch-depth: 0
-
-      - name: Check commit message 💬
-        run: |
-          git config --global --add safe.directory $(pwd)
-          export head_commit_message="$(git show -s --format=%B | tr '\r\n' ' ' | tr '\n' ' ')"
-          echo "head_commit_message = $head_commit_message"
-          if [[ $head_commit_message == *"$SKIP_INSTRUCTION"* ]]; then
-            echo "Skip instruction detected - cancelling the workflow."
-            exit 1
-          fi
-        shell: bash
-        env:
-          SKIP_INSTRUCTION: "[skip linter]"
 
       - name: Install lint dependencies
         run: install.packages(c("jsonlite", "lintr"), repos = "https://cloud.r-project.org")

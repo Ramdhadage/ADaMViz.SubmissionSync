@@ -204,7 +204,9 @@ test_that("concurrent approval and rejection commit exactly one decision", {
     winslash = "/",
     mustWork = FALSE
   )
-  if (!file.exists(file.path(source_root, "DESCRIPTION"))) source_root <- NULL
+  if (!file.exists(file.path(source_root, "R", "evidence_repository_sqlite.R"))) {
+    source_root <- NULL
+  }
   worker <- function(
     source_root,
     database,
@@ -248,7 +250,7 @@ test_that("concurrent approval and rejection commit exactly one decision", {
       source_root, database, chain_root, gate, "sp",
       "statistical_programmer", "approved"
     ),
-    libpath = .libPaths()
+    libpath = test_subprocess_libpaths()
   )
   rejection <- callr::r_bg(
     worker,
@@ -256,7 +258,7 @@ test_that("concurrent approval and rejection commit exactly one decision", {
       source_root, database, chain_root, gate, "bio",
       "biostatistician", "rejected"
     ),
-    libpath = .libPaths()
+    libpath = test_subprocess_libpaths()
   )
   file.create(gate)
   approval$wait(timeout = 60000)

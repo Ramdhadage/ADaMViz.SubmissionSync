@@ -58,36 +58,22 @@ jobs:
   roxygen:
     name: Manual pages check 🏁
     runs-on: ubuntu-latest
-    if: >
-      !contains(github.event.commits[0].message, '[skip roxygen]')
-        && github.event.pull_request.draft == false
     container:
-      image: ghcr.io/insightsengineering/rstudio:latest
+      image: ghcr.io/insightsengineering/rstudio@sha256:b7fce5f56d0f979f33304b8d74ab878fd4f78db81278aeedc3a8ad6f22e86428
     env:
       RENV_CONFIG_AUTOLOADER_ENABLED: "false"
 
     steps:
       - name: Setup token 🔑
         id: github-token
-        run: |
-          if [ "${{ secrets.REPO_GITHUB_TOKEN }}" == "" ]; then
-            echo "REPO_GITHUB_TOKEN is empty. Substituting it with GITHUB_TOKEN."
-            echo "token=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
-          else
-            echo "Using REPO_GITHUB_TOKEN."
-            echo "token=${{ secrets.REPO_GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
-          fi
+        run: echo "token=${{ github.event_name == 'pull_request' && secrets.REPO_GITHUB_TOKEN || github.token }}" >> "$GITHUB_OUTPUT"
         shell: bash
-
-      - name: Get branch names 🌿
-        id: branch-name
-        uses: tj-actions/branch-names@e497ceb8ccd43fd9573cf2e375216625bc411d1f # v9.0.0
 
       - name: Checkout repo (PR) 🛎
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         if: github.event_name == 'pull_request'
         with:
-          ref: ${{ steps.branch-name.outputs.head_ref_branch }}
+          ref: ${{ github.event.pull_request.head.sha }}
           path: ${{ github.event.repository.name }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           token: ${{ steps.github-token.outputs.token }}
@@ -96,22 +82,22 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         if: github.event_name != 'pull_request'
         with:
-          ref: ${{ steps.branch-name.outputs.current_branch }}
+          ref: ${{ github.ref_name }}
           path: ${{ github.event.repository.name }}
 
-      - name: Check commit message 💬
-        run: |
-          git config --global --add safe.directory $(pwd)
-          export head_commit_message="$(git show -s --format=%B | tr '\r\n' ' ' | tr '\n' ' ')"
-          echo "head_commit_message = $head_commit_message"
-          if [[ $head_commit_message == *"$SKIP_INSTRUCTION"* ]]; then
-            echo "Skip instruction detected - cancelling the workflow."
-            exit 1
-          fi
-        shell: bash
-        working-directory: ${{ github.event.repository.name }}
-        env:
-          SKIP_INSTRUCTION: "[skip roxygen]"
+      - name: Check live PR write target
+        id: write-target
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const {data: pr} = await github.rest.pulls.get({...context.repo, pull_number: context.issue.number});
+            const sameRepo = pr.head.repo?.full_name === context.payload.repository.full_name;
+            core.setOutput('active', pr.state === 'open' && sameRepo);
+            core.setOutput('allowed', pr.state === 'open' && sameRepo && pr.head.sha === context.payload.pull_request.head.sha && ${{ secrets.REPO_GITHUB_TOKEN != '' }});
+            if (pr.state === 'open' && sameRepo && !${{ secrets.REPO_GITHUB_TOKEN != '' }}) core.warning('PR updates require REPO_GITHUB_TOKEN to trigger checks on the generated head; apply generated changes manually when no write token is configured.');
+            core.setOutput('ref', pr.head.ref);
+            core.setOutput('sha', pr.head.sha);
 
       - name: Normalize variables 📏
         run: |
@@ -181,6 +167,7 @@ jobs:
       - name: Roxygen check 🅾
         run: |
           AUTO_UPDATE=${{ inputs.auto-update }}
+          if [[ "$EVENT_NAME" == "pull_request" && "$WRITE_ALLOWED" != "true" ]]; then AUTO_UPDATE=false; fi
           if [[ -n `git status -s | grep -E "man|DESCRIPTION"` ]]
           then {
             ROXYGEN_VERSION="$(Rscript -e 'packageVersion("roxygen2")' | awk '{print $NF}')"
@@ -193,16 +180,21 @@ jobs:
               echo "Regenerating man pages via auto-update"
               git config --global user.name "github-actions"
               git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-              git config pull.rebase false
-              git pull origin "${BRANCH_NAME}" || true
               git add -A man/ DESCRIPTION
-              git commit -m "[skip roxygen] [skip vbump] Roxygen Man Pages Auto Update"
-              git push -v origin "HEAD:${BRANCH_NAME}" || \
-                (echo "⚠️ Could not push to ${BRANCH_NAME} on $(git remote -v show -n origin | grep Push)" && \
-                AUTO_UPDATE=failed)
+              git commit -m "Roxygen Man Pages Auto Update"
+              if [[ "$EVENT_NAME" == "pull_request" ]]; then
+                test "$(git ls-remote origin "refs/heads/${BRANCH_NAME}" | cut -f1)" = "$EXPECTED_SHA"
+                git push origin "HEAD:refs/heads/${BRANCH_NAME}"
+              else
+                git push origin "HEAD:refs/heads/${BRANCH_NAME}"
+              fi
             }
             fi
             # If auto-update is disabled or is unsuccessful, let 'em know to fix manually
+            if [[ "$EVENT_NAME" == "pull_request" && "$WRITE_ACTIVE" != "true" && "$SAME_REPO" == "true" ]]; then
+              echo "PR closed or branch removed; generated updates are not published."
+              exit 0
+            fi
             if [ "${AUTO_UPDATE}" != "true" ]
             then {
               echo -e "\n💻 Please rerun the following command on your workstation and push your changes"
@@ -222,3 +214,8 @@ jobs:
         working-directory: ${{ github.event.repository.name }}/${{ inputs.package-subdirectory }}
         env:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+          EVENT_NAME: ${{ github.event_name }}
+          WRITE_ALLOWED: ${{ steps.write-target.outputs.allowed }}
+          WRITE_ACTIVE: ${{ steps.write-target.outputs.active }}
+          SAME_REPO: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha }}

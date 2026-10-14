@@ -23,6 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: r-lib/actions/setup-r@v2
         with:
           r-version: "release"
@@ -119,12 +121,14 @@ jobs:
     permissions:
       contents: read
       statuses: write
-    if: github.event_name != 'push'
     name: SuperLinter 🦸‍♀️
     uses: ./.github/workflows/linter.yaml
+    with:
+      lint-all-files: true
   roxygen:
     permissions:
       contents: write
+      pull-requests: read
     name: Roxygen 🅾
     uses: ./.github/workflows/roxygen.yaml
     secrets:
@@ -136,6 +140,8 @@ jobs:
     name: gitleaks 💧
     uses: ./.github/workflows/gitleaks.yaml
   spelling:
+    needs: roxygen
+    if: always()
     permissions:
       contents: write
     name: Spell Check 🆎
@@ -143,14 +149,14 @@ jobs:
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
   links:
-    if: github.event_name != 'push'
     name: Check URLs 🌐
     uses: ./.github/workflows/links.yaml
   vbump:
+    needs: spelling
     permissions:
       contents: write
     name: Version Bump 🤜🤛
-    if: github.event_name == 'push'
+    if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
     uses: ./.github/workflows/version-bump.yaml
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
@@ -163,10 +169,68 @@ jobs:
   style:
     permissions:
       contents: write
-    if: github.event_name != 'push'
+      pull-requests: read
     name: Style Check 👗
     uses: ./.github/workflows/style.yaml
     with:
-      auto-update: true
+      auto-update: ${{ github.event_name == 'pull_request' }}
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+
+  generated-check:
+    name: Check final generated main revision
+    needs: vbump
+    if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - name: Record generated revision
+        run: git rev-parse HEAD | tee -a "$GITHUB_STEP_SUMMARY"
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "release"
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake libcurl4-openssl-dev libfontconfig1-dev libfreetype6-dev libgit2-dev libnode-dev libx11-dev pandoc
+      - uses: r-lib/actions/setup-renv@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          dependencies: '"all"'
+          extra-packages: |
+            any::rcmdcheck
+            any::lintr
+      - name: Document package
+        run: |
+          Rscript -e 'roxygen2::roxygenise()'
+          git diff --exit-code -- DESCRIPTION NAMESPACE man/
+      - name: Lint package
+        run: Rscript -e 'lints <- lintr::lint_package(); print(lints); if (length(lints)) quit(status = 1)'
+      - name: Run tests
+        run: Rscript -e 'testthat::test_local(reporter = "summary")'
+      - name: Check package
+        run: Rscript -e 'rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning")'
+
+  required-checks:
+    name: Required CI results
+    if: always()
+    needs: [check, audit, r-cmd, r-cmd-non-cran, coverage, linter, roxygen, gitleaks, spelling, links, vbump, version, licenses, style, generated-check]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check expected event results
+        uses: actions/github-script@v7
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+        with:
+          script: |
+            const results = JSON.parse(process.env.RESULTS);
+            const required = ['check', 'audit', 'r-cmd', 'r-cmd-non-cran', 'coverage', 'linter', 'roxygen', 'gitleaks', 'spelling', 'links', 'version', 'licenses', 'style'];
+            if (context.eventName === 'push' && context.ref === 'refs/heads/main') required.push('vbump', 'generated-check');
+            const failures = required.filter(job => results[job]?.result !== 'success');
+            await core.summary.addHeading('Required CI results').addTable([
+              [{data: 'Job', header: true}, {data: 'Result', header: true}],
+              ...Object.entries(results).map(([job, value]) => [job, value.result])
+            ]).addRaw('Intentional skips: Version Bump outside main push; Lychee (URL Checker selected); Covtracer and PII disabled; tag/multiversion report paths inactive.').write();
+            if (failures.length) core.setFailed('Required checks failed or skipped: ' + failures.join(', '));
