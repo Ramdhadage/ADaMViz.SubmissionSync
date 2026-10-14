@@ -9,9 +9,9 @@ FDA validated or FDA approved.
 
 **Prototype preview:**
 
-[![Rendered F001 plot-generation prototype](inst/app/www/wireframe.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/docs/ux/F001-plot-generation-prototype.html)
+[![Rendered F001 plot-generation prototype](inst/app/www/wireframe.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/docs/ux/F001-plot-generation-prototype.html)
 
-[View in Full Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/docs/ux/F001-plot-generation-prototype.html)
+[View in Full Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/docs/ux/F001-plot-generation-prototype.html)
 
 ## Development status
 
