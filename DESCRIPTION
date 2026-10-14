@@ -32,7 +32,8 @@ Suggests:
     rmarkdown,
     shinytest2,
     testthat (>= 3.0.0),
-    withr
+    withr,
+    DT
 VignetteBuilder: knitr
 URL: https://ramdhadage.github.io/ADaMViz.SubmissionSync/, https://github.com/Ramdhadage/ADaMViz.SubmissionSync
 Config/testthat/edition: 3
