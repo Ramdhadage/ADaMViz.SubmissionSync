@@ -22,6 +22,15 @@ test_that("local runner returns a bounded versioned result manifest", {
   )
   expect_match(result$result$image_hash, "^[0-9a-f]{64}$")
   expect_true(fs::file_exists(result$image_path))
+
+  connection <- file(result$image_path, open = "rb")
+  on.exit(close(connection), add = TRUE)
+  readBin(connection, what = "raw", n = 16L)
+  dimensions <- readBin(connection,
+    what = integer(), n = 2L, size = 4L,
+    endian = "big"
+  )
+  expect_identical(dimensions, c(1200L, 840L))
 })
 
 test_that("runner rejects mismatched scripts and non-POC classifications", {
