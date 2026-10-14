@@ -239,6 +239,7 @@ jobs:
             if (!require("covr")) renv::install("covr")
           }
           if (!require("covr")) install.packages("covr")
+          if (!requireNamespace("DT", quietly = TRUE)) install.packages("DT")
         shell: Rscript {0}
         working-directory: ${{ github.event.repository.name }}/${{ inputs.package-subdirectory }}
 

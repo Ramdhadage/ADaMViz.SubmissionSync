@@ -100,9 +100,14 @@ jobs:
       - name: Check URLs with urlchecker 🔬
         run: |
           # For unexplained reasons, parallel = FALSE is required to prevent some false positives.
-          bad_urls <- nrow(print(urlchecker::url_check(".", parallel = FALSE)))
-          if (bad_urls > 0) {
-            stop("Looks like a total of ", bad_urls, " URL(s) were found! Please correct them.")
+          bad_urls <- urlchecker::url_check(".", parallel = FALSE, fail = FALSE)
+          if (nrow(bad_urls) > 0L) {
+            Sys.sleep(5)
+            bad_urls <- urlchecker::url_check(".", parallel = FALSE, fail = FALSE)
+          }
+          print(bad_urls)
+          if (nrow(bad_urls) > 0L) {
+            stop("Looks like a total of ", nrow(bad_urls), " URL(s) were found! Please correct them.")
           }
         shell: Rscript {0}
         working-directory: ${{ inputs.package-subdirectory }}
