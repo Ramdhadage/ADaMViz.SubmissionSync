@@ -83,6 +83,7 @@ jobs:
         if: github.event_name == 'push'
         id: file-pattern
         run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           if [[ "${{ inputs.package-subdirectory }}" == "." ]]; then
             FILE_PATTERN="inst/WORDLIST"
           else
