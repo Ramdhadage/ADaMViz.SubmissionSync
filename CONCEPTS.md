@@ -5,9 +5,11 @@ Shared domain vocabulary for this project — entities, named processes, and sta
 ## Plot generation
 
 ### Confirmed plot specification
+
 The scientist-approved plot type, variables, and relevant settings from which the application deterministically generates R code.
 
 ### Plot revision
+
 An immutable review unit that links the permitted input, confirmed plot specification, executed R code, resulting plot, validation evidence, and reviewer decisions.
 
 Each reviewer independently approves or rejects a revision, and both approvals are required before export. Unreviewed revisions are not exportable.
