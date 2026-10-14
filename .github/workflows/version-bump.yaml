@@ -102,6 +102,7 @@ jobs:
       - name: Set file pattern to commit ⚙️
         id: file-pattern
         run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           if [[ "${{ inputs.package-subdirectory }}" == "." || "${{ inputs.package-subdirectory }}" == "" ]]; then
             FILE_PATTERN="NEWS.md DESCRIPTION"
           else
