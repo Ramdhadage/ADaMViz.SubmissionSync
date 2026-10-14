@@ -7,18 +7,18 @@ These mechanisms detect several forms of local modification; they do not
 establish qualified audit-record custody or a durable study repository.
 
 [![Rendered integrity and recovery
-diagram](diagrams/12-integrity-lifecycle-backup.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/12-integrity-lifecycle-backup.html)
+diagram](diagrams/12-integrity-lifecycle-backup.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/12-integrity-lifecycle-backup.html)
 
 [View in Full
-Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/12-integrity-lifecycle-backup.html)
+Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/12-integrity-lifecycle-backup.html)
 
 ## Records and identity
 
-[`sqlite_evidence_repository()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/evidence_repository_sqlite.R)
+[`sqlite_evidence_repository()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/evidence_repository_sqlite.R)
 stores plots, revisions, attempts and outcomes, evidence entries,
 accepted artifact bundles, reviewer decisions, export receipts, command
 keys, and a status/version projection. Numbered [SQL
-migrations](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/inst/sql/migrations/)
+migrations](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/inst/sql/migrations/)
 apply in version order and record successful versions in
 `schema_migrations`. Foreign keys are enabled for each repository
 connection. SQL constraints enforce revision numbering, permitted status
@@ -26,14 +26,14 @@ and decision values, unique command/event keys, and record
 relationships.
 
 [`canonical_serialize()` and
-`canonical_hash()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/canonical_serialization.R)
+`canonical_hash()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/canonical_serialization.R)
 sort named list elements recursively and serialize compact JSON before
 hashing. Evidence details have a SHA-256 content hash. Reviewer decision
 records have a separate hash tied to a lifecycle event. These hashes
 serve different purposes; a lifecycle chain does not contain every
 repository row.
 
-[`local_artifact_store()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/artifact_store_local.R)
+[`local_artifact_store()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/artifact_store_local.R)
 stores raw bytes at `<root>/<first-two-hash-characters>/<sha256>`.
 `put()` writes to a temporary file, checks its bytes, and moves it into
 place. Existing objects are verified before reuse.
@@ -130,7 +130,7 @@ with another repository would not protect that other repository’s
 references.
 
 The [application
-coordinator](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/app_server.R)
+coordinator](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/app_server.R)
 uses a temporary `assurance-session-` root unless `repository_root` is
 supplied. Backup, restore, cleanup, and recovery exist as callable
 operations; no automatic scheduled backup or cross-session discovery is
@@ -141,15 +141,15 @@ qualified target-environment custody remain unresolved.
 ## Inspected test coverage
 
 [Repository
-tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-evidence-repository-sqlite.R)
+tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-evidence-repository-sqlite.R)
 cover chain corruption, event omission, root rollback, projection
 rebuilds, evidence/decision modification, publication retry, command
 reuse, migrations, serialized writes, and pending artifact-hash binding.
 [Artifact
-tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-artifact-store-contract.R)
+tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-artifact-store-contract.R)
 cover corruption, reference-preserving cleanup, layout filtering, and
 resolved roots. [Backup/restore
-tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-backup-restore.R)
+tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-backup-restore.R)
 cover round trips, modified/incomplete backups, concurrent lifecycle
 writes, empty repositories, required artifact reconciliation during
 backup, and corrupt artifact bytes during restore. These tests were

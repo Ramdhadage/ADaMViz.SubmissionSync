@@ -87,8 +87,8 @@ bundle, completes the attempt, and promotes the revision.
 <code>Verified</code> describes automated execution evidence. Human
 approval and reproduction of a retained result are separate
 operations.</p>
-<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/07-verification-revision-evidence.html" class="external-link"><img src="diagrams/07-verification-revision-evidence.png" alt="Rendered verification diagram"></a></p>
-<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/07-verification-revision-evidence.html" class="external-link">View
+<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/07-verification-revision-evidence.html" class="external-link"><img src="diagrams/07-verification-revision-evidence.png" alt="Rendered verification diagram"></a></p>
+<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/07-verification-revision-evidence.html" class="external-link">View
 in Full Screen</a></p>
 <p>This page describes the implementation inspected on 2026-10-04; test
 files cited below were read, not executed.</p>
@@ -96,7 +96,7 @@ files cited below were read, not executed.</p>
 <h2 id="what-happens-after-confirmation">What happens after confirmation<a class="anchor" aria-label="anchor" href="#what-happens-after-confirmation"></a>
 </h2>
 <p>The application coordinator, <code>.materialize_revision()</code> in
-<a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/app_server.R" class="external-link">app_server.R</a>,
+<a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/app_server.R" class="external-link">app_server.R</a>,
 compiles the script and creates an execution request. The request
 identifies the confirmed specification, script hash, snapshot
 identifier, selected-record hash, and harness version. The
@@ -108,7 +108,7 @@ pending image and analytical hashes. Fixed scales start at
 and skip governed execution. The coordinator later assembles the
 displayed preview in the application process. That preview is not the
 accepted worker PNG.</p>
-<p><code>new_execution_service()</code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/execution_service.R" class="external-link">execution_service.R</a>
+<p><code>new_execution_service()</code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/execution_service.R" class="external-link">execution_service.R</a>
 accepts only <code>Draft</code> revisions. Its <code><a href="https://rdrr.io/r/stats/start.html" class="external-link">start()</a></code>
 method captures the revision version, records an attempt, and rejects
 another active attempt with a different identifier. The attempt
@@ -120,7 +120,7 @@ rejected by the repository.</p>
 <div class="section level2">
 <h2 id="the-checks-that-determine-the-outcome">The checks that determine the outcome<a class="anchor" aria-label="anchor" href="#the-checks-that-determine-the-outcome"></a>
 </h2>
-<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/verification_service.R" class="external-link">verify_execution_result()</a>
+<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/verification_service.R" class="external-link">verify_execution_result()</a>
 returns <code>execution-verification-v1</code>, a <code>passed</code> or
 <code>failed</code> status, named boolean checks, and the names of
 failed checks. All eight checks must pass:</p>
@@ -176,7 +176,7 @@ syntax.</td>
 environment details. The analytical comparison establishes consistency
 between two returned values; it does not compare the analysis with an
 independently reviewed statistical reference.</p>
-<p><code>new_execution_result()</code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/domain_execution_protocol.R" class="external-link">domain_execution_protocol.R</a>
+<p><code>new_execution_result()</code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/domain_execution_protocol.R" class="external-link">domain_execution_protocol.R</a>
 normally copies request fields into the result. The verifier does not
 explicitly compare those copied specification, snapshot, script, or
 harness fields back to the request. The attempt fingerprint binds
@@ -197,11 +197,11 @@ attempt and returns without promoting the revision. Runner exceptions
 are converted to failed runner results with the error message in
 diagnostics.</p>
 <p>On success, an injected artifact store receives script and image
-bytes. <code>accept_artifact_bundle()</code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/evidence_repository_sqlite.R" class="external-link">evidence_repository_sqlite.R</a>
+bytes. <code>accept_artifact_bundle()</code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/evidence_repository_sqlite.R" class="external-link">evidence_repository_sqlite.R</a>
 binds both pending image and analytical hashes once, checks the bundle
 against the revision’s code/image/analytical identities, and permits one
 accepted bundle per revision. With an artifact store attached, it
-verifies the stored script and PNG against the supplied hashes. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/artifact_store_local.R" class="external-link">local_artifact_store()</a>
+verifies the stored script and PNG against the supplied hashes. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/artifact_store_local.R" class="external-link">local_artifact_store()</a>
 calculates SHA-256 from bytes and checks content before publication and
 retrieval. An artifact store is optional in the service and repository
 contracts; these byte checks depend on its injection.</p>
@@ -217,7 +217,7 @@ gate.</p>
 <div class="section level2">
 <h2 id="retained-context-and-recovery-limits">Retained context and recovery limits<a class="anchor" aria-label="anchor" href="#retained-context-and-recovery-limits"></a>
 </h2>
-<p>After governed execution, <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/revision_evidence.R" class="external-link">.record_revision_context()</a>
+<p>After governed execution, <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/revision_evidence.R" class="external-link">.record_revision_context()</a>
 records <code>revision-context-evidence-v1</code>. It retains the
 prompt, confirmed specification, selected records with column classes,
 snapshot/source metadata, generated R code, request/result, environment,
@@ -226,14 +226,14 @@ Classification is included only when present. This context supports <a href="08-
 reproduction</a>.</p>
 <p>Completion uses several repository calls rather than one encompassing
 transaction. An error during artifact acceptance or promotion can leave
-partial completion records. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/attempt_reconciliation.R" class="external-link">reconcile_execution_attempts()</a>
+partial completion records. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/attempt_reconciliation.R" class="external-link">reconcile_execution_attempts()</a>
 marks attempts without terminal outcomes as failed; it neither reruns
 verification nor repairs promotion. The application does not
 automatically call this recovery function at startup.</p>
-<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-verification-service.R" class="external-link">Verification
-tests</a> cover passing evidence and a missing image hash. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-execution-service.R" class="external-link">Execution-service
+<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-verification-service.R" class="external-link">Verification
+tests</a> cover passing evidence and a missing image hash. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-execution-service.R" class="external-link">Execution-service
 tests</a> cover promotion, failed verification, runner errors, and
-exclusion of experimental drafts. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-revision-evidence.R" class="external-link">Revision-evidence
+exclusion of experimental drafts. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-revision-evidence.R" class="external-link">Revision-evidence
 tests</a> inspect retained context and a mocked replay. These sources
 establish intended checks, not a passing test run, browser proof,
 independent statistical review, or formal validation. For the upstream

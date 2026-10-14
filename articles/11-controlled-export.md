@@ -7,10 +7,10 @@ revisions with an accepted artifact bundle. The local workspace provider
 is explicitly development-only.
 
 [![Rendered export
-diagram](diagrams/11-controlled-export.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/11-controlled-export.html)
+diagram](diagrams/11-controlled-export.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/11-controlled-export.html)
 
 [View in Full
-Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/11-controlled-export.html)
+Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/11-controlled-export.html)
 
 The diagram separates workspace publication, internal receipt recording,
 and the later ZIP download. This page describes inspected implementation
@@ -20,7 +20,7 @@ at `5e2fa6a`; it does not establish target-environment qualification.
 
 The Export step contains revision history, review, and controlled
 export, following the [five-step
-workflow](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/docs/solutions/four-step-wizard-flow.md).
+workflow](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/docs/solutions/four-step-wizard-flow.md).
 `mod_export_ui()` offers an actor selector, a logical destination field,
 **Export image and code**, and **Download image and code ZIP**.
 `mod_export_server()` sends the current revision identifier and version
@@ -47,7 +47,7 @@ for their separate boundaries.
 ## Publication and retained records
 
 `export_revision()` in
-[export_service.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/export_service.R)
+[export_service.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/export_service.R)
 performs these operations:
 
 1.  Validate identifiers and derive a receipt identifier from the
@@ -66,7 +66,7 @@ performs these operations:
 5.  Publish the stage, compare final hashes with the accepted bundle,
     and record the internal receipt.
 
-[local_workspace_provider()](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/provider_workspace_local.R)
+[local_workspace_provider()](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/provider_workspace_local.R)
 writes `script.R`, `plot.png`, and a temporary `manifest.json` beneath
 `.staging/<export_id>`. `publish_staged()` hashes both staged files
 again. Changed bytes cause quarantine and failure. It removes the
@@ -75,7 +75,7 @@ published hashes. Only the script and PNG remain in the published
 directory.
 
 `record_export_receipt()` in
-[evidence_repository_sqlite.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/evidence_repository_sqlite.R)
+[evidence_repository_sqlite.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/evidence_repository_sqlite.R)
 checks receipt hashes against the immutable revision and writes the
 receipt identifier, revision identifier, logical destination,
 script/image hashes, timestamp, and idempotency key. This record stays
@@ -93,13 +93,13 @@ destination is rejected.
 Publication precedes receipt recording. If receipt recording fails after
 publication, a retry can inspect the existing pair, compare hashes, and
 record the receipt.
-[reconcile_workspace_exports()](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/export_reconciliation.R)
+[reconcile_workspace_exports()](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/export_reconciliation.R)
 separately quarantines leftover staging directories; it does not
 complete their publication or create receipts. It is not wired into
 automatic application startup.
 
 `.write_export_zip()` in
-[mod_export.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/mod_export.R)
+[mod_export.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/mod_export.R)
 verifies that the last successful export belongs to the current
 revision, copies its two files, and invokes
 [`utils::zip()`](https://rdrr.io/r/utils/zip.html). Download is a
@@ -109,12 +109,12 @@ checks, and it is not a new controlled-publication decision.
 ## Policy differences and operating limits
 
 Strategy and the [draft-status design
-learning](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/docs/solutions/draft-status-badge.md)
+learning](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/docs/solutions/draft-status-badge.md)
 require both independent approvals before export. The service enforces
 this by accepting only `Reviewed` revisions.
 
 The pair is also not a complete reproduction package.
-[compile_boxplot_script()](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/boxplot_compiler.R)
+[compile_boxplot_script()](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/boxplot_compiler.R)
 requires caller-supplied `analysis_data` and the controlled package
 environment. Export copies that script unchanged; another machine still
 needs the governed input and compatible environment to reproduce the
@@ -124,7 +124,7 @@ Logical tokens reject traversal syntax and Windows reserved names;
 destinations must be registered existing roots. The provider checks the
 root for links/reparse points but does not establish qualified
 descendant-path, filesystem-race, access-control, or custody guarantees.
-[app_server()](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/app_server.R)
+[app_server()](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/app_server.R)
 creates the workspace under temporary storage. See [integrity and
 lifecycle](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/12-integrity-lifecycle-backup.md)
 for retained-evidence controls.
@@ -132,14 +132,14 @@ for retained-evidence controls.
 ## Inspected coverage
 
 Tests inspected:
-[service](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-export-service.R),
+[service](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-export-service.R),
 [workspace
-contract](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-provider-workspace-contract.R),
+contract](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-provider-workspace-contract.R),
 [module and
-ZIP](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-mod-export.R),
-[reconciliation](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-export-reconciliation.R),
+ZIP](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-mod-export.R),
+[reconciliation](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-export-reconciliation.R),
 and [browser
-harness](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-app-export-browser.R).
+harness](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-app-export-browser.R).
 They cover publication, receipts, repeated commands,
 actor/version/destination denials, experimental exclusion, missing
 bundles, ZIP contents, and orphan staging. No R tests or browser

@@ -7,10 +7,10 @@ treatment. Its choices come from the pinned dataset, and the scientist
 confirms the settings before generation.
 
 [![Rendered confirmation flow
-diagram](diagrams/03-confirming-analysis-selections.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/03-confirming-analysis-selections.html)
+diagram](diagrams/03-confirming-analysis-selections.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/03-confirming-analysis-selections.html)
 
 [View in Full
-Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/03-confirming-analysis-selections.html)
+Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/03-confirming-analysis-selections.html)
 
 The diagram shows the selection and field gates; detailed BDS
 eligibility checks are described in [BDS data
@@ -19,10 +19,10 @@ profiling](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/02-bds-p
 ## From question to selectable choices
 
 In
-[mod_plot_generation.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/mod_plot_generation.R),
+[mod_plot_generation.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/mod_plot_generation.R),
 `to_confirm` requires the current upload and a valid question. It calls
 `.create_assurance_candidate()` in
-[app_server.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/app_server.R)
+[app_server.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/app_server.R)
 when there is no pending candidate or the question has changed. That
 function pins the snapshot, retains the question, builds aggregate
 context, and creates a candidate with `dataset_id` set and
@@ -31,7 +31,7 @@ context, and creates a candidate with `dataset_id` set and
 
 [`build_prompt_context()`](https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference/build_prompt_context.md)
 in
-[prompt_context.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/prompt_context.R)
+[prompt_context.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/prompt_context.R)
 derives the following choices:
 
 | Choice | Dataset source and ordering |
@@ -49,7 +49,7 @@ parameter does not rebuild them from that parameter’s records. The later
 profile gate checks whether the selected combination exists.
 
 The context contains aggregate choices rather than patient records.
-[prompt_context_policy.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/prompt_context_policy.R)
+[prompt_context_policy.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/prompt_context_policy.R)
 rejects specified prohibited terms and URL patterns in labels and
 aggregate content. This lexical check does not qualify uploaded data
 provenance or establish de-identification. A separate
@@ -58,7 +58,7 @@ the active upload candidate path does not call it.
 
 ## What the scientist confirms
 
-[mod_specification.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/mod_specification.R),
+[mod_specification.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/mod_specification.R),
 through `mod_specification_server()`, presents the supported
 longitudinal numeric BDS boxplot and its controls. Parameter, Y
 variable, and treatment facet fall back to the first available choice
@@ -88,7 +88,7 @@ character value. It records `dataset_id` provenance as `metadata` and
 all seven remaining field sources as `user_confirmed`, including
 defaults accepted by the scientist.
 
-[domain_plot_spec.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/domain_plot_spec.R)
+[domain_plot_spec.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/domain_plot_spec.R)
 defines eight specification fields: `dataset_id`, `paramcd`,
 `y_variable`, `unit`, `treatment_variable`, `treatment_levels`,
 `visits`, and `scale_mode`. `new_plot_spec()` records schema version
@@ -106,7 +106,7 @@ decision. The active field builder imposes stronger shape checks than
 The workflow then calls
 [`validate_bds_profile()`](https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference/validate_bds_profile.md)
 in
-[bds_profile.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/bds_profile.R).
+[bds_profile.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/bds_profile.R).
 This gate checks selected parameter and unit availability, permitted
 treatment, numeric Y, treatment levels, visit availability and mappings,
 and the supported record keys. A blocked profile remains on Confirm with
@@ -126,13 +126,13 @@ previous revision.
 Inspected tests cover field/provenance display, read-only controls,
 user-selected units and visits, free-scale acknowledgement, and
 correction requests in
-[test-mod-specification.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-mod-specification.R).
-[test-domain-plot-spec.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-domain-plot-spec.R)
+[test-mod-specification.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-mod-specification.R).
+[test-domain-plot-spec.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-domain-plot-spec.R)
 covers complete and incomplete specifications, supported Y variables,
 and unknown provenance fields.
-[test-prompt-context.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-prompt-context.R)
+[test-prompt-context.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-prompt-context.R)
 covers aggregate context and prohibited content.
-[test-bds-profile.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-bds-profile.R)
+[test-bds-profile.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-bds-profile.R)
 covers explicit units, exclusions, numeric Y, and deterministic visit
 mappings.
 

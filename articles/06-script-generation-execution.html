@@ -87,15 +87,15 @@ separate R process. The script, selected records, specification, and
 execution harness have recorded identities. A completed worker run
 supplies evidence for verification; it does not establish statistical
 approval or human review.</p>
-<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/06-script-generation-execution.html" class="external-link"><img src="diagrams/06-script-generation-execution.png" alt="Rendered execution diagram"></a></p>
-<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/06-script-generation-execution.html" class="external-link">View
+<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/06-script-generation-execution.html" class="external-link"><img src="diagrams/06-script-generation-execution.png" alt="Rendered execution diagram"></a></p>
+<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/06-script-generation-execution.html" class="external-link">View
 in Full Screen</a></p>
 <p>The diagram shows the fixed-scale path. Free-scale previews and
 detached script use are described below.</p>
 <div class="section level2">
 <h2 id="from-confirmation-to-executable-code">From confirmation to executable code<a class="anchor" aria-label="anchor" href="#from-confirmation-to-executable-code"></a>
 </h2>
-<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/boxplot_compiler.R" class="external-link"><code>compile_boxplot_script()</code></a>
+<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/boxplot_compiler.R" class="external-link"><code>compile_boxplot_script()</code></a>
 validates the <code>plot_spec</code>, requires
 <code>state = "confirmed"</code>, and checks the ordered treatment and
 visit levels plus retained low-N policy. It constructs R expressions
@@ -104,7 +104,7 @@ from owned helper functions and resolved specification literals using
 <code><a href="https://rlang.r-lib.org/reference/expr_label.html" class="external-link">rlang::expr_text()</a></code> writes those expressions at width 80.
 The resulting script is UTF-8 text with a final newline.</p>
 <p>The emitted code contains the standalone statistical and plotting
-functions from <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/boxplot_standalone.R" class="external-link"><code>boxplot_standalone.R</code></a>.
+functions from <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/boxplot_standalone.R" class="external-link"><code>boxplot_standalone.R</code></a>.
 It inserts the treatment variable, Y variable, ordered levels, scale
 mode, unit, and low-N policy into the analysis call. This avoids relying
 on the application package for those functions when the detached script
@@ -123,16 +123,16 @@ generated text alone.</p>
 <div class="section level2">
 <h2 id="binding-the-selected-input">Binding the selected input<a class="anchor" aria-label="anchor" href="#binding-the-selected-input"></a>
 </h2>
-<p>In <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/app_server.R" class="external-link"><code>app_server.R</code></a>,
+<p>In <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/app_server.R" class="external-link"><code>app_server.R</code></a>,
 <code>.materialize_revision()</code> compiles the script and constructs
 an execution request with the specification hash, script hash, snapshot
 identifier, hash of <code>profile$selected_data</code>, and
 <code>execution-harness-v1</code>. The request’s snapshot hash
 identifies the selected execution records, not the entire original
 upload.</p>
-<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/domain_execution_protocol.R" class="external-link"><code>new_execution_request()</code></a>
+<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/domain_execution_protocol.R" class="external-link"><code>new_execution_request()</code></a>
 requires non-empty identity fields. Before sourcing the script,
-<code>.validate_execution_input()</code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/execution_runner.R" class="external-link"><code>execution_runner.R</code></a>
+<code>.validate_execution_input()</code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/execution_runner.R" class="external-link"><code>execution_runner.R</code></a>
 recomputes the script SHA-256 and canonical data hash and rejects
 mismatches. The worker places the selected records in its evaluation
 environment as <code>analysis_data</code>. Consequently, the generated
@@ -147,12 +147,12 @@ de-identification.</p>
 <div class="section level2">
 <h2 id="what-the-subprocess-executes">What the subprocess executes<a class="anchor" aria-label="anchor" href="#what-the-subprocess-executes"></a>
 </h2>
-<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/execution_service.R" class="external-link"><code>new_execution_service()</code></a>
+<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/execution_service.R" class="external-link"><code>new_execution_service()</code></a>
 records an attempt before calling the runner. Only <code>Draft</code>
 revisions can start, and the service prevents another active attempt
 with a different attempt identity for the same revision. Its fingerprint
 combines the request, supplied script hash, and selected-data hash.</p>
-<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/execution_runner_callr.R" class="external-link"><code>run_execution_callr()</code></a>
+<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/execution_runner_callr.R" class="external-link"><code>run_execution_callr()</code></a>
 invokes <code><a href="https://callr.r-lib.org/reference/r.html" class="external-link">callr::r()</a></code> synchronously with
 <code>--vanilla</code>, disabled system and user profiles, and the
 current library paths. It clears <code>R_PROFILE_USER</code>,
@@ -201,11 +201,11 @@ from the accepted worker PNG.</p>
 <div class="section level2">
 <h2 id="inspected-checks-and-remaining-evidence">Inspected checks and remaining evidence<a class="anchor" aria-label="anchor" href="#inspected-checks-and-remaining-evidence"></a>
 </h2>
-<p>The inspected tests cover <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-boxplot-compiler.R" class="external-link">stable
-parseable scripts and analytical fixtures</a>, <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-execution-runner-callr.R" class="external-link">subprocess
-execution and source-root selection</a>, <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-execution-runner-contract.R" class="external-link">runner
-manifests and rejection cases</a>, <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-execution-service.R" class="external-link">service
-promotion and terminal failures</a>, and <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-domain-execution-protocol.R" class="external-link">execution
+<p>The inspected tests cover <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-boxplot-compiler.R" class="external-link">stable
+parseable scripts and analytical fixtures</a>, <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-execution-runner-callr.R" class="external-link">subprocess
+execution and source-root selection</a>, <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-execution-runner-contract.R" class="external-link">runner
+manifests and rejection cases</a>, <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-execution-service.R" class="external-link">service
+promotion and terminal failures</a>, and <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-domain-execution-protocol.R" class="external-link">execution
 manifest identity</a>. Graphics and package availability can cause skips
 in the subprocess tests.</p>
 <p>This documentation records source and test inspection. It does not

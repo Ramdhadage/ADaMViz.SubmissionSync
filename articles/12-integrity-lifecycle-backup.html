@@ -87,28 +87,28 @@ Its backup and restore functions operate on that local evidence package.
 These mechanisms detect several forms of local modification; they do not
 establish qualified audit-record custody or a durable study
 repository.</p>
-<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/12-integrity-lifecycle-backup.html" class="external-link"><img src="diagrams/12-integrity-lifecycle-backup.png" alt="Rendered integrity and recovery diagram"></a></p>
-<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/12-integrity-lifecycle-backup.html" class="external-link">View
+<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/12-integrity-lifecycle-backup.html" class="external-link"><img src="diagrams/12-integrity-lifecycle-backup.png" alt="Rendered integrity and recovery diagram"></a></p>
+<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/12-integrity-lifecycle-backup.html" class="external-link">View
 in Full Screen</a></p>
 <div class="section level2">
 <h2 id="records-and-identity">Records and identity<a class="anchor" aria-label="anchor" href="#records-and-identity"></a>
 </h2>
-<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/evidence_repository_sqlite.R" class="external-link"><code>sqlite_evidence_repository()</code></a>
+<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/evidence_repository_sqlite.R" class="external-link"><code>sqlite_evidence_repository()</code></a>
 stores plots, revisions, attempts and outcomes, evidence entries,
 accepted artifact bundles, reviewer decisions, export receipts, command
-keys, and a status/version projection. Numbered <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/inst/sql/migrations/" class="external-link">SQL
+keys, and a status/version projection. Numbered <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/inst/sql/migrations/" class="external-link">SQL
 migrations</a> apply in version order and record successful versions in
 <code>schema_migrations</code>. Foreign keys are enabled for each
 repository connection. SQL constraints enforce revision numbering,
 permitted status and decision values, unique command/event keys, and
 record relationships.</p>
-<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/canonical_serialization.R" class="external-link"><code>canonical_serialize()</code>
+<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/canonical_serialization.R" class="external-link"><code>canonical_serialize()</code>
 and <code>canonical_hash()</code></a> sort named list elements
 recursively and serialize compact JSON before hashing. Evidence details
 have a SHA-256 content hash. Reviewer decision records have a separate
 hash tied to a lifecycle event. These hashes serve different purposes; a
 lifecycle chain does not contain every repository row.</p>
-<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/artifact_store_local.R" class="external-link"><code>local_artifact_store()</code></a>
+<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/artifact_store_local.R" class="external-link"><code>local_artifact_store()</code></a>
 stores raw bytes at
 <code>&lt;root&gt;/&lt;first-two-hash-characters&gt;/&lt;sha256&gt;</code>.
 <code>put()</code> writes to a temporary file, checks its bytes, and
@@ -207,7 +207,7 @@ meet the threshold. It does not implement evidence retention or study
 deletion. Its reference scope is the attached repository; sharing an
 artifact root with another repository would not protect that other
 repository’s references.</p>
-<p>The <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/app_server.R" class="external-link">application
+<p>The <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/app_server.R" class="external-link">application
 coordinator</a> uses a temporary <code>assurance-session-</code> root
 unless <code>repository_root</code> is supplied. Backup, restore,
 cleanup, and recovery exist as callable operations; no automatic
@@ -219,13 +219,13 @@ custody remain unresolved.</p>
 <div class="section level2">
 <h2 id="inspected-test-coverage">Inspected test coverage<a class="anchor" aria-label="anchor" href="#inspected-test-coverage"></a>
 </h2>
-<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-evidence-repository-sqlite.R" class="external-link">Repository
+<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-evidence-repository-sqlite.R" class="external-link">Repository
 tests</a> cover chain corruption, event omission, root rollback,
 projection rebuilds, evidence/decision modification, publication retry,
 command reuse, migrations, serialized writes, and pending artifact-hash
-binding. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-artifact-store-contract.R" class="external-link">Artifact
+binding. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-artifact-store-contract.R" class="external-link">Artifact
 tests</a> cover corruption, reference-preserving cleanup, layout
-filtering, and resolved roots. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-backup-restore.R" class="external-link">Backup/restore
+filtering, and resolved roots. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-backup-restore.R" class="external-link">Backup/restore
 tests</a> cover round trips, modified/incomplete backups, concurrent
 lifecycle writes, empty repositories, required artifact reconciliation
 during backup, and corrupt artifact bytes during restore. These tests

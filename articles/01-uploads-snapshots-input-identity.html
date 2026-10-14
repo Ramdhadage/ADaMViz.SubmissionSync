@@ -87,8 +87,8 @@ content-verified snapshot. Later revisions retain the selected analysis
 records and input identities. These mechanisms identify what was read
 and executed; they do not establish synthetic provenance,
 de-identification, or full ADaM conformance.</p>
-<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/01-uploads-snapshots-input-identity.html" class="external-link"><img src="diagrams/01-uploads-snapshots-input-identity.png" alt="Rendered upload and identity diagram"></a></p>
-<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/01-uploads-snapshots-input-identity.html" class="external-link">View
+<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/01-uploads-snapshots-input-identity.html" class="external-link"><img src="diagrams/01-uploads-snapshots-input-identity.png" alt="Rendered upload and identity diagram"></a></p>
+<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/01-uploads-snapshots-input-identity.html" class="external-link">View
 in Full Screen</a></p>
 <p>The diagram shows the successful intake path and the distinct
 identities carried into revision evidence. Parser and structural errors
@@ -217,8 +217,8 @@ data frames are not a write-protected storage mechanism.</p>
 <code><a href="../reference/validate_bds_profile.html">validate_bds_profile()</a></code> allows this absence when source
 metadata identifies <code>direct_upload</code>; the execution service
 uses a synthetic classification default. Neither behavior verifies
-provenance or removes identifiers. The <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/docs/solutions/design-patterns/task-first-clinical-plot-workbench.md" class="external-link">task-first
-workbench learning</a> records the synthetic-only POC intent. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/docs/product/STRATEGY.md" class="external-link">Strategy</a>
+provenance or removes identifiers. The <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/docs/solutions/design-patterns/task-first-clinical-plot-workbench.md" class="external-link">task-first
+workbench learning</a> records the synthetic-only POC intent. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/docs/product/STRATEGY.md" class="external-link">Strategy</a>
 permits public, synthetic, or properly de-identified data. This
 unresolved policy difference does not change the inspected runtime
 behavior.</p>
@@ -228,23 +228,23 @@ behavior.</p>
 </h2>
 <ul>
 <li>
-<a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/mod_plot_generation.R" class="external-link">Upload
+<a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/mod_plot_generation.R" class="external-link">Upload
 module</a>: <code>.uploaded_study_data_provider()</code>,
 <code>mod_plot_generation_server()</code>.</li>
 <li>
-<a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/provider_study_data.R" class="external-link">Snapshot
+<a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/provider_study_data.R" class="external-link">Snapshot
 contract</a>: <code><a href="../reference/study_data_content_hash.html">study_data_content_hash()</a></code>,
-<code><a href="../reference/pin_study_snapshot.html">pin_study_snapshot()</a></code>; <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/provider_study_data_local.R" class="external-link">local
+<code><a href="../reference/pin_study_snapshot.html">pin_study_snapshot()</a></code>; <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/provider_study_data_local.R" class="external-link">local
 provider</a>: <code><a href="../reference/local_study_data_provider.html">local_study_data_provider()</a></code>.</li>
 <li>
-<a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/canonical_serialization.R" class="external-link">Serialization</a>:
-<code>canonical_serialize()</code>, <code>canonical_hash()</code>; <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/app_server.R" class="external-link">coordinator</a>:
-<code>.create_assurance_candidate()</code>; <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/revision_evidence.R" class="external-link">retained
+<a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/canonical_serialization.R" class="external-link">Serialization</a>:
+<code>canonical_serialize()</code>, <code>canonical_hash()</code>; <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/app_server.R" class="external-link">coordinator</a>:
+<code>.create_assurance_candidate()</code>; <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/revision_evidence.R" class="external-link">retained
 evidence</a>: <code>.revision_context_details()</code>.</li>
 <li>
-<a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-provider-study-data.R" class="external-link">Provider
+<a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-provider-study-data.R" class="external-link">Provider
 tests</a> cover local catalog metadata, classification, row-order
-invariance, unauthorized dataset identifiers, and content mismatches. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-mod-plot-generation.R" class="external-link">Module
+invariance, unauthorized dataset identifiers, and content mismatches. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-mod-plot-generation.R" class="external-link">Module
 tests</a> cover workflow layout and navigation. No direct parser
 assertions for <code>.uploaded_study_data_provider()</code> were found
 in the inspected test tree.</li>

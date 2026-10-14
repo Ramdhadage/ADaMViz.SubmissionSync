@@ -8,17 +8,17 @@ caller to inspect; it does not promote a revision, replace its accepted
 artifacts, or approve a plot.
 
 [![Rendered replay
-diagram](diagrams/08-reproducing-retained-results.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/08-reproducing-retained-results.html)
+diagram](diagrams/08-reproducing-retained-results.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/08-reproducing-retained-results.html)
 
 [View in Full
-Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/08-reproducing-retained-results.html)
+Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/08-reproducing-retained-results.html)
 
 The diagram shows the service sequence and optional evidence write.
 Details of data reconstruction and comparison rules follow below.
 
 ## What replay reads
 
-[`new_reproducibility_service()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/reproducibility_service.R)
+[`new_reproducibility_service()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/reproducibility_service.R)
 accepts an evidence repository, readable artifact store, runner, and
 verification service. Its
 `reproduce_revision(revision_id, idempotency_key = NULL)` method
@@ -27,13 +27,13 @@ entry. Missing context stops the operation. With the SQLite repository,
 entries are ordered by `created_at`, then `evidence_id`; “latest” means
 the last matching row in that order.
 
-[`.revision_context_details()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/revision_evidence.R)
+[`.revision_context_details()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/revision_evidence.R)
 retains the question, confirmed specification, input identity, selected
 records, generated script, execution request and result, environment,
 profile warnings, and checks. Replay reads the script bytes from the
 artifact store using the revision’s `code_hash`, rather than recompiling
 the specification or using the script copy in context JSON. The [local
-store](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/artifact_store_local.R)
+store](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/artifact_store_local.R)
 verifies an artifact’s SHA-256 hash before returning its bytes through
 [`get()`](https://rdrr.io/r/base/get.html).
 
@@ -66,7 +66,7 @@ that every input type can be recreated.
 ## Running and checking the result
 
 The default replay runner is
-[`new_execution_runner()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/execution_runner.R),
+[`new_execution_runner()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/execution_runner.R),
 which executes locally in the current R process. The normal governed
 execution path uses a clean `callr` subprocess, described in [script
 generation and
@@ -125,7 +125,7 @@ runnable environment.
 
 ## Coverage and limits
 
-[`test-revision-evidence.R`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-revision-evidence.R)
+[`test-revision-evidence.R`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-revision-evidence.R)
 checks retained context and a passing replay with recorded evidence. Its
 injected runner sources the script but writes fixed `"png bytes"`; that
 test does not demonstrate real PNG reproducibility or clean-subprocess

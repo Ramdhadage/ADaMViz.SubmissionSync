@@ -8,17 +8,17 @@ supplies evidence for verification; it does not establish statistical
 approval or human review.
 
 [![Rendered execution
-diagram](diagrams/06-script-generation-execution.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/06-script-generation-execution.html)
+diagram](diagrams/06-script-generation-execution.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/06-script-generation-execution.html)
 
 [View in Full
-Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/06-script-generation-execution.html)
+Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/06-script-generation-execution.html)
 
 The diagram shows the fixed-scale path. Free-scale previews and detached
 script use are described below.
 
 ## From confirmation to executable code
 
-[`compile_boxplot_script()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/boxplot_compiler.R)
+[`compile_boxplot_script()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/boxplot_compiler.R)
 validates the `plot_spec`, requires `state = "confirmed"`, and checks
 the ordered treatment and visit levels plus retained low-N policy. It
 constructs R expressions from owned helper functions and resolved
@@ -31,7 +31,7 @@ with a final newline.
 
 The emitted code contains the standalone statistical and plotting
 functions from
-[`boxplot_standalone.R`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/boxplot_standalone.R).
+[`boxplot_standalone.R`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/boxplot_standalone.R).
 It inserts the treatment variable, Y variable, ordered levels, scale
 mode, unit, and low-N policy into the analysis call. This avoids relying
 on the application package for those functions when the detached script
@@ -51,17 +51,17 @@ generated text alone.
 ## Binding the selected input
 
 In
-[`app_server.R`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/app_server.R),
+[`app_server.R`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/app_server.R),
 `.materialize_revision()` compiles the script and constructs an
 execution request with the specification hash, script hash, snapshot
 identifier, hash of `profile$selected_data`, and `execution-harness-v1`.
 The request’s snapshot hash identifies the selected execution records,
 not the entire original upload.
 
-[`new_execution_request()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/domain_execution_protocol.R)
+[`new_execution_request()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/domain_execution_protocol.R)
 requires non-empty identity fields. Before sourcing the script,
 `.validate_execution_input()` in
-[`execution_runner.R`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/execution_runner.R)
+[`execution_runner.R`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/execution_runner.R)
 recomputes the script SHA-256 and canonical data hash and rejects
 mismatches. The worker places the selected records in its evaluation
 environment as `analysis_data`. Consequently, the generated fallback CSV
@@ -75,13 +75,13 @@ de-identification.
 
 ## What the subprocess executes
 
-[`new_execution_service()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/execution_service.R)
+[`new_execution_service()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/execution_service.R)
 records an attempt before calling the runner. Only `Draft` revisions can
 start, and the service prevents another active attempt with a different
 attempt identity for the same revision. Its fingerprint combines the
 request, supplied script hash, and selected-data hash.
 
-[`run_execution_callr()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/execution_runner_callr.R)
+[`run_execution_callr()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/execution_runner_callr.R)
 invokes [`callr::r()`](https://callr.r-lib.org/reference/r.html)
 synchronously with `--vanilla`, disabled system and user profiles, and
 the current library paths. It clears `R_PROFILE_USER`, `R_ENVIRON_USER`,
@@ -130,15 +130,15 @@ than read from the accepted worker PNG.
 ## Inspected checks and remaining evidence
 
 The inspected tests cover [stable parseable scripts and analytical
-fixtures](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-boxplot-compiler.R),
+fixtures](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-boxplot-compiler.R),
 [subprocess execution and source-root
-selection](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-execution-runner-callr.R),
+selection](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-execution-runner-callr.R),
 [runner manifests and rejection
-cases](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-execution-runner-contract.R),
+cases](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-execution-runner-contract.R),
 [service promotion and terminal
-failures](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-execution-service.R),
+failures](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-execution-service.R),
 and [execution manifest
-identity](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-domain-execution-protocol.R).
+identity](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-domain-execution-protocol.R).
 Graphics and package availability can cause skips in the subprocess
 tests.
 

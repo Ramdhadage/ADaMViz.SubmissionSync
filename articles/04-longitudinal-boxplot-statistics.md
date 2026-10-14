@@ -7,14 +7,14 @@ draws those calculated values directly, so `ggplot2` does not choose a
 second quartile or whisker definition.
 
 [![Rendered statistical-to-visual pipeline
-diagram](diagrams/04-longitudinal-boxplot-statistics.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/04-longitudinal-boxplot-statistics.html)
+diagram](diagrams/04-longitudinal-boxplot-statistics.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/04-longitudinal-boxplot-statistics.html)
 
 [View in Full
-Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/04-longitudinal-boxplot-statistics.html)
+Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/04-longitudinal-boxplot-statistics.html)
 
 ## Selected records and grouping
 
-[`calculate_boxplot_statistics()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/boxplot_statistics.R)
+[`calculate_boxplot_statistics()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/boxplot_statistics.R)
 consumes records from a validated selected-data profile, the treatment
 and Y column names, ordered treatment and visit levels, and a retained
 low-N policy. Required columns are `USUBJID`, `AVISIT`, `AVISITN`, the
@@ -51,7 +51,7 @@ strictly outside are retained as individual outlier rows, with subject
 identity, treatment, visit, and value.
 
 The [expected-statistics
-fixture](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/fixtures/expected-boxplot-statistics.csv)
+fixture](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/fixtures/expected-boxplot-statistics.csv)
 makes small samples and edge cases explicit. For values `1, 2, 3, 20`,
 Q1 is 1.75, the median is 2.5, Q3 is 7.25, whiskers are 1 and 3, and 20
 is an outlier. For `5, 5, 5, 5, 10`, IQR is zero: both whiskers remain
@@ -60,7 +60,7 @@ identical hinges, median, and whiskers.
 
 Low N is a flag, not a filter. It is true when distinct-subject N is
 strictly below the retained policy value.
-[`validate_bds_profile()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/bds_profile.R)
+[`validate_bds_profile()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/bds_profile.R)
 supplies a default threshold of 5; a non-default policy retains its
 value, rationale, authority, and version. Labels are `N = <count>` or
 `N = <count> - Low N`. Boxes remain visible when flagged.
@@ -82,7 +82,7 @@ trajectory or an imputed intermediate median.
 
 ## Rendering and composition
 
-[`assemble_boxplot()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/boxplot_assembly.R)
+[`assemble_boxplot()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/boxplot_assembly.R)
 uses `geom_boxplot(stat = "identity")` with the five calculated
 statistics. It disables the geometry’s own outlier drawing and adds
 retained outliers as open circles. Boxes have white fill and black
@@ -107,17 +107,17 @@ approval.
 ## Implementation evidence and limits
 
 The standalone helpers in
-[`boxplot_standalone.R`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/boxplot_standalone.R)
+[`boxplot_standalone.R`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/boxplot_standalone.R)
 repeat the calculation and visual conventions inside scripts emitted by
-[`compile_boxplot_script()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/boxplot_compiler.R).
+[`compile_boxplot_script()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/boxplot_compiler.R).
 Changes to statistical or visual rules need corresponding scrutiny in
 both implementations.
 
 Inspected tests cover
-[statistics](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-boxplot-statistics.R),
-[assembly](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-boxplot-assembly.R),
+[statistics](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-boxplot-statistics.R),
+[assembly](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-boxplot-assembly.R),
 and [compiled
-scripts](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-boxplot-compiler.R):
+scripts](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-boxplot-compiler.R):
 explicit fixture results, empty groups, non-finite rejection, row-order
 invariance, layer values, N-panel alignment, scale differences, and
 standalone analytical results. The long-label test checks PNG creation

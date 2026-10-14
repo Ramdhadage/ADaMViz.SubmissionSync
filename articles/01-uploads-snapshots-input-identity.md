@@ -8,10 +8,10 @@ and executed; they do not establish synthetic provenance,
 de-identification, or full ADaM conformance.
 
 [![Rendered upload and identity
-diagram](diagrams/01-uploads-snapshots-input-identity.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/01-uploads-snapshots-input-identity.html)
+diagram](diagrams/01-uploads-snapshots-input-identity.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/01-uploads-snapshots-input-identity.html)
 
 [View in Full
-Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/01-uploads-snapshots-input-identity.html)
+Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/01-uploads-snapshots-input-identity.html)
 
 The diagram shows the successful intake path and the distinct identities
 carried into revision evidence. Parser and structural errors stop that
@@ -119,9 +119,9 @@ allows this absence when source metadata identifies `direct_upload`; the
 execution service uses a synthetic classification default. Neither
 behavior verifies provenance or removes identifiers. The [task-first
 workbench
-learning](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/docs/solutions/design-patterns/task-first-clinical-plot-workbench.md)
+learning](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/docs/solutions/design-patterns/task-first-clinical-plot-workbench.md)
 records the synthetic-only POC intent.
-[Strategy](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/docs/product/STRATEGY.md)
+[Strategy](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/docs/product/STRATEGY.md)
 permits public, synthetic, or properly de-identified data. This
 unresolved policy difference does not change the inspected runtime
 behavior.
@@ -129,26 +129,26 @@ behavior.
 ## Source and inspected coverage
 
 - [Upload
-  module](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/mod_plot_generation.R):
+  module](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/mod_plot_generation.R):
   `.uploaded_study_data_provider()`, `mod_plot_generation_server()`.
 - [Snapshot
-  contract](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/provider_study_data.R):
+  contract](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/provider_study_data.R):
   [`study_data_content_hash()`](https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference/study_data_content_hash.md),
   [`pin_study_snapshot()`](https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference/pin_study_snapshot.md);
   [local
-  provider](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/provider_study_data_local.R):
+  provider](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/provider_study_data_local.R):
   [`local_study_data_provider()`](https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference/local_study_data_provider.md).
-- [Serialization](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/canonical_serialization.R):
+- [Serialization](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/canonical_serialization.R):
   `canonical_serialize()`, `canonical_hash()`;
-  [coordinator](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/app_server.R):
+  [coordinator](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/app_server.R):
   `.create_assurance_candidate()`; [retained
-  evidence](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/revision_evidence.R):
+  evidence](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/revision_evidence.R):
   `.revision_context_details()`.
 - [Provider
-  tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-provider-study-data.R)
+  tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-provider-study-data.R)
   cover local catalog metadata, classification, row-order invariance,
   unauthorized dataset identifiers, and content mismatches. [Module
-  tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-mod-plot-generation.R)
+  tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-mod-plot-generation.R)
   cover workflow layout and navigation. No direct parser assertions for
   `.uploaded_study_data_provider()` were found in the inspected test
   tree.

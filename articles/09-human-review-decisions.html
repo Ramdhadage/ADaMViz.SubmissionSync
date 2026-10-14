@@ -90,8 +90,8 @@ both <code>statistical_programmer</code> and
 <p>This page describes implementation inspected at base commit
 <code>5e2fa6a</code>. It documents the local proof of concept, not
 authenticated production review or formal validation evidence.</p>
-<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/09-human-review-decisions.html" class="external-link"><img src="diagrams/09-human-review-decisions.png" alt="Rendered review-state diagram"></a></p>
-<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/09-human-review-decisions.html" class="external-link">View
+<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/09-human-review-decisions.html" class="external-link"><img src="diagrams/09-human-review-decisions.png" alt="Rendered review-state diagram"></a></p>
+<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/09-human-review-decisions.html" class="external-link">View
 in Full Screen</a></p>
 <div class="section level2">
 <h2 id="using-the-review-panel">Using the review panel<a class="anchor" aria-label="anchor" href="#using-the-review-panel"></a>
@@ -103,7 +103,7 @@ chooses <strong>Approve</strong> or <strong>Reject</strong>. The panel
 then shows recorded actor IDs, roles, decisions, and timestamps.
 Selecting the creator identity remains possible in the interface, but
 the repository refuses that actor’s decision on their own revision.</p>
-<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/mod_review.R" class="external-link"><code>mod_review_server()</code></a>
+<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/mod_review.R" class="external-link"><code>mod_review_server()</code></a>
 reloads the revision before submitting a decision. It supplies the
 current integer version and an idempotency key built from the decision,
 revision ID, actor ID, and version. On success it refreshes application
@@ -114,10 +114,10 @@ registered roles.</p>
 <div class="section level2">
 <h2 id="decision-checks-and-outcomes">Decision checks and outcomes<a class="anchor" aria-label="anchor" href="#decision-checks-and-outcomes"></a>
 </h2>
-<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/review_service.R" class="external-link"><code>new_review_service()</code></a>
+<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/review_service.R" class="external-link"><code>new_review_service()</code></a>
 resolves an actor through the identity provider. Its
 <code>approve()</code> and <code>reject()</code> methods delegate to
-<code>record_review_decision()</code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/evidence_repository_sqlite.R" class="external-link"><code>sqlite_evidence_repository()</code></a>.
+<code>record_review_decision()</code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/evidence_repository_sqlite.R" class="external-link"><code>sqlite_evidence_repository()</code></a>.
 When callers omit hashes, the service reads the revision’s
 <code>code_hash</code>, <code>image_hash</code>, and
 <code>analytical_hash</code> and submits those values.</p>
@@ -177,8 +177,8 @@ distinct-actor rule applied to new commands.</p>
 <div class="section level2">
 <h2 id="enforcement-limits">Enforcement limits<a class="anchor" aria-label="anchor" href="#enforcement-limits"></a>
 </h2>
-<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/provider_identity_local.R" class="external-link"><code>local_identity_provider()</code></a>
-looks up actors in a supplied catalog. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/app_server.R" class="external-link"><code>app_server()</code></a>
+<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/provider_identity_local.R" class="external-link"><code>local_identity_provider()</code></a>
+looks up actors in a supplied catalog. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/app_server.R" class="external-link"><code>app_server()</code></a>
 constructs creator, programmer, and biostatistician actors locally, and
 the interface lets the user select them. These mechanisms demonstrate
 role and identity rules but do not authenticate the person operating the
@@ -191,7 +191,7 @@ image visually inspected was the accepted image. Review does not
 automatically invoke retained-input replay. See <a href="07-verification-revision-evidence.html">execution evidence</a> for
 the distinction between automated checks and human judgment.</p>
 <p>Rejection is implemented directly by the repository’s decision
-transaction. The generic <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/domain_status.R" class="external-link"><code>transition_revision_status()</code></a>
+transaction. The generic <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/domain_status.R" class="external-link"><code>transition_revision_status()</code></a>
 helper lists <code>Verified</code> to <code>Reviewed</code> but has no
 rejection transition; it is not the complete review lifecycle. Export
 requires <code>Reviewed</code> status plus the remaining bundle,
@@ -200,10 +200,10 @@ authorization, destination, and integrity checks described in <a href="11-contro
 <div class="section level2">
 <h2 id="inspected-coverage">Inspected coverage<a class="anchor" aria-label="anchor" href="#inspected-coverage"></a>
 </h2>
-<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-review-service.R" class="external-link"><code>test-review-service.R</code></a>
+<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-review-service.R" class="external-link"><code>test-review-service.R</code></a>
 covers creator exclusion, active actors, dual-role claims, distinct
 identities, exact hashes, rationale retention, stale versions, either
-approval order, and competing decisions. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-mod-review.R" class="external-link"><code>test-mod-review.R</code></a>
+approval order, and competing decisions. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-mod-review.R" class="external-link"><code>test-mod-review.R</code></a>
 exercises the panel’s two-approval state update. These files were
 inspected, not executed for this documentation change. Browser behavior,
 authentication, statistical adequacy of reviewer decisions, and

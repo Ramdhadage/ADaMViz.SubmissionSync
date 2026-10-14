@@ -8,15 +8,15 @@ establish full ADaM conformance, data provenance, or statistical
 suitability for an intended clinical analysis.
 
 [![Rendered eligibility flow
-diagram](diagrams/02-bds-profiling-eligibility.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/02-bds-profiling-eligibility.html)
+diagram](diagrams/02-bds-profiling-eligibility.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/02-bds-profiling-eligibility.html)
 
 [View in Full
-Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/02-bds-profiling-eligibility.html)
+Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/02-bds-profiling-eligibility.html)
 
 ## Two checks with different scope
 
 The upload adapter, `.uploaded_study_data_provider()` in
-[mod_plot_generation.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/mod_plot_generation.R),
+[mod_plot_generation.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/mod_plot_generation.R),
 checks the parsed file before creating a provider. It requires populated
 records, unique non-empty column names, and `USUBJID`, `PARAMCD`,
 `PARAM`, `AVISIT`, `AVISITN`, `AVAL`, and `AVALU`. Both `AVAL` and
@@ -30,7 +30,7 @@ reshape into long format; the adapter does not reshape them.
 
 [`validate_bds_profile()`](https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference/validate_bds_profile.md)
 in
-[bds_profile.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/bds_profile.R)
+[bds_profile.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/bds_profile.R)
 then evaluates a pinned snapshot and six selections: `paramcd`,
 `y_variable`, `unit`, `treatment_variable`, `treatment_levels`, and
 `visits`. The parameter and treatment variable must each be one
@@ -55,7 +55,7 @@ explicit choice; an unavailable choice blocks. Selecting a unit removes
 records with another unit or a missing unit. With no explicit unit and
 at most one discovered unit, the API does not apply a unit filter.
 Confirmation has its own completeness requirements in
-[domain_plot_spec.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/domain_plot_spec.R).
+[domain_plot_spec.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/domain_plot_spec.R).
 
 Missing or empty subject identifiers and treatment values block at this
 point, **before** treatment-level and visit exclusions. Treatment
@@ -112,18 +112,18 @@ text.
 The confirmation handler displays the blocking code and message and
 remains at Confirm. The execution coordinator,
 `.execute_assurance_revision()` in
-[app_server.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/app_server.R),
+[app_server.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/app_server.R),
 also checks the profile before compilation. Numeric type alone is
 insufficient: the profile can retain infinite Y values, while
 [`calculate_boxplot_statistics()`](https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference/calculate_boxplot_statistics.md)
 in
-[boxplot_statistics.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/boxplot_statistics.R)
+[boxplot_statistics.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/boxplot_statistics.R)
 rejects non-finite displayed values downstream. Profiling success
 therefore does not guarantee that generation or execution will succeed.
 
 ## Coverage and verification status
 
-[test-bds-profile.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-bds-profile.R)
+[test-bds-profile.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-bds-profile.R)
 contains cases for metadata, required fields, explicit units, absent
 keys, numeric Y, visit conflicts, duplicates, additional timepoint keys,
 exclusions, unchanged analysis flags, missing-Y counts, empty facets,

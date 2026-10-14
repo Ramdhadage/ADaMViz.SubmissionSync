@@ -7,10 +7,10 @@ revision does not receive a governed subprocess attempt, execution
 verification, human review, or controlled export.
 
 [![Rendered scale-path
-diagram](diagrams/05-fixed-free-y-scales.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/05-fixed-free-y-scales.html)
+diagram](diagrams/05-fixed-free-y-scales.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/05-fixed-free-y-scales.html)
 
 [View in Full
-Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/05-fixed-free-y-scales.html)
+Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/05-fixed-free-y-scales.html)
 
 The diagram shows current implementation, inspected at commit `5e2fa6a`;
 it does not establish runtime or statistical validation.
@@ -34,11 +34,11 @@ separate mock-prompt coordinator also checks free-scale confirmation,
 but it is not the active upload workflow’s prompt interpreter.
 
 Source: [specification
-module](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/mod_specification.R),
+module](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/mod_specification.R),
 [application
-coordinator](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/app_server.R),
+coordinator](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/app_server.R),
 and [plot
-specification](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/domain_plot_spec.R).
+specification](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/domain_plot_spec.R).
 
 ## What changes in the figure
 
@@ -67,11 +67,11 @@ embeds the confirmed scale value as a literal in its assembly call, so
 the choice is part of the specification and script identities.
 
 Source: [plot
-assembly](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/boxplot_assembly.R),
+assembly](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/boxplot_assembly.R),
 [standalone
-helper](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/boxplot_standalone.R),
+helper](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/boxplot_standalone.R),
 and
-[compiler](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/boxplot_compiler.R).
+[compiler](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/boxplot_compiler.R).
 
 ## Execution and evidence boundaries
 
@@ -101,34 +101,34 @@ guarantee export: the service also requires accepted artifacts and the
 remaining export checks.
 
 Source: [execution
-service](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/execution_service.R),
+service](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/execution_service.R),
 [status
-rules](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/domain_status.R),
+rules](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/domain_status.R),
 [review repository
-gate](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/evidence_repository_sqlite.R),
+gate](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/evidence_repository_sqlite.R),
 and [export
-service](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/export_service.R).
+service](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/export_service.R).
 
 ## Checks and known gaps
 
 The inspected tests specify the intended boundaries:
 
 - [Assembly
-  tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-boxplot-assembly.R)
+  tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-boxplot-assembly.R)
   compare analytical objects, shared versus separate panel scales,
   ranges, statuses, and the warning.
 - [Specification
-  tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-mod-specification.R)
+  tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-mod-specification.R)
   verify that an unconfirmed free-scale action does not call generation
   and that acknowledgement allows the callback.
 - [Execution
-  tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-execution-service.R)
+  tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-execution-service.R)
   reject an experimental submission and assert that no attempt was
   recorded.
 - [Export
-  tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-export-service.R)
+  tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-export-service.R)
   reject an `Experimental/Draft` revision. [Status
-  tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-domain-status.R)
+  tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-domain-status.R)
   cover its initial status.
 
 These tests were read, not executed, for this documentation change. No R
@@ -144,7 +144,7 @@ free path is governed. The proof of concept is designed for validated
 clinical submission workflows; it is not FDA validated or FDA approved.
 
 Source: [preview
-module](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/mod_plot_preview.R).
+module](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/mod_plot_preview.R).
 Related documentation: [statistical
 summaries](https://ramdhadage.github.io/ADaMViz.SubmissionSync/articles/04-longitudinal-boxplot-statistics.md),
 [script

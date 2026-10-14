@@ -86,23 +86,23 @@ specification. The active upload workflow retains the question but does
 not interpret it to choose a parameter, Y variable, unit, visit, or
 treatment. Its choices come from the pinned dataset, and the scientist
 confirms the settings before generation.</p>
-<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/03-confirming-analysis-selections.html" class="external-link"><img src="diagrams/03-confirming-analysis-selections.png" alt="Rendered confirmation flow diagram"></a></p>
-<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/03-confirming-analysis-selections.html" class="external-link">View
+<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/03-confirming-analysis-selections.html" class="external-link"><img src="diagrams/03-confirming-analysis-selections.png" alt="Rendered confirmation flow diagram"></a></p>
+<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/03-confirming-analysis-selections.html" class="external-link">View
 in Full Screen</a></p>
 <p>The diagram shows the selection and field gates; detailed BDS
 eligibility checks are described in <a href="02-bds-profiling-eligibility.html">BDS data profiling</a>.</p>
 <div class="section level2">
 <h2 id="from-question-to-selectable-choices">From question to selectable choices<a class="anchor" aria-label="anchor" href="#from-question-to-selectable-choices"></a>
 </h2>
-<p>In <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/mod_plot_generation.R" class="external-link">mod_plot_generation.R</a>,
+<p>In <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/mod_plot_generation.R" class="external-link">mod_plot_generation.R</a>,
 <code>to_confirm</code> requires the current upload and a valid
-question. It calls <code>.create_assurance_candidate()</code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/app_server.R" class="external-link">app_server.R</a>
+question. It calls <code>.create_assurance_candidate()</code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/app_server.R" class="external-link">app_server.R</a>
 when there is no pending candidate or the question has changed. That
 function pins the snapshot, retains the question, builds aggregate
 context, and creates a candidate with <code>dataset_id</code> set and
 <code>scale_mode = "fixed"</code>. The remaining plot fields initially
 contain <code>NULL</code>.</p>
-<p><code><a href="../reference/build_prompt_context.html">build_prompt_context()</a></code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/prompt_context.R" class="external-link">prompt_context.R</a>
+<p><code><a href="../reference/build_prompt_context.html">build_prompt_context()</a></code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/prompt_context.R" class="external-link">prompt_context.R</a>
 derives the following choices:</p>
 <table class="table">
 <colgroup>
@@ -149,7 +149,7 @@ selecting a parameter does not rebuild them from that parameter’s
 records. The later profile gate checks whether the selected combination
 exists.</p>
 <p>The context contains aggregate choices rather than patient records.
-<a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/prompt_context_policy.R" class="external-link">prompt_context_policy.R</a>
+<a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/prompt_context_policy.R" class="external-link">prompt_context_policy.R</a>
 rejects specified prohibited terms and URL patterns in labels and
 aggregate content. This lexical check does not qualify uploaded data
 provenance or establish de-identification. A separate
@@ -159,7 +159,7 @@ interpreter, but the active upload candidate path does not call it.</p>
 <div class="section level2">
 <h2 id="what-the-scientist-confirms">What the scientist confirms<a class="anchor" aria-label="anchor" href="#what-the-scientist-confirms"></a>
 </h2>
-<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/mod_specification.R" class="external-link">mod_specification.R</a>,
+<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/mod_specification.R" class="external-link">mod_specification.R</a>,
 through <code>mod_specification_server()</code>, presents the supported
 longitudinal numeric BDS boxplot and its controls. Parameter, Y
 variable, and treatment facet fall back to the first available choice
@@ -191,7 +191,7 @@ non-missing character value. It records <code>dataset_id</code>
 provenance as <code>metadata</code> and all seven remaining field
 sources as <code>user_confirmed</code>, including defaults accepted by
 the scientist.</p>
-<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/domain_plot_spec.R" class="external-link">domain_plot_spec.R</a>
+<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/domain_plot_spec.R" class="external-link">domain_plot_spec.R</a>
 defines eight specification fields: <code>dataset_id</code>,
 <code>paramcd</code>, <code>y_variable</code>, <code>unit</code>,
 <code>treatment_variable</code>, <code>treatment_levels</code>,
@@ -208,7 +208,7 @@ hash.</p>
 they are not signatures or authenticated proof of a person’s decision.
 The active field builder imposes stronger shape checks than
 <code>confirm_plot_spec()</code> alone.</p>
-<p>The workflow then calls <code><a href="../reference/validate_bds_profile.html">validate_bds_profile()</a></code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/bds_profile.R" class="external-link">bds_profile.R</a>.
+<p>The workflow then calls <code><a href="../reference/validate_bds_profile.html">validate_bds_profile()</a></code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/bds_profile.R" class="external-link">bds_profile.R</a>.
 This gate checks selected parameter and unit availability, permitted
 treatment, numeric Y, treatment levels, visit availability and mappings,
 and the supported record keys. A blocked profile remains on Confirm with
@@ -227,11 +227,11 @@ a correction action requiring rationale and provenance; it creates a
 successor rather than editing the previous revision.</p>
 <p>Inspected tests cover field/provenance display, read-only controls,
 user-selected units and visits, free-scale acknowledgement, and
-correction requests in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-mod-specification.R" class="external-link">test-mod-specification.R</a>.
-<a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-domain-plot-spec.R" class="external-link">test-domain-plot-spec.R</a>
+correction requests in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-mod-specification.R" class="external-link">test-mod-specification.R</a>.
+<a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-domain-plot-spec.R" class="external-link">test-domain-plot-spec.R</a>
 covers complete and incomplete specifications, supported Y variables,
-and unknown provenance fields. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-prompt-context.R" class="external-link">test-prompt-context.R</a>
-covers aggregate context and prohibited content. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-bds-profile.R" class="external-link">test-bds-profile.R</a>
+and unknown provenance fields. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-prompt-context.R" class="external-link">test-prompt-context.R</a>
+covers aggregate context and prohibited content. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-bds-profile.R" class="external-link">test-bds-profile.R</a>
 covers explicit units, exclusions, numeric Y, and deterministic visit
 mappings.</p>
 <p>These are inspected coverage references. This documentation task did

@@ -86,13 +86,13 @@ variable across ordered visits, with a separate facet for each selected
 treatment. Statistical calculations happen before rendering. The plot
 draws those calculated values directly, so <code>ggplot2</code> does not
 choose a second quartile or whisker definition.</p>
-<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/04-longitudinal-boxplot-statistics.html" class="external-link"><img src="diagrams/04-longitudinal-boxplot-statistics.png" alt="Rendered statistical-to-visual pipeline diagram"></a></p>
-<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/04-longitudinal-boxplot-statistics.html" class="external-link">View
+<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/04-longitudinal-boxplot-statistics.html" class="external-link"><img src="diagrams/04-longitudinal-boxplot-statistics.png" alt="Rendered statistical-to-visual pipeline diagram"></a></p>
+<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/04-longitudinal-boxplot-statistics.html" class="external-link">View
 in Full Screen</a></p>
 <div class="section level2">
 <h2 id="selected-records-and-grouping">Selected records and grouping<a class="anchor" aria-label="anchor" href="#selected-records-and-grouping"></a>
 </h2>
-<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/boxplot_statistics.R" class="external-link"><code>calculate_boxplot_statistics()</code></a>
+<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/boxplot_statistics.R" class="external-link"><code>calculate_boxplot_statistics()</code></a>
 consumes records from a validated selected-data profile, the treatment
 and Y column names, ordered treatment and visit levels, and a retained
 low-N policy. Required columns are <code>USUBJID</code>,
@@ -130,7 +130,7 @@ end at the smallest and largest observed values inside those fences,
 rather than at the fence values. Values strictly outside are retained as
 individual outlier rows, with subject identity, treatment, visit, and
 value.</p>
-<p>The <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/fixtures/expected-boxplot-statistics.csv" class="external-link">expected-statistics
+<p>The <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/fixtures/expected-boxplot-statistics.csv" class="external-link">expected-statistics
 fixture</a> makes small samples and edge cases explicit. For values
 <code>1, 2, 3, 20</code>, Q1 is 1.75, the median is 2.5, Q3 is 7.25,
 whiskers are 1 and 3, and 20 is an outlier. For
@@ -138,7 +138,7 @@ whiskers are 1 and 3, and 20 is an outlier. For
 10 is an outlier. A single contributing value produces identical hinges,
 median, and whiskers.</p>
 <p>Low N is a flag, not a filter. It is true when distinct-subject N is
-strictly below the retained policy value. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/bds_profile.R" class="external-link"><code>validate_bds_profile()</code></a>
+strictly below the retained policy value. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/bds_profile.R" class="external-link"><code>validate_bds_profile()</code></a>
 supplies a default threshold of 5; a non-default policy retains its
 value, rationale, authority, and version. Labels are
 <code>N = &lt;count&gt;</code> or
@@ -165,7 +165,7 @@ trajectory or an imputed intermediate median.</p>
 <div class="section level2">
 <h2 id="rendering-and-composition">Rendering and composition<a class="anchor" aria-label="anchor" href="#rendering-and-composition"></a>
 </h2>
-<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/boxplot_assembly.R" class="external-link"><code>assemble_boxplot()</code></a>
+<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/boxplot_assembly.R" class="external-link"><code>assemble_boxplot()</code></a>
 uses <code>geom_boxplot(stat = "identity")</code> with the five
 calculated statistics. It disables the geometry’s own outlier drawing
 and adds retained outliers as open circles. Boxes have white fill and
@@ -187,14 +187,14 @@ verification or human approval.</p>
 <div class="section level2">
 <h2 id="implementation-evidence-and-limits">Implementation evidence and limits<a class="anchor" aria-label="anchor" href="#implementation-evidence-and-limits"></a>
 </h2>
-<p>The standalone helpers in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/boxplot_standalone.R" class="external-link"><code>boxplot_standalone.R</code></a>
+<p>The standalone helpers in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/boxplot_standalone.R" class="external-link"><code>boxplot_standalone.R</code></a>
 repeat the calculation and visual conventions inside scripts emitted by
-<a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/boxplot_compiler.R" class="external-link"><code>compile_boxplot_script()</code></a>.
+<a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/boxplot_compiler.R" class="external-link"><code>compile_boxplot_script()</code></a>.
 Changes to statistical or visual rules need corresponding scrutiny in
 both implementations.</p>
-<p>Inspected tests cover <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-boxplot-statistics.R" class="external-link">statistics</a>,
-<a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-boxplot-assembly.R" class="external-link">assembly</a>,
-and <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-boxplot-compiler.R" class="external-link">compiled
+<p>Inspected tests cover <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-boxplot-statistics.R" class="external-link">statistics</a>,
+<a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-boxplot-assembly.R" class="external-link">assembly</a>,
+and <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-boxplot-compiler.R" class="external-link">compiled
 scripts</a>: explicit fixture results, empty groups, non-finite
 rejection, row-order invariance, layer values, N-panel alignment, scale
 differences, and standalone analytical results. The long-label test

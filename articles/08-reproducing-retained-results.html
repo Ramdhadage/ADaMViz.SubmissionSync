@@ -87,15 +87,15 @@ new result with stored identities. Replay does not run automatically
 during confirmation, human review, or export. It returns evidence for a
 caller to inspect; it does not promote a revision, replace its accepted
 artifacts, or approve a plot.</p>
-<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/08-reproducing-retained-results.html" class="external-link"><img src="diagrams/08-reproducing-retained-results.png" alt="Rendered replay diagram"></a></p>
-<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/08-reproducing-retained-results.html" class="external-link">View
+<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/08-reproducing-retained-results.html" class="external-link"><img src="diagrams/08-reproducing-retained-results.png" alt="Rendered replay diagram"></a></p>
+<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/08-reproducing-retained-results.html" class="external-link">View
 in Full Screen</a></p>
 <p>The diagram shows the service sequence and optional evidence write.
 Details of data reconstruction and comparison rules follow below.</p>
 <div class="section level2">
 <h2 id="what-replay-reads">What replay reads<a class="anchor" aria-label="anchor" href="#what-replay-reads"></a>
 </h2>
-<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/reproducibility_service.R" class="external-link"><code>new_reproducibility_service()</code></a>
+<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/reproducibility_service.R" class="external-link"><code>new_reproducibility_service()</code></a>
 accepts an evidence repository, readable artifact store, runner, and
 verification service. Its
 <code>reproduce_revision(revision_id, idempotency_key = NULL)</code>
@@ -104,13 +104,13 @@ method retrieves the persisted revision and its latest
 operation. With the SQLite repository, entries are ordered by
 <code>created_at</code>, then <code>evidence_id</code>; “latest” means
 the last matching row in that order.</p>
-<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/revision_evidence.R" class="external-link"><code>.revision_context_details()</code></a>
+<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/revision_evidence.R" class="external-link"><code>.revision_context_details()</code></a>
 retains the question, confirmed specification, input identity, selected
 records, generated script, execution request and result, environment,
 profile warnings, and checks. Replay reads the script bytes from the
 artifact store using the revision’s <code>code_hash</code>, rather than
 recompiling the specification or using the script copy in context JSON.
-The <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/artifact_store_local.R" class="external-link">local
+The <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/artifact_store_local.R" class="external-link">local
 store</a> verifies an artifact’s SHA-256 hash before returning its bytes
 through <code><a href="https://rdrr.io/r/base/get.html" class="external-link">get()</a></code>.</p>
 <p>The retained request supplies the original specification hash, script
@@ -142,7 +142,7 @@ guarantee that every input type can be recreated.</p>
 <div class="section level2">
 <h2 id="running-and-checking-the-result">Running and checking the result<a class="anchor" aria-label="anchor" href="#running-and-checking-the-result"></a>
 </h2>
-<p>The default replay runner is <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/execution_runner.R" class="external-link"><code>new_execution_runner()</code></a>,
+<p>The default replay runner is <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/execution_runner.R" class="external-link"><code>new_execution_runner()</code></a>,
 which executes locally in the current R process. The normal governed
 execution path uses a clean <code>callr</code> subprocess, described in
 <a href="06-script-generation-execution.html">script generation and
@@ -225,7 +225,7 @@ runnable environment.</p>
 <div class="section level2">
 <h2 id="coverage-and-limits">Coverage and limits<a class="anchor" aria-label="anchor" href="#coverage-and-limits"></a>
 </h2>
-<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-revision-evidence.R" class="external-link"><code>test-revision-evidence.R</code></a>
+<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-revision-evidence.R" class="external-link"><code>test-revision-evidence.R</code></a>
 checks retained context and a passing replay with recorded evidence. Its
 injected runner sources the script but writes fixed
 <code>"png bytes"</code>; that test does not demonstrate real PNG

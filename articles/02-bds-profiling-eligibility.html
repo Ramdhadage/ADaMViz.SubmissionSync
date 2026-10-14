@@ -88,14 +88,14 @@ result explicitly records
 <code>dataset_conformance = "not_assessed"</code>; it does not establish
 full ADaM conformance, data provenance, or statistical suitability for
 an intended clinical analysis.</p>
-<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/02-bds-profiling-eligibility.html" class="external-link"><img src="diagrams/02-bds-profiling-eligibility.png" alt="Rendered eligibility flow diagram"></a></p>
-<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/02-bds-profiling-eligibility.html" class="external-link">View
+<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/02-bds-profiling-eligibility.html" class="external-link"><img src="diagrams/02-bds-profiling-eligibility.png" alt="Rendered eligibility flow diagram"></a></p>
+<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/02-bds-profiling-eligibility.html" class="external-link">View
 in Full Screen</a></p>
 <div class="section level2">
 <h2 id="two-checks-with-different-scope">Two checks with different scope<a class="anchor" aria-label="anchor" href="#two-checks-with-different-scope"></a>
 </h2>
 <p>The upload adapter, <code>.uploaded_study_data_provider()</code> in
-<a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/mod_plot_generation.R" class="external-link">mod_plot_generation.R</a>,
+<a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/mod_plot_generation.R" class="external-link">mod_plot_generation.R</a>,
 checks the parsed file before creating a provider. It requires populated
 records, unique non-empty column names, and <code>USUBJID</code>,
 <code>PARAMCD</code>, <code>PARAM</code>, <code>AVISIT</code>,
@@ -108,7 +108,7 @@ with finite order values, and treatment values must exist somewhere in
 the file. This is a whole-file admission check, rather than a complete
 validation of every row. Wide-format visit columns receive guidance to
 reshape into long format; the adapter does not reshape them.</p>
-<p><code><a href="../reference/validate_bds_profile.html">validate_bds_profile()</a></code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/bds_profile.R" class="external-link">bds_profile.R</a>
+<p><code><a href="../reference/validate_bds_profile.html">validate_bds_profile()</a></code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/bds_profile.R" class="external-link">bds_profile.R</a>
 then evaluates a pinned snapshot and six selections:
 <code>paramcd</code>, <code>y_variable</code>, <code>unit</code>,
 <code>treatment_variable</code>, <code>treatment_levels</code>, and
@@ -135,7 +135,7 @@ parameter and discovers its non-missing units. Multiple units require an
 explicit choice; an unavailable choice blocks. Selecting a unit removes
 records with another unit or a missing unit. With no explicit unit and
 at most one discovered unit, the API does not apply a unit filter.
-Confirmation has its own completeness requirements in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/domain_plot_spec.R" class="external-link">domain_plot_spec.R</a>.</p>
+Confirmation has its own completeness requirements in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/domain_plot_spec.R" class="external-link">domain_plot_spec.R</a>.</p>
 <p>Missing or empty subject identifiers and treatment values block at
 this point, <strong>before</strong> treatment-level and visit
 exclusions. Treatment choices default to all available levels when
@@ -191,10 +191,10 @@ reference. Duplicate subject keys are returned separately in
 diagnostic text.</p>
 <p>The confirmation handler displays the blocking code and message and
 remains at Confirm. The execution coordinator,
-<code>.execute_assurance_revision()</code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/app_server.R" class="external-link">app_server.R</a>,
+<code>.execute_assurance_revision()</code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/app_server.R" class="external-link">app_server.R</a>,
 also checks the profile before compilation. Numeric type alone is
 insufficient: the profile can retain infinite Y values, while
-<code><a href="../reference/calculate_boxplot_statistics.html">calculate_boxplot_statistics()</a></code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/boxplot_statistics.R" class="external-link">boxplot_statistics.R</a>
+<code><a href="../reference/calculate_boxplot_statistics.html">calculate_boxplot_statistics()</a></code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/boxplot_statistics.R" class="external-link">boxplot_statistics.R</a>
 rejects non-finite displayed values downstream. Profiling success
 therefore does not guarantee that generation or execution will
 succeed.</p>
@@ -202,7 +202,7 @@ succeed.</p>
 <div class="section level2">
 <h2 id="coverage-and-verification-status">Coverage and verification status<a class="anchor" aria-label="anchor" href="#coverage-and-verification-status"></a>
 </h2>
-<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-bds-profile.R" class="external-link">test-bds-profile.R</a>
+<p><a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-bds-profile.R" class="external-link">test-bds-profile.R</a>
 contains cases for metadata, required fields, explicit units, absent
 keys, numeric Y, visit conflicts, duplicates, additional timepoint keys,
 exclusions, unchanged analysis flags, missing-Y counts, empty facets,
