@@ -52,6 +52,8 @@ jobs:
             indent: 2                   # Unordered list indentation
           MD013:
             line_length: 800            # Line length
+          MD025:
+            front_matter_title: ""       # Metadata title may accompany one H1
           MD026:
             punctuation: ".,;:!。，；:"  # List of not allowed
           MD029: false                  # Ordered list item prefix
@@ -99,8 +101,13 @@ jobs:
           fetch-depth: 0
 
       - name: Install lint dependencies
-        run: install.packages(c("jsonlite", "lintr"), repos = "https://cloud.r-project.org")
-        shell: Rscript {0}
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          dependencies: '"all"'
+          extra-packages: any::lintr
+
+      - name: Install package for namespace-aware linting
+        run: R CMD INSTALL .
 
       - name: Changed files 🖋️
         if: github.event_name != 'workflow_dispatch'
@@ -114,6 +121,7 @@ jobs:
         run: |
           github_event_name <- "${{ github.event_name }}"
           cat(paste0("GitHub event name = ", github_event_name, "\n"))
+          loadNamespace(read.dcf("DESCRIPTION")[1, "Package"])
           exclusions_list <- NULL
           if (!(identical("${{ inputs.lint-all-files }}", "true") || identical(github_event_name, "workflow_dispatch"))) {
             changed_files <- jsonlite::fromJSON('${{ steps.files.outputs.added_modified }}')

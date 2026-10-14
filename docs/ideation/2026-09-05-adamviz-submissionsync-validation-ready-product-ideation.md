@@ -216,4 +216,3 @@ This idea concentrates it on material novelty while converting expert correction
 | 12 | Governed Reviewer Patch Library | Near-duplicate of the broader Exception-Led Review Learning Loop, which also covers semantic deltas and scenario conversion. |
 | 13 | Plot Evidence Receipt | Duplicate of the stronger Evidence Graph and Plot Passport, which includes invalidation and reuse mechanics. |
 | 14 | Review the Delta, Not the Whole Plot | Duplicate of the stronger Exception-Led Review Learning Loop, which adds governed learning and regression evidence. |
-
