@@ -107,7 +107,9 @@ jobs:
           extra-packages: any::lintr
 
       - name: Install package for namespace-aware linting
-        run: R CMD INSTALL .
+        # Rscript loads .Rprofile so installation sees the renv dependency library.
+        run: install.packages(".", repos = NULL, type = "source")
+        shell: Rscript {0}
 
       - name: Changed files 🖋️
         if: github.event_name != 'workflow_dispatch'
