@@ -75,6 +75,7 @@ mod_plot_preview_server <- function(id, current_revision) {
         list(
           src = image_path,
           contentType = "image/png",
+          style = "width: 100%; height: 100%; object-fit: contain;",
           alt = paste(
             "Accepted longitudinal boxplot for",
             state$spec$fields$paramcd

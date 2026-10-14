@@ -115,7 +115,9 @@ run_execution_locally <- function(
       ggplot2::ggsave(
         filename = image_path,
         plot = env$boxplot_artifact$combined,
-        device = function(...) grDevices::png(..., type = "cairo"),
+        device = function(...) {
+          grDevices::png(..., units = "in", res = 100, type = "cairo")
+        },
         width = image_width / 100,
         height = image_height / 100,
         dpi = 100,

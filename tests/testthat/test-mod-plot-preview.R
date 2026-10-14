@@ -72,6 +72,10 @@ test_that("governed preview uses accepted image and code artifacts", {
         output$accepted_plot$src,
         "^data:image/png;base64,"
       )
+      expect_identical(
+        output$accepted_plot$style,
+        "width: 100%; height: 100%; object-fit: contain;"
+      )
       encoded <- sub("^data:image/png;base64,", "", output$accepted_plot$src)
       expect_identical(jsonlite::base64_dec(encoded), accepted_image)
     }

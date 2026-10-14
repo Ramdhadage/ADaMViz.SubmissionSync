@@ -50,6 +50,12 @@ test_that("plot generation UI gives traceability, review, and export a step", {
       "<summary>Traceability, review, and export</summary>"
     )
   )
+  expect_match(html, "id=\"plot_generation-back_to_ask_ui\"", fixed = TRUE)
+  expect_match(
+    html,
+    "id=\"plot_generation-back_to_result_from_confirm_ui\"",
+    fixed = TRUE
+  )
 })
 
 test_that("plot generation navigation reaches Export and returns to Result", {
@@ -109,7 +115,7 @@ test_that("plot generation returns from read-only Confirm to Result", {
       session$setInputs(back_to_confirm = 1)
       session$flushReact()
       expect_match(
-        htmltools::renderTags(output$back_to_result_from_confirm)$html,
+        htmltools::renderTags(output$back_to_result_from_confirm_ui)$html,
         "Back to result"
       )
 

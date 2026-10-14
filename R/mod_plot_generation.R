@@ -223,8 +223,8 @@ mod_plot_generation_ui <- function(id) {
               class = "d-flex justify-content-between",
               tags$div(
                 class = "d-flex gap-2",
-                shiny::uiOutput(ns("back_to_ask")),
-                shiny::uiOutput(ns("back_to_result_from_confirm"))
+                shiny::uiOutput(ns("back_to_ask_ui")),
+                shiny::uiOutput(ns("back_to_result_from_confirm_ui"))
               ),
               shiny::uiOutput(ns("confirm_message"))
             ),
@@ -501,7 +501,7 @@ mod_plot_generation_server <- function(
       NULL
     })
 
-    output$back_to_ask <- shiny::renderUI({
+    output$back_to_ask_ui <- shiny::renderUI({
       state <- current_revision()
       if (!is.null(state$revision) && is.null(state$pending)) {
         return(NULL)
@@ -513,7 +513,7 @@ mod_plot_generation_server <- function(
       )
     })
 
-    output$back_to_result_from_confirm <- shiny::renderUI({
+    output$back_to_result_from_confirm_ui <- shiny::renderUI({
       state <- current_revision()
       if (is.null(state$revision) || !is.null(state$pending)) {
         return(NULL)
