@@ -12,7 +12,7 @@ execution: code
 
 **Objective:** Run teal's complete package quality workflow for ADaMViz SubmissionSync while retaining this repository's approved package check.
 
-**Means:** Replace `R-CMD-check.yaml` with a workflow that calls local copies of teal's thirteen reusable jobs and retains the existing warning-failing R package job. Migrate the repository default branch from `master` to `main`, which teal's write jobs require.
+**Means:** Replace `R-CMD-check.yaml` with a workflow that calls local copies of teal's thirteen reusable jobs and retains the existing warning-failing R package job. Use `main` as the repository default branch, which teal's write jobs require.
 
 **Success signal:** All applicable jobs run on a pull request and the post-merge `main` push; the existing lint, tests, and R CMD check still fail on findings or warnings. The version, spelling, update, coverage, and publication jobs complete with the intended writes.
 
@@ -56,7 +56,7 @@ The caller must grant write permissions for the auto-update and report jobs. Pre
 
 ### U3. Update active references
 
-Update `ARCHITECTURE.md` and the `pkgdown.yaml` branch trigger for the new default. Retain historical plan references. Revisit raw `master` links before retiring that branch.
+Update `ARCHITECTURE.md` and the `pkgdown.yaml` branch trigger for the new default. Retain historical plan references. Confirm raw `main` links resolve before removing the obsolete branch.
 
 ### U4. Deliver through the repository workflow
 

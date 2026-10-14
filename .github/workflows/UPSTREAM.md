@@ -1,7 +1,6 @@
 # Vendored R package workflows
 
-The following reusable workflows were copied from
-[`insightsengineering/r.pkg.template` at `9a4999333bb39887c2600295739b1e592152cb21`](https://github.com/insightsengineering/r.pkg.template/tree/9a4999333bb39887c2600295739b1e592152cb21/.github/workflows):
+The following reusable workflows are stored in this [workflows](./) folder:
 `audit.yaml`, `build-check-install.yaml`, `gitleaks.yaml`, `licenses.yaml`,
 `links.yaml`, `linter.yaml`, `roxygen.yaml`, `spelling.yaml`, `style.yaml`,
 `test-coverage.yaml`, `version-bump.yaml`, and `version.yaml`.

@@ -6,9 +6,9 @@ description: >
 
 A correction creates a new revision linked to a closed result. The earlier revision remains `Reviewed` or `Rejected`, with its existing evidence and decisions. The successor receives its own specification, script, artifacts, execution evidence, and review decisions. Approval of the parent does not approve the correction.
 
-[![Rendered correction lifecycle diagram](diagrams/10-correction-revision-traceability.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/10-correction-revision-traceability.html)
+[![Rendered correction lifecycle diagram](diagrams/10-correction-revision-traceability.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/10-correction-revision-traceability.html)
 
-[View in Full Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/10-correction-revision-traceability.html)
+[View in Full Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/10-correction-revision-traceability.html)
 
 ## Starting a correction
 
@@ -48,8 +48,8 @@ Tests inspected cover rejection followed by correction, preservation of a review
 
 ## Implementation references
 
-- [Lifecycle service](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/lifecycle_service.R): `create_correction()`.
-- [Application coordinator](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/app_server.R): `.execute_correction_revision()`, `.materialize_correction()`.
-- [Specification controls](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/mod_specification.R): `.can_create_correction()`, `.current_spec_input_fields()`.
-- [Repository](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/evidence_repository_sqlite.R) and [schema](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/inst/sql/schema.sql): revision relationships and creation transaction.
-- [History module](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/mod_revision_history.R), [lifecycle tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-lifecycle-service.R), [application correction test](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-app-server-correction.R), [repository contract tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-evidence-repository-contract.R), and [history test](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-mod-revision-history.R).
+- [Lifecycle service](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/lifecycle_service.R): `create_correction()`.
+- [Application coordinator](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/app_server.R): `.execute_correction_revision()`, `.materialize_correction()`.
+- [Specification controls](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/mod_specification.R): `.can_create_correction()`, `.current_spec_input_fields()`.
+- [Repository](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/evidence_repository_sqlite.R) and [schema](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/inst/sql/schema.sql): revision relationships and creation transaction.
+- [History module](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/mod_revision_history.R), [lifecycle tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-lifecycle-service.R), [application correction test](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-app-server-correction.R), [repository contract tests](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-evidence-repository-contract.R), and [history test](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-mod-revision-history.R).

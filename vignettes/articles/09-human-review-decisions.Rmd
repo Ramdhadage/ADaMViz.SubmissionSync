@@ -8,19 +8,19 @@ Human review binds decisions to one revision's retained script, image, and analy
 
 This page describes implementation inspected at base commit `5e2fa6a`. It documents the local proof of concept, not authenticated production review or formal validation evidence.
 
-[![Rendered review-state diagram](diagrams/09-human-review-decisions.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/09-human-review-decisions.html)
+[![Rendered review-state diagram](diagrams/09-human-review-decisions.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/09-human-review-decisions.html)
 
-[View in Full Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/master/vignettes/articles/diagrams/09-human-review-decisions.html)
+[View in Full Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/09-human-review-decisions.html)
 
 ## Using the review panel
 
 The Export step contains the **Two-Person Review** panel. The reviewer selects a local identity and a review role, enters an optional approval comment or required rejection rationale, and chooses **Approve** or **Reject**. The panel then shows recorded actor IDs, roles, decisions, and timestamps. Selecting the creator identity remains possible in the interface, but the repository refuses that actor's decision on their own revision.
 
-[`mod_review_server()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/mod_review.R) reloads the revision before submitting a decision. It supplies the current integer version and an idempotency key built from the decision, revision ID, actor ID, and version. On success it refreshes application state; on failure it displays the error message. The role selector does not grant that role: the repository checks the claim against the actor's registered roles.
+[`mod_review_server()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/mod_review.R) reloads the revision before submitting a decision. It supplies the current integer version and an idempotency key built from the decision, revision ID, actor ID, and version. On success it refreshes application state; on failure it displays the error message. The role selector does not grant that role: the repository checks the claim against the actor's registered roles.
 
 ## Decision checks and outcomes
 
-[`new_review_service()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/review_service.R) resolves an actor through the identity provider. Its `approve()` and `reject()` methods delegate to `record_review_decision()` in [`sqlite_evidence_repository()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/evidence_repository_sqlite.R). When callers omit hashes, the service reads the revision's `code_hash`, `image_hash`, and `analytical_hash` and submits those values.
+[`new_review_service()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/review_service.R) resolves an actor through the identity provider. Its `approve()` and `reject()` methods delegate to `record_review_decision()` in [`sqlite_evidence_repository()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/evidence_repository_sqlite.R). When callers omit hashes, the service reads the revision's `code_hash`, `image_hash`, and `analytical_hash` and submits those values.
 
 The repository applies these checks within its decision transaction:
 
@@ -44,12 +44,12 @@ Repeating an identical registered command with the same idempotency key returns 
 
 ## Enforcement limits
 
-[`local_identity_provider()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/provider_identity_local.R) looks up actors in a supplied catalog. [`app_server()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/app_server.R) constructs creator, programmer, and biostatistician actors locally, and the interface lets the user select them. These mechanisms demonstrate role and identity rules but do not authenticate the person operating the session. Error messages referring to an “authenticated” actor do not establish authentication.
+[`local_identity_provider()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/provider_identity_local.R) looks up actors in a supplied catalog. [`app_server()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/app_server.R) constructs creator, programmer, and biostatistician actors locally, and the interface lets the user select them. These mechanisms demonstrate role and identity rules but do not authenticate the person operating the session. Error messages referring to an “authenticated” actor do not establish authentication.
 
 The displayed preview is rebuilt in the application process rather than loaded from the accepted worker PNG. Decisions bind retained revision hashes, but the current interface does not establish that the image visually inspected was the accepted image. Review does not automatically invoke retained-input replay. See [execution evidence](07-verification-revision-evidence.html) for the distinction between automated checks and human judgment.
 
-Rejection is implemented directly by the repository's decision transaction. The generic [`transition_revision_status()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/R/domain_status.R) helper lists `Verified` to `Reviewed` but has no rejection transition; it is not the complete review lifecycle. Export requires `Reviewed` status plus the remaining bundle, authorization, destination, and integrity checks described in [controlled export](11-controlled-export.html).
+Rejection is implemented directly by the repository's decision transaction. The generic [`transition_revision_status()`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/domain_status.R) helper lists `Verified` to `Reviewed` but has no rejection transition; it is not the complete review lifecycle. Export requires `Reviewed` status plus the remaining bundle, authorization, destination, and integrity checks described in [controlled export](11-controlled-export.html).
 
 ## Inspected coverage
 
-[`test-review-service.R`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-review-service.R) covers creator exclusion, active actors, dual-role claims, distinct identities, exact hashes, rationale retention, stale versions, either approval order, and competing decisions. [`test-mod-review.R`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/master/tests/testthat/test-mod-review.R) exercises the panel's two-approval state update. These files were inspected, not executed for this documentation change. Browser behavior, authentication, statistical adequacy of reviewer decisions, and regulated qualification remain unverified here.
+[`test-review-service.R`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-review-service.R) covers creator exclusion, active actors, dual-role claims, distinct identities, exact hashes, rationale retention, stale versions, either approval order, and competing decisions. [`test-mod-review.R`](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/tests/testthat/test-mod-review.R) exercises the panel's two-approval state update. These files were inspected, not executed for this documentation change. Browser behavior, authentication, statistical adequacy of reviewer decisions, and regulated qualification remain unverified here.
