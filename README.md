@@ -1,5 +1,12 @@
 # ADaMViz SubmissionSync
 
+[![R CMD check](https://img.shields.io/github/actions/workflow/status/Ramdhadage/ADaMViz.SubmissionSync/check.yaml?branch=main&label=R%20CMD%20check)](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/actions/workflows/check.yaml)
+[![Documentation build](https://img.shields.io/github/actions/workflow/status/Ramdhadage/ADaMViz.SubmissionSync/pkgdown.yaml?branch=main&label=docs)](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/actions/workflows/pkgdown.yaml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Commits per month](https://img.shields.io/github/commit-activity/m/Ramdhadage/ADaMViz.SubmissionSync)](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/commits/main/)
+[![Test coverage](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Framdhadage.github.io%2FADaMViz.SubmissionSync%2Fcoverage-report%2Fcoverage.xml&query=round%28100%20%2A%20%2Fcoverage%2F%40line-rate%29&suffix=%25&label=coverage&color=blue)](https://ramdhadage.github.io/ADaMViz.SubmissionSync/coverage-report/)
+
 ADaMViz SubmissionSync is an R-first Shiny proof of concept for review-ready
 clinical visualizations and reproducible R code from permitted ADaM or tabular
 data. It is designed for validated clinical submission workflows; it is not

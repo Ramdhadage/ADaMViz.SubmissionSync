@@ -151,6 +151,24 @@ fixture("R CMD blocked note fails", check,
         error = "NOTEs on the blocklist")
 fixture("clean R CMD log passes", check, setup = log_setup("Status: OK"))
 
+pkgdown <- workflow_block(file.path(root, ".github/workflows/pkgdown.yaml"), "Check documentation version")
+pkgdown_setup <- function(heading) function() {
+  writeLines(c("Package: fixture", "Version: 1.2.3.9001"), "DESCRIPTION")
+  writeLines(heading, "NEWS.md")
+}
+pkgdown_bindings <- list(Sys.getenv = function(...) "github-output")
+fixture("pkgdown matching version emits publication version", pkgdown, pkgdown_bindings,
+        setup = pkgdown_setup("# fixture 1.2.3.9001"), inspect = function() {
+          stopifnot(identical(readLines("github-output"), "version=1.2.3.9001"))
+        })
+fixture("pkgdown stale NEWS fails", pkgdown, pkgdown_bindings,
+        setup = pkgdown_setup("# fixture 1.2.3.9000"), error = "NEWS version does not match DESCRIPTION")
+fixture("pkgdown missing NEWS heading fails", pkgdown, pkgdown_bindings,
+        setup = pkgdown_setup("No version heading"), error = "NEWS version does not match DESCRIPTION")
+fixture("pkgdown missing NEWS fails", pkgdown, pkgdown_bindings,
+        setup = function() writeLines(c("Package: fixture", "Version: 1.2.3.9001"), "DESCRIPTION"),
+        error = "cannot open the connection")
+
 # Python remains the authoritative implementation for NEWS; execute when available.
 python <- unname(Sys.which("python"))
 if (!nzchar(python)) python <- unname(Sys.which("python3"))

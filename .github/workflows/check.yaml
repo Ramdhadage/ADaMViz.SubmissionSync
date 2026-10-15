@@ -254,6 +254,16 @@ jobs:
             ]).addRaw('Intentional skips: Version Bump outside main push; Lychee (URL Checker selected); Covtracer and PII disabled; tag/multiversion report paths inactive.').write();
             if (failures.length) core.setFailed('Required checks failed or skipped: ' + failures.join(', '));
 
+  pkgdown:
+    name: Publish package documentation
+    needs: [required-checks, generated-check]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+    uses: ./.github/workflows/pkgdown.yaml
+    with:
+      checked-sha: ${{ needs.generated-check.outputs.checked-sha }}
+
   deploy:
     name: Package CD
     needs: [required-checks, generated-check]

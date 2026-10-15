@@ -49,6 +49,12 @@ required result. Report publishers retry against the latest gh-pages revision;
 pkgdown keeps other report directories, disables force pushes, and permits five
 rebase attempts. Concurrent writes that cannot be reconciled fail visibly.
 
+Pkgdown is called only after Required CI results and the final generated revision
+check pass on a main push. It checks out that job's recorded SHA, checks that the
+first NEWS heading matches DESCRIPTION, and includes the version and source SHA
+in its gh-pages commit message. Standalone push, PR, release and manual pkgdown
+triggers are removed so they cannot bypass the publication gate.
+
 ### Retained external runtime references
 
 The copied YAML remains local integration code. These images were resolved
