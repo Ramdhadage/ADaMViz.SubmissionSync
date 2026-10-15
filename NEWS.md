@@ -1,4 +1,4 @@
-# ADaMViz.SubmissionSync 0.1.0.9005
+# ADaMViz.SubmissionSync 0.1.0.9006
 
 ## Application interface
 
