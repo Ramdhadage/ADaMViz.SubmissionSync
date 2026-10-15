@@ -3,6 +3,10 @@ name: Roxygen 🅾
 
 on:
   workflow_call:
+    outputs:
+      generated-sha:
+        description: Commit created by this run, empty when no commit was made.
+        value: ${{ jobs.roxygen.outputs.generated-sha }}
     inputs:
       install-system-dependencies:
         description: Check for and install system dependencies
@@ -56,6 +60,8 @@ concurrency:
 
 jobs:
   roxygen:
+    outputs:
+      generated-sha: ${{ steps.generated.outputs.generated-sha }}
     name: Manual pages check 🏁
     runs-on: ubuntu-latest
     container:
@@ -188,6 +194,7 @@ jobs:
               else
                 git push origin "HEAD:refs/heads/${BRANCH_NAME}"
               fi
+              echo "generated-sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
             }
             fi
             # If auto-update is disabled or is unsuccessful, let 'em know to fix manually
@@ -219,3 +226,4 @@ jobs:
           WRITE_ACTIVE: ${{ steps.write-target.outputs.active }}
           SAME_REPO: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
           EXPECTED_SHA: ${{ github.event.pull_request.head.sha }}
+        id: generated

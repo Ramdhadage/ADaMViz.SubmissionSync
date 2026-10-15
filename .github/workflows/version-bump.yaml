@@ -3,6 +3,10 @@ name: Version bump ⬆
 
 on:
   workflow_call:
+    outputs:
+      generated-sha:
+        description: Commit created by this run, empty when no commit was made.
+        value: ${{ jobs.vbump.outputs.generated-sha }}
     secrets:
       REPO_GITHUB_TOKEN:
         description: Github token with write access to the repo
@@ -30,6 +34,8 @@ concurrency:
 
 jobs:
   vbump:
+    outputs:
+      generated-sha: ${{ steps.commit.outputs.commit_hash }}
     name: Bump version ⤴
     runs-on: ubuntu-latest
     container:
@@ -117,6 +123,7 @@ jobs:
       - name: Commit and push changes 📌
         if: ${{ env.NEW_PKG_VERSION }}
         uses: stefanzweifel/git-auto-commit-action@b863ae1933cb653a53c021fe36dbb774e1fb9403 # v5
+        id: commit
         with:
           commit_message: "Bump version to ${{ env.NEW_PKG_VERSION }}"
           file_pattern: "${{ steps.file-pattern.outputs.file-pattern }}"

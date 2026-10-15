@@ -3,6 +3,10 @@ name: Spelling 🆎
 
 on:
   workflow_call:
+    outputs:
+      generated-sha:
+        description: Commit created by this run, empty when no commit was made.
+        value: ${{ jobs.spelling.outputs.generated-sha }}
     secrets:
       REPO_GITHUB_TOKEN:
         description: Github token with write access to the repo
@@ -25,6 +29,8 @@ concurrency:
 
 jobs:
   spelling:
+    outputs:
+      generated-sha: ${{ steps.commit.outputs.commit_hash }}
     name: Check spelling 🔠
     runs-on: ubuntu-latest
     container:
@@ -95,6 +101,7 @@ jobs:
       - name: Commit and push changes 📌
         if: github.event_name == 'push'
         uses: stefanzweifel/git-auto-commit-action@b863ae1933cb653a53c021fe36dbb774e1fb9403 # v5
+        id: commit
         with:
           commit_message: "Update WORDLIST"
           file_pattern: "${{ steps.file-pattern.outputs.file-pattern }}"

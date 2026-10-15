@@ -1,0 +1,115 @@
+---
+name: Package CD
+
+on:
+  workflow_call:
+    inputs:
+      checked-sha:
+        description: Final revision validated by Package CI.
+        required: true
+        type: string
+    secrets:
+      SHINYAPPSIO_TOKEN:
+        required: true
+      SHINYAPPSIO_SECRET:
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: package-cd-shinyappsio-ADaMViz-SubmissionSync
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      DEPLOY_SHA: ${{ inputs.checked-sha }}
+      SHINYAPPSIO_ACCOUNT: ramnath-dhadage
+      RENV_CONFIG_PAK_ENABLED: "true"
+      RENV_CONFIG_CACHE_SYMLINKS: "false"
+    defaults:
+      run:
+        shell: Rscript {0}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.checked-sha }}
+          persist-credentials: false
+
+      - name: Check revision before restoring dependencies
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "$DEPLOY_SHA"
+          test "$(git ls-remote origin refs/heads/main | cut -f1)" = "$DEPLOY_SHA"
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "release"
+
+      - name: Install system dependencies
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake libcurl4-openssl-dev libfontconfig1-dev libfreetype6-dev libgit2-dev libnode-dev libx11-dev pandoc
+
+      - uses: r-lib/actions/setup-renv@v2
+
+      - name: Install the checked package with pak
+        env:
+          GITHUB_PAT: ${{ github.token }}
+        run: |
+          if (!requireNamespace("pak", quietly = TRUE)) {
+            install.packages("pak", repos = "https://cloud.r-project.org")
+          }
+          package_ref <- paste0("Ramdhadage/ADaMViz.SubmissionSync@", Sys.getenv("DEPLOY_SHA"))
+          pak::pak(package_ref, dependencies = FALSE, ask = FALSE)
+          stopifnot(identical(
+            unname(packageDescription("ADaMViz.SubmissionSync", fields = "RemoteSha")),
+            Sys.getenv("DEPLOY_SHA")
+          ))
+          # Only the app's entry changes; all other locked versions stay intact.
+          renv::record(package_ref)
+
+      - name: Deploy the existing shinyapps.io app
+        env:
+          SHINYAPPSIO_TOKEN: ${{ secrets.SHINYAPPSIO_TOKEN }}
+          SHINYAPPSIO_SECRET: ${{ secrets.SHINYAPPSIO_SECRET }}
+        run: |
+          stopifnot(all(nzchar(Sys.getenv(c("SHINYAPPSIO_TOKEN", "SHINYAPPSIO_SECRET")))))
+          remote <- system2("git", c("ls-remote", "origin", "refs/heads/main"), stdout = TRUE)
+          stopifnot(identical(sub("\t.*", "", remote), Sys.getenv("DEPLOY_SHA")))
+          # Read tracked records before this fresh runner registers its account.
+          deployments <- rsconnect::deployments(".", excludeOrphaned = FALSE)
+          target <- deployments[
+            deployments$name == "ADaMViz-SubmissionSync" &
+              deployments$account == Sys.getenv("SHINYAPPSIO_ACCOUNT") &
+              deployments$server == "shinyapps.io",
+            , drop = FALSE
+          ]
+          stopifnot(nrow(target) == 1L, identical(as.character(target$appId), "18047061"))
+          rsconnect::setAccountInfo(
+            name = Sys.getenv("SHINYAPPSIO_ACCOUNT"),
+            token = Sys.getenv("SHINYAPPSIO_TOKEN"),
+            secret = Sys.getenv("SHINYAPPSIO_SECRET"),
+            server = "shinyapps.io"
+          )
+          rsconnect::deployApp(
+            appName = "ADaMViz-SubmissionSync",
+            appTitle = "ADaMViz.SubmissionSync: Review-Ready Clinical Figures",
+            appFiles = c("R/", "inst/", "renv/", "NAMESPACE", "DESCRIPTION", "renv.lock", "app.R"),
+            appId = target$appId,
+            account = Sys.getenv("SHINYAPPSIO_ACCOUNT"),
+            server = "shinyapps.io",
+            lint = FALSE,
+            forceUpdate = TRUE,
+            launch.browser = FALSE
+          )
+          cat(
+            "Deployed revision: ", Sys.getenv("DEPLOY_SHA"),
+            "\nApp: https://ramnath-dhadage.shinyapps.io/ADaMViz-SubmissionSync/\n",
+            sep = "", file = Sys.getenv("GITHUB_STEP_SUMMARY"), append = TRUE
+          )
