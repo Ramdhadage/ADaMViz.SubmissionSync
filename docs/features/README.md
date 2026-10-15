@@ -4,6 +4,13 @@ These pages describe the implementation inspected at source commit `5e2fa6a` on 
 
 Read the pages in order for the full input-to-export workflow, or open a feature directly.
 
+The shared application frame is documented in the
+[F001 UX guide](../ux/F001-plot-generation.md#application-frame). The current
+source adds a blue product header and GitHub link above the existing
+**Create plot** step bar, plus an attribution footer with source-code and
+issue-reporting links. This frame update is separate from the feature-source
+snapshot described above; it does not change the input-to-export workflow.
+
 | Feature | Documentation | Diagram |
 | --- | --- | --- |
 | 01 | [CSV and Excel uploads, data snapshots, and input identity](01-uploads-snapshots-input-identity.md) | [Open diagram](diagrams/01-uploads-snapshots-input-identity.html) |

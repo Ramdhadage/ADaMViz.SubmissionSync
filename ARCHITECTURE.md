@@ -106,6 +106,12 @@ These observations identify differences; they do not authorize new requirements 
 
 ## Navigation and maintenance
 
+The shared application header and footer are composed in `R/app_ui.R` and
+styled in `inst/app/www/app.css`. The existing **Create plot** workflow bar
+and five-step indicator remain in `mod_plot_generation_ui()`. See the
+[application frame](docs/ux/F001-plot-generation.md#application-frame) for
+the prototype reference and visible content.
+
 The [twelve feature guides](docs/features/README.md) explain the current input,
 profiling, plotting, execution, review, export, and evidence workflows. Each guide
 includes an implementation diagram and links to source and inspected tests.

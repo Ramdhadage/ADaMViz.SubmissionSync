@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -15,15 +15,22 @@ h1{font-size:1.5rem;margin:0 0 3px}
 .note{border:1px solid var(--line);background:white;border-radius:5px;padding:7px 9px;font-size:.83rem}
 .grid{display:grid;grid-template-columns:1fr;gap:14px}
 .screen{position:relative;min-width:0;border:1px solid #aebbc5;border-radius:8px;background:white;overflow:hidden;box-shadow:0 2px 5px #13202a0b}
+.app-header{height:56px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--blue);color:white}
+.app-title{font-size:1rem;font-weight:700}
+.repo-link{display:inline-flex;align-items:center;gap:6px;padding:4px;color:inherit;text-decoration:none;font-size:.8rem;white-space:nowrap}
+.repo-link:hover{text-decoration:underline}
+.repo-link:focus-visible{outline:2px solid white;outline-offset:3px}
+.repo-link svg{width:20px;height:20px;fill:currentColor}
+.app-footer{padding:10px 12px;border-top:1px solid var(--line);background:#f7f9fa;color:var(--muted);font-size:.76rem;text-align:center}
 .appbar{height:45px;padding:8px 12px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:#fff}
 .brand{font-weight:700}
 .stepmark{font-size:.78rem;color:#344754}
-.drawer-trigger{position:absolute;left:0;top:57px;z-index:5;width:28px;height:148px;border:1px solid #8fa2b0;border-left:0;border-radius:0 6px 6px 0;background:#fff;color:#1c4259;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:9px 5px;cursor:pointer;box-shadow:1px 2px 5px #18293612;list-style:none}
+.drawer-trigger{position:absolute;left:0;top:113px;z-index:5;width:28px;height:148px;border:1px solid #8fa2b0;border-left:0;border-radius:0 6px 6px 0;background:#fff;color:#1c4259;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:9px 5px;cursor:pointer;box-shadow:1px 2px 5px #18293612;list-style:none}
 .drawer-trigger::-webkit-details-marker{display:none}
 .trigger-label{writing-mode:vertical-rl;transform:rotate(180deg);font-size:.75rem;font-weight:650;white-space:nowrap}
 .grip{font-size:1rem;line-height:1;color:#688091;letter-spacing:-2px}
 .data-drawer[open]>.drawer-trigger{left:250px;border-left:1px solid #8fa2b0;border-radius:6px 0 0 6px;background:#edf3f6;box-shadow:none}
-.drawer-content{position:absolute;left:0;top:45px;bottom:0;width:250px;z-index:4;background:white;border-right:1px solid #8fa2b0;box-shadow:4px 0 14px #18293616;padding:15px 14px}
+.drawer-content{position:absolute;left:0;top:101px;bottom:0;width:250px;z-index:4;background:white;border-right:1px solid #8fa2b0;box-shadow:4px 0 14px #18293616;padding:15px 14px}
 .drawer-content h3{margin:0 0 3px;font-size:1rem}
 .drawer-content p{margin:0 0 12px;color:var(--muted);font-size:.82rem}
 .drawer-section{border-top:1px solid #e0e6ea;padding:10px 0}
@@ -83,6 +90,7 @@ textarea.input{width:100%;height:72px;resize:vertical;font:inherit}
 
 <section class="grid">
 <article class="screen" aria-label="Data screen">
+<header class="app-header"><span class="app-title">ADaMViz SubmissionSync</span><a class="repo-link" href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync" target="_blank" rel="noopener noreferrer" aria-label="ADaMViz SubmissionSync on GitHub (opens in a new tab)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a></header>
 <div class="appbar"><span class="brand">Create plot</span><span class="stepmark">Step 1 of 5</span></div>
 <details class="data-drawer">
 <summary class="drawer-trigger" aria-label="Open active data and profile drawer"><span class="trigger-label">Data &amp; profile</span><span class="grip">•••</span></summary>
@@ -94,10 +102,12 @@ textarea.input{width:100%;height:72px;resize:vertical;font:inherit}
 <details class="panel" open><summary>Upload a dataset <span class="required">Required</span></summary><div class="panel-body"><div class="muted">Choose a supported CSV or Excel file. </div><div class="drop"><b>Choose file</b> <span class="muted">or drag and drop it here</span><div class="muted">CSV or Excel</div></div></div></details>
 <div class="footer-action"><span class="muted">Next: describe the visualization question</span><span class="btn disabled">Continue</span></div>
 </div>
+<footer class="app-footer">This app is brought to you by Ramnath Dhadage. For more information, please visit the <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync" target="_blank" rel="noopener noreferrer">Source Code</a> and <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/issues/new" target="_blank" rel="noopener noreferrer">Report Issues</a>.</footer>
 <div class="screen-caption">Data comes first. Continue becomes available when a permitted CSV or Excel file is ready.</div>
 </article>
 
 <article class="screen" aria-label="Ask screen">
+<header class="app-header"><span class="app-title">ADaMViz SubmissionSync</span><a class="repo-link" href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync" target="_blank" rel="noopener noreferrer" aria-label="ADaMViz SubmissionSync on GitHub (opens in a new tab)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a></header>
 <div class="appbar"><span class="brand">Create plot</span><span class="stepmark">Step 2 of 5</span></div>
 <details class="data-drawer">
 <summary class="drawer-trigger" aria-label="Open active data and profile drawer"><span class="trigger-label">Data &amp; profile</span><span class="grip">•••</span></summary>
@@ -110,10 +120,12 @@ textarea.input{width:100%;height:72px;resize:vertical;font:inherit}
 
 <div class="footer-action"><span class="back">← Back to data</span><span class="btn">Continue to review choices</span></div>
 </div>
+<footer class="app-footer">This app is brought to you by Ramnath Dhadage. For more information, please visit the <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync" target="_blank" rel="noopener noreferrer">Source Code</a> and <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/issues/new" target="_blank" rel="noopener noreferrer">Report Issues</a>.</footer>
 <div class="screen-caption">The prompt is the only required input on this step; the data drawer is available without leaving the question.</div>
 </article>
 
 <article class="screen" aria-label="Confirm screen">
+<header class="app-header"><span class="app-title">ADaMViz SubmissionSync</span><a class="repo-link" href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync" target="_blank" rel="noopener noreferrer" aria-label="ADaMViz SubmissionSync on GitHub (opens in a new tab)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a></header>
 <div class="appbar"><span class="brand">Create plot</span><span class="stepmark">Step 3 of 5</span></div>
 <details class="data-drawer">
 <summary class="drawer-trigger" aria-label="Open active data and profile drawer"><span class="trigger-label">Data &amp; profile</span><span class="grip">•••</span></summary>
@@ -127,10 +139,12 @@ textarea.input{width:100%;height:72px;resize:vertical;font:inherit}
 
 <div class="footer-action"><span class="back">← Back to question</span><span class="btn">Confirm and generate</span></div>
 </div>
+<footer class="app-footer">This app is brought to you by Ramnath Dhadage. For more information, please visit the <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync" target="_blank" rel="noopener noreferrer">Source Code</a> and <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/issues/new" target="_blank" rel="noopener noreferrer">Report Issues</a>.</footer>
 <div class="screen-caption">The scientist reviews the plot type, variables, and settings before validating the selected input, generating code, and running it.</div>
 </article>
 
 <article class="screen" aria-label="Result screen">
+<header class="app-header"><span class="app-title">ADaMViz SubmissionSync</span><a class="repo-link" href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync" target="_blank" rel="noopener noreferrer" aria-label="ADaMViz SubmissionSync on GitHub (opens in a new tab)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a></header>
 <div class="appbar"><span class="brand">Create plot</span><span class="stepmark">Step 4 of 5</span></div>
 <details class="data-drawer">
 <summary class="drawer-trigger" aria-label="Open active data and profile drawer"><span class="trigger-label">Data &amp; profile</span><span class="grip">•••</span></summary>
@@ -147,9 +161,11 @@ ggplot2::ggplot(...)</div></div></details>
 
 <div class="footer-action"><span class="back">← Back to confirm</span><span class="btn">Continue to export</span></div>
 </div>
+<footer class="app-footer">This app is brought to you by Ramnath Dhadage. For more information, please visit the <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync" target="_blank" rel="noopener noreferrer">Source Code</a> and <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/issues/new" target="_blank" rel="noopener noreferrer">Report Issues</a>.</footer>
 <div class="screen-caption">Plot and exact R code are here. Automated checks are optional; revision history, review, and export are on the next step.</div>
 </article>
 <article class="screen" aria-label="Export screen">
+<header class="app-header"><span class="app-title">ADaMViz SubmissionSync</span><a class="repo-link" href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync" target="_blank" rel="noopener noreferrer" aria-label="ADaMViz SubmissionSync on GitHub (opens in a new tab)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a></header>
 <div class="appbar"><span class="brand">Create plot</span><span class="stepmark">Step 5 of 5</span></div>
 <details class="data-drawer">
 <summary class="drawer-trigger" aria-label="Open active data and profile drawer"><span class="trigger-label">Data &amp; profile</span><span class="grip">•••</span></summary>
@@ -165,6 +181,7 @@ ggplot2::ggplot(...)</div></div></details>
 </div></details>
 <div class="footer-action"><span class="back">← Back to result</span></div>
 </div>
+<footer class="app-footer">This app is brought to you by Ramnath Dhadage. For more information, please visit the <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync" target="_blank" rel="noopener noreferrer">Source Code</a> and <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/issues/new" target="_blank" rel="noopener noreferrer">Report Issues</a>.</footer>
 <div class="screen-caption">Review decisions are pending until both independent reviewers approve. The exact R script and check evidence remain linked to this revision.</div>
 </article>
 </section>
