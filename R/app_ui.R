@@ -15,7 +15,43 @@ app_ui <- function(request, runtime_config = new_runtime_config()) {
       fillable = FALSE,
       div(
         class = "assurance-shell",
-        mod_plot_generation_ui("plot_generation")
+        tags$header(
+          class = "f001-app-header",
+          tags$span(class = "f001-app-title", "ADaMViz SubmissionSync"),
+          tags$a(
+            class = "f001-repo-link",
+            href = "https://github.com/Ramdhadage/ADaMViz.SubmissionSync",
+            target = "_blank",
+            rel = "noopener noreferrer",
+            `aria-label` = paste(
+              "ADaMViz SubmissionSync on GitHub (opens in a new tab)"
+            ),
+            shiny::icon("github")
+          )
+        ),
+        mod_plot_generation_ui("plot_generation"),
+        tags$footer(
+          class = "f001-app-footer",
+          "This app is brought to you by Ramnath Dhadage. ",
+          "For more information, please visit the ",
+          tags$a(
+            "Source Code",
+            href = "https://github.com/Ramdhadage/ADaMViz.SubmissionSync",
+            target = "_blank",
+            rel = "noopener noreferrer"
+          ),
+          " and ",
+          tags$a(
+            "Report Issues",
+            href = paste0(
+              "https://github.com/Ramdhadage/",
+              "ADaMViz.SubmissionSync/issues/new"
+            ),
+            target = "_blank",
+            rel = "noopener noreferrer"
+          ),
+          "."
+        )
       )
     )
   )

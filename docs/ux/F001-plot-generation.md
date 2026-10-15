@@ -4,6 +4,24 @@ This document defines the first POC workflow and its behavior. It does not defin
 
 The implemented workbench follows five steps: Data → Ask → Confirm → Result → Export. Result shows the plot, exact R code, and automated checks. Export shows revision history, two-person review, controlled export, and the image-and-code ZIP download. Back to result returns to the plot without creating a new revision. The [static prototype](F001-plot-generation-prototype.html) illustrates this layout; it is not runtime or validation evidence.
 
+## Application frame
+
+The app uses the [prototype](F001-plot-generation-prototype.html) as the
+visual reference for its shared header, workflow bar, and footer:
+
+- A blue header displays **ADaMViz SubmissionSync** and an accessible GitHub
+  repository link that opens in a new tab.
+- The white **Create plot** bar displays the current step out of five. The
+  existing Data → Ask → Confirm → Result → Export navigation remains in place.
+- A footer credits Ramnath Dhadage and links to **Source Code** and
+  **Report Issues**, both opening in new tabs.
+
+The shared frame is composed in `R/app_ui.R` and styled in
+`inst/app/www/app.css`. The workflow bar and step indicator are owned by
+`R/mod_plot_generation.R`. These presentation elements do not change
+validation, review, or export eligibility. Source rendering checks do not
+establish browser appearance or accessibility conformance.
+
 ## 1. User
 
 - **Primary user:** Clinical scientist answering a regulatory or internal clinical question.
