@@ -1,6 +1,6 @@
 # Changelog
 
-## ADaMViz.SubmissionSync 0.1.0.9001
+## ADaMViz.SubmissionSync 0.1.0.9002
 
 ### U1 foundation
 
