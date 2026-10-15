@@ -1,13 +1,12 @@
 name: pkgdown
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-  release:
-    types: [published]
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      checked-sha:
+        description: Final generated revision that passed Package CI.
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -16,13 +15,13 @@ jobs:
   pkgdown:
     runs-on: ubuntu-latest
     concurrency:
-      group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
+      group: pkgdown-main
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ inputs.checked-sha }}
 
       - uses: r-lib/actions/setup-pandoc@v2
 
@@ -35,6 +34,20 @@ jobs:
           extra-packages: any::pkgdown, local::.
           needs: website
 
+      - name: Check documentation version
+        id: version
+        shell: Rscript {0}
+        run: |
+          description <- read.dcf("DESCRIPTION")
+          version <- description[1L, "Version"]
+          expected <- paste("#", description[1L, "Package"], version)
+          news <- readLines("NEWS.md", warn = FALSE)
+          heading <- grep("^#+ ", news)[1L]
+          if (is.na(heading) || !identical(news[heading], expected)) {
+            stop("NEWS version does not match DESCRIPTION: expected ", expected)
+          }
+          cat(paste0("version=", version, "\n"), file = Sys.getenv("GITHUB_OUTPUT"), append = TRUE)
+
       - name: Build site
         run: pkgdown::build_site_github_pages(dest_dir = "pkgdown-site", new_process = FALSE, install = FALSE)
         shell: Rscript {0}
@@ -45,11 +58,11 @@ jobs:
           cp inst/app/www/wireframe.png pkgdown-site/inst/app/www/wireframe.png
 
       - name: Deploy to GitHub Pages
-        if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4.7.3
         with:
           branch: gh-pages
           folder: pkgdown-site
+          commit-message: 'docs: publish pkgdown for ${{ steps.version.outputs.version }} (source ${{ inputs.checked-sha }})'
           clean: false
           force: false
           attempt-limit: 5
