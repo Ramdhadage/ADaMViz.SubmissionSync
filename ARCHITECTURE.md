@@ -197,6 +197,13 @@ requirements or refactoring.
 
 ## Navigation and maintenance
 
+The shared application header and footer are composed in `R/app_ui.R`
+and styled in `inst/app/www/app.css`. The existing **Create plot**
+workflow bar and five-step indicator remain in
+`mod_plot_generation_ui()`. See the [application
+frame](https://ramdhadage.github.io/ADaMViz.SubmissionSync/docs/ux/F001-plot-generation.html#application-frame)
+for the prototype reference and visible content.
+
 The [twelve feature
 guides](https://ramdhadage.github.io/ADaMViz.SubmissionSync/docs/features/README.md)
 explain the current input, profiling, plotting, execution, review,

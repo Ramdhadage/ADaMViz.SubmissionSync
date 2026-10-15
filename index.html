@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ADaMViz.SubmissionSync</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9002</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,6 +77,8 @@
 <div class="section level2">
 <h2 id="development-status">Development status<a class="anchor" aria-label="anchor" href="#development-status"></a>
 </h2>
+<p>The application follows <strong>Data → Ask → Confirm → Result → Export</strong>. Its shared frame follows the F001 prototype: a blue <strong>ADaMViz SubmissionSync</strong> header with a GitHub link, a white <strong>Create plot</strong> bar showing the current step out of five, and a footer crediting Ramnath Dhadage with <strong>Source Code</strong> and <strong>Report Issues</strong> links.</p>
+<p>See the <a href="docs/ux/F001-plot-generation.html#application-frame">F001 UX documentation</a> for the frame’s source files. The preview image above is a static prototype; the hosted app may differ until the updated package is deployed.</p>
 <p>The first Plot-Pattern Assurance Cell is being implemented incrementally. The current application shell uses injected local providers for runtime configuration, study data, identity, evidence storage, artifacts, and controlled workspace export. Only public, synthetic, or properly de-identified data may be used during this proof of concept.</p>
 </div>
 <div class="section level2">
@@ -87,6 +89,7 @@
 <code class="sourceCode R"><span><span class="fu">renv</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/renv/reference/restore.html" class="external-link">restore</a></span><span class="op">(</span>prompt <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">ADaMViz.SubmissionSync</span><span class="fu">::</span><span class="fu"><a href="reference/run_app.html">run_app</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>After changing application source or CSS, restart R and run <code><a href="https://devtools.r-lib.org/reference/install.html" class="external-link">devtools::install()</a></code> from the RStudio Console at the repository root before launching <code>app.R</code>. The launcher uses the installed package.</p>
 <p>Provider credentials and secret values must remain outside source files, prompts, logs, generated scripts, and retained evidence.</p>
 <p>Controlled exports are addressed by logical workspace identifiers. A local POC workspace export writes a detached <code>plot.png</code> and <code>script.R</code> pair only after the accepted artifact hashes, acting user, revision token, destination, and final file hashes are rechecked. The receipt stays inside the internal evidence store.</p>
 </div>

@@ -18,6 +18,18 @@ Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhad
 
 ## Development status
 
+The application follows **Data → Ask → Confirm → Result → Export**. Its
+shared frame follows the F001 prototype: a blue **ADaMViz
+SubmissionSync** header with a GitHub link, a white **Create plot** bar
+showing the current step out of five, and a footer crediting Ramnath
+Dhadage with **Source Code** and **Report Issues** links.
+
+See the [F001 UX
+documentation](https://ramdhadage.github.io/ADaMViz.SubmissionSync/docs/ux/F001-plot-generation.html#application-frame)
+for the frame’s source files. The preview image above is a static
+prototype; the hosted app may differ until the updated package is
+deployed.
+
 The first Plot-Pattern Assurance Cell is being implemented
 incrementally. The current application shell uses injected local
 providers for runtime configuration, study data, identity, evidence
@@ -35,6 +47,11 @@ renv::restore(prompt = FALSE)
 devtools::install()
 ADaMViz.SubmissionSync::run_app()
 ```
+
+After changing application source or CSS, restart R and run
+[`devtools::install()`](https://devtools.r-lib.org/reference/install.html)
+from the RStudio Console at the repository root before launching
+`app.R`. The launcher uses the installed package.
 
 Provider credentials and secret values must remain outside source files,
 prompts, logs, generated scripts, and retained evidence.

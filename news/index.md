@@ -1,6 +1,14 @@
 # Changelog
 
-## ADaMViz.SubmissionSync 0.1.0.9002
+## ADaMViz.SubmissionSync 0.1.0.9003
+
+### Application interface
+
+- Added the F001 prototype’s blue product header and GitHub link, plus
+  an attribution footer with Source Code and Report Issues links, around
+  the existing Create plot workflow bar and five-step workbench.
+- Updated the README, feature index, architecture map, and F001 UX guide
+  to describe the shared frame and how to load local changes.
 
 ### U1 foundation
 
