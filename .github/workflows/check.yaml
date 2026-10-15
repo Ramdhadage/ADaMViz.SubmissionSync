@@ -182,15 +182,31 @@ jobs:
 
   generated-check:
     name: Check final generated main revision
-    needs: vbump
+    needs: [roxygen, spelling, vbump]
+    outputs:
+      checked-sha: ${{ steps.revision.outputs.sha }}
     if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.ref_name }}
+          fetch-depth: 0
       - name: Record generated revision
-        run: git rev-parse HEAD | tee -a "$GITHUB_STEP_SUMMARY"
+        id: revision
+        env:
+          EVENT_SHA: ${{ github.sha }}
+          GENERATED_SHAS: ${{ needs.roxygen.outputs.generated-sha }} ${{ needs.spelling.outputs.generated-sha }} ${{ needs.vbump.outputs.generated-sha }}
+        run: |
+          git merge-base --is-ancestor "$EVENT_SHA" HEAD
+          for revision in $(git rev-list "${EVENT_SHA}..HEAD"); do
+            case " $GENERATED_SHAS " in
+              *" $revision "*) ;;
+              *) echo "Main contains a commit outside this CI run: $revision" >&2; exit 1 ;;
+            esac
+          done
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          git rev-parse HEAD >> "$GITHUB_STEP_SUMMARY"
       - uses: r-lib/actions/setup-r@v2
         with:
           r-version: "release"
@@ -237,3 +253,14 @@ jobs:
               ...Object.entries(results).map(([job, value]) => [job, value.result])
             ]).addRaw('Intentional skips: Version Bump outside main push; Lychee (URL Checker selected); Covtracer and PII disabled; tag/multiversion report paths inactive.').write();
             if (failures.length) core.setFailed('Required checks failed or skipped: ' + failures.join(', '));
+
+  deploy:
+    name: Package CD
+    needs: [required-checks, generated-check]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      checked-sha: ${{ needs.generated-check.outputs.checked-sha }}
+    secrets:
+      SHINYAPPSIO_TOKEN: ${{ secrets.SHINYAPPSIO_TOKEN }}
+      SHINYAPPSIO_SECRET: ${{ secrets.SHINYAPPSIO_SECRET }}
