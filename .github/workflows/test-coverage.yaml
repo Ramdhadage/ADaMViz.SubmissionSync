@@ -96,7 +96,7 @@ concurrency:
 jobs:
   coverage:
     name: Coverage 📔
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container:
       image: ghcr.io/insightsengineering/rstudio@sha256:b7fce5f56d0f979f33304b8d74ab878fd4f78db81278aeedc3a8ad6f22e86428
     env:
@@ -130,7 +130,7 @@ jobs:
           github.event_name != 'pull_request'
             && inputs.publish-coverage-report-gh-pages == true
         id: checkout-gh-pages
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         with:
           ref: gh-pages
           path: gh-pages
@@ -166,7 +166,7 @@ jobs:
         shell: bash
 
       - name: Checkout repo (PR) 🛎
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         if: github.event_name == 'pull_request'
         with:
           ref: ${{ github.event.pull_request.head.sha }}
@@ -174,7 +174,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
 
       - name: Checkout repo 🛎
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         if: github.event_name != 'pull_request'
         with:
           ref: ${{ github.sha }}
@@ -313,7 +313,7 @@ jobs:
 
   covtracer:
     name: Covtracer 🐄
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: inputs.enable-covtracer == true
     container:
       image: ghcr.io/insightsengineering/rstudio@sha256:b7fce5f56d0f979f33304b8d74ab878fd4f78db81278aeedc3a8ad6f22e86428
@@ -324,7 +324,7 @@ jobs:
         uses: tj-actions/branch-names@e497ceb8ccd43fd9573cf2e375216625bc411d1f # v9.0.0
 
       - name: Checkout repo (PR) 🛎
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         if: github.event_name == 'pull_request'
         with:
           ref: ${{ github.event.pull_request.head.sha }}
@@ -332,7 +332,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
 
       - name: Checkout repo 🛎
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         if: github.event_name != 'pull_request'
         with:
           ref: ${{ github.sha }}
@@ -364,7 +364,7 @@ jobs:
 
   publish-coverage-report:
     name: Publish coverage report 📰
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: coverage
     if: >
       needs.coverage.outputs.publish-coverage-html-report == 'true'
@@ -392,7 +392,7 @@ jobs:
         run: mv coverage-report/coverage-report.html coverage-report/index.html
 
       - name: Checkout latest report branch
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         with:
           ref: gh-pages
           path: report-pages

@@ -75,13 +75,17 @@ explicitly mutable, whereas existing SHA-pinned actions retain those pins.
 | insightsengineering/coverage-action@v3 | Optional posting after validated real coverage output |
 | insightsengineering/covtracer-action@v1 | Optional disabled Covtracer scan |
 | insightsengineering/r-spellcheck-action@v3 | Active package spelling analysis |
-| insightsengineering/pip-action@v2 | NEWS emoji-check dependency setup |
 | insightsengineering/presidio-action@v1 | Optional disabled PII scan |
 | insightsengineering/release-existence-action@v1 | Tag-only release path |
 | insightsengineering/junit-xml-diff v0.4.0 | Active PR comparison of current and baseline JUnit XML; versioned executable download |
 | insightsengineering/r-pkgdown-multiversion marker | Conditional site-layout detection; current repository publishes a single-version site |
 | JamesIves/github-pages-deploy-action@v4.7.3 | pkgdown deployment; clean:false, force:false, attempt-limit:5 |
 | zricethezav/gitleaks v8.18.1 release executable | Active secret scan |
+
+The NEWS emoji check installs `regex` with `python -m pip install regex` after
+`actions/setup-python`, replacing the Node 20-based pip wrapper. Ubuntu runners
+are pinned to `ubuntu-24.04`; checkout and Python setup actions use SHA-pinned
+Node 24 releases.
 
 The external r-license-report Docker action was replaced by a local locked
 scanner. Report publication no longer uses peaceiris/actions-gh-pages or

@@ -262,7 +262,7 @@ jobs:
             tag: latest
             digest: sha256:b7fce5f56d0f979f33304b8d74ab878fd4f78db81278aeedc3a8ad6f22e86428
     name: ${{ matrix.config.image }}, version ${{ matrix.config.tag }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container:
       image: ${{ matrix.config.digest && format('{0}@{1}', matrix.config.image, matrix.config.digest) || format('{0}:{1}', matrix.config.image, matrix.config.tag) }}
     env:
@@ -292,7 +292,7 @@ jobs:
         uses: tj-actions/branch-names@e497ceb8ccd43fd9573cf2e375216625bc411d1f # v9.0.0
 
       - name: Checkout repo (PR) 🛎
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         if: github.event_name == 'pull_request'
         with:
           ref: ${{ github.event.pull_request.head.sha }}
@@ -301,7 +301,7 @@ jobs:
           fetch-depth: 0
 
       - name: Checkout repo 🛎
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         if: github.event_name != 'pull_request'
         with:
           ref: ${{ github.sha }}
@@ -312,7 +312,7 @@ jobs:
           inputs.publish-unit-test-report-gh-pages == true
             && github.event_name != 'pull_request'
         id: checkout-gh-pages
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         with:
           ref: gh-pages
           path: gh-pages
@@ -650,7 +650,7 @@ jobs:
 
       - name: Fetch report from ${{ env.junit_xml_storage }} ⤵️
         if: env.junit_xml_comparison == 'true'
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         with:
           path: ${{ env.junit_xml_storage }}
           token: ${{ steps.github-token.outputs.token }}
@@ -962,7 +962,7 @@ jobs:
 
   publish-junit-html-report:
     name: Publish JUnit HTML report 📰
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: build-install-check
     if: >
       needs.build-install-check.outputs.publish-unit-test-html-report == 'true'
@@ -987,7 +987,7 @@ jobs:
           path: unit-test-report
 
       - name: Checkout latest report branch
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         with:
           ref: gh-pages
           path: report-pages
@@ -1037,14 +1037,14 @@ jobs:
   upload-release-assets:
     name: Upload build tar.gz
     needs: build-install-check
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: >
       startsWith(github.ref, 'refs/tags/v')
 
 
     steps:
       - name: Checkout repo 🛎
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
 
       - name: Get package build filename 📦
         run: |
