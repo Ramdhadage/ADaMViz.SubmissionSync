@@ -69,8 +69,23 @@ jobs:
       - name: Report linked libcurl and system package versions
         run: |
           print(packageVersion("curl"))
-          print(curl::curl_version())
+          runtime <- curl::curl_version()
+          print(runtime)
           system2("dpkg-query", c("-W", "curl", "libcurl4t64", "libcurl4-openssl-dev"))
+          # These exceptions apply only to Ubuntu Noble's patched system libcurl.
+          os <- readLines("/etc/os-release")
+          linkage <- system2("ldd", shQuote(getLoadedDLLs()[["curl"]][["path"]]), stdout = TRUE)
+          libcurl <- grep("^\\s*libcurl\\.so\\.4 => /", linkage, value = TRUE)
+          stopifnot(length(libcurl) == 1L)
+          libcurl <- normalizePath(sub("^.* => ([^ ]+) .*", "\\1", libcurl), mustWork = TRUE)
+          owner <- system2("dpkg-query", c("-S", shQuote(libcurl)), stdout = TRUE)
+          version <- system2("dpkg-query", c("-W", shQuote("-f=${Version}"), "libcurl4t64"), stdout = TRUE)
+          stopifnot(all(c("ID=ubuntu", "VERSION_CODENAME=noble") %in% os),
+                    identical(runtime$version, "8.5.0"), isTRUE(startsWith(runtime$libssh_version, "libssh/")),
+                    length(owner) == 1L, startsWith(owner, "libcurl4t64:"),
+                    length(version) == 1L, grepl("^8[.]5[.]0-2ubuntu10[.][0-9]+$", version),
+                    system2("dpkg", c("--compare-versions", version, "ge", "8.5.0-2ubuntu10.15")) == 0L)
+          cat("CURL_NOBLE_REVIEWED=true\n", file = Sys.getenv("GITHUB_ENV"), append = TRUE)
         shell: Rscript {0}
         env:
           RENV_CONFIG_AUTOLOADER_ENABLED: "true"
@@ -98,7 +113,18 @@ jobs:
           if (anyNA(dependencies_scan$no_of_vulnerabilities)) {
             stop("Dependency audit returned incomplete vulnerability results")
           }
-          if (any(dependencies_scan$no_of_vulnerabilities > 0) &&
+          remaining <- dependencies_scan$no_of_vulnerabilities
+          if (Sys.getenv("CURL_NOBLE_REVIEWED") == "true") {
+            # Ubuntu's CVE tracker: Noble fixes the first two in .15/.8; libssh is unaffected by the others.
+            reviewed <- c("CVE-2026-18924", "CVE-2026-3783", "CVE-2026-86410", "CVE-2026-87865")
+            for (i in which(dependencies_scan$oss_package == "pkg:cran/curl@8.1.0")) {
+              stopifnot(length(dependencies_scan$vulnerabilities[[i]]) == remaining[i])
+              remaining[i] <- remaining[i] - sum(vapply(dependencies_scan$vulnerabilities[[i]],
+                function(v) isTRUE(v$id %in% reviewed), logical(1)))
+            }
+          }
+          message("Unresolved vulnerability findings after Noble review: ", sum(remaining))
+          if (any(remaining > 0) &&
               Sys.getenv("ALLOW_FINDINGS") != "true") {
             stop("Vulnerabilities found in DESCRIPTION dependencies")
           }
@@ -125,7 +151,18 @@ jobs:
             if (anyNA(renv_lock_scan$no_of_vulnerabilities)) {
               stop("Lockfile audit returned incomplete vulnerability results")
             }
-            if (any(renv_lock_scan$no_of_vulnerabilities > 0) &&
+            remaining <- renv_lock_scan$no_of_vulnerabilities
+            if (Sys.getenv("CURL_NOBLE_REVIEWED") == "true") {
+              # Ubuntu's CVE tracker: Noble fixes the first two in .15/.8; libssh is unaffected by the others.
+              reviewed <- c("CVE-2026-18924", "CVE-2026-3783", "CVE-2026-86410", "CVE-2026-87865")
+              for (i in which(renv_lock_scan$oss_package == "pkg:cran/curl@8.1.0")) {
+                stopifnot(length(renv_lock_scan$vulnerabilities[[i]]) == remaining[i])
+                remaining[i] <- remaining[i] - sum(vapply(renv_lock_scan$vulnerabilities[[i]],
+                  function(v) isTRUE(v$id %in% reviewed), logical(1)))
+              }
+            }
+            message("Unresolved vulnerability findings after Noble review: ", sum(remaining))
+            if (any(remaining > 0) &&
                 Sys.getenv("ALLOW_FINDINGS") != "true") {
               stop("Vulnerabilities found in locked dependencies")
             }
