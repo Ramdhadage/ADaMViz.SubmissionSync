@@ -43,6 +43,18 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 1
 
+      - name: Apply Ubuntu curl security updates
+        run: |
+          apt-get update
+          apt-get install --yes --only-upgrade curl libcurl4t64 libcurl4-openssl-dev
+          # Ubuntu Noble backports CVE-2026-18924's fix in revision .15.
+          # https://ubuntu.com/security/CVE-2026-18924
+          for package in curl libcurl4t64 libcurl4-openssl-dev; do
+            installed_version=$(dpkg-query -W -f='${Version}' "$package")
+            dpkg --compare-versions "$installed_version" ge 8.5.0-2ubuntu10.15
+          done
+        shell: bash
+
       - name: Install pinned audit tool
         run: |
           options(repos = c(CRAN = "https://cloud.r-project.org"))
