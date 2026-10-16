@@ -17,10 +17,13 @@ fixture <- data.frame(
 fixture$vulnerabilities <- list(lapply(reviewed, function(id) list(id = id)))
 checks <- 0L
 expect_result <- function(code, env, succeeds, label) {
-  result <- tryCatch({
-    invisible(capture.output(suppressMessages(eval(parse(text = code), env))))
-    TRUE
-  }, error = function(e) FALSE)
+  result <- tryCatch(
+    {
+      invisible(capture.output(suppressMessages(eval(parse(text = code), env))))
+      TRUE
+    },
+    error = function(e) FALSE
+  )
   if (!identical(result, succeeds)) stop(label, call. = FALSE)
   checks <<- checks + 1L
 }
@@ -68,13 +71,17 @@ for (name in c("Run oysteR scan on dependencies", "Run oysteR scan on renv.lock"
   artifact_dir <- commandArgs(trailingOnly = TRUE)
   if (length(artifact_dir)) {
     artifact <- if (grepl("renv.lock", name, fixed = TRUE)) "audit-renv-lock.rds" else "audit-description.rds"
-    run_scan(readRDS(file.path(artifact_dir[[1L]], artifact)), succeeds = TRUE,
-             label = "must accept the actual reviewed audit artifact")
+    run_scan(readRDS(file.path(artifact_dir[[1L]], artifact)),
+      succeeds = TRUE,
+      label = "must accept the actual reviewed audit artifact"
+    )
   }
 }
 
 code <- gsub("curl::curl_version", "get_curl_version",
-             read_step("Report linked libcurl and system package versions"), fixed = TRUE)
+  read_step("Report linked libcurl and system package versions"),
+  fixed = TRUE
+)
 run_runtime <- function(os = c("ID=ubuntu", "VERSION_CODENAME=noble"),
                         version = "8.5.0", ssh = "libssh/0.10.6/openssl/zlib",
                         linkage = "libcurl.so.4 => /usr/lib/libcurl.so.4 (0x123)",
@@ -90,9 +97,15 @@ run_runtime <- function(os = c("ID=ubuntu", "VERSION_CODENAME=noble"),
   env$normalizePath <- function(path, ...) path
   env$Sys.getenv <- function(...) marker
   env$system2 <- function(command, args, ...) {
-    if (command == "ldd") return(linkage)
-    if (identical(args[[1L]], "-S")) return(owner)
-    if (identical(args[[1L]], "-W")) return(package_version)
+    if (command == "ldd") {
+      return(linkage)
+    }
+    if (identical(args[[1L]], "-S")) {
+      return(owner)
+    }
+    if (identical(args[[1L]], "-W")) {
+      return(package_version)
+    }
     if (identical(args[[1L]], "--compare-versions")) {
       return(if (package_version == "8.5.0-2ubuntu10.14") 1L else 0L)
     }
