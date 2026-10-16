@@ -35,20 +35,20 @@ concurrency:
 jobs:
   links:
     name: Validate Links 🔎
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: >
       true
         && inputs.link-checking-method == 'lychee'
     steps:
       - name: Checkout repo (PR) 🛎
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         if: github.event_name == 'pull_request'
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
 
       - name: Checkout repo 🛎
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         if: github.event_name != 'pull_request'
         with:
           ref: ${{ github.sha }}
@@ -73,7 +73,7 @@ jobs:
 
   urlchecker:
     name: URL Checker 🔎
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container:
       image: rocker/tidyverse@sha256:94a4cdb7be4d1214f9039bca4937e8919253d2ad90d8bed084e9a8af685a50c7
     if: >
@@ -81,14 +81,14 @@ jobs:
         && inputs.link-checking-method == 'urlchecker'
     steps:
       - name: Checkout repo (PR) 🛎
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         if: github.event_name == 'pull_request'
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
 
       - name: Checkout repo 🛎
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         if: github.event_name != 'pull_request'
         with:
           ref: ${{ github.sha }}
