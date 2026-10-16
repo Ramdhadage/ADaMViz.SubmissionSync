@@ -54,6 +54,16 @@ jobs:
           GITHUB_PAT: ${{ github.token }}
         working-directory: ${{ inputs.package-subdirectory }}
 
+      - name: Report linked libcurl and system package versions
+        run: |
+          print(packageVersion("curl"))
+          print(curl::curl_version())
+          system2("dpkg-query", c("-W", "curl", "libcurl4t64", "libcurl4-openssl-dev"))
+        shell: Rscript {0}
+        env:
+          RENV_CONFIG_AUTOLOADER_ENABLED: "true"
+        working-directory: ${{ inputs.package-subdirectory }}
+
       - name: Run oysteR scan on dependencies 🔍
         env:
           OSSINDEX_USER: ${{ secrets.OSSINDEX_USER }}
@@ -67,6 +77,9 @@ jobs:
             verbose = TRUE
           )
           print(dependencies_scan)
+          print(as.data.frame(dependencies_scan[
+            which(dependencies_scan$no_of_vulnerabilities > 0),
+          ]), row.names = FALSE)
           saveRDS(dependencies_scan, "audit-description.rds")
           stopifnot(is.data.frame(dependencies_scan), nrow(dependencies_scan) > 0L,
                     "no_of_vulnerabilities" %in% names(dependencies_scan))
@@ -91,6 +104,9 @@ jobs:
           if (file.exists("renv.lock")) {
             renv_lock_scan <- oysteR::audit_renv_lock(dir = ".", verbose = TRUE)
             print(renv_lock_scan)
+            print(as.data.frame(renv_lock_scan[
+              which(renv_lock_scan$no_of_vulnerabilities > 0),
+            ]), row.names = FALSE)
             saveRDS(renv_lock_scan, "audit-renv-lock.rds")
             stopifnot(is.data.frame(renv_lock_scan), nrow(renv_lock_scan) > 0L,
                       "no_of_vulnerabilities" %in% names(renv_lock_scan))
