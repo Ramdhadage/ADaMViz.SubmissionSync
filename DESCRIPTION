@@ -1,7 +1,7 @@
 Package: ADaMViz.SubmissionSync
 Title: From Clinical Questions to Review-Ready Figures and Reproducible R
     Code
-Version: 0.1.0.9011
+Version: 0.1.0.9012
 Authors@R:
     person("Ramnath", "Dhadage", , "ram.dhadage123@gmail.com", role = c("aut", "cre"))
 Description: Generates and conversationally refines ggplot2 visualizations
