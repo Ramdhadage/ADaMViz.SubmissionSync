@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.896708286038593" branch-rate="0" lines-covered="6320" lines-valid="7048" branches-covered="0" branches-valid="0" complexity="0" version="3.6.5" timestamp="2026-10-16 15:38:20.504035">
+<coverage line-rate="0.896708286038593" branch-rate="0" lines-covered="6320" lines-valid="7048" branches-covered="0" branches-valid="0" complexity="0" version="3.6.5" timestamp="2026-10-17 06:14:35.543955">
   <sources>
     <source>/__w/ADaMViz.SubmissionSync/ADaMViz.SubmissionSync/ADaMViz.SubmissionSync</source>
   </sources>
@@ -4751,7 +4751,7 @@
                 <line number="354" hits="28" branch="false"/>
                 <line number="355" hits="28" branch="false"/>
                 <line number="356" hits="28" branch="false"/>
-                <line number="357" hits="14" branch="false"/>
+                <line number="357" hits="15" branch="false"/>
                 <line number="358" hits="28" branch="false"/>
                 <line number="359" hits="28" branch="false"/>
                 <line number="360" hits="28" branch="false"/>
@@ -6155,7 +6155,7 @@
             <line number="354" hits="28" branch="false"/>
             <line number="355" hits="28" branch="false"/>
             <line number="356" hits="28" branch="false"/>
-            <line number="357" hits="14" branch="false"/>
+            <line number="357" hits="15" branch="false"/>
             <line number="358" hits="28" branch="false"/>
             <line number="359" hits="28" branch="false"/>
             <line number="360" hits="28" branch="false"/>
