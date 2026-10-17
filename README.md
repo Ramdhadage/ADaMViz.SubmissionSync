@@ -7,12 +7,13 @@
 [![Commits per month](https://img.shields.io/github/commit-activity/m/Ramdhadage/ADaMViz.SubmissionSync)](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/commits/main/)
 [![Test coverage](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Framdhadage.github.io%2FADaMViz.SubmissionSync%2Fcoverage-report%2Fcoverage.xml&query=round%28100%20%2A%20%2Fcoverage%2F%40line-rate%29&suffix=%25&label=coverage&color=blue)](https://ramdhadage.github.io/ADaMViz.SubmissionSync/coverage-report/)
 
-ADaMViz SubmissionSync is an R-first Shiny proof of concept for review-ready
+> ADaMViz SubmissionSync is an proof of concept for review-ready
 clinical visualizations and reproducible R code from permitted ADaM or tabular
 data. It is designed for validated clinical submission workflows; it is not
 FDA validated or FDA approved.
 
 **Live app:** [Open ADaMViz SubmissionSync](https://ramnath-dhadage.shinyapps.io/ADaMViz-SubmissionSync/)
+
 
 **Prototype preview:**
 
@@ -22,22 +23,23 @@ FDA validated or FDA approved.
 
 ## Development status
 
-The application follows **Data → Ask → Confirm → Result → Export**. Its
-shared frame follows the F001 prototype: a blue **ADaMViz SubmissionSync**
-header with a GitHub link, a white **Create plot** bar showing the current
-step out of five, and a footer crediting Ramnath Dhadage with **Source Code**
-and **Report Issues** links.
+ADaMViz SubmissionSync is an experimental proof of concept supporting Data → Ask → Confirm → Result → Export. The current implementation supports CSV/Excel input, longitudinal BDS boxplots, generated R scripts, local execution evidence, human review, and controlled export of Reviewed revisions.
+Plotting choices currently come from data and user selections; natural-language interpretation is not connected to the active workflow.
 
-See the [F001 UX documentation](docs/ux/F001-plot-generation.md#application-frame)
-for the frame's source files. The preview image above is a static prototype;
-the hosted app may differ until the updated package is deployed.
+## 🚀 Installation
 
-The first Plot-Pattern Assurance Cell is being implemented incrementally. The
-current application shell uses injected local providers for runtime
-configuration, study data, identity, evidence storage, artifacts, and controlled
-workspace export. Only public, synthetic, or properly de-identified data may be
-used during this proof of concept.
+You can install the development version of ADaMViz.SubmissionSync from
+[GitHub](https://github.com/Ramdhadage/ADaMViz.SubmissionSync):
 
+``` r
+# Install pak if you haven't already
+if (!requireNamespace("pak", quietly = TRUE)) {
+  install.packages("pak")
+}
+
+# Install ADaMViz.SubmissionSync
+pak::pak("Ramdhadage/ADaMViz.SubmissionSync")
+```
 ## Run locally
 
 The package is intended to run from a locked `renv` environment:
@@ -59,3 +61,15 @@ Controlled exports are addressed by logical workspace identifiers. A local POC
 workspace export writes a detached `plot.png` and `script.R` pair only after the
 accepted artifact hashes, acting user, revision token, destination, and final
 file hashes are rechecked. The receipt stays inside the internal evidence store.
+
+## 📚 Documentation
+
+For more detailed information and usage examples, please refer to the
+[package
+documentation](https://ramdhadage.github.io/ADaMViz.SubmissionSync/).
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request or
+open an Issue on our [GitHub
+repository](https://github.com/Ramdhadage/ADaMViz.SubmissionSync).
