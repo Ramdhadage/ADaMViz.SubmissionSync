@@ -24,7 +24,6 @@ Save the synthetic sample CSV, then upload it in the app's **Data** step.
 
 [Download the full workflow video (MP4, 23.3 MB)](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/releases/download/workflow-video-2026-10-17/Video_Project_Enhanced_Full_Workflow.mp4)
 
-
 **Prototype preview:**
 
 [![Rendered F001 plot-generation prototype](inst/app/www/wireframe.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/docs/ux/F001-plot-generation-prototype.html)
@@ -50,6 +49,7 @@ if (!requireNamespace("pak", quietly = TRUE)) {
 # Install ADaMViz.SubmissionSync
 pak::pak("Ramdhadage/ADaMViz.SubmissionSync")
 ```
+
 ## Run locally
 
 The package is intended to run from a locked `renv` environment:
