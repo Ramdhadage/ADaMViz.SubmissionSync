@@ -14,6 +14,16 @@ FDA validated or FDA approved.
 
 **Live app:** [Open ADaMViz SubmissionSync](https://ramnath-dhadage.shinyapps.io/ADaMViz-SubmissionSync/)
 
+**Try the app with sample data:** [Download adlb-standard.csv](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/raw/refs/heads/main/inst/extdata/synthetic/adlb-standard.csv)
+
+Save the synthetic sample CSV, then upload it in the app's **Data** step.
+
+**Workflow video:**
+
+<video controls preload="none" width="100%" src="https://github.com/user-attachments/assets/988381fa-8994-44a4-b98f-83c0664b0435"></video>
+
+[Download the full workflow video (MP4, 23.3 MB)](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/releases/download/workflow-video-2026-10-17/Video_Project_Enhanced_Full_Workflow.mp4)
+
 
 **Prototype preview:**
 
