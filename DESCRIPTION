@@ -37,9 +37,11 @@ Suggests:
     DT,
     htmltools,
     knitr,
+    lintr,
     rmarkdown,
     roxygen2,
     shinytest2,
+    styler,
     testthat (>= 3.0.0),
     withr
 VignetteBuilder: 
