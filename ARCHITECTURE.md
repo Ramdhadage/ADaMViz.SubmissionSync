@@ -36,6 +36,7 @@ Names below are exact symbols suitable for IDE symbol search.
 
 | Component / physical location | Responsibility | Start here for common changes |
 | --- | --- | --- |
+| `dev/run_dev.R` | Launch current source for local development and browser verification | `source("dev/run_dev.R")`, `golem::document_and_reload()` |
 | Root `app.R`; application functions under `R/` | Launch the installed package and compose the Shiny application | `run_app()`, `app_ui()`, `app_server()` |
 | `R/mod_*`; `R/app_theme.R`; `inst/app/www/` | Workflow navigation, confirmation, preview, evidence, review, and export interface | `mod_plot_generation_server()`, `mod_specification_server()`, `app_theme()` |
 | `R/provider_study_data*`; `R/bds_profile.R`; upload adapter in `R/mod_plot_generation.R` | Read inputs, pin snapshots, expose choices, and validate the supported selected-data envelope | `.uploaded_study_data_provider()`, `pin_study_snapshot()`, `validate_bds_profile()` |
@@ -47,7 +48,7 @@ Names below are exact symbols suitable for IDE symbol search.
 
 These components are conceptual groups within a **flat `R/` directory**, not separate packages or directory layers. Provider contracts are classed lists of functions. The application coordinator currently constructs several local implementations directly.
 
-`app.R` calls the installed namespace. Reading or editing source does not by itself update the installed application.
+For local development and browser verification, use `source("dev/run_dev.R")` from the repository root. It documents and reloads the current source before calling `run_app()`. Root `app.R` calls the installed namespace; reading or editing source does not by itself update that installed application.
 
 ## End-to-end flow
 
