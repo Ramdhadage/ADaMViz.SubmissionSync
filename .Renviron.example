@@ -1,0 +1,15 @@
+# Optional local configuration. Copy to .Renviron only when overrides are needed.
+# Defaults below are already supplied by R/provider_runtime_config.R.
+ADAMVIZ_PROFILE=local
+ADAMVIZ_PROMPT_PROVIDER=mock
+ADAMVIZ_WORKSPACE=local
+
+# Optional paths; leave unset to use the application's existing defaults.
+# ADAMVIZ_EVIDENCE_ROOT="D:/local-evidence"
+# ADAMVIZ_SUBMISSIONSYNC_SOURCE_ROOT="D:/R shiny Apps/ADaMViz.SubmissionSync"
+
+# Optional golem configuration selector; defaults to default.
+# GOLEM_CONFIG_ACTIVE=dev
+# R_CONFIG_ACTIVE is the fallback when GOLEM_CONFIG_ACTIVE is unset.
+
+# Keep credentials outside Git. The local mock workflow requires no API key.

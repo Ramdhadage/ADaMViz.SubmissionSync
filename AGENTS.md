@@ -2,6 +2,7 @@
 
 ## System Anchors
 
+- At session start, read [PROGRESS.md](PROGRESS.md) if present and reconcile it with current repository state. Long tasks must maintain it under [Progress tracking](docs/development/workflow.md#progress-tracking).
 - For product or code work, read [CODEX_CONTEXT.md](CODEX_CONTEXT.md) before planning or changing implementation.
 - Read [ARCHITECTURE.md](ARCHITECTURE.md) for the implementation map, enforcement boundaries, known gaps, and task-specific document pointers.
 - Treat [docs/product/STRATEGY.md](docs/product/STRATEGY.md) as the source of truth for scope, terminology, boundaries, and metrics.

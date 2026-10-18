@@ -2,6 +2,15 @@
 
 Read [root AGENTS.md](../../AGENTS.md) first. This guide contains the detailed process referenced by the root map; [Verification](verification.md) defines VS Code execution and completion requirements.
 
+## Progress tracking
+
+- Long tasks that span multiple steps or sessions must maintain root [PROGRESS.md](../../PROGRESS.md). At session start, read it if present and reconcile the checkpoint with the current branch, working tree, relevant artifacts, and verification evidence before acting. Resolve mismatches from current evidence; do not repeat completed work solely because a checkpoint is stale.
+- Record the task, update time with timezone, branch and HEAD, and plan or issue links when applicable. Keep `Done`, `In progress`, `Blocked`, `Decisions and constraints`, `Verification`, and `Next action` sections. Use `None` when a section has no entries. Name what remains in partial work and what would resolve each blocker; make the next action concrete.
+- Update the checkpoint after meaningful milestones, decisions, verification results, or blockers, before switching tasks, and before ending a session with an active long task. Update during execution because an interruption may prevent a final write. When changing tasks, retain unresolved work with its task or artifact pointer so it is not lost.
+- Use the host task tracker during execution when available; checkpoint its useful state into `PROGRESS.md` even when no tracker is available. Keep approved requirements and design in their authoritative plans; link to them rather than copying them or using plan checkboxes as execution state.
+- Distinguish implementation finished from verification passed. Record observed checks with their results and revision or scope, plus pending checks and manual handoffs. A checkpoint is context, not proof of completion or new authorization; existing verification and commit/publish approval gates still apply. Keep secrets and patient-level or confidential data out of the file.
+- Keep the checkpoint concise. Use `ce-handoff` when a transfer needs more context, link the handoff from the checkpoint, and choose a durable destination accessible to the receiving session. Do not rely on its default temporary storage for permanent continuity. These are agent instructions; they do not install startup or shutdown hooks.
+
 ## Compound Engineering Workflow
 
 - Read the selected skill's `SKILL.md` and use only capabilities available in the current session. Plugin workflows do not broaden authorization.

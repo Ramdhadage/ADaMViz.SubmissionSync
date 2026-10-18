@@ -1,5 +1,11 @@
 .Rproj.user
 
+# Local configuration and optional development environment reports.
+/.Renviron
+/.Renviron.*
+!/.Renviron.example
+/environment-report*.json
+
 # Generated documentation support files; controlled Markdown and SVG remain tracked.
 docs/**/*_files/
 docs/**/site_libs/

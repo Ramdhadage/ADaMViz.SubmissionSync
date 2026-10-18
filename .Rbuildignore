@@ -1,4 +1,6 @@
 ^renv$
+^\.Renviron(\..*)?$
+^environment-report.*\.json$
 ^renv\.lock$
 ^\.git$
 ^\.compound-engineering$
@@ -29,3 +31,4 @@ $run_dev.*
 ^_pkgdown\.yml$
 ^lint_output\.txt$
 ^manifest\.json$
+^PROGRESS\.md$
