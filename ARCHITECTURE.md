@@ -159,9 +159,10 @@ can skip when unavailable. CI retains the `renv`-based documentation,
 lint, test, and warning-failing `R CMD check` job alongside teal’s
 reusable audit, check, coverage, formatting, spelling, link, version,
 license, and secret-scan jobs. Some reusable jobs update files, publish
-reports, or comment on pull requests. The repository pre-commit policy
-separately requires formatting, linting, and a warning-failing package
-check from the RStudio Console.
+reports, or comment on pull requests. The [verification
+guide](https://ramdhadage.github.io/ADaMViz.SubmissionSync/docs/development/verification.md)
+defines completion checks and the full local pre-commit sequence in the
+existing VS Code integrated terminal.
 
 ## Contradictions and open questions
 

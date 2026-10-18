@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ADaMViz.SubmissionSync</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9011</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9016</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,9 @@
 <li>Read <a href="ARCHITECTURE.html">ARCHITECTURE.md</a> for the implementation map, enforcement boundaries, known gaps, and task-specific document pointers.</li>
 <li>Treat <a href="docs/product/STRATEGY.html">docs/product/STRATEGY.md</a> as the source of truth for scope, terminology, boundaries, and metrics.</li>
 <li>Consult <a href="docs/solutions/">docs/solutions/</a> for reusable technical learnings and <a href="CONCEPTS.html">CONCEPTS.md</a> for project vocabulary. The solutions store is organized by category and searchable through YAML frontmatter such as <code>module</code>, <code>tags</code>, and <code>problem_type</code> when implementing or debugging a documented area.</li>
-<li>More specific nested <code>AGENTS.md</code> files govern work in their directories.</li>
+<li>Before editing implementation or tests, read <a href="R/AGENTS.html">R/AGENTS.md</a> or <a href="tests/AGENTS.html">tests/AGENTS.md</a>, respectively; nested guidance supplements this root contract.</li>
+<li>Read <a href="docs/development/verification.html">Verification</a> for completion gates, VS Code commands, and CI requirements.</li>
+<li>Read <a href="docs/development/workflow.html">Development workflow</a> before selecting a process tier or using Compound Engineering.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="working-contract">Working Contract<a class="anchor" aria-label="anchor" href="#working-contract"></a></h2>
@@ -68,49 +70,9 @@
 <li>Preserve approved verification checkpoints and manual-testing handoffs.</li>
 <li>Report files changed, checks run, observed results, and anything unverified. Keep static checks, R execution, browser behavior, statistical review, and formal validation distinct.</li>
 <li>For complex features that need long-form package documentation, use <code>usethis::use_vignette("feature_name")</code>. Ask the user for explicit permission before running the command or creating any vignette files.</li>
-<li>Before committing, run <code>styler::style_pkg()</code>, <code>lintr::lint_package()</code>, then <code>devtools::check(error_on = "warning")</code> from the RStudio Console at the repository root. Treat lint findings and package-check warnings or errors as failures. If all three pass, report the results and ask the user for explicit commit approval; otherwise report the failure and do not ask to commit.</li>
-</ul></div>
-<div class="section level2">
-<h2 id="compound-engineering-workflow">Compound Engineering Workflow<a class="anchor" aria-label="anchor" href="#compound-engineering-workflow"></a></h2>
-<ul><li><p>Read the selected skill’s <code>SKILL.md</code> and use only capabilities available in the current session. Plugin workflows do not broaden authorization.</p></li>
-<li><p>Use the GitHub MCP for GitHub Project, issue, pull-request, review, status, linking, and merge operations when the required capability is available; do not substitute manual GitHub UI steps.</p></li>
-<li>
-<p>The complete workflow is:</p>
-<pre class="text"><code>[GitHub MCP: create an issue and add it to the GitHub Project]
-  -&gt; ce-brainstorm -&gt; ce-plan
-  -&gt; ce-worktree (branch: &lt;type&gt;/&lt;issue-number&gt;-&lt;slug&gt;)
-  -&gt; GitHub MCP: move the project item to In Progress
-  -&gt; ce-work (commits reference #&lt;issue-number&gt;)
-  -&gt; ce-test-browser
-  -&gt; ce-code-review
-  -&gt; ce-commit-push-pr (PR body includes "Closes #&lt;issue-number&gt;")
-  -&gt; GitHub MCP: link the PR and move the project item to In Review
-  -&gt; ce-resolve-pr-feedback
-  -&gt; [GitHub MCP: merge the PR and move the project item to Done]
-  -&gt; ce-compound (writes to docs/solutions/)</code></pre>
-</li>
-<li>
-<p>Apply only the steps required by the change’s blast radius:</p>
-<table class="table"><colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup><thead><tr><th>Tier</th>
-<th>Examples</th>
-<th>Required process</th>
-</tr></thead><tbody><tr><td>Routine</td>
-<td>Copy or documentation edits; CSS-only spacing, typography, or icon changes; lint or formatting fixes; small UI changes that reuse an approved <code>bslib</code> or Shiny pattern without changing behavior</td>
-<td>Run <code>ce-work</code> directly with a bare prompt; <code>ce-code-review</code> is optional. Do not create an issue.</td>
-</tr><tr><td>Standard</td>
-<td>A new Shiny module within the approved workflow; a read-only data-profile panel; a new plot control using an existing supported <code>ggplot2</code> pattern; an internal refactor that preserves public interfaces, validation rules, and review status</td>
-<td>Run <code>ce-plan</code> -&gt; <code>ce-work</code> -&gt; <code>ce-code-review</code> -&gt; <code>ce-commit-push-pr</code>. Create an issue.</td>
-</tr><tr><td>Safety-critical</td>
-<td>Changes to permitted-data or BDS validation boundaries; LLM prompts or tools that can expose study data; generated-code execution or automated statistical checks; revision evidence, audit trail, review status, export eligibility, authentication, authorization, privacy controls, or persistent-data migrations</td>
-<td>Run <code>ce-brainstorm</code> -&gt; <code>ce-plan</code> (every unit has <code>Execution: test-first</code>) -&gt; <code>ce-work</code> -&gt; <code>ce-code-review</code> -&gt; <code>ce-commit-push-pr</code> -&gt; <code>ce-compound</code>. Create an issue.</td>
-</tr></tbody></table></li>
-<li><p>If less than 95% confident in the tier classification, ask the user before proceeding.</p></li>
-<li><p>Use <code>ce-debug</code> for failures, <code>ce-explain</code> for evidence-based explanations, and <code>ce-pov</code> for evaluating approaches. Search relevant <code>docs/solutions/</code> before planning or debugging.</p></li>
-<li><p>For substantial code changes, run <code>ce-simplify-code</code> before <code>ce-code-review</code>. Use <code>ce-doc-review</code> for plans and <code>ce-test-browser</code> for requested browser verification; review findings are not test evidence.</p></li>
-<li><p>Use <code>ce-compound</code> only after a verified, non-obvious solution that is not already explained by the diff or existing documentation.</p></li>
-<li><p>After a solved, verified problem, automatically invoke the <code>ce-compound</code> skill with <code>mode:non-interactive</code> at the completion checkpoint only when the work produced durable project reasoning that is not readily recoverable from the final code, tests, types, comments, or existing documentation, and losing it would plausibly cause recurrence, material risk, or substantial rediscovery. Apply this counterfactual: if the learning document disappeared, would a future engineer reading the final implementation still be likely to repeat the mistake or redo substantial investigation? If not, do not invoke it. Completion, effort, and diff size alone are not enough. Capture at the checkpoint so a qualifying learning can ship in the PR that produced it, and only where the repository treats captured learnings as tracked, committed knowledge.</p></li>
-<li><p>Write every report, summary, or handoff to the user through the <code>ce-noslop</code> skill. This applies when you are the top-level agent writing to the user, not when you are a subagent reporting to its caller. Do not apply it to code, config, verbatim quotes, or text the user asked to post as written.</p></li>
-<li><p>Commit, publish, or merge only when requested. Use <code>lfg</code> only when the user explicitly authorizes autonomous delivery.</p></li>
+<li>Before claiming implementation is complete, run the applicable checks in <a href="docs/development/verification.html">Verification</a> in the existing VS Code integrated terminal. If required checks fail or cannot run, report verification pending, with the missing checks; do not claim completion.</li>
+<li>Before committing, complete the full local verification sequence, report the results, and obtain explicit commit approval. Commit, publish, or merge only when requested.</li>
+<li>Write user-facing reports through <code>ce-noslop</code>. Keep detailed workflow instructions in the linked development guide.</li>
 </ul></div>
 </div>
 

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ADaMViz.SubmissionSync</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9011</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9016</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -202,7 +202,7 @@
 <p><strong>Configuration and injection.</strong> <code><a href="reference/new_runtime_config.html">new_runtime_config()</a></code> provides profile and logical provider/workspace identifiers plus an injected secret resolver. Services accept repository, runner, identity, artifact, and workspace implementations. Injection is partial at application level: the coordinator constructs local providers, and runtime prompt-provider selection does not select an interpreter in the active workflow. <code>get_golem_config()</code> exists separately from these runtime defaults.</p>
 <p><strong>Errors and recovery.</strong> Boundaries use <code>checkmate</code> and <code>cli</code>; modules expose caught errors as messages. Execution failures produce failed results and terminal attempt evidence. <code>reconcile_execution_attempts()</code> and <code>reconcile_workspace_exports()</code> exist as callable recovery functions, without automatic application startup wiring.</p>
 <p><strong>Observability and cancellation.</strong> Stored attempts, timestamps, checks, review decisions, receipts, and worker diagnostics provide operational evidence. The subprocess has a timeout. No user cancellation control or strategy-metric telemetry pipeline was found; schema outcome names such as <code>cancelled</code> do not establish cancellation behavior.</p>
-<p><strong>Testing and continuous checks.</strong> Tests cover functions, contracts, services, Shiny servers, and browser journeys. Browser initialization can skip when unavailable. CI retains the <code>renv</code>-based documentation, lint, test, and warning-failing <code>R CMD check</code> job alongside teal’s reusable audit, check, coverage, formatting, spelling, link, version, license, and secret-scan jobs. Some reusable jobs update files, publish reports, or comment on pull requests. The repository pre-commit policy separately requires formatting, linting, and a warning-failing package check from the RStudio Console.</p>
+<p><strong>Testing and continuous checks.</strong> Tests cover functions, contracts, services, Shiny servers, and browser journeys. Browser initialization can skip when unavailable. CI retains the <code>renv</code>-based documentation, lint, test, and warning-failing <code>R CMD check</code> job alongside teal’s reusable audit, check, coverage, formatting, spelling, link, version, license, and secret-scan jobs. Some reusable jobs update files, publish reports, or comment on pull requests. The <a href="docs/development/verification.html">verification guide</a> defines completion checks and the full local pre-commit sequence in the existing VS Code integrated terminal.</p>
 </div>
 <div class="section level2">
 <h2 id="contradictions-and-open-questions">Contradictions and open questions<a class="anchor" aria-label="anchor" href="#contradictions-and-open-questions"></a></h2>
