@@ -167,14 +167,15 @@ Under **Controlled export**:
 1.  Select **Creator** as **Actor** for this local exercise.
 2.  Keep **Destination** as `local` when using the default runtime
     configuration.
-3.  Select **Export image and code**.
-4.  Confirm that the message reports **Exported** and a receipt appears.
-5.  Select **Download image and code ZIP**.
+3.  Select **Export and download ZIP** after both approvals are
+    recorded.
+4.  Confirm that the ZIP downloads, the message reports **Exported**,
+    and a receipt appears.
 
-Export must succeed before the ZIP download can be created. The
-destination is a registered workspace identifier, not a folder path. If
-your runtime configuration uses another workspace identifier, use that
-registered destination.
+The same action publishes the files and records a receipt before
+creating the ZIP. The destination is a registered workspace identifier,
+not a folder path. If your runtime configuration uses another workspace
+identifier, use that registered destination.
 
 The ZIP contains exactly two files:
 
@@ -217,7 +218,7 @@ evidence.
 | Generation reports a blocking profile diagnostic | Resolve the named issue in the input or selections before generating again. |
 | The result remains `Draft` | Inspect the execution diagnostics and automated checks; do not treat the preview as verification evidence. |
 | Export fails | Read the export message and check the status, actor, destination, and accepted artifact availability. |
-| ZIP download reports that export is required | Complete **Export image and code** successfully before downloading. |
+| Export and download ZIP is disabled | Record both required approvals for the current revision. |
 
 ## Implementation references
 

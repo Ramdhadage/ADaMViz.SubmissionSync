@@ -11,12 +11,12 @@ Source:
 
 Dhadage R (2026). *ADaMViz.SubmissionSync: From Clinical Questions to
 Review-Ready Figures and Reproducible R Code*. R package version
-0.1.0.9019, <https://ramdhadage.github.io/ADaMViz.SubmissionSync/>.
+0.1.0.9020, <https://ramdhadage.github.io/ADaMViz.SubmissionSync/>.
 
     @Manual{,
       title = {ADaMViz.SubmissionSync: From Clinical Questions to Review-Ready Figures and Reproducible R Code},
       author = {Ramnath Dhadage},
       year = {2026},
-      note = {R package version 0.1.0.9019},
+      note = {R package version 0.1.0.9020},
       url = {https://ramdhadage.github.io/ADaMViz.SubmissionSync/},
     }

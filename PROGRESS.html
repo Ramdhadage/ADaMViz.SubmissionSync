@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ADaMViz.SubmissionSync</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9019</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9020</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,50 +52,46 @@
 
 <div id="progress" class="section level1">
 
-<p>Updated: 2026-10-18 22:05 IST Task: Record development dependencies and repair incomplete renv installations. Branch: <code>main</code> HEAD at checkpoint start: <code>7d3e7cdcebc5c0746ce5a7201debf0ce9287738e</code> Plan / issue: User-approved approach in this conversation; no separate plan or issue.</p>
+<p>Updated: 2026-10-18 22:46 IST Task: Implement one Export and download ZIP action after both approvals. Branch: <code>fix/export-approval-controls</code> HEAD at checkpoint start: <code>351e8fb0e594f944752b1cb97d63ddd68ab31d1b</code> Plan / issue: User-reported error and requested disabled controls; no issue supplied.</p>
 <div class="section level2">
 <h2 id="done">Done<a class="anchor" aria-label="anchor" href="#done"></a></h2>
-<ul><li>Added <code>lintr</code> and <code>styler</code> to <code>DESCRIPTION</code> under <code>Suggests</code> and enabled <code>snapshot.dev</code> in <code>renv/settings.json</code> following user approval. The working tree was clean before this task.</li>
-<li>Reinstalled all seven damaged packages through <code>renv::install(..., rebuild = TRUE)</code>. Each now has metadata and loads successfully; fresh R startup no longer reports missing DESCRIPTION files.</li>
-<li>Generated <code>renv.lock</code> through <code>renv::snapshot(update = TRUE, prompt = FALSE)</code>. Added the seven repaired packages and existing development dependencies <code>DT</code>, <code>crosstalk</code>, and <code>lazyeval</code>; removed no records and changed no previously locked versions. <code><a href="https://rstudio.github.io/renv/reference/status.html" class="external-link">renv::status()</a></code> reports a consistent project.</li>
-<li>Passed fresh-session package/lockfile checks, spelling, lintr, the full source test suite including browser tests, and the final <code>devtools::check(error_on = "warning")</code>: 0 errors, 0 warnings, 0 notes.</li>
-<li>Retained the previous progress-tracking task and its pending verification below.</li>
-<li>Inspected repository workflow and installed Compound Engineering tracking and handoff guidance.</li>
-<li>Recorded pre-existing work in <code>.Rbuildignore</code>, <code>.gitignore</code>, <code>README.md</code>, <code>.Renviron.example</code>, <code>dev/check-environment.R</code>, <code>dev/test-environment.R</code>, and <code>docs/development/environment.md</code>; its verification status is unknown.</li>
-<li>Added the session-start rule in <a href="AGENTS.html">AGENTS.md</a> and the checkpoint lifecycle in <a href="docs/development/workflow.html#progress-tracking">Development workflow</a>.</li>
-<li>Created this checkpoint and excluded it from the R package build in <code>.Rbuildignore</code>.</li>
-<li>Passed the document checks listed below; preserved pre-existing file contents, including all earlier <code>.Rbuildignore</code> changes.</li>
+<ul><li>Reconciled the previous checkpoint with a clean worktree at the current HEAD. Earlier dependency repairs are committed; do not repeat them.</li>
+<li>Reproduced <code>Export the revision before download</code>. The UI permitted downloads with no export receipt; the export service already enforced Reviewed-only eligibility.</li>
+<li>Replaced the two actions with one Export and download ZIP control, disabled until Reviewed. Its download handler runs the existing controlled export service, refreshes the receipt table, then writes the ZIP; service/ZIP failures display a message and cancel the download silently.</li>
+<li>Updated module tests for one-action publication/download, approval gates, revision changes, receipt reuse, authorization denials, and ZIP-failure retry. Updated the existing browser export journey and its launcher to build the app from current source inside the subprocess.</li>
+<li>Independent read-only correctness review found no concrete defects. Chrome verification resolved its disabled-selectize interaction question.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="in-progress">In progress<a class="anchor" aria-label="anchor" href="#in-progress"></a></h2>
-<ul><li>None for the dependency repair. The user’s existing interactive R session has not been restarted; fresh background startup already passed.</li>
-<li>Earlier progress-guidance documentation lint remains unverified; it is separate from this dependency repair.</li>
+<ul><li>Single-button Chrome flow, focused module/browser tests, and full source suite passed. Final package build/check is running. Documentation now reflects one combined action; spelling is being rechecked after those prose edits.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="blocked">Blocked<a class="anchor" aria-label="anchor" href="#blocked"></a></h2>
-<ul><li>None for the package repair. Initial Pandoc-discovery and inherited-locale failures were resolved for verification using process-local settings. Roxygen’s pre-existing installed 8.1.0 versus metadata 8.1.1 diagnostic remains outside this repair; no unrelated dependency upgrade or persistent environment change was made.</li>
+<ul><li>None. Sandbox access to the existing renv cache required escalation; checks run with the user’s authorization in background PowerShell.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="decisions-and-constraints">Decisions and constraints<a class="anchor" aria-label="anchor" href="#decisions-and-constraints"></a></h2>
-<ul><li>The user approved one root <code>PROGRESS.md</code> for persistent execution checkpoints.</li>
-<li>Keep approved plans separate from execution status; use the host task tracker when available and <code>ce-handoff</code> when a transfer needs more context.</li>
-<li>Preserve pre-existing work. No commit, push, or publication is authorized.</li>
-<li>The user explicitly authorized background-shell repair, snapshot, and verification without additional terminal windows; the prior VS Code attachment blocker no longer applies to this task.</li>
+<ul><li>Keep the existing two-reviewer approval and Reviewed-only service policy.</li>
+<li>No new dependencies or changes to service/public interfaces. User approved the combined action. Owned paths: R/mod_export.R, tests/testthat/test-mod-export.R, tests/testthat/test-app-browser.R, PROGRESS.md, vignettes/ADaMViz.SubmissionSync.Rmd, vignettes/articles/11-controlled-export.Rmd, docs/features/11-controlled-export.md, and docs/ux/F001-plot-generation-prototype.html. Preserve concurrent unowned edits to AGENTS.md, docs/development/workflow.md, and docs/development/agent-state/.</li>
+<li>The user authorized background PowerShell checks for this task. No additional terminal windows, commits, push, or publication.</li>
+<li>Preserve earlier unresolved documentation-lint verification from the progress-guidance task. The known installed roxygen2 8.1.0 versus recorded 8.1.1 diagnostic is unchanged.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="verification">Verification<a class="anchor" aria-label="anchor" href="#verification"></a></h2>
-<ul><li>Current change: PowerShell checks passed for JSON parsing, <code>snapshot.dev = true</code>, both new <code>Suggests</code> entries, and <code>git diff --check</code>. R checks passed for all seven package namespaces and DESCRIPTION files, lockfile membership, and <code><a href="https://rstudio.github.io/renv/reference/status.html" class="external-link">renv::status()</a></code>. Fresh startup showed no missing-DESCRIPTION warning. Lockfile comparison confirmed no removed packages or previously locked version changes.</li>
-<li>Styler processed 121 files without errors and made one unrelated test line wrap, which was reverted to keep the dependency change focused. Roxygen completed with the pre-existing 8.1.0/8.1.1 version diagnostic and no generated diff. Spelling and lintr reported no findings. <code>testthat::test_local(reporter = "summary")</code> finished successfully, including both browser test files without skips.</li>
-<li>Final <code>devtools::check(error_on = "warning")</code> passed: 0 errors, 0 warnings, 0 notes, including installed-package tests and vignette rebuilding. The process used existing Pandoc 3.6.3 (<code>RSTUDIO_PANDOC = "C:/Program Files/Quarto/bin/tools"</code>) and process-only <code>LC_ALL</code>/<code>LANG = "English_United States.utf8"</code>. Earlier runs failed on Pandoc discovery, then inherited <code>C.UTF-8</code> startup warnings. Logs are retained for both failures and the successful retry.</li>
-<li>Passed: PowerShell assertions on this change’s three Markdown files for local link targets, referenced heading anchors, required progress sections, trailing whitespace, and repeated blank lines.</li>
-<li>Passed: package-exclusion regex check for <code>PROGRESS.md</code>; SHA-256 comparisons confirmed pre-existing work was preserved and <code>.Rbuildignore</code> changed only by the new exclusion.</li>
-<li>Passed: the required package-check command and <code>git diff --check</code> in the authorized background shell. No source/test changes remain. Earlier progress-guidance documentation lint remains unverified.</li>
+<ul><li>Focused export-module tests passed after reproducing failure before implementation.</li>
+<li>Formatting, documentation generation, spelling, lint, and full <code>testthat::test_local(reporter = "summary")</code> passed. Reverted the formatter’s unrelated line wrap in <code>test-revision-evidence.R</code> to preserve scope.</li>
+<li>Chrome DevTools verified the source app at <code>http://127.0.0.1:42016/</code>, launched with <code>print(source("dev/run_dev.R")$value)</code>, using the repository’s synthetic <code>adlb-standard.csv</code>.</li>
+<li>Browser: zero/one approval disables controls; both approvals enable Export while Download remains disabled; export enables Download; download returns HTTP 200, application/zip, ZIP bytes, and an attachment filename for the current revision. Shiny stays connected. No browser console warnings/errors; upload/download network requests returned 200.</li>
+<li>Disabled Actor selectize input cannot open or take keyboard focus. Destination and Export match native disabled state; Download has disabled styling, aria-disabled, and tabindex -1.</li>
+<li>
+<code>devtools::check(error_on = "warning")</code> passed: 0 errors, 0 warnings, 0 notes, including installed-package tests and vignette rebuilding. <code>git diff --check</code> passed.</li>
+<li>Earlier two-button verification log: <code>C:/Users/admin/AppData/Local/Temp/submission-sync-export-approval-check.log</code>. The single-action final verification log is <code>C:/Users/admin/AppData/Local/Temp/submission-sync-single-export-final-check.log</code>; the initial single-action run exposed the stale browser-test launcher and was stopped.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="next-action">Next action<a class="anchor" aria-label="anchor" href="#next-action"></a></h2>
-<ol style="list-style-type: decimal"><li>The user may restart the existing interactive R session; fresh background startup already confirms the missing-DESCRIPTION warning is absent. Do not reinstall the repaired packages merely to repeat verification.</li>
-<li>Logs are in <code>C:/Users/admin/AppData/Local/Temp/submission-sync-renv-repair-20261018/</code>: <code>fresh-startup.log</code>, <code>full-local-verification.log</code>, <code>package-check-with-pandoc.log</code>, and successful <code>package-check-windows-utf8.log</code>.</li>
-<li>Keep the roxygen version diagnostic and earlier documentation-lint handoff visible. No commit or publication is authorized.</li>
+<ol style="list-style-type: decimal"><li>The user approved the single-button workflow. Finish focused tests, Chrome verification, and the full package sequence; preserve controlled publication and receipt creation before download.</li>
+<li>Restart the user’s existing app with <code>source("dev/run_dev.R")</code> to load the fix.</li>
+<li>Leave changes uncommitted; commit or publication requires an explicit request.</li>
 </ol></div>
 </div>
 

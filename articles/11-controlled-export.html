@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ADaMViz.SubmissionSync</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9019</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9020</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,21 +90,24 @@ development-only.</p>
 <p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/11-controlled-export.html" class="external-link"><img src="diagrams/11-controlled-export.png" alt="Rendered export diagram"></a></p>
 <p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/11-controlled-export.html" class="external-link">View
 in Full Screen</a></p>
-<p>The diagram separates workspace publication, internal receipt
-recording, and the later ZIP download. This page describes inspected
-implementation at <code>5e2fa6a</code>; it does not establish
-target-environment qualification.</p>
+<p>The historical diagram separates workspace publication, internal
+receipt recording, and ZIP creation; its labels show the earlier
+two-button interface. The publication details were originally inspected
+at <code>5e2fa6a</code>; the interface and download description include
+the combined action. This guide does not establish target-environment
+qualification.</p>
 <div class="section level2">
 <h2 id="user-actions-and-eligibility">User actions and eligibility<a class="anchor" aria-label="anchor" href="#user-actions-and-eligibility"></a>
 </h2>
 <p>The Export step contains revision history, review, and controlled
 export, following the <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/docs/solutions/four-step-wizard-flow.md" class="external-link">five-step
 workflow</a>. <code>mod_export_ui()</code> offers an actor selector, a
-logical destination field, <strong>Export image and code</strong>, and
-<strong>Download image and code ZIP</strong>.
+logical destination field, and one <strong>Export and download
+ZIP</strong> action, disabled until both approvals are recorded.
 <code>mod_export_server()</code> sends the current revision identifier
-and version to <code>new_export_service()</code>, then displays the
-result and receipt table. Service errors appear as messages.</p>
+and version to <code>new_export_service()</code>, then creates the ZIP
+and displays the result and receipt table. Export or ZIP errors appear
+as messages.</p>
 <p>For a new export command, <code>.authorize_export_actor()</code>
 requires an active <code>submission_sync_actor</code> with at least one
 of <code>clinical_scientist</code>, <code>statistical_programmer</code>,
@@ -172,11 +175,11 @@ separately quarantines leftover staging directories; it does not
 complete their publication or create receipts. It is not wired into
 automatic application startup.</p>
 <p><code>.write_export_zip()</code> in <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/mod_export.R" class="external-link">mod_export.R</a>
-verifies that the last successful export belongs to the current
+verifies that the export returned by the service belongs to the current
 revision, copies its two files, and invokes <code><a href="https://rdrr.io/r/utils/zip.html" class="external-link">utils::zip()</a></code>.
-Download is a separate operation: it does not rerun actor, status,
-version, or hash checks, and it is not a new controlled-publication
-decision.</p>
+Every download first calls the export service, which rechecks the actor,
+status, version, and hashes. A successful retry reuses the existing
+receipt and published pair.</p>
 </div>
 <div class="section level2">
 <h2 id="policy-differences-and-operating-limits">Policy differences and operating limits<a class="anchor" aria-label="anchor" href="#policy-differences-and-operating-limits"></a>

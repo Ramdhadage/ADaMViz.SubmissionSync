@@ -43,6 +43,8 @@
   explicit request overrides repository and skill guidance.
 - Make small, focused changes. Preserve unrelated work and all
   uncommitted changes.
+- Manage agent state under the [ACID
+  contract](https://ramdhadage.github.io/ADaMViz.SubmissionSync/docs/development/workflow.html#agent-state-acid-contract).
 - Stop and ask before changing requirements, business logic, public
   interfaces, target environments, dependencies, or error-handling
   policy.
@@ -66,5 +68,6 @@
 - Before committing, complete the full local verification sequence,
   report the results, and obtain explicit commit approval. Commit,
   publish, or merge only when requested.
-- Write user-facing reports through `ce-noslop`. Keep detailed workflow
-  instructions in the linked development guide.
+- Write user-facing reports through `ce-noslop`. Keep this file a map,
+  not a manual; put detailed workflow instructions in the linked
+  development guide.

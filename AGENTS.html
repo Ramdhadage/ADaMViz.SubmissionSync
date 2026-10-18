@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ADaMViz.SubmissionSync</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9019</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9020</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,6 +67,7 @@
 <h2 id="working-contract">Working Contract<a class="anchor" aria-label="anchor" href="#working-contract"></a></h2>
 <ul><li>Within platform, safety, and security constraints, the user’s current explicit request overrides repository and skill guidance.</li>
 <li>Make small, focused changes. Preserve unrelated work and all uncommitted changes.</li>
+<li>Manage agent state under the <a href="docs/development/workflow.html#agent-state-acid-contract">ACID contract</a>.</li>
 <li>Stop and ask before changing requirements, business logic, public interfaces, target environments, dependencies, or error-handling policy.</li>
 <li>Preserve approved verification checkpoints and manual-testing handoffs.</li>
 <li>Launch the application for local development and browser verification with <code>source("dev/run_dev.R")</code> from the repository root; do not use root <code>app.R</code> for these runs.</li>
@@ -74,7 +75,7 @@
 <li>For complex features that need long-form package documentation, use <code>usethis::use_vignette("feature_name")</code>. Ask the user for explicit permission before running the command or creating any vignette files.</li>
 <li>Before claiming implementation is complete, run the applicable checks in <a href="docs/development/verification.html">Verification</a> in the existing VS Code integrated terminal. If required checks fail or cannot run, report verification pending, with the missing checks; do not claim completion.</li>
 <li>Before committing, complete the full local verification sequence, report the results, and obtain explicit commit approval. Commit, publish, or merge only when requested.</li>
-<li>Write user-facing reports through <code>ce-noslop</code>. Keep detailed workflow instructions in the linked development guide.</li>
+<li>Write user-facing reports through <code>ce-noslop</code>. Keep this file a map, not a manual; put detailed workflow instructions in the linked development guide.</li>
 </ul></div>
 </div>
 

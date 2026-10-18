@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ADaMViz.SubmissionSync</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9019</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9020</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -301,15 +301,15 @@ independent human review.</p>
 local exercise.</li>
 <li>Keep <strong>Destination</strong> as <code>local</code> when using
 the default runtime configuration.</li>
-<li>Select <strong>Export image and code</strong>.</li>
-<li>Confirm that the message reports <strong>Exported</strong> and a
-receipt appears.</li>
-<li>Select <strong>Download image and code ZIP</strong>.</li>
+<li>Select <strong>Export and download ZIP</strong> after both approvals
+are recorded.</li>
+<li>Confirm that the ZIP downloads, the message reports
+<strong>Exported</strong>, and a receipt appears.</li>
 </ol>
-<p>Export must succeed before the ZIP download can be created. The
-destination is a registered workspace identifier, not a folder path. If
-your runtime configuration uses another workspace identifier, use that
-registered destination.</p>
+<p>The same action publishes the files and records a receipt before
+creating the ZIP. The destination is a registered workspace identifier,
+not a folder path. If your runtime configuration uses another workspace
+identifier, use that registered destination.</p>
 <p>The ZIP contains exactly two files:</p>
 <table class="table">
 <thead><tr class="header">
@@ -389,9 +389,8 @@ the preview as verification evidence.</td>
 and accepted artifact availability.</td>
 </tr>
 <tr class="odd">
-<td>ZIP download reports that export is required</td>
-<td>Complete <strong>Export image and code</strong> successfully before
-downloading.</td>
+<td>Export and download ZIP is disabled</td>
+<td>Record both required approvals for the current revision.</td>
 </tr>
 </tbody>
 </table>

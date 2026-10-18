@@ -12,9 +12,11 @@ diagram](diagrams/11-controlled-export.png)](https://htmlpreview.github.io/?http
 [View in Full
 Screen](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Ramdhadage/ADaMViz.SubmissionSync/main/vignettes/articles/diagrams/11-controlled-export.html)
 
-The diagram separates workspace publication, internal receipt recording,
-and the later ZIP download. This page describes inspected implementation
-at `5e2fa6a`; it does not establish target-environment qualification.
+The historical diagram separates workspace publication, internal receipt
+recording, and ZIP creation; its labels show the earlier two-button
+interface. The publication details were originally inspected at
+`5e2fa6a`; the interface and download description include the combined
+action. This guide does not establish target-environment qualification.
 
 ## User actions and eligibility
 
@@ -22,10 +24,11 @@ The Export step contains revision history, review, and controlled
 export, following the [five-step
 workflow](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/docs/solutions/four-step-wizard-flow.md).
 `mod_export_ui()` offers an actor selector, a logical destination field,
-**Export image and code**, and **Download image and code ZIP**.
-`mod_export_server()` sends the current revision identifier and version
-to `new_export_service()`, then displays the result and receipt table.
-Service errors appear as messages.
+and one **Export and download ZIP** action, disabled until both
+approvals are recorded. `mod_export_server()` sends the current revision
+identifier and version to `new_export_service()`, then creates the ZIP
+and displays the result and receipt table. Export or ZIP errors appear
+as messages.
 
 For a new export command, `.authorize_export_actor()` requires an active
 `submission_sync_actor` with at least one of `clinical_scientist`,
@@ -100,11 +103,12 @@ automatic application startup.
 
 `.write_export_zip()` in
 [mod_export.R](https://github.com/Ramdhadage/ADaMViz.SubmissionSync/blob/main/R/mod_export.R)
-verifies that the last successful export belongs to the current
+verifies that the export returned by the service belongs to the current
 revision, copies its two files, and invokes
-[`utils::zip()`](https://rdrr.io/r/utils/zip.html). Download is a
-separate operation: it does not rerun actor, status, version, or hash
-checks, and it is not a new controlled-publication decision.
+[`utils::zip()`](https://rdrr.io/r/utils/zip.html). Every download first
+calls the export service, which rechecks the actor, status, version, and
+hashes. A successful retry reuses the existing receipt and published
+pair.
 
 ## Policy differences and operating limits
 

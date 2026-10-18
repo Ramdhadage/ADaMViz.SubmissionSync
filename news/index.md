@@ -1,6 +1,6 @@
 # Changelog
 
-## ADaMViz.SubmissionSync 0.1.0.9019
+## ADaMViz.SubmissionSync 0.1.0.9020
 
 ### Application interface
 
