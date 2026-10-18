@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ADaMViz.SubmissionSync</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9016</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9018</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,7 +83,12 @@
 <table class="table"><colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup><thead><tr><th>Component / physical location</th>
 <th>Responsibility</th>
 <th>Start here for common changes</th>
-</tr></thead><tbody><tr><td>Root <code>app.R</code>; application functions under <code>R/</code>
+</tr></thead><tbody><tr><td><code>dev/run_dev.R</code></td>
+<td>Launch current source for local development and browser verification</td>
+<td>
+<code>source("dev/run_dev.R")</code>, <code><a href="https://thinkr-open.github.io/golem/reference/document_and_reload.html" class="external-link">golem::document_and_reload()</a></code>
+</td>
+</tr><tr><td>Root <code>app.R</code>; application functions under <code>R/</code>
 </td>
 <td>Launch the installed package and compose the Shiny application</td>
 <td>
@@ -133,7 +138,7 @@
 <td>Relevant <code>test-*</code> files, <code><a href="reference/synthetic_scenario_manifest.html">synthetic_scenario_manifest()</a></code>, <code>check.yaml</code>
 </td>
 </tr></tbody></table><p>These components are conceptual groups within a <strong>flat <code>R/</code> directory</strong>, not separate packages or directory layers. Provider contracts are classed lists of functions. The application coordinator currently constructs several local implementations directly.</p>
-<p><code>app.R</code> calls the installed namespace. Reading or editing source does not by itself update the installed application.</p>
+<p>For local development and browser verification, use <code>source("dev/run_dev.R")</code> from the repository root. It documents and reloads the current source before calling <code><a href="reference/run_app.html">run_app()</a></code>. Root <code>app.R</code> calls the installed namespace; reading or editing source does not by itself update that installed application.</p>
 </div>
 <div class="section level2">
 <h2 id="end-to-end-flow">End-to-end flow<a class="anchor" aria-label="anchor" href="#end-to-end-flow"></a></h2>

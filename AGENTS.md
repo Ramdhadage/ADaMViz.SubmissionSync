@@ -2,6 +2,11 @@
 
 ## System Anchors
 
+- At session start, read
+  [PROGRESS.md](https://ramdhadage.github.io/ADaMViz.SubmissionSync/PROGRESS.md)
+  if present and reconcile it with current repository state. Long tasks
+  must maintain it under [Progress
+  tracking](https://ramdhadage.github.io/ADaMViz.SubmissionSync/docs/development/workflow.html#progress-tracking).
 - For product or code work, read
   [CODEX_CONTEXT.md](https://ramdhadage.github.io/ADaMViz.SubmissionSync/CODEX_CONTEXT.md)
   before planning or changing implementation.
@@ -43,6 +48,9 @@
   policy.
 - Preserve approved verification checkpoints and manual-testing
   handoffs.
+- Launch the application for local development and browser verification
+  with `source("dev/run_dev.R")` from the repository root; do not use
+  root `app.R` for these runs.
 - Report files changed, checks run, observed results, and anything
   unverified. Keep static checks, R execution, browser behavior,
   statistical review, and formal validation distinct.
