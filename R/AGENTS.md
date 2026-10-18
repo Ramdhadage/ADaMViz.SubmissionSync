@@ -1,6 +1,6 @@
 # R and Shiny Engineering Rules
 
-These rules apply to implementation files under `R/`. Repository-wide product and safety boundaries remain in [`../CODEX_CONTEXT.md`](../CODEX_CONTEXT.md).
+These rules apply to implementation files under `R/`. Read [root AGENTS.md](../AGENTS.md) for repository-wide process and authorization, and [CODEX_CONTEXT.md](../CODEX_CONTEXT.md) for product and safety boundaries.
 
 ## Stack and Structure
 
@@ -18,4 +18,5 @@ These rules apply to implementation files under `R/`. Repository-wide product an
 ## Local Verification
 
 - Run focused tests for changed behavior before broader checks; follow [`../tests/AGENTS.md`](../tests/AGENTS.md) when changing tests.
-- After package development is complete, restart R if the namespace is loaded, then run `devtools::install()` from the RStudio Console at the repository root before running `app.R`. The root script calls `ADaMViz.SubmissionSync::run_app()` from the installed namespace.
+- Before claiming R/package implementation complete, follow the [verification completion gate and full local sequence](../docs/development/verification.md) in the existing VS Code integrated terminal. Report verification pending if a required check fails or cannot run.
+- Before running `app.R`, restart any R session with the package namespace loaded and run `devtools::install()` using the project R installation from the existing VS Code integrated terminal. The root script calls `ADaMViz.SubmissionSync::run_app()` from the installed namespace.

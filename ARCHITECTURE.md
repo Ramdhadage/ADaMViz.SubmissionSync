@@ -90,7 +90,7 @@ The worker returns execution results; the coordinating process writes evidence. 
 
 **Observability and cancellation.** Stored attempts, timestamps, checks, review decisions, receipts, and worker diagnostics provide operational evidence. The subprocess has a timeout. No user cancellation control or strategy-metric telemetry pipeline was found; schema outcome names such as `cancelled` do not establish cancellation behavior.
 
-**Testing and continuous checks.** Tests cover functions, contracts, services, Shiny servers, and browser journeys. Browser initialization can skip when unavailable. CI retains the `renv`-based documentation, lint, test, and warning-failing `R CMD check` job alongside teal's reusable audit, check, coverage, formatting, spelling, link, version, license, and secret-scan jobs. Some reusable jobs update files, publish reports, or comment on pull requests. The repository pre-commit policy separately requires formatting, linting, and a warning-failing package check from the RStudio Console.
+**Testing and continuous checks.** Tests cover functions, contracts, services, Shiny servers, and browser journeys. Browser initialization can skip when unavailable. CI retains the `renv`-based documentation, lint, test, and warning-failing `R CMD check` job alongside teal's reusable audit, check, coverage, formatting, spelling, link, version, license, and secret-scan jobs. Some reusable jobs update files, publish reports, or comment on pull requests. The [verification guide](docs/development/verification.md) defines completion checks and the full local pre-commit sequence in the existing VS Code integrated terminal.
 
 ## Contradictions and open questions
 
