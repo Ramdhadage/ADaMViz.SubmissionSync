@@ -1,11 +1,12 @@
 local_submission_sync_app <- function(name) {
-  app_ui <- getFromNamespace("app_ui", "ADaMViz.SubmissionSync")
-  app_server <- getFromNamespace("app_server", "ADaMViz.SubmissionSync")
-
-  app <- shiny::shinyApp(
-    ui = function(request) app_ui(request),
-    server = app_server
-  )
+  # Build inside the subprocess so browser tests use the current source.
+  app <- function() {
+    source_root <- Sys.getenv("ADAMVIZ_SUBMISSIONSYNC_SOURCE_ROOT")
+    if (nzchar(source_root)) devtools::load_all(source_root, quiet = TRUE)
+    app_ui <- getFromNamespace("app_ui", "ADaMViz.SubmissionSync")
+    app_server <- getFromNamespace("app_server", "ADaMViz.SubmissionSync")
+    shiny::shinyApp(ui = function(request) app_ui(request), server = app_server)
+  }
   driver <- local_browser_app(app, name) # nolint: object_usage_linter.
   cleanup_env <- parent.frame()
   if (!identical(cleanup_env, globalenv())) {
@@ -115,8 +116,15 @@ test_that("browser prompt journey exports Reviewed image and code", {
 
   create_standard_revision(app)
   open_export_step(app)
+  expect_true(app$get_js(paste0(
+    "document.getElementById('plot_generation-export-download_zip')",
+    ".getAttribute('aria-disabled') === 'true'"
+  )))
   review_standard_revision(app)
-  app$click("plot_generation-export-export")
+  zipfile <- app$get_download("plot_generation-export-download_zip")
+  expect_setequal(
+    utils::unzip(zipfile, list = TRUE)$Name, c("script.R", "plot.png")
+  )
   app$wait_for_idle()
   app$wait_for_js(paste0(
     "document.querySelector('#plot_generation-export-message')",
