@@ -4,18 +4,7 @@ mod_export_ui <- function(id) {
     class = "assurance-panel",
     bslib::card_header("Controlled export"),
     bslib::card_body(
-      shiny::selectInput(
-        ns("actor_id"),
-        "Actor",
-        choices = c(
-          "Creator" = "creator",
-          "Statistical programmer" = "stat-programmer",
-          "Biostatistician" = "biostatistician"
-        )
-      ),
-      shiny::textInput(ns("destination_id"), "Destination", value = "local"),
-      shiny::actionButton(ns("export"), "Export image and code"),
-      shiny::downloadButton(ns("download_zip"), "Download image and code ZIP"),
+      shiny::uiOutput(ns("controls")),
       shiny::verbatimTextOutput(ns("message")),
       shiny::tableOutput(ns("receipts"))
     )
@@ -26,12 +15,47 @@ mod_export_server <- function(id, current_revision, workspace_provider) {
   shiny::moduleServer(id, function(input, output, session) {
     message <- shiny::reactiveVal("No export attempted.")
     receipt_refresh <- shiny::reactiveVal(0L)
-    last_export <- shiny::reactiveVal(NULL)
 
-    shiny::observeEvent(input$export,
-      {
+    export_ready <- shiny::reactive({
+      identical(current_revision()$revision$status, "Reviewed")
+    })
+
+    output$controls <- shiny::renderUI({
+      shiny::tags$fieldset(
+        disabled = if (!export_ready()) NA else NULL,
+        shiny::selectInput(
+          session$ns("actor_id"),
+          "Actor",
+          choices = c(
+            "Creator" = "creator",
+            "Statistical programmer" = "stat-programmer",
+            "Biostatistician" = "biostatistician"
+          )
+        ),
+        shiny::textInput(
+          session$ns("destination_id"), "Destination",
+          value = "local"
+        ),
+        shiny::downloadButton(
+          session$ns("download_zip"), "Export and download ZIP",
+          enabled = export_ready()
+        )
+      )
+    })
+
+    output$message <- shiny::renderText(message())
+    output$download_zip <- shiny::downloadHandler(
+      filename = function() {
         state <- current_revision()
-        tryCatch(
+        if (is.null(state$revision)) {
+          return("image-code.zip")
+        }
+        paste0(state$revision$revision_id, "-image-code.zip")
+      },
+      content = function(file) {
+        shiny::req(export_ready())
+        state <- current_revision()
+        succeeded <- tryCatch(
           {
             if (is.null(state$revision) || is.null(state$repository)) {
               cli::cli_abort("Create a revision before export")
@@ -58,31 +82,17 @@ mod_export_server <- function(id, current_revision, workspace_provider) {
                 sep = ":"
               )
             )
-            message(paste("Exported", receipt$receipt_id, receipt$revision_id))
-            last_export(receipt)
             receipt_refresh(receipt_refresh() + 1L)
+            .write_export_zip(receipt, file, state$revision$revision_id)
+            message(paste("Exported", receipt$receipt_id, receipt$revision_id))
+            TRUE
           },
           error = function(error) {
             message(conditionMessage(error))
+            FALSE
           }
         )
-      },
-      ignoreInit = TRUE
-    )
-
-    output$message <- shiny::renderText(message())
-    output$download_zip <- shiny::downloadHandler(
-      filename = function() {
-        state <- current_revision()
-        if (is.null(state$revision)) {
-          return("image-code.zip")
-        }
-        paste0(state$revision$revision_id, "-image-code.zip")
-      },
-      content = function(file) {
-        state <- current_revision()
-        revision_id <- state$revision$revision_id %||% NULL
-        .write_export_zip(last_export(), file, revision_id)
+        shiny::req(succeeded)
       },
       contentType = "application/zip"
     )

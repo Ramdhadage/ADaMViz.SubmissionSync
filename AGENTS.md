@@ -15,6 +15,7 @@
 
 - Within platform, safety, and security constraints, the user's current explicit request overrides repository and skill guidance.
 - Make small, focused changes. Preserve unrelated work and all uncommitted changes.
+- Manage agent state under the [ACID contract](docs/development/workflow.md#agent-state-acid-contract).
 - Stop and ask before changing requirements, business logic, public interfaces, target environments, dependencies, or error-handling policy.
 - Preserve approved verification checkpoints and manual-testing handoffs.
 - Launch the application for local development and browser verification with `source("dev/run_dev.R")` from the repository root; do not use root `app.R` for these runs.
@@ -22,4 +23,4 @@
 - For complex features that need long-form package documentation, use `usethis::use_vignette("feature_name")`. Ask the user for explicit permission before running the command or creating any vignette files.
 - Before claiming implementation is complete, run the applicable checks in [Verification](docs/development/verification.md) in the existing VS Code integrated terminal. If required checks fail or cannot run, report verification pending, with the missing checks; do not claim completion.
 - Before committing, complete the full local verification sequence, report the results, and obtain explicit commit approval. Commit, publish, or merge only when requested.
-- Write user-facing reports through `ce-noslop`. Keep detailed workflow instructions in the linked development guide.
+- Write user-facing reports through `ce-noslop`. Keep this file a map, not a manual; put detailed workflow instructions in the linked development guide.

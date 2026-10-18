@@ -1,51 +1,46 @@
 # Progress
 
-Updated: 2026-10-18 22:05 IST
-Task: Record development dependencies and repair incomplete renv installations.
-Branch: `main`
-HEAD at checkpoint start: `7d3e7cdcebc5c0746ce5a7201debf0ce9287738e`
-Plan / issue: User-approved approach in this conversation; no separate plan or issue.
+Updated: 2026-10-18 22:46 IST
+Task: Implement one Export and download ZIP action after both approvals.
+Branch: `fix/export-approval-controls`
+HEAD at checkpoint start: `351e8fb0e594f944752b1cb97d63ddd68ab31d1b`
+Plan / issue: User-reported error and requested disabled controls; no issue supplied.
 
 ## Done
 
-- Added `lintr` and `styler` to `DESCRIPTION` under `Suggests` and enabled `snapshot.dev` in `renv/settings.json` following user approval. The working tree was clean before this task.
-- Reinstalled all seven damaged packages through `renv::install(..., rebuild = TRUE)`. Each now has metadata and loads successfully; fresh R startup no longer reports missing DESCRIPTION files.
-- Generated `renv.lock` through `renv::snapshot(update = TRUE, prompt = FALSE)`. Added the seven repaired packages and existing development dependencies `DT`, `crosstalk`, and `lazyeval`; removed no records and changed no previously locked versions. `renv::status()` reports a consistent project.
-- Passed fresh-session package/lockfile checks, spelling, lintr, the full source test suite including browser tests, and the final `devtools::check(error_on = "warning")`: 0 errors, 0 warnings, 0 notes.
-- Retained the previous progress-tracking task and its pending verification below.
-- Inspected repository workflow and installed Compound Engineering tracking and handoff guidance.
-- Recorded pre-existing work in `.Rbuildignore`, `.gitignore`, `README.md`, `.Renviron.example`, `dev/check-environment.R`, `dev/test-environment.R`, and `docs/development/environment.md`; its verification status is unknown.
-- Added the session-start rule in [AGENTS.md](AGENTS.md) and the checkpoint lifecycle in [Development workflow](docs/development/workflow.md#progress-tracking).
-- Created this checkpoint and excluded it from the R package build in `.Rbuildignore`.
-- Passed the document checks listed below; preserved pre-existing file contents, including all earlier `.Rbuildignore` changes.
+- Reconciled the previous checkpoint with a clean worktree at the current HEAD. Earlier dependency repairs are committed; do not repeat them.
+- Reproduced `Export the revision before download`. The UI permitted downloads with no export receipt; the export service already enforced Reviewed-only eligibility.
+- Replaced the two actions with one Export and download ZIP control, disabled until Reviewed. Its download handler runs the existing controlled export service, refreshes the receipt table, then writes the ZIP; service/ZIP failures display a message and cancel the download silently.
+- Updated module tests for one-action publication/download, approval gates, revision changes, receipt reuse, authorization denials, and ZIP-failure retry. Updated the existing browser export journey and its launcher to build the app from current source inside the subprocess.
+- Independent read-only correctness review found no concrete defects. Chrome verification resolved its disabled-selectize interaction question.
 
 ## In progress
 
-- None for the dependency repair. The user's existing interactive R session has not been restarted; fresh background startup already passed.
-- Earlier progress-guidance documentation lint remains unverified; it is separate from this dependency repair.
+- Single-button Chrome flow, focused module/browser tests, and full source suite passed. Final package build/check is running. Documentation now reflects one combined action; spelling is being rechecked after those prose edits.
 
 ## Blocked
 
-- None for the package repair. Initial Pandoc-discovery and inherited-locale failures were resolved for verification using process-local settings. Roxygen's pre-existing installed 8.1.0 versus metadata 8.1.1 diagnostic remains outside this repair; no unrelated dependency upgrade or persistent environment change was made.
+- None. Sandbox access to the existing renv cache required escalation; checks run with the user's authorization in background PowerShell.
 
 ## Decisions and constraints
 
-- The user approved one root `PROGRESS.md` for persistent execution checkpoints.
-- Keep approved plans separate from execution status; use the host task tracker when available and `ce-handoff` when a transfer needs more context.
-- Preserve pre-existing work. No commit, push, or publication is authorized.
-- The user explicitly authorized background-shell repair, snapshot, and verification without additional terminal windows; the prior VS Code attachment blocker no longer applies to this task.
+- Keep the existing two-reviewer approval and Reviewed-only service policy.
+- No new dependencies or changes to service/public interfaces. User approved the combined action. Owned paths: R/mod_export.R, tests/testthat/test-mod-export.R, tests/testthat/test-app-browser.R, PROGRESS.md, vignettes/ADaMViz.SubmissionSync.Rmd, vignettes/articles/11-controlled-export.Rmd, docs/features/11-controlled-export.md, and docs/ux/F001-plot-generation-prototype.html. Preserve concurrent unowned edits to AGENTS.md, docs/development/workflow.md, and docs/development/agent-state/.
+- The user authorized background PowerShell checks for this task. No additional terminal windows, commits, push, or publication.
+- Preserve earlier unresolved documentation-lint verification from the progress-guidance task. The known installed roxygen2 8.1.0 versus recorded 8.1.1 diagnostic is unchanged.
 
 ## Verification
 
-- Current change: PowerShell checks passed for JSON parsing, `snapshot.dev = true`, both new `Suggests` entries, and `git diff --check`. R checks passed for all seven package namespaces and DESCRIPTION files, lockfile membership, and `renv::status()`. Fresh startup showed no missing-DESCRIPTION warning. Lockfile comparison confirmed no removed packages or previously locked version changes.
-- Styler processed 121 files without errors and made one unrelated test line wrap, which was reverted to keep the dependency change focused. Roxygen completed with the pre-existing 8.1.0/8.1.1 version diagnostic and no generated diff. Spelling and lintr reported no findings. `testthat::test_local(reporter = "summary")` finished successfully, including both browser test files without skips.
-- Final `devtools::check(error_on = "warning")` passed: 0 errors, 0 warnings, 0 notes, including installed-package tests and vignette rebuilding. The process used existing Pandoc 3.6.3 (`RSTUDIO_PANDOC = "C:/Program Files/Quarto/bin/tools"`) and process-only `LC_ALL`/`LANG = "English_United States.utf8"`. Earlier runs failed on Pandoc discovery, then inherited `C.UTF-8` startup warnings. Logs are retained for both failures and the successful retry.
-- Passed: PowerShell assertions on this change's three Markdown files for local link targets, referenced heading anchors, required progress sections, trailing whitespace, and repeated blank lines.
-- Passed: package-exclusion regex check for `PROGRESS.md`; SHA-256 comparisons confirmed pre-existing work was preserved and `.Rbuildignore` changed only by the new exclusion.
-- Passed: the required package-check command and `git diff --check` in the authorized background shell. No source/test changes remain. Earlier progress-guidance documentation lint remains unverified.
+- Focused export-module tests passed after reproducing failure before implementation.
+- Formatting, documentation generation, spelling, lint, and full `testthat::test_local(reporter = "summary")` passed. Reverted the formatter's unrelated line wrap in `test-revision-evidence.R` to preserve scope.
+- Chrome DevTools verified the source app at `http://127.0.0.1:42016/`, launched with `print(source("dev/run_dev.R")$value)`, using the repository's synthetic `adlb-standard.csv`.
+- Browser: zero/one approval disables controls; both approvals enable Export while Download remains disabled; export enables Download; download returns HTTP 200, application/zip, ZIP bytes, and an attachment filename for the current revision. Shiny stays connected. No browser console warnings/errors; upload/download network requests returned 200.
+- Disabled Actor selectize input cannot open or take keyboard focus. Destination and Export match native disabled state; Download has disabled styling, aria-disabled, and tabindex -1.
+- `devtools::check(error_on = "warning")` passed: 0 errors, 0 warnings, 0 notes, including installed-package tests and vignette rebuilding. `git diff --check` passed.
+- Earlier two-button verification log: `C:/Users/admin/AppData/Local/Temp/submission-sync-export-approval-check.log`. The single-action final verification log is `C:/Users/admin/AppData/Local/Temp/submission-sync-single-export-final-check.log`; the initial single-action run exposed the stale browser-test launcher and was stopped.
 
 ## Next action
 
-1. The user may restart the existing interactive R session; fresh background startup already confirms the missing-DESCRIPTION warning is absent. Do not reinstall the repaired packages merely to repeat verification.
-2. Logs are in `C:/Users/admin/AppData/Local/Temp/submission-sync-renv-repair-20261018/`: `fresh-startup.log`, `full-local-verification.log`, `package-check-with-pandoc.log`, and successful `package-check-windows-utf8.log`.
-3. Keep the roxygen version diagnostic and earlier documentation-lint handoff visible. No commit or publication is authorized.
+1. The user approved the single-button workflow. Finish focused tests, Chrome verification, and the full package sequence; preserve controlled publication and receipt creation before download.
+2. Restart the user's existing app with `source("dev/run_dev.R")` to load the fix.
+3. Leave changes uncommitted; commit or publication requires an explicit request.
