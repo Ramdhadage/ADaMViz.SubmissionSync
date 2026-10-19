@@ -2,7 +2,7 @@
 
 ## System Anchors
 
-- At session start, read [PROGRESS.md](PROGRESS.md) if present and reconcile it with current repository state. Long tasks must maintain it under [Progress tracking](docs/development/workflow.md#progress-tracking).
+- Follow the clock-in and clock-out routines below. Long tasks must maintain [PROGRESS.md](PROGRESS.md) under [Progress tracking](docs/development/workflow.md#progress-tracking).
 - For product or code work, read [CODEX_CONTEXT.md](CODEX_CONTEXT.md) before planning or changing implementation.
 - Read [ARCHITECTURE.md](ARCHITECTURE.md) for the implementation map, enforcement boundaries, known gaps, and task-specific document pointers.
 - Treat [docs/product/STRATEGY.md](docs/product/STRATEGY.md) as the source of truth for scope, terminology, boundaries, and metrics.
@@ -10,6 +10,21 @@
 - Before editing implementation or tests, read [R/AGENTS.md](R/AGENTS.md) or [tests/AGENTS.md](tests/AGENTS.md), respectively; nested guidance supplements this root contract.
 - Read [Verification](docs/development/verification.md) for completion gates, VS Code commands, and CI requirements.
 - Read [Development workflow](docs/development/workflow.md) before selecting a process tier or using Compound Engineering.
+
+## At session start (clock in)
+
+1. Read [PROGRESS.md](PROGRESS.md) and reconcile it with the current branch, HEAD, working tree, and verification evidence.
+2. Read [DECISIONS.md](DECISIONS.md) for accepted decisions and reasons; follow linked task-specific sources as needed.
+3. Run the [required verification](docs/development/verification.md) in the existing VS Code integrated terminal to establish the baseline. Record failures or unavailable checks as verification pending; do not infer a passing baseline.
+4. Continue from PROGRESS.md's `Next action` section unless the user's current request redirects the work. Preserve unresolved tasks when switching scope.
+
+## Before session end (clock out)
+
+1. Update [PROGRESS.md](PROGRESS.md) with current state, verification results, blockers, and the next action. Record newly accepted important choices and reasons in [DECISIONS.md](DECISIONS.md).
+2. Run the [required verification](docs/development/verification.md) on the final tree in the existing VS Code integrated terminal. Record the actual results or missing checks in PROGRESS.md before handoff.
+3. Commit completed work only after the full local verification sequence passes and the user explicitly approves the commit. Otherwise leave it identified as uncommitted, with a concrete next action.
+
+These routines are agent instructions, not automatic startup or shutdown hooks. Compound Engineering roles and decision-recording rules are in the [development guide](docs/development/workflow.md#decision-records).
 
 ## Working Contract
 
