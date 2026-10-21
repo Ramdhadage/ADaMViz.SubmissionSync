@@ -1,0 +1,838 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="app-browser" timestamp="2026-10-21T05:33:28Z" hostname="91bdab9c50ce" tests="18" skipped="0" failures="0" errors="0" time="50.599">
+    <testcase time="6.32" classname="app_browser" name="browser_revised_questions_replace_the_Y_variable_in_Confirm"/>
+    <testcase time="0.31" classname="app_browser" name="browser_revised_questions_replace_the_Y_variable_in_Confirm"/>
+    <testcase time="0.222" classname="app_browser" name="browser_revised_questions_replace_the_Y_variable_in_Confirm"/>
+    <testcase time="0.245" classname="app_browser" name="browser_revised_questions_replace_the_Y_variable_in_Confirm"/>
+    <testcase time="9.34" classname="app_browser" name="browser_prompt_journey_creates_a_Verified_draft_with_evidence"/>
+    <testcase time="0.00100000000000122" classname="app_browser" name="browser_prompt_journey_creates_a_Verified_draft_with_evidence"/>
+    <testcase time="0.000999999999997669" classname="app_browser" name="browser_prompt_journey_creates_a_Verified_draft_with_evidence"/>
+    <testcase time="9.672" classname="app_browser" name="browser_prompt_journey_exports_Reviewed_image_and_code"/>
+    <testcase time="1.376" classname="app_browser" name="browser_prompt_journey_exports_Reviewed_image_and_code"/>
+    <testcase time="0.518999999999998" classname="app_browser" name="browser_prompt_journey_exports_Reviewed_image_and_code"/>
+    <testcase time="0.00100000000000122" classname="app_browser" name="browser_prompt_journey_exports_Reviewed_image_and_code"/>
+    <testcase time="10.997" classname="app_browser" name="browser_review_reaches_Reviewed_with_two_distinct_approvals"/>
+    <testcase time="0.00200000000000244" classname="app_browser" name="browser_review_reaches_Reviewed_with_two_distinct_approvals"/>
+    <testcase time="0.000999999999997669" classname="app_browser" name="browser_review_reaches_Reviewed_with_two_distinct_approvals"/>
+    <testcase time="0.627000000000002" classname="app_browser" name="browser_review_reaches_Reviewed_with_two_distinct_approvals"/>
+    <testcase time="10.311" classname="app_browser" name="browser_rejection_closes_the_revision_and_blocks_further_review"/>
+    <testcase time="0.000999999999997669" classname="app_browser" name="browser_rejection_closes_the_revision_and_blocks_further_review"/>
+    <testcase time="0.653000000000006" classname="app_browser" name="browser_rejection_closes_the_revision_and_blocks_further_review"/>
+  </testsuite>
+  <testsuite name="app-export-browser" timestamp="2026-10-21T05:34:19Z" hostname="91bdab9c50ce" tests="6" skipped="0" failures="0" errors="0" time="5.358">
+    <testcase time="2.54499999999999" classname="app_export_browser" name="browser_export_journey_publishes_an_eligible_accepted_bundle"/>
+    <testcase time="0.00200000000000244" classname="app_export_browser" name="browser_export_journey_publishes_an_eligible_accepted_bundle"/>
+    <testcase time="0.000999999999997669" classname="app_export_browser" name="browser_export_journey_publishes_an_eligible_accepted_bundle"/>
+    <testcase time="2.591" classname="app_export_browser" name="browser_export_blocks_stale_tokens_and_unauthorized_actors"/>
+    <testcase time="0.212000000000003" classname="app_export_browser" name="browser_export_blocks_stale_tokens_and_unauthorized_actors"/>
+    <testcase time="0.0069999999999979" classname="app_export_browser" name="browser_export_blocks_stale_tokens_and_unauthorized_actors"/>
+  </testsuite>
+  <testsuite name="app-server-correction" timestamp="2026-10-21T05:34:24Z" hostname="91bdab9c50ce" tests="11" skipped="0" failures="0" errors="0" time="1.523">
+    <testcase time="0.503" classname="app_server_correction" name="app_correction_creates_child_Draft_and_preserves_reviewed_parent"/>
+    <testcase time="0.0110000000000028" classname="app_server_correction" name="app_correction_creates_child_Draft_and_preserves_reviewed_parent"/>
+    <testcase time="0.978999999999999" classname="app_server_correction" name="app_correction_creates_child_Draft_and_preserves_reviewed_parent"/>
+    <testcase time="0.00300000000000011" classname="app_server_correction" name="app_correction_creates_child_Draft_and_preserves_reviewed_parent"/>
+    <testcase time="0.00300000000000011" classname="app_server_correction" name="app_correction_creates_child_Draft_and_preserves_reviewed_parent"/>
+    <testcase time="0.00300000000000011" classname="app_server_correction" name="app_correction_creates_child_Draft_and_preserves_reviewed_parent"/>
+    <testcase time="0.00300000000000011" classname="app_server_correction" name="app_correction_creates_child_Draft_and_preserves_reviewed_parent"/>
+    <testcase time="0.00600000000000023" classname="app_server_correction" name="app_correction_creates_child_Draft_and_preserves_reviewed_parent"/>
+    <testcase time="0.00300000000000011" classname="app_server_correction" name="app_correction_creates_child_Draft_and_preserves_reviewed_parent"/>
+    <testcase time="0.00300000000000011" classname="app_server_correction" name="app_correction_creates_child_Draft_and_preserves_reviewed_parent"/>
+    <testcase time="0.00600000000000023" classname="app_server_correction" name="app_correction_creates_child_Draft_and_preserves_reviewed_parent"/>
+  </testsuite>
+  <testsuite name="app-smoke" timestamp="2026-10-21T05:34:25Z" hostname="91bdab9c50ce" tests="10" skipped="0" failures="0" errors="0" time="1.926">
+    <testcase time="0.0820000000000007" classname="app_smoke" name="the_app_exposes_the_current_plot_workflow"/>
+    <testcase time="0.729999999999997" classname="app_smoke" name="the_app_exposes_the_current_plot_workflow"/>
+    <testcase time="0.134" classname="app_smoke" name="the_app_exposes_the_current_plot_workflow"/>
+    <testcase time="0.128999999999998" classname="app_smoke" name="the_app_exposes_the_current_plot_workflow"/>
+    <testcase time="0.149999999999999" classname="app_smoke" name="the_app_server_starts_with_injected_runtime_configuration"/>
+    <testcase time="0.0930000000000035" classname="app_smoke" name="the_app_server_completes_execution_synchronously"/>
+    <testcase time="0.161999999999999" classname="app_smoke" name="app_sessions_share_the_configured_evidence_root"/>
+    <testcase time="0.359000000000002" classname="app_smoke" name="repeated_specifications_persist_as_separate_plots"/>
+    <testcase time="0.00600000000000023" classname="app_smoke" name="repeated_specifications_persist_as_separate_plots"/>
+    <testcase time="0.0810000000000031" classname="app_smoke" name="repeated_specifications_persist_as_separate_plots"/>
+  </testsuite>
+  <testsuite name="artifact-store-contract" timestamp="2026-10-21T05:34:27Z" hostname="91bdab9c50ce" tests="14" skipped="0" failures="0" errors="0" time="0.326">
+    <testcase time="0.0159999999999982" classname="artifact_store_contract" name="local_artifact_store_is_content_addressed_and_detects_corruption"/>
+    <testcase time="0.00399999999999778" classname="artifact_store_contract" name="local_artifact_store_is_content_addressed_and_detects_corruption"/>
+    <testcase time="0.00400000000000489" classname="artifact_store_contract" name="local_artifact_store_is_content_addressed_and_detects_corruption"/>
+    <testcase time="0.0289999999999964" classname="artifact_store_contract" name="local_artifact_store_is_content_addressed_and_detects_corruption"/>
+    <testcase time="0.0200000000000031" classname="artifact_store_contract" name="local_artifact_store_is_content_addressed_and_detects_corruption"/>
+    <testcase time="0.019999999999996" classname="artifact_store_contract" name="local_artifact_store_is_content_addressed_and_detects_corruption"/>
+    <testcase time="0.0579999999999998" classname="artifact_store_contract" name="repository_cleanup_preserves_referenced_content"/>
+    <testcase time="0.00399999999999778" classname="artifact_store_contract" name="repository_cleanup_preserves_referenced_content"/>
+    <testcase time="0.00300000000000011" classname="artifact_store_contract" name="repository_cleanup_preserves_referenced_content"/>
+    <testcase time="0.0619999999999976" classname="artifact_store_contract" name="cleanup_ignores_files_outside_content_addressed_storage"/>
+    <testcase time="0.00600000000000023" classname="artifact_store_contract" name="cleanup_ignores_files_outside_content_addressed_storage"/>
+    <testcase time="0.0129999999999981" classname="artifact_store_contract" name="artifact_stores_retain_their_root_after_working_directory_changes"/>
+    <testcase time="0.00600000000000023" classname="artifact_store_contract" name="artifact_stores_retain_their_root_after_working_directory_changes"/>
+    <testcase time="0.0810000000000031" classname="artifact_store_contract" name="accepted_bundles_recheck_durable_artifact_hashes"/>
+  </testsuite>
+  <testsuite name="attempt-reconciliation" timestamp="2026-10-21T05:34:28Z" hostname="91bdab9c50ce" tests="3" skipped="0" failures="0" errors="0" time="0.08">
+    <testcase time="0.070999999999998" classname="attempt_reconciliation" name="attempt_reconciliation_closes_abandoned_active_attempts"/>
+    <testcase time="0.00300000000000011" classname="attempt_reconciliation" name="attempt_reconciliation_closes_abandoned_active_attempts"/>
+    <testcase time="0.00600000000000023" classname="attempt_reconciliation" name="attempt_reconciliation_closes_abandoned_active_attempts"/>
+  </testsuite>
+  <testsuite name="authorization-service" timestamp="2026-10-21T05:34:28Z" hostname="91bdab9c50ce" tests="2" skipped="0" failures="0" errors="0" time="0.132">
+    <testcase time="0.0859999999999985" classname="authorization_service" name="revision_creators_and_ineligible_actors_cannot_approve"/>
+    <testcase time="0.0459999999999994" classname="authorization_service" name="revision_creators_and_ineligible_actors_cannot_approve"/>
+  </testsuite>
+  <testsuite name="backup-restore" timestamp="2026-10-21T05:34:28Z" hostname="91bdab9c50ce" tests="23" skipped="0" failures="0" errors="0" time="2.571">
+    <testcase time="0.235000000000007" classname="backup_restore" name="backup_and_restore_preserve_history_projections_and_artifacts"/>
+    <testcase time="0.0700000000000003" classname="backup_restore" name="backup_and_restore_preserve_history_projections_and_artifacts"/>
+    <testcase time="0.00599999999999312" classname="backup_restore" name="backup_and_restore_preserve_history_projections_and_artifacts"/>
+    <testcase time="0.00600000000000023" classname="backup_restore" name="backup_and_restore_preserve_history_projections_and_artifacts"/>
+    <testcase time="0.00500000000000256" classname="backup_restore" name="backup_and_restore_preserve_history_projections_and_artifacts"/>
+    <testcase time="0.00600000000000023" classname="backup_restore" name="backup_and_restore_preserve_history_projections_and_artifacts"/>
+    <testcase time="0.00500000000000256" classname="backup_restore" name="backup_and_restore_preserve_history_projections_and_artifacts"/>
+    <testcase time="0.0180000000000007" classname="backup_restore" name="backup_and_restore_preserve_history_projections_and_artifacts"/>
+    <testcase time="0.00399999999999778" classname="backup_restore" name="backup_and_restore_preserve_history_projections_and_artifacts"/>
+    <testcase time="0.00300000000000011" classname="backup_restore" name="backup_and_restore_preserve_history_projections_and_artifacts"/>
+    <testcase time="0.210000000000001" classname="backup_restore" name="restore_rejects_incomplete_or_modified_backups"/>
+    <testcase time="0.00900000000000034" classname="backup_restore" name="restore_rejects_incomplete_or_modified_backups"/>
+    <testcase time="1.394" classname="backup_restore" name="backup_remains_consistent_with_a_concurrent_lifecycle_write"/>
+    <testcase time="0.00399999999999778" classname="backup_restore" name="backup_remains_consistent_with_a_concurrent_lifecycle_write"/>
+    <testcase time="0.00400000000000489" classname="backup_restore" name="backup_remains_consistent_with_a_concurrent_lifecycle_write"/>
+    <testcase time="0.00499999999999545" classname="backup_restore" name="backup_remains_consistent_with_a_concurrent_lifecycle_write"/>
+    <testcase time="0.102000000000004" classname="backup_restore" name="backup_remains_consistent_with_a_concurrent_lifecycle_write"/>
+    <testcase time="0.0229999999999961" classname="backup_restore" name="backup_remains_consistent_with_a_concurrent_lifecycle_write"/>
+    <testcase time="0.166000000000004" classname="backup_restore" name="empty_repositories_can_be_backed_up_and_restored"/>
+    <testcase time="0.0069999999999979" classname="backup_restore" name="empty_repositories_can_be_backed_up_and_restored"/>
+    <testcase time="0.0859999999999985" classname="backup_restore" name="nonempty_backups_require_artifact_reconciliation"/>
+    <testcase time="0.189" classname="backup_restore" name="failed_artifact_verification_leaves_no_restore_destination"/>
+    <testcase time="0.0140000000000029" classname="backup_restore" name="failed_artifact_verification_leaves_no_restore_destination"/>
+  </testsuite>
+  <testsuite name="bds-profile" timestamp="2026-10-21T05:34:30Z" hostname="91bdab9c50ce" tests="64" skipped="0" failures="0" errors="0" time="0.427">
+    <testcase time="0.0159999999999982" classname="bds_profile" name="profile_requires_permitted_BDS_metadata_and_required_variables"/>
+    <testcase time="0.00399999999999778" classname="bds_profile" name="profile_requires_permitted_BDS_metadata_and_required_variables"/>
+    <testcase time="0.00600000000000023" classname="bds_profile" name="profile_requires_permitted_BDS_metadata_and_required_variables"/>
+    <testcase time="0.00400000000000489" classname="bds_profile" name="profile_requires_permitted_BDS_metadata_and_required_variables"/>
+    <testcase time="0.019999999999996" classname="bds_profile" name="profile_does_not_silently_filter_by_analysis_flags"/>
+    <testcase time="0.00399999999999778" classname="bds_profile" name="profile_does_not_silently_filter_by_analysis_flags"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="profile_does_not_silently_filter_by_analysis_flags"/>
+    <testcase time="0.00100000000000477" classname="bds_profile" name="profile_does_not_silently_filter_by_analysis_flags"/>
+    <testcase time="0.0169999999999959" classname="bds_profile" name="profile_keeps_selected_records_and_distinct_nonmissing_subjects"/>
+    <testcase time="0.00200000000000244" classname="bds_profile" name="profile_keeps_selected_records_and_distinct_nonmissing_subjects"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="profile_keeps_selected_records_and_distinct_nonmissing_subjects"/>
+    <testcase time="0.00200000000000244" classname="bds_profile" name="profile_keeps_selected_records_and_distinct_nonmissing_subjects"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="profile_keeps_selected_records_and_distinct_nonmissing_subjects"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="profile_keeps_selected_records_and_distinct_nonmissing_subjects"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="profile_keeps_selected_records_and_distinct_nonmissing_subjects"/>
+    <testcase time="0.0259999999999962" classname="bds_profile" name="analysis_data_is_minimal_pseudonymous_and_deterministic"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="analysis_data_is_minimal_pseudonymous_and_deterministic"/>
+    <testcase time="0.00200000000000244" classname="bds_profile" name="analysis_data_is_minimal_pseudonymous_and_deterministic"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="analysis_data_is_minimal_pseudonymous_and_deterministic"/>
+    <testcase time="0.0109999999999957" classname="bds_profile" name="analysis_data_is_minimal_pseudonymous_and_deterministic"/>
+    <testcase time="0.00800000000000267" classname="bds_profile" name="multiple_units_require_an_explicit_authorized_choice"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="multiple_units_require_an_explicit_authorized_choice"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="multiple_units_require_an_explicit_authorized_choice"/>
+    <testcase time="0.00200000000000244" classname="bds_profile" name="multiple_units_require_an_explicit_authorized_choice"/>
+    <testcase time="0.019999999999996" classname="bds_profile" name="multiple_units_require_an_explicit_authorized_choice"/>
+    <testcase time="0.00500000000000256" classname="bds_profile" name="multiple_units_require_an_explicit_authorized_choice"/>
+    <testcase time="0.0159999999999982" classname="bds_profile" name="duplicate_visit_keys_block_with_ephemeral_authorized_detail_only"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="duplicate_visit_keys_block_with_ephemeral_authorized_detail_only"/>
+    <testcase time="0.000999999999997669" classname="bds_profile" name="duplicate_visit_keys_block_with_ephemeral_authorized_detail_only"/>
+    <testcase time="0.00400000000000489" classname="bds_profile" name="duplicate_visit_keys_block_with_ephemeral_authorized_detail_only"/>
+    <testcase time="0.00399999999999778" classname="bds_profile" name="duplicate_visit_keys_block_with_ephemeral_authorized_detail_only"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="duplicate_visit_keys_block_with_ephemeral_authorized_detail_only"/>
+    <testcase time="0.00500000000000256" classname="bds_profile" name="duplicate_visit_keys_block_with_ephemeral_authorized_detail_only"/>
+    <testcase time="0.0219999999999985" classname="bds_profile" name="visit_mapping_defects_block_deterministically"/>
+    <testcase time="0.00399999999999778" classname="bds_profile" name="visit_mapping_defects_block_deterministically"/>
+    <testcase time="0.00800000000000267" classname="bds_profile" name="numeric_Y_and_complete_selected_profile_keys_are_required"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="numeric_Y_and_complete_selected_profile_keys_are_required"/>
+    <testcase time="0.00399999999999778" classname="bds_profile" name="numeric_Y_and_complete_selected_profile_keys_are_required"/>
+    <testcase time="0.00399999999999778" classname="bds_profile" name="numeric_Y_and_complete_selected_profile_keys_are_required"/>
+    <testcase time="0.00500000000000256" classname="bds_profile" name="numeric_Y_and_complete_selected_profile_keys_are_required"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="numeric_Y_and_complete_selected_profile_keys_are_required"/>
+    <testcase time="0.0150000000000006" classname="bds_profile" name="explicit_exclusions_precede_key_checks_and_propagate_downstream"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="explicit_exclusions_precede_key_checks_and_propagate_downstream"/>
+    <testcase time="0.00200000000000244" classname="bds_profile" name="explicit_exclusions_precede_key_checks_and_propagate_downstream"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="explicit_exclusions_precede_key_checks_and_propagate_downstream"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="explicit_exclusions_precede_key_checks_and_propagate_downstream"/>
+    <testcase time="0.0139999999999958" classname="bds_profile" name="empty_combinations_and_empty_facets_do_not_create_display_rows"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="empty_combinations_and_empty_facets_do_not_create_display_rows"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="empty_combinations_and_empty_facets_do_not_create_display_rows"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="empty_combinations_and_empty_facets_do_not_create_display_rows"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="empty_combinations_and_empty_facets_do_not_create_display_rows"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="empty_combinations_and_empty_facets_do_not_create_display_rows"/>
+    <testcase time="0.00999999999999801" classname="bds_profile" name="additional_timepoint_keys_are_unsupported_not_invalid_ADaM_"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="additional_timepoint_keys_are_unsupported_not_invalid_ADaM_"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="additional_timepoint_keys_are_unsupported_not_invalid_ADaM_"/>
+    <testcase time="0.0320000000000036" classname="bds_profile" name="row_permutation_preserves_choices_diagnostics_and_analysis"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="row_permutation_preserves_choices_diagnostics_and_analysis"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="row_permutation_preserves_choices_diagnostics_and_analysis"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="row_permutation_preserves_choices_diagnostics_and_analysis"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="row_permutation_preserves_choices_diagnostics_and_analysis"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="row_permutation_preserves_choices_diagnostics_and_analysis"/>
+    <testcase time="0.00300000000000011" classname="bds_profile" name="row_permutation_preserves_choices_diagnostics_and_analysis"/>
+    <testcase time="0.0259999999999962" classname="bds_profile" name="non_default_low_N_thresholds_require_retained_sponsor_approval"/>
+    <testcase time="0.0140000000000029" classname="bds_profile" name="non_default_low_N_thresholds_require_retained_sponsor_approval"/>
+  </testsuite>
+  <testsuite name="boxplot-assembly" timestamp="2026-10-21T05:34:31Z" hostname="91bdab9c50ce" tests="30" skipped="0" failures="0" errors="0" time="1.715">
+    <testcase time="0.274999999999999" classname="boxplot_assembly" name="plot_layers_use_the_oracle_and_the_N_strip_remains_aligned"/>
+    <testcase time="0.00200000000000244" classname="boxplot_assembly" name="plot_layers_use_the_oracle_and_the_N_strip_remains_aligned"/>
+    <testcase time="0.000999999999997669" classname="boxplot_assembly" name="plot_layers_use_the_oracle_and_the_N_strip_remains_aligned"/>
+    <testcase time="0.00399999999999778" classname="boxplot_assembly" name="plot_layers_use_the_oracle_and_the_N_strip_remains_aligned"/>
+    <testcase time="0.00300000000000011" classname="boxplot_assembly" name="plot_layers_use_the_oracle_and_the_N_strip_remains_aligned"/>
+    <testcase time="0.00300000000000011" classname="boxplot_assembly" name="plot_layers_use_the_oracle_and_the_N_strip_remains_aligned"/>
+    <testcase time="0.00300000000000011" classname="boxplot_assembly" name="plot_layers_use_the_oracle_and_the_N_strip_remains_aligned"/>
+    <testcase time="0.00300000000000011" classname="boxplot_assembly" name="plot_layers_use_the_oracle_and_the_N_strip_remains_aligned"/>
+    <testcase time="0.00300000000000011" classname="boxplot_assembly" name="plot_layers_use_the_oracle_and_the_N_strip_remains_aligned"/>
+    <testcase time="0.00300000000000011" classname="boxplot_assembly" name="plot_layers_use_the_oracle_and_the_N_strip_remains_aligned"/>
+    <testcase time="0.00100000000000477" classname="boxplot_assembly" name="plot_layers_use_the_oracle_and_the_N_strip_remains_aligned"/>
+    <testcase time="0.00300000000000011" classname="boxplot_assembly" name="plot_layers_use_the_oracle_and_the_N_strip_remains_aligned"/>
+    <testcase time="0.00300000000000011" classname="boxplot_assembly" name="plot_layers_use_the_oracle_and_the_N_strip_remains_aligned"/>
+    <testcase time="0.00300000000000011" classname="boxplot_assembly" name="plot_layers_use_the_oracle_and_the_N_strip_remains_aligned"/>
+    <testcase time="0.00299999999999301" classname="boxplot_assembly" name="plot_layers_use_the_oracle_and_the_N_strip_remains_aligned"/>
+    <testcase time="0.00300000000000011" classname="boxplot_assembly" name="plot_layers_use_the_oracle_and_the_N_strip_remains_aligned"/>
+    <testcase time="0.425000000000004" classname="boxplot_assembly" name="free_scales_change_status_but_not_analytical_values"/>
+    <testcase time="0.00300000000000011" classname="boxplot_assembly" name="free_scales_change_status_but_not_analytical_values"/>
+    <testcase time="0.00300000000000011" classname="boxplot_assembly" name="free_scales_change_status_but_not_analytical_values"/>
+    <testcase time="0.00199999999999534" classname="boxplot_assembly" name="free_scales_change_status_but_not_analytical_values"/>
+    <testcase time="0.00100000000000477" classname="boxplot_assembly" name="free_scales_change_status_but_not_analytical_values"/>
+    <testcase time="0.00100000000000477" classname="boxplot_assembly" name="free_scales_change_status_but_not_analytical_values"/>
+    <testcase time="0.00300000000000011" classname="boxplot_assembly" name="free_scales_change_status_but_not_analytical_values"/>
+    <testcase time="0.00300000000000011" classname="boxplot_assembly" name="free_scales_change_status_but_not_analytical_values"/>
+    <testcase time="0.940999999999988" classname="boxplot_assembly" name="long_visit_labels_render_at_the_governed_export_dimensions"/>
+    <testcase time="0.00400000000000489" classname="boxplot_assembly" name="long_visit_labels_render_at_the_governed_export_dimensions"/>
+    <testcase time="0.00300000000000011" classname="boxplot_assembly" name="long_visit_labels_render_at_the_governed_export_dimensions"/>
+    <testcase time="0.00300000000000011" classname="boxplot_assembly" name="long_visit_labels_render_at_the_governed_export_dimensions"/>
+    <testcase time="0.00400000000000489" classname="boxplot_assembly" name="long_visit_labels_render_at_the_governed_export_dimensions"/>
+    <testcase time="0.00300000000000011" classname="boxplot_assembly" name="long_visit_labels_render_at_the_governed_export_dimensions"/>
+  </testsuite>
+  <testsuite name="boxplot-compiler" timestamp="2026-10-21T05:34:33Z" hostname="91bdab9c50ce" tests="35" skipped="0" failures="0" errors="0" time="1.034">
+    <testcase time="0.0150000000000006" classname="boxplot_compiler" name="compiler_emits_stable_parseable_governed_code"/>
+    <testcase time="0.00199999999999534" classname="boxplot_compiler" name="compiler_emits_stable_parseable_governed_code"/>
+    <testcase time="0.00400000000000489" classname="boxplot_compiler" name="compiler_emits_stable_parseable_governed_code"/>
+    <testcase time="0.00300000000000011" classname="boxplot_compiler" name="compiler_emits_stable_parseable_governed_code"/>
+    <testcase time="0.000999999999990564" classname="boxplot_compiler" name="compiler_emits_stable_parseable_governed_code"/>
+    <testcase time="0.00300000000000011" classname="boxplot_compiler" name="compiler_emits_stable_parseable_governed_code"/>
+    <testcase time="0.00300000000000011" classname="boxplot_compiler" name="compiler_emits_stable_parseable_governed_code"/>
+    <testcase time="0.00100000000000477" classname="boxplot_compiler" name="compiler_emits_stable_parseable_governed_code"/>
+    <testcase time="0.00100000000000477" classname="boxplot_compiler" name="compiler_emits_stable_parseable_governed_code"/>
+    <testcase time="0.00799999999999557" classname="boxplot_compiler" name="compiler_emits_stable_parseable_governed_code"/>
+    <testcase time="0.00199999999999534" classname="boxplot_compiler" name="compiler_emits_stable_parseable_governed_code"/>
+    <testcase time="0.01400000000001" classname="boxplot_compiler" name="compiled_script_requires_explicitly_supplied_analysis_data"/>
+    <testcase time="0.146999999999991" classname="boxplot_compiler" name="compiled_script_reproduces_the_independent_analytical_result"/>
+    <testcase time="0.00300000000000011" classname="boxplot_compiler" name="compiled_script_reproduces_the_independent_analytical_result"/>
+    <testcase time="0.00300000000000011" classname="boxplot_compiler" name="compiled_script_reproduces_the_independent_analytical_result"/>
+    <testcase time="0.00300000000000011" classname="boxplot_compiler" name="compiled_script_reproduces_the_independent_analytical_result"/>
+    <testcase time="0.00300000000000011" classname="boxplot_compiler" name="compiled_script_reproduces_the_independent_analytical_result"/>
+    <testcase time="0.00199999999999534" classname="boxplot_compiler" name="compiled_script_reproduces_the_independent_analytical_result"/>
+    <testcase time="0.0400000000000063" classname="boxplot_compiler" name="compiled_script_reproduces_the_independent_analytical_result"/>
+    <testcase time="0.00799999999999557" classname="boxplot_compiler" name="compiled_script_reproduces_the_independent_analytical_result"/>
+    <testcase time="0.597000000000008" classname="boxplot_compiler" name="compiled_script_reproduces_the_independent_analytical_result"/>
+    <testcase time="0.00399999999999068" classname="boxplot_compiler" name="compiled_script_reproduces_the_independent_analytical_result"/>
+    <testcase time="0.0350000000000108" classname="boxplot_compiler" name="artifact_manifest_binds_only_U4_reproducibility_evidence"/>
+    <testcase time="0.00399999999999068" classname="boxplot_compiler" name="artifact_manifest_binds_only_U4_reproducibility_evidence"/>
+    <testcase time="0.00300000000000011" classname="boxplot_compiler" name="artifact_manifest_binds_only_U4_reproducibility_evidence"/>
+    <testcase time="0.00300000000000011" classname="boxplot_compiler" name="artifact_manifest_binds_only_U4_reproducibility_evidence"/>
+    <testcase time="0.00600000000000023" classname="boxplot_compiler" name="artifact_manifest_binds_only_U4_reproducibility_evidence"/>
+    <testcase time="0.00300000000000011" classname="boxplot_compiler" name="artifact_manifest_binds_only_U4_reproducibility_evidence"/>
+    <testcase time="0.00300000000000011" classname="boxplot_compiler" name="artifact_manifest_binds_only_U4_reproducibility_evidence"/>
+    <testcase time="0.00400000000000489" classname="boxplot_compiler" name="artifact_manifest_binds_only_U4_reproducibility_evidence"/>
+    <testcase time="0.00300000000000011" classname="boxplot_compiler" name="artifact_manifest_binds_only_U4_reproducibility_evidence"/>
+    <testcase time="0.0429999999999922" classname="boxplot_compiler" name="artifact_manifest_rejects_inconsistent_U4_inputs"/>
+    <testcase time="0.027000000000001" classname="boxplot_compiler" name="artifact_manifest_rejects_inconsistent_U4_inputs"/>
+    <testcase time="0.0260000000000105" classname="boxplot_compiler" name="artifact_manifest_rejects_inconsistent_U4_inputs"/>
+    <testcase time="0.00699999999999079" classname="boxplot_compiler" name="compiler_retains_the_exact_approved_low_N_threshold"/>
+  </testsuite>
+  <testsuite name="boxplot-statistics" timestamp="2026-10-21T05:34:34Z" hostname="91bdab9c50ce" tests="19" skipped="0" failures="0" errors="0" time="0.17">
+    <testcase time="0.0260000000000105" classname="boxplot_statistics" name="independent_fixtures_match_explicit_type_7_box_statistics"/>
+    <testcase time="0.00399999999999068" classname="boxplot_statistics" name="independent_fixtures_match_explicit_type_7_box_statistics"/>
+    <testcase time="0.00300000000000011" classname="boxplot_statistics" name="independent_fixtures_match_explicit_type_7_box_statistics"/>
+    <testcase time="0.00300000000000011" classname="boxplot_statistics" name="independent_fixtures_match_explicit_type_7_box_statistics"/>
+    <testcase time="0.00499999999999545" classname="boxplot_statistics" name="independent_fixtures_match_explicit_type_7_box_statistics"/>
+    <testcase time="0.00400000000000489" classname="boxplot_statistics" name="independent_fixtures_match_explicit_type_7_box_statistics"/>
+    <testcase time="0.00300000000000011" classname="boxplot_statistics" name="independent_fixtures_match_explicit_type_7_box_statistics"/>
+    <testcase time="0.00300000000000011" classname="boxplot_statistics" name="independent_fixtures_match_explicit_type_7_box_statistics"/>
+    <testcase time="0.0240000000000009" classname="boxplot_statistics" name="missing_values_and_empty_combinations_create_no_analytical_rows"/>
+    <testcase time="0.00300000000000011" classname="boxplot_statistics" name="missing_values_and_empty_combinations_create_no_analytical_rows"/>
+    <testcase time="0.00300000000000011" classname="boxplot_statistics" name="missing_values_and_empty_combinations_create_no_analytical_rows"/>
+    <testcase time="0.00300000000000011" classname="boxplot_statistics" name="missing_values_and_empty_combinations_create_no_analytical_rows"/>
+    <testcase time="0.0240000000000009" classname="boxplot_statistics" name="row_order_does_not_change_the_analytical_object_or_hash"/>
+    <testcase time="0.0150000000000006" classname="boxplot_statistics" name="row_order_does_not_change_the_analytical_object_or_hash"/>
+    <testcase time="0.012999999999991" classname="boxplot_statistics" name="treatment_and_visit_values_cannot_collide_as_grouping_keys"/>
+    <testcase time="0.00400000000000489" classname="boxplot_statistics" name="treatment_and_visit_values_cannot_collide_as_grouping_keys"/>
+    <testcase time="0.00400000000000489" classname="boxplot_statistics" name="treatment_and_visit_values_cannot_collide_as_grouping_keys"/>
+    <testcase time="0.00300000000000011" classname="boxplot_statistics" name="treatment_and_visit_values_cannot_collide_as_grouping_keys"/>
+    <testcase time="0.0229999999999961" classname="boxplot_statistics" name="selected_non_finite_Y_values_are_rejected"/>
+  </testsuite>
+  <testsuite name="domain-execution-protocol" timestamp="2026-10-21T05:34:34Z" hostname="91bdab9c50ce" tests="3" skipped="0" failures="0" errors="0" time="0.024">
+    <testcase time="0.012999999999991" classname="domain_execution_protocol" name="execution_manifests_bind_the_specification_and_environment"/>
+    <testcase time="0.00300000000000011" classname="domain_execution_protocol" name="execution_manifests_bind_the_specification_and_environment"/>
+    <testcase time="0.00800000000000978" classname="domain_execution_protocol" name="canonical_serialization_is_order_stable"/>
+  </testsuite>
+  <testsuite name="domain-plot-spec" timestamp="2026-10-21T05:34:34Z" hostname="91bdab9c50ce" tests="5" skipped="0" failures="0" errors="0" time="0.131">
+    <testcase time="0.012999999999991" classname="domain_plot_spec" name="a_complete_plot_specification_becomes_confirmable"/>
+    <testcase time="0.00300000000000011" classname="domain_plot_spec" name="a_complete_plot_specification_becomes_confirmable"/>
+    <testcase time="0.00500000000000966" classname="domain_plot_spec" name="incomplete_specifications_require_clarification"/>
+    <testcase time="0.0559999999999974" classname="domain_plot_spec" name="unsupported_y_variables_and_unknown_provenance_are_rejected"/>
+    <testcase time="0.054000000000002" classname="domain_plot_spec" name="unsupported_y_variables_and_unknown_provenance_are_rejected"/>
+  </testsuite>
+  <testsuite name="domain-status" timestamp="2026-10-21T05:34:34Z" hostname="91bdab9c50ce" tests="3" skipped="0" failures="0" errors="0" time="0.059">
+    <testcase time="0.0120000000000005" classname="domain_status" name="only_legal_lifecycle_transitions_are_accepted"/>
+    <testcase time="0.0390000000000015" classname="domain_status" name="only_legal_lifecycle_transitions_are_accepted"/>
+    <testcase time="0.00799999999999557" classname="domain_status" name="free_scale_revisions_start_as_experimental_drafts"/>
+  </testsuite>
+  <testsuite name="evidence-repository-contract" timestamp="2026-10-21T05:34:34Z" hostname="91bdab9c50ce" tests="18" skipped="0" failures="0" errors="0" time="0.566">
+    <testcase time="0.0669999999999931" classname="evidence_repository_contract" name="repository_history_is_append_only_and_idempotent"/>
+    <testcase time="0.007000000000005" classname="evidence_repository_contract" name="repository_history_is_append_only_and_idempotent"/>
+    <testcase time="0.0190000000000055" classname="evidence_repository_contract" name="repository_history_is_append_only_and_idempotent"/>
+    <testcase time="0.0169999999999959" classname="evidence_repository_contract" name="repository_history_is_append_only_and_idempotent"/>
+    <testcase time="0.0660000000000025" classname="evidence_repository_contract" name="attempt_outcomes_evidence_and_bundles_enforce_relationships"/>
+    <testcase time="0.0499999999999972" classname="evidence_repository_contract" name="attempt_outcomes_evidence_and_bundles_enforce_relationships"/>
+    <testcase time="0.0160000000000053" classname="evidence_repository_contract" name="attempt_outcomes_evidence_and_bundles_enforce_relationships"/>
+    <testcase time="0.00199999999999534" classname="evidence_repository_contract" name="attempt_outcomes_evidence_and_bundles_enforce_relationships"/>
+    <testcase time="0.0429999999999922" classname="evidence_repository_contract" name="attempt_outcomes_evidence_and_bundles_enforce_relationships"/>
+    <testcase time="0.0350000000000108" classname="evidence_repository_contract" name="attempt_outcomes_evidence_and_bundles_enforce_relationships"/>
+    <testcase time="0.0219999999999914" classname="evidence_repository_contract" name="attempt_outcomes_evidence_and_bundles_enforce_relationships"/>
+    <testcase time="0.041000000000011" classname="evidence_repository_contract" name="attempt_outcomes_evidence_and_bundles_enforce_relationships"/>
+    <testcase time="0.0439999999999969" classname="evidence_repository_contract" name="generic_lifecycle_commands_cannot_bypass_governed_review"/>
+    <testcase time="0.00600000000000023" classname="evidence_repository_contract" name="generic_lifecycle_commands_cannot_bypass_governed_review"/>
+    <testcase time="0.00600000000000023" classname="evidence_repository_contract" name="generic_lifecycle_commands_cannot_bypass_governed_review"/>
+    <testcase time="0.0720000000000027" classname="evidence_repository_contract" name="direct_repository_calls_cannot_bypass_correction_rules"/>
+    <testcase time="0.0449999999999875" classname="evidence_repository_contract" name="direct_repository_calls_cannot_bypass_correction_rules"/>
+    <testcase time="0.00800000000000978" classname="evidence_repository_contract" name="direct_repository_calls_cannot_bypass_correction_rules"/>
+  </testsuite>
+  <testsuite name="evidence-repository-sqlite" timestamp="2026-10-21T05:34:35Z" hostname="91bdab9c50ce" tests="88" skipped="0" failures="0" errors="0" time="4.034">
+    <testcase time="0.0499999999999972" classname="evidence_repository_sqlite" name="SQLite_connections_enforce_foreign_keys_and_projections_rebuild"/>
+    <testcase time="0.0229999999999961" classname="evidence_repository_sqlite" name="SQLite_connections_enforce_foreign_keys_and_projections_rebuild"/>
+    <testcase time="0.0150000000000006" classname="evidence_repository_sqlite" name="SQLite_connections_enforce_foreign_keys_and_projections_rebuild"/>
+    <testcase time="0.0280000000000058" classname="evidence_repository_sqlite" name="SQLite_connections_enforce_foreign_keys_and_projections_rebuild"/>
+    <testcase time="0.0380000000000109" classname="evidence_repository_sqlite" name="SQLite_connections_enforce_foreign_keys_and_projections_rebuild"/>
+    <testcase time="0.0689999999999884" classname="evidence_repository_sqlite" name="event_corruption_and_external_root_rollback_are_detected"/>
+    <testcase time="0.150000000000006" classname="evidence_repository_sqlite" name="event_omission_and_previous_hash_tampering_are_detected"/>
+    <testcase time="0.0330000000000013" classname="evidence_repository_sqlite" name="event_omission_and_previous_hash_tampering_are_detected"/>
+    <testcase time="0.0919999999999987" classname="evidence_repository_sqlite" name="rollback_to_an_older_database_copy_is_detected_by_the_root"/>
+    <testcase time="0.0949999999999989" classname="evidence_repository_sqlite" name="integrity_checks_reconcile_bound_evidence_hashes"/>
+    <testcase time="0.165999999999997" classname="evidence_repository_sqlite" name="integrity_checks_detect_evidence_and_decision_metadata_tampering"/>
+    <testcase time="0.034000000000006" classname="evidence_repository_sqlite" name="integrity_checks_detect_evidence_and_decision_metadata_tampering"/>
+    <testcase time="0.0769999999999982" classname="evidence_repository_sqlite" name="external_roots_cannot_contain_plots_absent_from_the_database"/>
+    <testcase time="0.0580000000000069" classname="evidence_repository_sqlite" name="retry_reconciles_a_root_publication_failure"/>
+    <testcase time="0.00600000000000023" classname="evidence_repository_sqlite" name="retry_reconciles_a_root_publication_failure"/>
+    <testcase time="0.0369999999999919" classname="evidence_repository_sqlite" name="retry_reconciles_a_root_publication_failure"/>
+    <testcase time="0.007000000000005" classname="evidence_repository_sqlite" name="retry_reconciles_a_root_publication_failure"/>
+    <testcase time="0.0790000000000077" classname="evidence_repository_sqlite" name="a_missing_external_root_blocks_new_lifecycle_commands"/>
+    <testcase time="0.00600000000000023" classname="evidence_repository_sqlite" name="a_missing_external_root_blocks_new_lifecycle_commands"/>
+    <testcase time="0.0279999999999916" classname="evidence_repository_sqlite" name="a_missing_external_root_blocks_new_lifecycle_commands"/>
+    <testcase time="0.00600000000000023" classname="evidence_repository_sqlite" name="a_missing_external_root_blocks_new_lifecycle_commands"/>
+    <testcase time="0.103999999999999" classname="evidence_repository_sqlite" name="attempt_identifiers_cannot_be_reused_for_a_different_command"/>
+    <testcase time="0.0360000000000014" classname="evidence_repository_sqlite" name="attempt_identifiers_cannot_be_reused_for_a_different_command"/>
+    <testcase time="0.00699999999999079" classname="evidence_repository_sqlite" name="attempt_identifiers_cannot_be_reused_for_a_different_command"/>
+    <testcase time="0.00600000000000023" classname="evidence_repository_sqlite" name="attempt_identifiers_cannot_be_reused_for_a_different_command"/>
+    <testcase time="0.0570000000000022" classname="evidence_repository_sqlite" name="evidence_details_must_use_unique_names"/>
+    <testcase time="0.0190000000000055" classname="evidence_repository_sqlite" name="evidence_details_must_use_unique_names"/>
+    <testcase time="0.0279999999999916" classname="evidence_repository_sqlite" name="database_initialization_applies_versioned_migrations"/>
+    <testcase time="0.00500000000000966" classname="evidence_repository_sqlite" name="database_initialization_applies_versioned_migrations"/>
+    <testcase time="0.0420000000000016" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00499999999999545" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00499999999999545" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00400000000000489" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00499999999999545" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00400000000000489" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00400000000000489" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00499999999999545" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00400000000000489" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00399999999999068" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00400000000000489" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00400000000000489" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00399999999999068" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00499999999999545" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00400000000000489" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00400000000000489" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00499999999999545" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00400000000000489" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00399999999999068" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00500000000000966" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00399999999999068" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00400000000000489" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00400000000000489" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00399999999999068" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.0100000000000051" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00600000000000023" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00400000000000489" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00500000000000966" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00499999999999545" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00499999999999545" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00500000000000966" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00499999999999545" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00400000000000489" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00399999999999068" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00400000000000489" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00400000000000489" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="0.00399999999999068" classname="evidence_repository_sqlite" name="schema_snapshot_matches_the_numbered_migrations"/>
+    <testcase time="1.51000000000001" classname="evidence_repository_sqlite" name="writes_projection_rebuilds_and_integrity_checks_serialize"/>
+    <testcase time="0.00699999999999079" classname="evidence_repository_sqlite" name="writes_projection_rebuilds_and_integrity_checks_serialize"/>
+    <testcase time="0.0130000000000052" classname="evidence_repository_sqlite" name="writes_projection_rebuilds_and_integrity_checks_serialize"/>
+    <testcase time="0.0250000000000057" classname="evidence_repository_sqlite" name="writes_projection_rebuilds_and_integrity_checks_serialize"/>
+    <testcase time="0.0679999999999978" classname="evidence_repository_sqlite" name="artifact_acceptance_binds_pending_revision_hashes_once"/>
+    <testcase time="0.00300000000000011" classname="evidence_repository_sqlite" name="artifact_acceptance_binds_pending_revision_hashes_once"/>
+    <testcase time="0.0390000000000015" classname="evidence_repository_sqlite" name="artifact_acceptance_binds_pending_revision_hashes_once"/>
+    <testcase time="0.11099999999999" classname="evidence_repository_sqlite" name="Draft_promotion_requires_linked_passing_execution_evidence"/>
+    <testcase time="0.007000000000005" classname="evidence_repository_sqlite" name="Draft_promotion_requires_linked_passing_execution_evidence"/>
+    <testcase time="0.123999999999995" classname="evidence_repository_sqlite" name="linked_passing_execution_evidence_allows_Draft_promotion"/>
+    <testcase time="0.119" classname="evidence_repository_sqlite" name="Draft_promotion_rejects_incomplete_execution_evidence"/>
+    <testcase time="0.007000000000005" classname="evidence_repository_sqlite" name="Draft_promotion_rejects_incomplete_execution_evidence"/>
+    <testcase time="0.131" classname="evidence_repository_sqlite" name="Draft_promotion_rejects_incomplete_execution_evidence"/>
+    <testcase time="0.007000000000005" classname="evidence_repository_sqlite" name="Draft_promotion_rejects_incomplete_execution_evidence"/>
+    <testcase time="0.10799999999999" classname="evidence_repository_sqlite" name="Draft_promotion_rejects_incomplete_execution_evidence"/>
+    <testcase time="0.01400000000001" classname="evidence_repository_sqlite" name="Draft_promotion_rejects_incomplete_execution_evidence"/>
+    <testcase time="0.111999999999995" classname="evidence_repository_sqlite" name="Draft_promotion_rejects_incomplete_execution_evidence"/>
+    <testcase time="0.007000000000005" classname="evidence_repository_sqlite" name="Draft_promotion_rejects_incomplete_execution_evidence"/>
+    <testcase time="0.0480000000000018" classname="evidence_repository_sqlite" name="revision_creation_persists_every_inserted_column"/>
+    <testcase time="0.00300000000000011" classname="evidence_repository_sqlite" name="revision_creation_persists_every_inserted_column"/>
+    <testcase time="0.00300000000000011" classname="evidence_repository_sqlite" name="revision_creation_persists_every_inserted_column"/>
+    <testcase time="0.00300000000000011" classname="evidence_repository_sqlite" name="revision_creation_persists_every_inserted_column"/>
+  </testsuite>
+  <testsuite name="execution-runner-callr" timestamp="2026-10-21T05:34:39Z" hostname="91bdab9c50ce" tests="6" skipped="2" failures="0" errors="0" time="2.324">
+    <testcase time="2.271" classname="execution_runner_callr" name="callr_runner_executes_in_a_clean_subprocess"/>
+    <testcase time="0.00499999999999545" classname="execution_runner_callr" name="callr_runner_executes_in_a_clean_subprocess"/>
+    <testcase time="0.00199999999999534" classname="execution_runner_callr" name="callr_runner_executes_in_a_clean_subprocess"/>
+    <testcase time="0.00400000000000489" classname="execution_runner_callr" name="callr_runner_executes_in_a_clean_subprocess"/>
+    <testcase time="0.007000000000005" classname="execution_runner_callr" name="callr_runner_resolves_the_source_root_from_a_nested_directory">
+      <skipped message="Reason: source checkout is unavailable ('test-execution-runner-callr.R:30:3')"/>
+    </testcase>
+    <testcase time="0.0349999999999966" classname="execution_runner_callr" name="callr_runner_honors_an_explicitly_configured_source_root">
+      <skipped message="Reason: source checkout is unavailable ('test-execution-runner-callr.R:38:3')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="execution-runner-contract" timestamp="2026-10-21T05:34:41Z" hostname="91bdab9c50ce" tests="11" skipped="0" failures="0" errors="0" time="0.966">
+    <testcase time="0.878" classname="execution_runner_contract" name="local_runner_returns_a_bounded_versioned_result_manifest"/>
+    <testcase time="0.00499999999999545" classname="execution_runner_contract" name="local_runner_returns_a_bounded_versioned_result_manifest"/>
+    <testcase time="0.00199999999999534" classname="execution_runner_contract" name="local_runner_returns_a_bounded_versioned_result_manifest"/>
+    <testcase time="0.00400000000000489" classname="execution_runner_contract" name="local_runner_returns_a_bounded_versioned_result_manifest"/>
+    <testcase time="0.00300000000000011" classname="execution_runner_contract" name="local_runner_returns_a_bounded_versioned_result_manifest"/>
+    <testcase time="0.007000000000005" classname="execution_runner_contract" name="local_runner_returns_a_bounded_versioned_result_manifest"/>
+    <testcase time="0.000999999999990564" classname="execution_runner_contract" name="local_runner_returns_a_bounded_versioned_result_manifest"/>
+    <testcase time="0.007000000000005" classname="execution_runner_contract" name="local_runner_returns_a_bounded_versioned_result_manifest"/>
+    <testcase time="0.00399999999999068" classname="execution_runner_contract" name="local_runner_returns_a_bounded_versioned_result_manifest"/>
+    <testcase time="0.0370000000000061" classname="execution_runner_contract" name="runner_rejects_mismatched_scripts_and_non_POC_classifications"/>
+    <testcase time="0.0180000000000007" classname="execution_runner_contract" name="runner_rejects_mismatched_scripts_and_non_POC_classifications"/>
+  </testsuite>
+  <testsuite name="execution-service" timestamp="2026-10-21T05:34:42Z" hostname="91bdab9c50ce" tests="13" skipped="0" failures="0" errors="0" time="0.781">
+    <testcase time="0.283000000000001" classname="execution_service" name="execution_service_promotes_only_a_complete_passing_attempt"/>
+    <testcase time="0.00600000000000023" classname="execution_service" name="execution_service_promotes_only_a_complete_passing_attempt"/>
+    <testcase time="0.00600000000000023" classname="execution_service" name="execution_service_promotes_only_a_complete_passing_attempt"/>
+    <testcase time="0.00499999999999545" classname="execution_service" name="execution_service_promotes_only_a_complete_passing_attempt"/>
+    <testcase time="0.102999999999994" classname="execution_service" name="failed_verification_records_terminal_failure_without_promotion"/>
+    <testcase time="0.00600000000000023" classname="execution_service" name="failed_verification_records_terminal_failure_without_promotion"/>
+    <testcase time="0.00600000000000023" classname="execution_service" name="failed_verification_records_terminal_failure_without_promotion"/>
+    <testcase time="0.00500000000000966" classname="execution_service" name="failed_verification_records_terminal_failure_without_promotion"/>
+    <testcase time="0.234999999999999" classname="execution_service" name="experimental_drafts_cannot_inherit_governed_verification"/>
+    <testcase time="0.00699999999999079" classname="execution_service" name="experimental_drafts_cannot_inherit_governed_verification"/>
+    <testcase time="0.00600000000000023" classname="execution_service" name="experimental_drafts_cannot_inherit_governed_verification"/>
+    <testcase time="0.106999999999999" classname="execution_service" name="runner_errors_leave_one_terminal_failed_attempt"/>
+    <testcase time="0.00600000000000023" classname="execution_service" name="runner_errors_leave_one_terminal_failed_attempt"/>
+  </testsuite>
+  <testsuite name="export-reconciliation" timestamp="2026-10-21T05:34:43Z" hostname="91bdab9c50ce" tests="2" skipped="0" failures="0" errors="0" time="0.021">
+    <testcase time="0.0170000000000101" classname="export_reconciliation" name="reconciliation_has_no_effect_when_no_staged_exports_exist"/>
+    <testcase time="0.00399999999999068" classname="export_reconciliation" name="reconciliation_has_no_effect_when_no_staged_exports_exist"/>
+  </testsuite>
+  <testsuite name="export-service" timestamp="2026-10-21T05:34:43Z" hostname="91bdab9c50ce" tests="19" skipped="0" failures="0" errors="0" time="1.473">
+    <testcase time="0.237000000000009" classname="export_service" name="export_service_publishes_accepted_bundles_and_records_receipts"/>
+    <testcase time="0.00499999999999545" classname="export_service" name="export_service_publishes_accepted_bundles_and_records_receipts"/>
+    <testcase time="0.00400000000000489" classname="export_service" name="export_service_publishes_accepted_bundles_and_records_receipts"/>
+    <testcase time="0.00799999999999557" classname="export_service" name="export_service_publishes_accepted_bundles_and_records_receipts"/>
+    <testcase time="0.0229999999999961" classname="export_service" name="export_service_publishes_accepted_bundles_and_records_receipts"/>
+    <testcase time="0.0130000000000052" classname="export_service" name="export_service_publishes_accepted_bundles_and_records_receipts"/>
+    <testcase time="0.00400000000000489" classname="export_service" name="export_service_publishes_accepted_bundles_and_records_receipts"/>
+    <testcase time="0.00399999999999068" classname="export_service" name="export_service_publishes_accepted_bundles_and_records_receipts"/>
+    <testcase time="0.0260000000000105" classname="export_service" name="export_service_publishes_accepted_bundles_and_records_receipts"/>
+    <testcase time="0.0179999999999865" classname="export_service" name="export_service_publishes_accepted_bundles_and_records_receipts"/>
+    <testcase time="0.0560000000000116" classname="export_service" name="export_service_publishes_accepted_bundles_and_records_receipts"/>
+    <testcase time="0.22999999999999" classname="export_service" name="export_denies_actors_revisions_destinations_and_tokens"/>
+    <testcase time="0.0210000000000008" classname="export_service" name="export_denies_actors_revisions_destinations_and_tokens"/>
+    <testcase time="0.034000000000006" classname="export_service" name="export_denies_actors_revisions_destinations_and_tokens"/>
+    <testcase time="0.0229999999999961" classname="export_service" name="export_denies_actors_revisions_destinations_and_tokens"/>
+    <testcase time="0.341999999999999" classname="export_service" name="export_denies_actors_revisions_destinations_and_tokens"/>
+    <testcase time="0.121000000000009" classname="export_service" name="export_denies_actors_revisions_destinations_and_tokens"/>
+    <testcase time="0.083999999999989" classname="export_service" name="export_denies_actors_revisions_destinations_and_tokens"/>
+    <testcase time="0.219999999999999" classname="export_service" name="export_requires_one_accepted_bundle_and_matching_final_hashes"/>
+  </testsuite>
+  <testsuite name="lifecycle-service" timestamp="2026-10-21T05:34:44Z" hostname="91bdab9c50ce" tests="16" skipped="0" failures="0" errors="0" time="0.814">
+    <testcase time="0.141000000000005" classname="lifecycle_service" name="rejection_closes_a_revision_and_correction_creates_a_child_Draft"/>
+    <testcase time="0.00300000000000011" classname="lifecycle_service" name="rejection_closes_a_revision_and_correction_creates_a_child_Draft"/>
+    <testcase time="0.0169999999999959" classname="lifecycle_service" name="rejection_closes_a_revision_and_correction_creates_a_child_Draft"/>
+    <testcase time="0.0310000000000059" classname="lifecycle_service" name="rejection_closes_a_revision_and_correction_creates_a_child_Draft"/>
+    <testcase time="0.00300000000000011" classname="lifecycle_service" name="rejection_closes_a_revision_and_correction_creates_a_child_Draft"/>
+    <testcase time="0.143000000000001" classname="lifecycle_service" name="stale_repository_promotions_do_not_append_partial_history"/>
+    <testcase time="0.00600000000000023" classname="lifecycle_service" name="stale_repository_promotions_do_not_append_partial_history"/>
+    <testcase time="0.0819999999999936" classname="lifecycle_service" name="Experimental_drafts_cannot_be_promoted_to_Verified"/>
+    <testcase time="0.007000000000005" classname="lifecycle_service" name="Experimental_drafts_cannot_be_promoted_to_Verified"/>
+    <testcase time="0.00600000000000023" classname="lifecycle_service" name="Experimental_drafts_cannot_be_promoted_to_Verified"/>
+    <testcase time="0.0570000000000022" classname="lifecycle_service" name="only_closed_revisions_can_have_correction_successors"/>
+    <testcase time="0.097999999999999" classname="lifecycle_service" name="only_closed_revisions_can_have_correction_successors"/>
+    <testcase time="0.007000000000005" classname="lifecycle_service" name="only_closed_revisions_can_have_correction_successors"/>
+    <testcase time="0.191999999999993" classname="lifecycle_service" name="changes_to_a_Reviewed_revision_create_a_child_Draft"/>
+    <testcase time="0.007000000000005" classname="lifecycle_service" name="changes_to_a_Reviewed_revision_create_a_child_Draft"/>
+    <testcase time="0.0139999999999958" classname="lifecycle_service" name="changes_to_a_Reviewed_revision_create_a_child_Draft"/>
+  </testsuite>
+  <testsuite name="limits-policy" timestamp="2026-10-21T05:34:45Z" hostname="91bdab9c50ce" tests="2" skipped="0" failures="0" errors="0" time="0.05">
+    <testcase time="0.0120000000000005" classname="limits_policy" name="limits_reject_content_above_their_configured_boundary"/>
+    <testcase time="0.0379999999999967" classname="limits_policy" name="limits_reject_content_above_their_configured_boundary"/>
+  </testsuite>
+  <testsuite name="mod-export" timestamp="2026-10-21T05:34:45Z" hostname="91bdab9c50ce" tests="43" skipped="0" failures="0" errors="0" time="2.363">
+    <testcase time="0.281999999999996" classname="mod_export" name="export_module_publishes_real_app_revision_artifacts"/>
+    <testcase time="0.0960000000000036" classname="mod_export" name="export_module_publishes_real_app_revision_artifacts"/>
+    <testcase time="0.00199999999999534" classname="mod_export" name="export_module_publishes_real_app_revision_artifacts"/>
+    <testcase time="0.007000000000005" classname="mod_export" name="export_module_publishes_real_app_revision_artifacts"/>
+    <testcase time="0.00400000000000489" classname="mod_export" name="export_module_publishes_real_app_revision_artifacts"/>
+    <testcase time="0.00499999999999545" classname="mod_export" name="export_module_publishes_real_app_revision_artifacts"/>
+    <testcase time="0.00300000000000011" classname="mod_export" name="export_module_publishes_real_app_revision_artifacts"/>
+    <testcase time="0.0319999999999965" classname="mod_export" name="export_module_publishes_real_app_revision_artifacts"/>
+    <testcase time="0.00600000000000023" classname="mod_export" name="export_module_publishes_real_app_revision_artifacts"/>
+    <testcase time="0.218000000000004" classname="mod_export" name="export_module_packages_revision_artifacts_as_a_ZIP_download"/>
+    <testcase time="0.00300000000000011" classname="mod_export" name="export_module_packages_revision_artifacts_as_a_ZIP_download"/>
+    <testcase time="0.00400000000000489" classname="mod_export" name="export_module_packages_revision_artifacts_as_a_ZIP_download"/>
+    <testcase time="0.0159999999999911" classname="mod_export" name="export_module_packages_revision_artifacts_as_a_ZIP_download"/>
+    <testcase time="0.247" classname="mod_export" name="export_module_surfaces_service_denials"/>
+    <testcase time="0.0120000000000005" classname="mod_export" name="export_module_surfaces_service_denials"/>
+    <testcase time="0.007000000000005" classname="mod_export" name="export_module_surfaces_service_denials"/>
+    <testcase time="0.171000000000006" classname="mod_export" name="one_export_and_download_action_requires_both_approvals"/>
+    <testcase time="0.00399999999999068" classname="mod_export" name="one_export_and_download_action_requires_both_approvals"/>
+    <testcase time="0.0130000000000052" classname="mod_export" name="one_export_and_download_action_requires_both_approvals"/>
+    <testcase time="0.00900000000000034" classname="mod_export" name="one_export_and_download_action_requires_both_approvals"/>
+    <testcase time="0.0679999999999978" classname="mod_export" name="one_export_and_download_action_requires_both_approvals"/>
+    <testcase time="0.0100000000000051" classname="mod_export" name="one_export_and_download_action_requires_both_approvals"/>
+    <testcase time="0.0589999999999975" classname="mod_export" name="one_export_and_download_action_requires_both_approvals"/>
+    <testcase time="0.00399999999999068" classname="mod_export" name="one_export_and_download_action_requires_both_approvals"/>
+    <testcase time="0.054000000000002" classname="mod_export" name="one_export_and_download_action_requires_both_approvals"/>
+    <testcase time="0.0250000000000057" classname="mod_export" name="one_export_and_download_action_requires_both_approvals"/>
+    <testcase time="0.236999999999995" classname="mod_export" name="one_export_and_download_action_requires_both_approvals"/>
+    <testcase time="0.0279999999999916" classname="mod_export" name="one_export_and_download_action_requires_both_approvals"/>
+    <testcase time="0.00600000000000023" classname="mod_export" name="one_export_and_download_action_requires_both_approvals"/>
+    <testcase time="0.0900000000000034" classname="mod_export" name="one_export_and_download_action_requires_both_approvals"/>
+    <testcase time="0.00400000000000489" classname="mod_export" name="one_export_and_download_action_requires_both_approvals"/>
+    <testcase time="0.00799999999999557" classname="mod_export" name="one_export_and_download_action_requires_both_approvals"/>
+    <testcase time="0.0880000000000081" classname="mod_export" name="one_export_and_download_action_requires_both_approvals"/>
+    <testcase time="0.00300000000000011" classname="mod_export" name="one_export_and_download_action_requires_both_approvals"/>
+    <testcase time="0.00999999999999091" classname="mod_export" name="one_export_and_download_action_requires_both_approvals"/>
+    <testcase time="0.152000000000001" classname="mod_export" name="one_export_and_download_action_requires_both_approvals"/>
+    <testcase time="0.00400000000000489" classname="mod_export" name="one_export_and_download_action_requires_both_approvals"/>
+    <testcase time="0.00900000000000034" classname="mod_export" name="one_export_and_download_action_requires_both_approvals"/>
+    <testcase time="0.277000000000001" classname="mod_export" name="ZIP_failures_show_a_message_and_allow_an_idempotent_retry"/>
+    <testcase time="0.0259999999999962" classname="mod_export" name="ZIP_failures_show_a_message_and_allow_an_idempotent_retry"/>
+    <testcase time="0.019999999999996" classname="mod_export" name="ZIP_failures_show_a_message_and_allow_an_idempotent_retry"/>
+    <testcase time="0.0330000000000013" classname="mod_export" name="ZIP_failures_show_a_message_and_allow_an_idempotent_retry"/>
+    <testcase time="0.007000000000005" classname="mod_export" name="ZIP_failures_show_a_message_and_allow_an_idempotent_retry"/>
+  </testsuite>
+  <testsuite name="mod-plot-generation" timestamp="2026-10-21T05:34:47Z" hostname="91bdab9c50ce" tests="53" skipped="0" failures="0" errors="0" time="2.691">
+    <testcase time="0.719999999999999" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00400000000000489" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00399999999999068" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.259" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.253999999999991" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00400000000000489" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00400000000000489" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.268999999999991" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00400000000000489" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00199999999999534" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00400000000000489" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.0259999999999962" classname="mod_plot_generation" name="revised_questions_replace_the_proposed_Y_variable_before_execution"/>
+    <testcase time="0.034000000000006" classname="mod_plot_generation" name="questions_without_an_interpreted_candidate_retain_manual_selection"/>
+    <testcase time="0.00399999999999068" classname="mod_plot_generation" name="questions_without_an_interpreted_candidate_retain_manual_selection"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="questions_without_an_interpreted_candidate_retain_manual_selection"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="questions_without_an_interpreted_candidate_retain_manual_selection"/>
+    <testcase time="0.0100000000000051" classname="mod_plot_generation" name="questions_without_an_interpreted_candidate_retain_manual_selection"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="questions_without_an_interpreted_candidate_retain_manual_selection"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="questions_without_an_interpreted_candidate_retain_manual_selection"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="questions_without_an_interpreted_candidate_retain_manual_selection"/>
+    <testcase time="0.0739999999999981" classname="mod_plot_generation" name="plot_generation_UI_gives_traceability_review_and_export_a_step"/>
+    <testcase time="0.00100000000000477" classname="mod_plot_generation" name="plot_generation_UI_gives_traceability_review_and_export_a_step"/>
+    <testcase time="0.00400000000000489" classname="mod_plot_generation" name="plot_generation_UI_gives_traceability_review_and_export_a_step"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="plot_generation_UI_gives_traceability_review_and_export_a_step"/>
+    <testcase time="0.000999999999990564" classname="mod_plot_generation" name="plot_generation_UI_gives_traceability_review_and_export_a_step"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="plot_generation_UI_gives_traceability_review_and_export_a_step"/>
+    <testcase time="0.00100000000000477" classname="mod_plot_generation" name="plot_generation_UI_gives_traceability_review_and_export_a_step"/>
+    <testcase time="0.00199999999999534" classname="mod_plot_generation" name="plot_generation_UI_gives_traceability_review_and_export_a_step"/>
+    <testcase time="0.00100000000000477" classname="mod_plot_generation" name="plot_generation_UI_gives_traceability_review_and_export_a_step"/>
+    <testcase time="0.00199999999999534" classname="mod_plot_generation" name="plot_generation_UI_gives_traceability_review_and_export_a_step"/>
+    <testcase time="0.384" classname="mod_plot_generation" name="plot_generation_navigation_reaches_Export_and_returns_to_Result"/>
+    <testcase time="0.00300000000000011" classname="mod_plot_generation" name="plot_generation_navigation_reaches_Export_and_returns_to_Result"/>
+    <testcase time="0.0280000000000058" classname="mod_plot_generation" name="plot_generation_navigation_reaches_Export_and_returns_to_Result"/>
+    <testcase time="0.0259999999999962" classname="mod_plot_generation" name="plot_generation_navigation_reaches_Export_and_returns_to_Result"/>
+    <testcase time="0.465000000000003" classname="mod_plot_generation" name="plot_generation_returns_from_read_only_Confirm_to_Result"/>
+    <testcase time="0.0249999999999915" classname="mod_plot_generation" name="plot_generation_returns_from_read_only_Confirm_to_Result"/>
+  </testsuite>
+  <testsuite name="mod-plot-preview" timestamp="2026-10-21T05:34:50Z" hostname="91bdab9c50ce" tests="7" skipped="0" failures="0" errors="0" time="0.883">
+    <testcase time="0.775000000000006" classname="mod_plot_preview" name="plot_preview_exposes_the_exact_compiled_script"/>
+    <testcase time="0.00400000000000489" classname="mod_plot_preview" name="plot_preview_exposes_the_exact_compiled_script"/>
+    <testcase time="0.0849999999999937" classname="mod_plot_preview" name="governed_preview_uses_accepted_image_and_code_artifacts"/>
+    <testcase time="0.00499999999999545" classname="mod_plot_preview" name="governed_preview_uses_accepted_image_and_code_artifacts"/>
+    <testcase time="0.00400000000000489" classname="mod_plot_preview" name="governed_preview_uses_accepted_image_and_code_artifacts"/>
+    <testcase time="0.00499999999999545" classname="mod_plot_preview" name="governed_preview_uses_accepted_image_and_code_artifacts"/>
+    <testcase time="0.00500000000000966" classname="mod_plot_preview" name="governed_preview_uses_accepted_image_and_code_artifacts"/>
+  </testsuite>
+  <testsuite name="mod-prompt" timestamp="2026-10-21T05:34:51Z" hostname="91bdab9c50ce" tests="4" skipped="0" failures="0" errors="0" time="0.051">
+    <testcase time="0.0420000000000016" classname="mod_prompt" name="prompt_module_sends_the_selected_request_to_the_coordinator"/>
+    <testcase time="0.00399999999999068" classname="mod_prompt" name="prompt_module_sends_the_selected_request_to_the_coordinator"/>
+    <testcase time="0.00100000000000477" classname="mod_prompt" name="prompt_module_sends_the_selected_request_to_the_coordinator"/>
+    <testcase time="0.00400000000000489" classname="mod_prompt" name="prompt_module_sends_the_selected_request_to_the_coordinator"/>
+  </testsuite>
+  <testsuite name="mod-review" timestamp="2026-10-21T05:34:51Z" hostname="91bdab9c50ce" tests="3" skipped="0" failures="0" errors="0" time="0.311">
+    <testcase time="0.23599999999999" classname="mod_review" name="review_module_records_distinct_approvals_and_reaches_Reviewed"/>
+    <testcase time="0.0679999999999978" classname="mod_review" name="review_module_records_distinct_approvals_and_reaches_Reviewed"/>
+    <testcase time="0.007000000000005" classname="mod_review" name="review_module_records_distinct_approvals_and_reaches_Reviewed"/>
+  </testsuite>
+  <testsuite name="mod-revision-history" timestamp="2026-10-21T05:34:51Z" hostname="91bdab9c50ce" tests="4" skipped="0" failures="0" errors="0" time="0.244">
+    <testcase time="0.239000000000004" classname="mod_revision_history" name="revision_history_shows_parent_and_child_current_statuses"/>
+    <testcase time="0.000999999999990564" classname="mod_revision_history" name="revision_history_shows_parent_and_child_current_statuses"/>
+    <testcase time="0.00200000000000955" classname="mod_revision_history" name="revision_history_shows_parent_and_child_current_statuses"/>
+    <testcase time="0.00199999999999534" classname="mod_revision_history" name="revision_history_shows_parent_and_child_current_statuses"/>
+  </testsuite>
+  <testsuite name="mod-specification" timestamp="2026-10-21T05:34:52Z" hostname="91bdab9c50ce" tests="18" skipped="0" failures="0" errors="0" time="0.604">
+    <testcase time="0.0969999999999942" classname="mod_specification" name="specification_module_renders_confirmed_fields_and_provenance"/>
+    <testcase time="0.00200000000000955" classname="mod_specification" name="specification_module_renders_confirmed_fields_and_provenance"/>
+    <testcase time="0.000999999999990564" classname="mod_specification" name="specification_module_renders_confirmed_fields_and_provenance"/>
+    <testcase time="0.078000000000003" classname="mod_specification" name="specification_module_keeps_settings_visible_but_read_only"/>
+    <testcase time="0.00200000000000955" classname="mod_specification" name="specification_module_keeps_settings_visible_but_read_only"/>
+    <testcase time="0.00199999999999534" classname="mod_specification" name="specification_module_keeps_settings_visible_but_read_only"/>
+    <testcase time="0.135999999999996" classname="mod_specification" name="specification_module_executes_user_confirmed_selections"/>
+    <testcase time="0.00400000000000489" classname="mod_specification" name="specification_module_executes_user_confirmed_selections"/>
+    <testcase time="0.00300000000000011" classname="mod_specification" name="specification_module_executes_user_confirmed_selections"/>
+    <testcase time="0.00300000000000011" classname="mod_specification" name="specification_module_executes_user_confirmed_selections"/>
+    <testcase time="0.0969999999999942" classname="mod_specification" name="specification_module_blocks_unconfirmed_free_scale_execution"/>
+    <testcase time="0.00500000000000966" classname="mod_specification" name="specification_module_blocks_unconfirmed_free_scale_execution"/>
+    <testcase time="0.0159999999999911" classname="mod_specification" name="specification_module_blocks_unconfirmed_free_scale_execution"/>
+    <testcase time="0.00400000000000489" classname="mod_specification" name="specification_module_blocks_unconfirmed_free_scale_execution"/>
+    <testcase time="0.143999999999991" classname="mod_specification" name="specification_module_creates_corrections_from_closed_revisions"/>
+    <testcase time="0.00400000000000489" classname="mod_specification" name="specification_module_creates_corrections_from_closed_revisions"/>
+    <testcase time="0.00300000000000011" classname="mod_specification" name="specification_module_creates_corrections_from_closed_revisions"/>
+    <testcase time="0.00300000000000011" classname="mod_specification" name="specification_module_creates_corrections_from_closed_revisions"/>
+  </testsuite>
+  <testsuite name="prompt-context-policy" timestamp="2026-10-21T05:34:52Z" hostname="91bdab9c50ce" tests="2" skipped="0" failures="0" errors="0" time="0.051">
+    <testcase time="0.0139999999999958" classname="prompt_context_policy" name="prompt_context_keeps_only_approved_aggregate_content"/>
+    <testcase time="0.0370000000000061" classname="prompt_context_policy" name="prompt_context_keeps_only_approved_aggregate_content"/>
+  </testsuite>
+  <testsuite name="prompt-context" timestamp="2026-10-21T05:34:52Z" hostname="91bdab9c50ce" tests="8" skipped="0" failures="0" errors="0" time="0.069">
+    <testcase time="0.0130000000000052" classname="prompt_context" name="prompt_context_is_built_from_authorized_aggregate_choices_only"/>
+    <testcase time="0.00399999999999068" classname="prompt_context" name="prompt_context_is_built_from_authorized_aggregate_choices_only"/>
+    <testcase time="0.00300000000000011" classname="prompt_context" name="prompt_context_is_built_from_authorized_aggregate_choices_only"/>
+    <testcase time="0.00300000000000011" classname="prompt_context" name="prompt_context_is_built_from_authorized_aggregate_choices_only"/>
+    <testcase time="0.00300000000000011" classname="prompt_context" name="prompt_context_is_built_from_authorized_aggregate_choices_only"/>
+    <testcase time="0.00300000000000011" classname="prompt_context" name="prompt_context_is_built_from_authorized_aggregate_choices_only"/>
+    <testcase time="0.0220000000000056" classname="prompt_context" name="prompt_context_blocks_prohibited_labels_and_metadata"/>
+    <testcase time="0.0180000000000007" classname="prompt_context" name="prompt_context_blocks_prohibited_labels_and_metadata"/>
+  </testsuite>
+  <testsuite name="prompt-interpreter-contract" timestamp="2026-10-21T05:34:52Z" hostname="91bdab9c50ce" tests="16" skipped="0" failures="0" errors="0" time="0.099">
+    <testcase time="0.0219999999999914" classname="prompt_interpreter_contract" name="ambiguous_parameter_cannot_create_an_executable_specification"/>
+    <testcase time="0.00300000000000011" classname="prompt_interpreter_contract" name="ambiguous_parameter_cannot_create_an_executable_specification"/>
+    <testcase time="0.00400000000000489" classname="prompt_interpreter_contract" name="ambiguous_parameter_cannot_create_an_executable_specification"/>
+    <testcase time="0.0109999999999957" classname="prompt_interpreter_contract" name="arbitrary_R_requests_are_deferred_before_provider_calls"/>
+    <testcase time="0.00400000000000489" classname="prompt_interpreter_contract" name="arbitrary_R_requests_are_deferred_before_provider_calls"/>
+    <testcase time="0.00400000000000489" classname="prompt_interpreter_contract" name="arbitrary_R_requests_are_deferred_before_provider_calls"/>
+    <testcase time="0.00399999999999068" classname="prompt_interpreter_contract" name="arbitrary_R_requests_are_deferred_before_provider_calls"/>
+    <testcase time="0.0130000000000052" classname="prompt_interpreter_contract" name="arbitrary_transformation_requests_defer_before_provider_calls"/>
+    <testcase time="0.00400000000000489" classname="prompt_interpreter_contract" name="arbitrary_transformation_requests_defer_before_provider_calls"/>
+    <testcase time="0.00300000000000011" classname="prompt_interpreter_contract" name="arbitrary_transformation_requests_defer_before_provider_calls"/>
+    <testcase time="0.00300000000000011" classname="prompt_interpreter_contract" name="arbitrary_transformation_requests_defer_before_provider_calls"/>
+    <testcase time="0.00399999999999068" classname="prompt_interpreter_contract" name="arbitrary_transformation_requests_defer_before_provider_calls"/>
+    <testcase time="0.0100000000000051" classname="prompt_interpreter_contract" name="extra_provider_and_candidate_fields_fail_closed"/>
+    <testcase time="0.00300000000000011" classname="prompt_interpreter_contract" name="extra_provider_and_candidate_fields_fail_closed"/>
+    <testcase time="0.00400000000000489" classname="prompt_interpreter_contract" name="extra_provider_and_candidate_fields_fail_closed"/>
+    <testcase time="0.00300000000000011" classname="prompt_interpreter_contract" name="extra_provider_and_candidate_fields_fail_closed"/>
+  </testsuite>
+  <testsuite name="prompt-interpreter-mock" timestamp="2026-10-21T05:34:52Z" hostname="91bdab9c50ce" tests="20" skipped="0" failures="0" errors="0" time="0.134">
+    <testcase time="0.0239999999999867" classname="prompt_interpreter_mock" name="mock_interpreter_converts_a_boxplot_prompt_to_a_candidate"/>
+    <testcase time="0.00400000000000489" classname="prompt_interpreter_mock" name="mock_interpreter_converts_a_boxplot_prompt_to_a_candidate"/>
+    <testcase time="0.00199999999999534" classname="prompt_interpreter_mock" name="mock_interpreter_converts_a_boxplot_prompt_to_a_candidate"/>
+    <testcase time="0.00300000000000011" classname="prompt_interpreter_mock" name="mock_interpreter_converts_a_boxplot_prompt_to_a_candidate"/>
+    <testcase time="0.00300000000000011" classname="prompt_interpreter_mock" name="mock_interpreter_converts_a_boxplot_prompt_to_a_candidate"/>
+    <testcase time="0.00300000000000011" classname="prompt_interpreter_mock" name="mock_interpreter_converts_a_boxplot_prompt_to_a_candidate"/>
+    <testcase time="0.00300000000000011" classname="prompt_interpreter_mock" name="mock_interpreter_converts_a_boxplot_prompt_to_a_candidate"/>
+    <testcase time="0.00400000000000489" classname="prompt_interpreter_mock" name="mock_interpreter_converts_a_boxplot_prompt_to_a_candidate"/>
+    <testcase time="0.0210000000000008" classname="prompt_interpreter_mock" name="mock_interpreter_preserves_explicit_visit_exclusions"/>
+    <testcase time="0.00300000000000011" classname="prompt_interpreter_mock" name="mock_interpreter_preserves_explicit_visit_exclusions"/>
+    <testcase time="0.019999999999996" classname="prompt_interpreter_mock" name="mock_interpreter_preserves_explicit_treatment_exclusions"/>
+    <testcase time="0.00300000000000011" classname="prompt_interpreter_mock" name="mock_interpreter_preserves_explicit_treatment_exclusions"/>
+    <testcase time="0.0120000000000005" classname="prompt_interpreter_mock" name="mock_interpreter_returns_a_candidate_for_unresolved_unit_choices"/>
+    <testcase time="0.00100000000000477" classname="prompt_interpreter_mock" name="mock_interpreter_returns_a_candidate_for_unresolved_unit_choices"/>
+    <testcase time="0.00300000000000011" classname="prompt_interpreter_mock" name="mock_interpreter_returns_a_candidate_for_unresolved_unit_choices"/>
+    <testcase time="0.00300000000000011" classname="prompt_interpreter_mock" name="mock_interpreter_returns_a_candidate_for_unresolved_unit_choices"/>
+    <testcase time="0.00300000000000011" classname="prompt_interpreter_mock" name="mock_interpreter_returns_a_candidate_for_unresolved_unit_choices"/>
+    <testcase time="0.0130000000000052" classname="prompt_interpreter_mock" name="mock_interpreter_requires_confirmation_for_free_scales"/>
+    <testcase time="0.00300000000000011" classname="prompt_interpreter_mock" name="mock_interpreter_requires_confirmation_for_free_scales"/>
+    <testcase time="0.0029999999999859" classname="prompt_interpreter_mock" name="mock_interpreter_requires_confirmation_for_free_scales"/>
+  </testsuite>
+  <testsuite name="provider-contracts" timestamp="2026-10-21T05:34:52Z" hostname="91bdab9c50ce" tests="2" skipped="0" failures="0" errors="0" time="0.013">
+    <testcase time="0.0120000000000005" classname="provider_contracts" name="provider_ports_declare_only_named_capabilities"/>
+    <testcase time="0.00100000000000477" classname="provider_contracts" name="provider_ports_declare_only_named_capabilities"/>
+  </testsuite>
+  <testsuite name="provider-study-data" timestamp="2026-10-21T05:34:53Z" hostname="91bdab9c50ce" tests="17" skipped="0" failures="0" errors="0" time="0.145">
+    <testcase time="0.0139999999999958" classname="provider_study_data" name="local_provider_exposes_metadata_and_pins_a_verified_snapshot"/>
+    <testcase time="0.00400000000000489" classname="provider_study_data" name="local_provider_exposes_metadata_and_pins_a_verified_snapshot"/>
+    <testcase time="0.00300000000000011" classname="provider_study_data" name="local_provider_exposes_metadata_and_pins_a_verified_snapshot"/>
+    <testcase time="0.00300000000000011" classname="provider_study_data" name="local_provider_exposes_metadata_and_pins_a_verified_snapshot"/>
+    <testcase time="0.00300000000000011" classname="provider_study_data" name="local_provider_exposes_metadata_and_pins_a_verified_snapshot"/>
+    <testcase time="0.00300000000000011" classname="provider_study_data" name="local_provider_exposes_metadata_and_pins_a_verified_snapshot"/>
+    <testcase time="0.00499999999999545" classname="provider_study_data" name="local_provider_exposes_metadata_and_pins_a_verified_snapshot"/>
+    <testcase time="0.00300000000000011" classname="provider_study_data" name="local_provider_exposes_metadata_and_pins_a_verified_snapshot"/>
+    <testcase time="0.00300000000000011" classname="provider_study_data" name="local_provider_exposes_metadata_and_pins_a_verified_snapshot"/>
+    <testcase time="0.00300000000000011" classname="provider_study_data" name="local_provider_exposes_metadata_and_pins_a_verified_snapshot"/>
+    <testcase time="0.0100000000000051" classname="provider_study_data" name="local_provider_exposes_metadata_and_pins_a_verified_snapshot"/>
+    <testcase time="0.007000000000005" classname="provider_study_data" name="local_provider_exposes_metadata_and_pins_a_verified_snapshot"/>
+    <testcase time="0.0159999999999911" classname="provider_study_data" name="snapshot_hashes_and_catalog_order_ignore_source_row_order"/>
+    <testcase time="0.0100000000000051" classname="provider_study_data" name="snapshot_hashes_and_catalog_order_ignore_source_row_order"/>
+    <testcase time="0.00400000000000489" classname="provider_study_data" name="snapshot_hashes_and_catalog_order_ignore_source_row_order"/>
+    <testcase time="0.0319999999999965" classname="provider_study_data" name="provider_rejects_unauthorized_and_modified_snapshots"/>
+    <testcase time="0.0219999999999914" classname="provider_study_data" name="provider_rejects_unauthorized_and_modified_snapshots"/>
+  </testsuite>
+  <testsuite name="provider-workspace-contract" timestamp="2026-10-21T05:34:53Z" hostname="91bdab9c50ce" tests="16" skipped="0" failures="0" errors="0" time="0.269">
+    <testcase time="0.0150000000000006" classname="provider_workspace_contract" name="local_workspace_provider_is_explicitly_development_only"/>
+    <testcase time="0.00100000000000477" classname="provider_workspace_contract" name="local_workspace_provider_is_explicitly_development_only"/>
+    <testcase time="0.0300000000000011" classname="provider_workspace_contract" name="local_workspace_publishes_complete_image_and_script_pairs"/>
+    <testcase time="0.00400000000000489" classname="provider_workspace_contract" name="local_workspace_publishes_complete_image_and_script_pairs"/>
+    <testcase time="0.00300000000000011" classname="provider_workspace_contract" name="local_workspace_publishes_complete_image_and_script_pairs"/>
+    <testcase time="0.00300000000000011" classname="provider_workspace_contract" name="local_workspace_publishes_complete_image_and_script_pairs"/>
+    <testcase time="0.0249999999999915" classname="provider_workspace_contract" name="local_workspace_publishes_complete_image_and_script_pairs"/>
+    <testcase time="0.027000000000001" classname="provider_workspace_contract" name="workspace_provider_rejects_unregistered_and_unsafe_identifiers"/>
+    <testcase time="0.0210000000000008" classname="provider_workspace_contract" name="workspace_provider_rejects_unregistered_and_unsafe_identifiers"/>
+    <testcase time="0.0210000000000008" classname="provider_workspace_contract" name="workspace_provider_rejects_unregistered_and_unsafe_identifiers"/>
+    <testcase time="0.0300000000000011" classname="provider_workspace_contract" name="workspace_provider_rejects_unregistered_and_unsafe_identifiers"/>
+    <testcase time="0.0259999999999962" classname="provider_workspace_contract" name="workspace_provider_rejects_unregistered_and_unsafe_identifiers"/>
+    <testcase time="0.0229999999999961" classname="provider_workspace_contract" name="workspace_provider_rejects_unregistered_and_unsafe_identifiers"/>
+    <testcase time="0.0250000000000057" classname="provider_workspace_contract" name="workspace_reconciliation_quarantines_leftover_staged_exports"/>
+    <testcase time="0.00799999999999557" classname="provider_workspace_contract" name="workspace_reconciliation_quarantines_leftover_staged_exports"/>
+    <testcase time="0.007000000000005" classname="provider_workspace_contract" name="workspace_reconciliation_quarantines_leftover_staged_exports"/>
+  </testsuite>
+  <testsuite name="review-service" timestamp="2026-10-21T05:34:53Z" hostname="91bdab9c50ce" tests="26" skipped="0" failures="0" errors="0" time="2.77">
+    <testcase time="0.158000000000001" classname="review_service" name="two_independent_eligible_reviewers_are_required"/>
+    <testcase time="0.0419999999999874" classname="review_service" name="two_independent_eligible_reviewers_are_required"/>
+    <testcase time="0.0450000000000017" classname="review_service" name="two_independent_eligible_reviewers_are_required"/>
+    <testcase time="0.007000000000005" classname="review_service" name="two_independent_eligible_reviewers_are_required"/>
+    <testcase time="0.0420000000000016" classname="review_service" name="two_independent_eligible_reviewers_are_required"/>
+    <testcase time="0.0309999999999917" classname="review_service" name="two_independent_eligible_reviewers_are_required"/>
+    <testcase time="0.0390000000000015" classname="review_service" name="two_independent_eligible_reviewers_are_required"/>
+    <testcase time="0.168000000000006" classname="review_service" name="review_decisions_bind_exact_immutable_hashes"/>
+    <testcase time="0.007000000000005" classname="review_service" name="review_decisions_bind_exact_immutable_hashes"/>
+    <testcase time="0.152000000000001" classname="review_service" name="review_decisions_retain_comments_and_an_authorized_role_claim"/>
+    <testcase time="0.0479999999999876" classname="review_service" name="review_decisions_retain_comments_and_an_authorized_role_claim"/>
+    <testcase time="0.0350000000000108" classname="review_service" name="review_decisions_retain_comments_and_an_authorized_role_claim"/>
+    <testcase time="0.00399999999999068" classname="review_service" name="review_decisions_retain_comments_and_an_authorized_role_claim"/>
+    <testcase time="0.0420000000000016" classname="review_service" name="review_decisions_retain_comments_and_an_authorized_role_claim"/>
+    <testcase time="0.153000000000006" classname="review_service" name="rejection_rationale_is_required_and_retained"/>
+    <testcase time="0.0309999999999917" classname="review_service" name="rejection_rationale_is_required_and_retained"/>
+    <testcase time="0.00300000000000011" classname="review_service" name="rejection_rationale_is_required_and_retained"/>
+    <testcase time="0.186000000000007" classname="review_service" name="a_competing_approval_cannot_follow_a_committed_rejection"/>
+    <testcase time="0.00600000000000023" classname="review_service" name="a_competing_approval_cannot_follow_a_committed_rejection"/>
+    <testcase time="0.00600000000000023" classname="review_service" name="a_competing_approval_cannot_follow_a_committed_rejection"/>
+    <testcase time="0.185000000000002" classname="review_service" name="required_approvals_may_arrive_in_either_role_order"/>
+    <testcase time="1.339" classname="review_service" name="concurrent_approval_and_rejection_commit_exactly_one_decision"/>
+    <testcase time="0.00499999999999545" classname="review_service" name="concurrent_approval_and_rejection_commit_exactly_one_decision"/>
+    <testcase time="0.00400000000000489" classname="review_service" name="concurrent_approval_and_rejection_commit_exactly_one_decision"/>
+    <testcase time="0.00900000000000034" classname="review_service" name="concurrent_approval_and_rejection_commit_exactly_one_decision"/>
+    <testcase time="0.0229999999999961" classname="review_service" name="concurrent_approval_and_rejection_commit_exactly_one_decision"/>
+  </testsuite>
+  <testsuite name="revision-evidence" timestamp="2026-10-21T05:34:56Z" hostname="91bdab9c50ce" tests="16" skipped="0" failures="0" errors="0" time="1.17">
+    <testcase time="0.497" classname="revision_evidence" name="app_revisions_persist_complete_context_evidence_for_R36"/>
+    <testcase time="0.00300000000000011" classname="revision_evidence" name="app_revisions_persist_complete_context_evidence_for_R36"/>
+    <testcase time="0.00400000000000489" classname="revision_evidence" name="app_revisions_persist_complete_context_evidence_for_R36"/>
+    <testcase time="0.00300000000000011" classname="revision_evidence" name="app_revisions_persist_complete_context_evidence_for_R36"/>
+    <testcase time="0.00300000000000011" classname="revision_evidence" name="app_revisions_persist_complete_context_evidence_for_R36"/>
+    <testcase time="0.000999999999990564" classname="revision_evidence" name="app_revisions_persist_complete_context_evidence_for_R36"/>
+    <testcase time="0.00300000000000011" classname="revision_evidence" name="app_revisions_persist_complete_context_evidence_for_R36"/>
+    <testcase time="0.00300000000000011" classname="revision_evidence" name="app_revisions_persist_complete_context_evidence_for_R36"/>
+    <testcase time="0.00300000000000011" classname="revision_evidence" name="app_revisions_persist_complete_context_evidence_for_R36"/>
+    <testcase time="0.00300000000000011" classname="revision_evidence" name="app_revisions_persist_complete_context_evidence_for_R36"/>
+    <testcase time="0.00300000000000011" classname="revision_evidence" name="app_revisions_persist_complete_context_evidence_for_R36"/>
+    <testcase time="0.00300000000000011" classname="revision_evidence" name="app_revisions_persist_complete_context_evidence_for_R36"/>
+    <testcase time="0.0130000000000052" classname="revision_evidence" name="app_revisions_persist_complete_context_evidence_for_R36"/>
+    <testcase time="0.617000000000004" classname="revision_evidence" name="reproducibility_service_reruns_retained_evidence_exactly"/>
+    <testcase time="0.00399999999999068" classname="revision_evidence" name="reproducibility_service_reruns_retained_evidence_exactly"/>
+    <testcase time="0.007000000000005" classname="revision_evidence" name="reproducibility_service_reruns_retained_evidence_exactly"/>
+  </testsuite>
+  <testsuite name="runtime-config" timestamp="2026-10-21T05:34:57Z" hostname="91bdab9c50ce" tests="13" skipped="0" failures="0" errors="0" time="0.28">
+    <testcase time="0.0120000000000005" classname="runtime_config" name="local_runtime_configuration_is_explicit_and_safe"/>
+    <testcase time="0.00399999999999068" classname="runtime_config" name="local_runtime_configuration_is_explicit_and_safe"/>
+    <testcase time="0.00400000000000489" classname="runtime_config" name="local_runtime_configuration_is_explicit_and_safe"/>
+    <testcase time="0.00300000000000011" classname="runtime_config" name="local_runtime_configuration_is_explicit_and_safe"/>
+    <testcase time="0.00400000000000489" classname="runtime_config" name="local_runtime_configuration_is_explicit_and_safe"/>
+    <testcase time="0.00199999999999534" classname="runtime_config" name="local_runtime_configuration_is_explicit_and_safe"/>
+    <testcase time="0.0510000000000019" classname="runtime_config" name="production_provider_configuration_cannot_be_selected_locally"/>
+    <testcase time="0.00900000000000034" classname="runtime_config" name="secret_references_are_resolved_only_by_the_injected_provider"/>
+    <testcase time="0.0390000000000015" classname="runtime_config" name="secret_references_are_resolved_only_by_the_injected_provider"/>
+    <testcase time="0.00199999999999534" classname="runtime_config" name="secret_references_are_resolved_only_by_the_injected_provider"/>
+    <testcase time="0.0529999999999973" classname="runtime_config" name="invalid_runtime_profiles_fail_closed"/>
+    <testcase time="0.0520000000000067" classname="runtime_config" name="runtime_parameters_are_validated_at_the_boundary"/>
+    <testcase time="0.0450000000000017" classname="runtime_config" name="runtime_parameters_are_validated_at_the_boundary"/>
+  </testsuite>
+  <testsuite name="synthetic-scenarios" timestamp="2026-10-21T05:34:57Z" hostname="91bdab9c50ce" tests="39" skipped="0" failures="0" errors="0" time="0.436">
+    <testcase time="0.0159999999999911" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.00300000000000011" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.00400000000000489" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.00300000000000011" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.00300000000000011" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.00799999999999557" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.00600000000000023" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.00800000000000978" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.00600000000000023" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.00699999999999079" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.007000000000005" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.007000000000005" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.00600000000000023" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.00699999999999079" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.00600000000000023" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.007000000000005" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.00600000000000023" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.00600000000000023" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.00600000000000023" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.007000000000005" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.00600000000000023" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.00699999999999079" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.0590000000000117" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.00900000000000034" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.00699999999999079" classname="synthetic_scenarios" name="governed_synthetic_manifest_is_versioned_complete_and_hash_bound"/>
+    <testcase time="0.109999999999999" classname="synthetic_scenarios" name="manifest_expectations_agree_with_profile_behavior"/>
+    <testcase time="0.00400000000000489" classname="synthetic_scenarios" name="manifest_expectations_agree_with_profile_behavior"/>
+    <testcase time="0.00399999999999068" classname="synthetic_scenarios" name="manifest_expectations_agree_with_profile_behavior"/>
+    <testcase time="0.00300000000000011" classname="synthetic_scenarios" name="manifest_expectations_agree_with_profile_behavior"/>
+    <testcase time="0.00400000000000489" classname="synthetic_scenarios" name="manifest_expectations_agree_with_profile_behavior"/>
+    <testcase time="0.00300000000000011" classname="synthetic_scenarios" name="manifest_expectations_agree_with_profile_behavior"/>
+    <testcase time="0.00400000000000489" classname="synthetic_scenarios" name="manifest_expectations_agree_with_profile_behavior"/>
+    <testcase time="0.0029999999999859" classname="synthetic_scenarios" name="manifest_expectations_agree_with_profile_behavior"/>
+    <testcase time="0.00300000000000011" classname="synthetic_scenarios" name="manifest_expectations_agree_with_profile_behavior"/>
+    <testcase time="0.00400000000000489" classname="synthetic_scenarios" name="manifest_expectations_agree_with_profile_behavior"/>
+    <testcase time="0.007000000000005" classname="synthetic_scenarios" name="manifest_expectations_agree_with_profile_behavior"/>
+    <testcase time="0.0259999999999962" classname="synthetic_scenarios" name="manifest_rejects_ambiguous_authorization_metadata"/>
+    <testcase time="0.0220000000000056" classname="synthetic_scenarios" name="manifest_rejects_ambiguous_authorization_metadata"/>
+    <testcase time="0.0219999999999914" classname="synthetic_scenarios" name="manifest_rejects_ambiguous_authorization_metadata"/>
+  </testsuite>
+  <testsuite name="verification-service" timestamp="2026-10-21T05:34:58Z" hostname="91bdab9c50ce" tests="17" skipped="0" failures="0" errors="0" time="1.259">
+    <testcase time="0.183999999999997" classname="verification_service" name="verification_passes_only_complete_runtime_evidence"/>
+    <testcase time="0.00300000000000011" classname="verification_service" name="verification_passes_only_complete_runtime_evidence"/>
+    <testcase time="0.00200000000000955" classname="verification_service" name="verification_passes_only_complete_runtime_evidence"/>
+    <testcase time="0.00699999999999079" classname="verification_service" name="verification_passes_only_complete_runtime_evidence"/>
+    <testcase time="0.00100000000000477" classname="verification_service" name="verification_passes_only_complete_runtime_evidence"/>
+    <testcase time="0.180999999999997" classname="verification_service" name="verification_binds_the_result_manifest_to_the_execution_request"/>
+    <testcase time="0.00200000000000955" classname="verification_service" name="verification_binds_the_result_manifest_to_the_execution_request"/>
+    <testcase time="0.168999999999997" classname="verification_service" name="verification_hashes_the_produced_image_bytes"/>
+    <testcase time="0.00199999999999534" classname="verification_service" name="verification_hashes_the_produced_image_bytes"/>
+    <testcase time="0.177999999999997" classname="verification_service" name="verification_rejects_incomplete_runner_manifests"/>
+    <testcase time="0.00400000000000489" classname="verification_service" name="verification_rejects_incomplete_runner_manifests"/>
+    <testcase time="0.177000000000007" classname="verification_service" name="verification_rejects_incomplete_runner_manifests"/>
+    <testcase time="0.00300000000000011" classname="verification_service" name="verification_rejects_incomplete_runner_manifests"/>
+    <testcase time="0.174999999999997" classname="verification_service" name="verification_rejects_incomplete_runner_manifests"/>
+    <testcase time="0.00400000000000489" classname="verification_service" name="verification_rejects_incomplete_runner_manifests"/>
+    <testcase time="0.162999999999997" classname="verification_service" name="verification_rejects_incomplete_runner_manifests"/>
+    <testcase time="0.00400000000000489" classname="verification_service" name="verification_rejects_incomplete_runner_manifests"/>
+  </testsuite>
+</testsuites>
