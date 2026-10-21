@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ADaMViz.SubmissionSync</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9020</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9023</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@
 
 <div class="section level2">
 <h2 id="system-anchors">System Anchors<a class="anchor" aria-label="anchor" href="#system-anchors"></a></h2>
-<ul><li>At session start, read <a href="PROGRESS.html">PROGRESS.md</a> if present and reconcile it with current repository state. Long tasks must maintain it under <a href="docs/development/workflow.html#progress-tracking">Progress tracking</a>.</li>
+<ul><li>Follow the clock-in and clock-out routines below. Long tasks must maintain <a href="PROGRESS.html">PROGRESS.md</a> under <a href="docs/development/workflow.html#progress-tracking">Progress tracking</a>.</li>
 <li>For product or code work, read <a href="CODEX_CONTEXT.html">CODEX_CONTEXT.md</a> before planning or changing implementation.</li>
 <li>Read <a href="ARCHITECTURE.html">ARCHITECTURE.md</a> for the implementation map, enforcement boundaries, known gaps, and task-specific document pointers.</li>
 <li>Treat <a href="docs/product/STRATEGY.html">docs/product/STRATEGY.md</a> as the source of truth for scope, terminology, boundaries, and metrics.</li>
@@ -63,6 +63,20 @@
 <li>Read <a href="docs/development/verification.html">Verification</a> for completion gates, VS Code commands, and CI requirements.</li>
 <li>Read <a href="docs/development/workflow.html">Development workflow</a> before selecting a process tier or using Compound Engineering.</li>
 </ul></div>
+<div class="section level2">
+<h2 id="at-session-start-clock-in">At session start (clock in)<a class="anchor" aria-label="anchor" href="#at-session-start-clock-in"></a></h2>
+<ol style="list-style-type: decimal"><li>Read <a href="PROGRESS.html">PROGRESS.md</a> and reconcile it with the current branch, HEAD, working tree, and verification evidence.</li>
+<li>Read <a href="DECISIONS.html">DECISIONS.md</a> for accepted decisions and reasons; follow linked task-specific sources as needed.</li>
+<li>Run the <a href="docs/development/verification.html">required verification</a> in the existing VS Code integrated terminal to establish the baseline. Record failures or unavailable checks as verification pending; do not infer a passing baseline.</li>
+<li>Continue from PROGRESS.md’s <code>Next action</code> section unless the user’s current request redirects the work. Preserve unresolved tasks when switching scope.</li>
+</ol></div>
+<div class="section level2">
+<h2 id="before-session-end-clock-out">Before session end (clock out)<a class="anchor" aria-label="anchor" href="#before-session-end-clock-out"></a></h2>
+<ol style="list-style-type: decimal"><li>Update <a href="PROGRESS.html">PROGRESS.md</a> with current state, verification results, blockers, and the next action. Record newly accepted important choices and reasons in <a href="DECISIONS.html">DECISIONS.md</a>.</li>
+<li>Run the <a href="docs/development/verification.html">required verification</a> on the final tree in the existing VS Code integrated terminal. Record the actual results or missing checks in PROGRESS.md before handoff.</li>
+<li>Commit completed work only after the full local verification sequence passes and the user explicitly approves the commit. Otherwise leave it identified as uncommitted, with a concrete next action.</li>
+</ol><p>These routines are agent instructions, not automatic startup or shutdown hooks. Compound Engineering roles and decision-recording rules are in the <a href="docs/development/workflow.html#decision-records">development guide</a>.</p>
+</div>
 <div class="section level2">
 <h2 id="working-contract">Working Contract<a class="anchor" aria-label="anchor" href="#working-contract"></a></h2>
 <ul><li>Within platform, safety, and security constraints, the user’s current explicit request overrides repository and skill guidance.</li>

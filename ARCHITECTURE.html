@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ADaMViz.SubmissionSync</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9020</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9023</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,7 +74,7 @@
 <h2 id="current-scope">Current scope<a class="anchor" aria-label="anchor" href="#current-scope"></a></h2>
 <p>The implemented plotting pattern is a longitudinal numeric BDS boxplot: one parameter, unit, and stored Y variable (<code>AVAL</code>, <code>CHG</code>, or <code>PCHG</code>), ordered analysis visits, treatment facets, median connections, visible outliers, and distinct-subject N.</p>
 <p>The active interface follows <strong>Data → Ask → Confirm → Result → Export</strong>. Inputs are CSV or Excel files; Excel parsing uses the first worksheet. Outputs include a plot preview, generated R script, revision evidence, review history, and a detached <code>plot.png</code>/<code>script.R</code> export pair with an optional ZIP download.</p>
-<p>Implementation exists for deterministic generation, synchronous subprocess execution, local evidence persistence, review, correction revisions, and development-only workspace export. Privacy qualification, production authentication, and qualified target-environment controls are incomplete. A mock prompt interpreter exists separately; the active upload workflow collects the question but derives plotting choices from data and user selections rather than interpreting that question.</p>
+<p>Implementation exists for deterministic generation, synchronous subprocess execution, local evidence persistence, review, correction revisions, and development-only workspace export. Privacy qualification, production authentication, and qualified target-environment controls are incomplete. The active upload workflow uses the local deterministic mock interpreter to propose plotting choices from the question and aggregate metadata; users confirm or edit those choices before generation. Questions without an interpreted candidate retain manual selection.</p>
 <p>Persistent governed study context and broader table, listing, and figure support remain deferred.</p>
 </div>
 <div class="section level2">
@@ -147,9 +147,9 @@
 </tr></thead><tbody><tr><td><strong>1. Input and snapshot — implemented; privacy assurance partial</strong></td>
 <td>
 <code>.uploaded_study_data_provider()</code> parses and checks supported file structure, calculates file/content hashes, and creates provider metadata. <code><a href="reference/pin_study_snapshot.html">pin_study_snapshot()</a></code> checks membership and content identity. Direct uploads carry no classification; format checks do not establish synthetic provenance or de-identification.</td>
-</tr><tr><td><strong>2. Plot specification — implemented; interpretation integration partial</strong></td>
+</tr><tr><td><strong>2. Plot specification — implemented; local rule-based interpretation</strong></td>
 <td>
-<code>.create_assurance_candidate()</code> retains the question and builds aggregate choices. <code>mod_specification_server()</code> collects selections; <code>.confirmed_spec_from_fields()</code> creates a confirmed specification with provenance. The active path does not call <code><a href="reference/interpret_prompt.html">interpret_prompt()</a></code>. <code><a href="reference/ellmer_prompt_interpreter.html">ellmer_prompt_interpreter()</a></code> is disabled.</td>
+<code>.create_assurance_candidate()</code> retains the question, builds aggregate choices, and calls <code><a href="reference/interpret_prompt.html">interpret_prompt()</a></code> with <code><a href="reference/mock_prompt_interpreter.html">mock_prompt_interpreter()</a></code> to propose a candidate or retain manual selection. <code>mod_specification_server()</code> collects selections; <code>.confirmed_spec_from_fields()</code> creates a confirmed specification with provenance. BDS validation still runs after confirmation. <code><a href="reference/ellmer_prompt_interpreter.html">ellmer_prompt_interpreter()</a></code> is disabled.</td>
 </tr><tr><td><strong>3. Profile and compilation — implemented</strong></td>
 <td>
 <code>.execute_assurance_revision()</code> validates the selected BDS profile before compilation. Explicit selections govern inclusion; analysis flags are not silently applied. Missing selected Y values are excluded from display statistics while retained selected records remain available for evidence. Blocking profile diagnostics stop generation. <code><a href="reference/compile_boxplot_script.html">compile_boxplot_script()</a></code> emits application-owned R code.</td>

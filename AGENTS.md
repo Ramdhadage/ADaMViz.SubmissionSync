@@ -2,10 +2,10 @@
 
 ## System Anchors
 
-- At session start, read
+- Follow the clock-in and clock-out routines below. Long tasks must
+  maintain
   [PROGRESS.md](https://ramdhadage.github.io/ADaMViz.SubmissionSync/PROGRESS.md)
-  if present and reconcile it with current repository state. Long tasks
-  must maintain it under [Progress
+  under [Progress
   tracking](https://ramdhadage.github.io/ADaMViz.SubmissionSync/docs/development/workflow.html#progress-tracking).
 - For product or code work, read
   [CODEX_CONTEXT.md](https://ramdhadage.github.io/ADaMViz.SubmissionSync/CODEX_CONTEXT.md)
@@ -36,6 +36,47 @@
 - Read [Development
   workflow](https://ramdhadage.github.io/ADaMViz.SubmissionSync/docs/development/workflow.md)
   before selecting a process tier or using Compound Engineering.
+
+## At session start (clock in)
+
+1.  Read
+    [PROGRESS.md](https://ramdhadage.github.io/ADaMViz.SubmissionSync/PROGRESS.md)
+    and reconcile it with the current branch, HEAD, working tree, and
+    verification evidence.
+2.  Read
+    [DECISIONS.md](https://ramdhadage.github.io/ADaMViz.SubmissionSync/DECISIONS.md)
+    for accepted decisions and reasons; follow linked task-specific
+    sources as needed.
+3.  Run the [required
+    verification](https://ramdhadage.github.io/ADaMViz.SubmissionSync/docs/development/verification.md)
+    in the existing VS Code integrated terminal to establish the
+    baseline. Record failures or unavailable checks as verification
+    pending; do not infer a passing baseline.
+4.  Continue from PROGRESS.md’s `Next action` section unless the user’s
+    current request redirects the work. Preserve unresolved tasks when
+    switching scope.
+
+## Before session end (clock out)
+
+1.  Update
+    [PROGRESS.md](https://ramdhadage.github.io/ADaMViz.SubmissionSync/PROGRESS.md)
+    with current state, verification results, blockers, and the next
+    action. Record newly accepted important choices and reasons in
+    [DECISIONS.md](https://ramdhadage.github.io/ADaMViz.SubmissionSync/DECISIONS.md).
+2.  Run the [required
+    verification](https://ramdhadage.github.io/ADaMViz.SubmissionSync/docs/development/verification.md)
+    on the final tree in the existing VS Code integrated terminal.
+    Record the actual results or missing checks in PROGRESS.md before
+    handoff.
+3.  Commit completed work only after the full local verification
+    sequence passes and the user explicitly approves the commit.
+    Otherwise leave it identified as uncommitted, with a concrete next
+    action.
+
+These routines are agent instructions, not automatic startup or shutdown
+hooks. Compound Engineering roles and decision-recording rules are in
+the [development
+guide](https://ramdhadage.github.io/ADaMViz.SubmissionSync/docs/development/workflow.html#decision-records).
 
 ## Working Contract
 

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ADaMViz.SubmissionSync</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9020</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9023</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,9 +52,68 @@
 
 <div id="progress" class="section level1">
 
-<p>Updated: 2026-10-18 22:46 IST Task: Implement one Export and download ZIP action after both approvals. Branch: <code>fix/export-approval-controls</code> HEAD at checkpoint start: <code>351e8fb0e594f944752b1cb97d63ddd68ab31d1b</code> Plan / issue: User-reported error and requested disabled controls; no issue supplied.</p>
+<div class="section level2">
+<h2 id="current-task-audit-and-cran-check-repair-2026-10-21-1200-ist">Current task: audit and CRAN check repair (2026-10-21 12:00 IST)<a class="anchor" aria-label="anchor" href="#current-task-audit-and-cran-check-repair-2026-10-21-1200-ist"></a></h2>
+<ul><li>Branch: <code>fix/question-plot-spec</code>; starting HEAD <code>e583d9a84a2b01c582457517a1501f8914c73a95</code>, clean worktree. Earlier checkpoints below are historical; their pending handoffs remain preserved.</li>
+<li>Goal: fix both failures from <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/actions/runs/39549833298" class="external-link">Package CI run 39549833298</a> on this branch. User authorized <code>gh</code> testing and background PowerShell verification without additional terminal windows, then explicitly approved committing, pushing, and verifying the new run after local checks passed.</li>
+<li>Owned paths: <code>.github/workflows/audit.yaml</code>, <code>.github/tests/audit.R</code>, <code>.Rbuildignore</code>, <code>tests/testthat/helper-app-browser.R</code>, DECISIONS.md, and this checkpoint. No package version or check-blocklist change.</li>
+<li>Done: downloaded exact audit RDS and CRAN check artifacts with <code>gh</code>. Existing audit regression fails against the actual six-finding artifact. The CRAN log reports development-version, top-level DECISIONS.md, and Chrome-temp detritus NOTES; only the top-level NOTE triggers the configured blocklist.</li>
+<li>Done: fixes and formatting follow-up committed/pushed as <code>5f77051</code> and <code>fb51bcdd04df57bc9e9a0b6f48dc33034ff209a3</code> on the existing branch/PR #49. <a href="https://github.com/Ramdhadage/ADaMViz.SubmissionSync/actions/runs/39557779490" class="external-link">Final Package CI run 39557779490</a> passes audit, CRAN, non-CRAN, style, and coverage jobs. The last observed running step was the R-lint dependency-cache upload. The user explicitly asked to skip waiting for it and consider this task done. No final aggregate-success claim is made. Only this final evidence checkpoint is uncommitted. User selected retaining the expected development-version NOTE.</li>
+<li>In progress / blocked: None for the requested repairs. See <a href="DECISIONS.html#2026-10-21-require-noble-curl-security-revision-16-for-reviewed-audit-findings">accepted CI choice</a>.</li>
+<li>Baseline: restricted-shell R could not load the existing renv library and failed at missing styler. Authorized retry passed style/roxygen/spelling/lint, with one browser timeout skip. Editing the helper during this run caused its subprocess to see an intermediate teardown registration, invalidating the source-suite baseline. Registration now occurs only inside the browser helper; no passing baseline inferred.</li>
+<li>Focused verification: the isolated lifecycle probe reproduced Chrome remaining alive. The actual browser suite now passes all 18 assertions without skips, and the post-suite assertion confirms Chrome is closed. Audit regression passes 37 checks including both downloaded artifacts and rejection of revision <code>.15</code>; CI fixtures pass 30 scenarios (NEWS Python behavior unverified: Python unavailable). Actionlint and YAML parsing passed. Final full sequence and hosted results remain pending.</li>
+<li>First final sequence: style, roxygen, spelling, lint, full source tests, and installed-package tests passed; package check ended with 0 errors, 1 warning, 0 notes because the initial cleanup directly referenced undeclared transitive dependency chromote. Replaced that reference with the existing shinytest2 session’s parent browser, retaining graceful shutdown and adding an assertion that it is no longer alive. Full local sequence is running again on this final helper. Markdown lint and 10 local document links passed; restored the formatter’s unrelated test-revision-evidence.R line wrap.</li>
+<li>Final verification: the repeat full sequence exited 0. Style, roxygen, spelling (zero findings), lint (zero findings), full source tests including all 24 browser assertions, installed-package tests, vignette rebuilds, and <code>devtools::check(error_on = "warning")</code> passed with 0 errors, 0 warnings, 0 notes. Source tests reported no skips. Both top-level files and temp-directory detritus checks are OK. This Windows check does not prove the Linux CRAN job; its expected development-version NOTE is retained by choice. Logs: <code>%TEMP%/submissionsync-ci-final-retry.log</code>; fixtures: <code>%TEMP%/submissionsync-ci-fixtures.log</code>.</li>
+<li>Review: targeted manual review of the six fix-owned files; no residual defect found. No additional abstraction or dependency was needed. Unrelated formatter changes were restored. Actionlint, YAML parsing, Markdown lint, local-link checks, whitespace checks, 37 audit scenarios against exact downloaded artifacts, and 30 workflow scenarios passed. The existing NEWS Python fixture remains unverified because Python is unavailable; this task changes no NEWS logic.</li>
+<li>Checked code SHA256: audit.yaml <code>03C99CB802D5E12D907BC49CFFAAAD703E98FAACE0B099E0CB95A839948A30EA</code>; audit.R <code>59BB3BE2CB8DB5F8F9F7C7243338F867F9B4E1EB7F929052982AA9381D4481C6</code>; .Rbuildignore <code>25C13050C2122E20C4275E12E0064C1AD298956E821A470382C4C87622192700</code>; helper-app-browser.R <code>FD923D923B6378F5056131211A4EDD555684AD113E2749FF428704A9DD2AE873</code>.</li>
+<li>Hosted evidence on <code>5f77051</code>: audit verifies system curl/libcurl <code>8.5.0-2ubuntu10.16</code>, preserves six raw findings per scan, and reports zero unresolved findings in both scans. CRAN and non-CRAN jobs succeeded. CRAN top-level files and temp detritus checks are OK; its only NOTE is the retained development version. The overall run cannot pass yet because style CI flags the audit regression fixture, outside <code>style_pkg()</code>’s scope.</li>
+<li>Follow-up verification: styled only <code>.github/tests/audit.R</code>; parsed R expressions are identical before/after and formatting is idempotent. All 37 audit regression checks pass. Repeated full precommit sequence exited 0: style, roxygen, spelling, lint, source tests, installed-package tests, vignette rebuilding, and package check (0 errors, 0 warnings, 0 notes). One source browser test skipped on a Page.navigate startup timeout; prior full run with identical package inputs passed all browser assertions. Log: <code>%TEMP%/submissionsync-ci-style-final.log</code>. Formatted audit.R SHA256: <code>BE89436937C7D9CA6DC1B1A778A00078B8CE0DAF1CCF65CBB5F8D79F0FF745A1</code>.</li>
+<li>Final hosted evidence on <code>fb51bcd</code>: audit job 119081519332 succeeds, verifies curl/libcurl security revision <code>.16</code>, and reports zero unresolved findings in both scans. CRAN job 119081519623 and non-CRAN job 119081519793 succeed; style job 119081519668 succeeds. CRAN has exactly the retained development-version NOTE; top-level files and temp detritus checks are OK. Logs: <code>%TEMP%/submissionsync-ci-final-{audit,cran}.log</code>. No change to renv.lock, the NOTE blocklist, or dependency/error policy.</li>
+<li>Next action: no further work on this repair unless requested. PR #49 remains available for review; no merge was requested. All repair code is committed and pushed; this final evidence-only checkpoint remains identified as uncommitted work. Preserve previous task handoffs below.</li>
+</ul></div>
+<div class="section level2">
+<h2 id="current-task-question-y-variable-2026-10-19-2114-ist">Current task: question Y variable (2026-10-19 21:14 IST)<a class="anchor" aria-label="anchor" href="#current-task-question-y-variable-2026-10-19-2114-ist"></a></h2>
+<ul><li>Branch: <code>fix/question-plot-spec</code>; starting/current HEAD <code>0348dd5e7a55d03eaa287bd7fde18123fc5ffea7</code>. The investigation started on clean <code>main</code>; only the investigation’s own PROGRESS.md edits existed before implementation. Earlier checkpoints below are historical, including their claims of uncommitted documentation. Preserve their unresolved verification handoffs.</li>
+<li>Authorization: User approved implementation and background PowerShell checks without extra terminal windows. No commit, push, or publication authorized.</li>
+<li>Owned paths: R/app_server.R, tests/testthat/test-mod-plot-generation.R, tests/testthat/test-app-browser.R, ARCHITECTURE.md, DECISIONS.md, PROGRESS.md. Reused the existing local interpreter in candidate construction; no dependency, external provider, execution, or approval-policy changes. See <a href="DECISIONS.html#2026-10-19-interpret-revised-plot-questions-before-confirmation">accepted choice</a>.</li>
+</ul><div class="section level3">
+<h3 id="done-for-question-fix">Done for question fix<a class="anchor" aria-label="anchor" href="#done-for-question-fix"></a></h3>
+<ul><li>Confirmed the cause: candidate construction previously stored the question without interpreting it; the form fell back to the first available Y variable, AVAL.</li>
+<li>Connected <code><a href="reference/interpret_prompt.html">interpret_prompt()</a></code> with <code><a href="reference/mock_prompt_interpreter.html">mock_prompt_interpreter()</a></code>, retaining manual selection when no candidate is returned and validation after explicit confirmation.</li>
+<li>Added regression coverage for successive AVAL/CHG/PCHG/AVAL questions, retained visits and groups, no automatic execution, manual fallback, and the actual browser dropdown. Updated the architecture map and decision log. All changes are uncommitted.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="in-progress-for-question-fix">In progress for question fix<a class="anchor" aria-label="anchor" href="#in-progress-for-question-fix"></a></h3>
+<ul><li>None. Implementation and applicable local/browser verification passed; changes remain uncommitted. Restored the formatter’s unrelated line wrap in test-revision-evidence.R before final checks. Formal multi-agent review/simplification skipped for the two-line implementation; manually reviewed the complete scoped diff.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="blocked-for-question-fix">Blocked for question fix<a class="anchor" aria-label="anchor" href="#blocked-for-question-fix"></a></h3>
+<ul><li>None for implementation. Baseline package check failed because Pandoc was not visible. The initial final package-check attempt rebuilt vignettes but failed on inherited C.UTF-8 startup warnings. The retry uses the existing <code>C:/Program Files/Quarto/bin/tools</code> via process-local RSTUDIO_PANDOC and <code>LC_ALL</code>/<code>LANG=English_United States.utf8</code>; confirmed UTF-8 startup without locale warnings. No installation or persistent configuration change.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="verification-for-question-fix">Verification for question fix<a class="anchor" aria-label="anchor" href="#verification-for-question-fix"></a></h3>
+<ul><li>Baseline: formatter, roxygen, spelling, lint, and full source tests passed; <code>devtools::check(error_on = "warning")</code> stopped during vignette building for missing Pandoc. Restricted-shell R could not load the existing renv library; approved background checks ran with access to that library. R startup reports host locale warnings, recorded separately from test results.</li>
+<li>Regression: after correcting test-session initialization, tests failed on missing candidate fields before implementation. Focused <code>devtools::test(filter = "^(mod-plot-generation|mod-specification|prompt-interpreter.*)$", stop_on_failure = TRUE)</code> passed: 107 assertions, zero failures/warnings/skips.</li>
+<li>Chrome DevTools: source app launched using <code>print(source("dev/run_dev.R")$value)</code> at <code>http://127.0.0.1:28691/</code>. Used a newly generated in-memory synthetic CSV (18 records), because the MCP file uploader rejected the workspace path. Verified successive AVAL -&gt; CHG -&gt; PCHG -&gt; AVAL -&gt; CHG questions update the dropdown and specification, keeping all three visits and both treatment groups selected. Confirmed CHG generation reaches Verified with a loaded accepted plot. Shiny remains connected, no console warnings/errors, upload HTTP 200. No deployed-app or formal statistical-validation claim.</li>
+<li>
+<code>git diff --check</code> passed. Tested code SHA256: R/app_server.R <code>887AFA4692CB5351E85AE2981E58BBD4D6A9AF66C5C45C78DF6BB7FCEE3E4F1D</code>; test-mod-plot-generation.R <code>3808904EB49F60164200A4F9684BC0466A3E6D1759B1828ECB9F313D9F73094E</code>; test-app-browser.R <code>0E64E7772ADF74149540C01556474D69B918AEDE90E58C3213A3F255F265E2F5</code>.</li>
+<li>Final full source <code>testthat::test_local(reporter = "summary")</code> passed, including all 18 app-browser assertions and 53 plot-generation assertions, without skipped tests. The package-check retry <code>devtools::check(error_on = "warning")</code> passed with exit 0: 0 errors, 0 warnings, 1 NOTE for the pre-existing top-level DECISIONS.md. Installed-package tests and vignette rebuilding passed. The NOTE is outside this fix’s packaging scope. Hosted CI and formal statistical validation were not run.</li>
+<li>Markdownlint 0.29.0 using the extracted <code>.github/workflows/linter.yaml</code> configuration passed for ARCHITECTURE.md, DECISIONS.md, and PROGRESS.md; Node checks passed local-link targets and 800-character line limits. The linter emits a Node deprecation warning about fs.R_OK but returns zero findings and exit 0.</li>
+<li>Logs: <code>%TEMP%/submission-sync-question-{baseline,red,green,style,final,package-check,browser}.log</code>. Results above identify the checked scope; logs supplement this record.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="next-action-for-question-fix">Next action for question fix<a class="anchor" aria-label="anchor" href="#next-action-for-question-fix"></a></h3>
+<ol style="list-style-type: decimal"><li>Restart the user’s existing app with <code>source("dev/run_dev.R")</code> to load the fix; the agent’s source test app remains available at <code>http://127.0.0.1:28691/</code> showing the Verified CHG result.</li>
+<li>Leave changes uncommitted unless explicitly approved. Preserve the earlier tasks and verification handoffs below; this fix does not establish their historical checks.</li>
+</ol><p>The previous checkpoint and unresolved tasks follow.</p>
+<p>Updated: 2026-10-19 10:31 IST Task: Add a concise decision log and explicit session start/end routines; explain their Compound Engineering roles. Branch: <code>main</code> HEAD at checkpoint start: <code>97821420d6d9c10e770d1c55899348adb4859957</code> Plan / issue: Current user request; Routine documentation work, no issue required. Decision log: <a href="DECISIONS.html">DECISIONS.md</a> Baseline: Clean worktree. Owned paths: AGENTS.md, DECISIONS.md, PROGRESS.md, docs/development/workflow.md. Verification predicates: valid local links, documentation lint, whitespace checks, and the full local sequence required by the verification guide.</p>
+<p>The previous export-task checkpoint below described branch <code>fix/export-approval-controls</code> at <code>351e8fb0e594f944752b1cb97d63ddd68ab31d1b</code>. Its results are historical; unresolved checks and the app-restart handoff remain pending reconciliation against the current tree.</p>
+</div>
+</div>
 <div class="section level2">
 <h2 id="done">Done<a class="anchor" aria-label="anchor" href="#done"></a></h2>
+<ul><li>Added DECISIONS.md with a short entry format and the current accepted process decision; linked it from this checkpoint. Added clock-in/out routines to AGENTS.md and documented their Compound Engineering roles in the development guide. Changes are uncommitted.</li>
+</ul><p>Previous export-task record, retained for continuity:</p>
 <ul><li>Reconciled the previous checkpoint with a clean worktree at the current HEAD. Earlier dependency repairs are committed; do not repeat them.</li>
 <li>Reproduced <code>Export the revision before download</code>. The UI permitted downloads with no export receipt; the export service already enforced Reviewed-only eligibility.</li>
 <li>Replaced the two actions with one Export and download ZIP control, disabled until Reviewed. Its download handler runs the existing controlled export service, refreshes the receipt table, then writes the ZIP; service/ZIP failures display a message and cancel the download silently.</li>
@@ -63,21 +122,25 @@
 </ul></div>
 <div class="section level2">
 <h2 id="in-progress">In progress<a class="anchor" aria-label="anchor" href="#in-progress"></a></h2>
-<ul><li>Single-button Chrome flow, focused module/browser tests, and full source suite passed. Final package build/check is running. Documentation now reflects one combined action; spelling is being rechecked after those prose edits.</li>
+<ul><li>Documentation edits are written and uncommitted; required Markdown lint and full local verification remain pending.</li>
+<li>Previous task: the last checkpoint reported single-button Chrome flow, focused module/browser tests, and full source suite passed, with the final package check and spelling recheck still running. Their final results have not been established in this session.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="blocked">Blocked<a class="anchor" aria-label="anchor" href="#blocked"></a></h2>
-<ul><li>None. Sandbox access to the existing renv cache required escalation; checks run with the user’s authorization in background PowerShell.</li>
+<ul><li>The agent has no direct connection to the existing VS Code integrated terminal. Full local verification must run there under the verification guide; previous task-specific background PowerShell authorization does not apply to this task.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="decisions-and-constraints">Decisions and constraints<a class="anchor" aria-label="anchor" href="#decisions-and-constraints"></a></h2>
-<ul><li>Keep the existing two-reviewer approval and Reviewed-only service policy.</li>
-<li>No new dependencies or changes to service/public interfaces. User approved the combined action. Owned paths: R/mod_export.R, tests/testthat/test-mod-export.R, tests/testthat/test-app-browser.R, PROGRESS.md, vignettes/ADaMViz.SubmissionSync.Rmd, vignettes/articles/11-controlled-export.Rmd, docs/features/11-controlled-export.md, and docs/ux/F001-plot-generation-prototype.html. Preserve concurrent unowned edits to AGENTS.md, docs/development/workflow.md, and docs/development/agent-state/.</li>
-<li>The user authorized background PowerShell checks for this task. No additional terminal windows, commits, push, or publication.</li>
-<li>Preserve earlier unresolved documentation-lint verification from the progress-guidance task. The known installed roxygen2 8.1.0 versus recorded 8.1.1 diagnostic is unchanged.</li>
+<ul><li>Lasting decisions and their reasons belong in <a href="DECISIONS.html">DECISIONS.md</a>; this checkpoint records current execution state and links to those decisions.</li>
+<li>Keep the existing two-reviewer approval and Reviewed-only service policy.</li>
+<li>Previous export task: no new dependencies or changes to service/public interfaces; the user approved the combined action. Its owned paths were R/mod_export.R, tests/testthat/test-mod-export.R, tests/testthat/test-app-browser.R, PROGRESS.md, vignettes/ADaMViz.SubmissionSync.Rmd, vignettes/articles/11-controlled-export.Rmd, docs/features/11-controlled-export.md, and docs/ux/F001-plot-generation-prototype.html. That checkpoint also identified concurrent edits to AGENTS.md, docs/development/workflow.md, and docs/development/agent-state/; the current baseline is clean.</li>
+<li>Previous export task only: the user authorized background PowerShell checks, without additional terminal windows, commits, push, or publication.</li>
+<li>Preserve earlier unresolved documentation-lint verification from the progress-guidance task. The previous checkpoint recorded an installed roxygen2 8.1.0 versus recorded 8.1.1 diagnostic; it has not been rechecked here.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="verification">Verification<a class="anchor" aria-label="anchor" href="#verification"></a></h2>
+<p>Current task: verification pending. Supplemental agent-shell checks passed for all four owned Markdown files: a Node.js assertion check resolved 38 local links and anchors and checked balanced code fences, final newlines, and the configured 800-character line limit; <code>git diff --check</code> passed. These checks do not satisfy the required VS Code execution surface or replace Markdown lint and the full local sequence. Python was unavailable; the equivalent check ran with installed Node.js. No R or browser checks ran for this task.</p>
+<p>Entries below are historical export-task evidence and do not verify these documentation changes.</p>
 <ul><li>Focused export-module tests passed after reproducing failure before implementation.</li>
 <li>Formatting, documentation generation, spelling, lint, and full <code>testthat::test_local(reporter = "summary")</code> passed. Reverted the formatter’s unrelated line wrap in <code>test-revision-evidence.R</code> to preserve scope.</li>
 <li>Chrome DevTools verified the source app at <code>http://127.0.0.1:42016/</code>, launched with <code>print(source("dev/run_dev.R")$value)</code>, using the repository’s synthetic <code>adlb-standard.csv</code>.</li>
@@ -89,9 +152,9 @@
 </ul></div>
 <div class="section level2">
 <h2 id="next-action">Next action<a class="anchor" aria-label="anchor" href="#next-action"></a></h2>
-<ol style="list-style-type: decimal"><li>The user approved the single-button workflow. Finish focused tests, Chrome verification, and the full package sequence; preserve controlled publication and receipt creation before download.</li>
-<li>Restart the user’s existing app with <code>source("dev/run_dev.R")</code> to load the fix.</li>
-<li>Leave changes uncommitted; commit or publication requires an explicit request.</li>
+<ol style="list-style-type: decimal"><li>Verify the documentation changes, including the <a href="docs/development/verification.html#full-local-verification">full local sequence</a> in the existing VS Code integrated terminal. Leave changes uncommitted; commit or publication requires an explicit request.</li>
+<li>Previous export task: reconcile final focused tests, Chrome evidence, and package-check results with the current tree before repeating or claiming completion. Preserve controlled publication and receipt creation before download.</li>
+<li>Preserve the previous handoff to restart the user’s existing app with <code>source("dev/run_dev.R")</code> when resuming that task.</li>
 </ol></div>
 </div>
 

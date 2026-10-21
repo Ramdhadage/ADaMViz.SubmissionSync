@@ -59,9 +59,10 @@ Implementation exists for deterministic generation, synchronous
 subprocess execution, local evidence persistence, review, correction
 revisions, and development-only workspace export. Privacy qualification,
 production authentication, and qualified target-environment controls are
-incomplete. A mock prompt interpreter exists separately; the active
-upload workflow collects the question but derives plotting choices from
-data and user selections rather than interpreting that question.
+incomplete. The active upload workflow uses the local deterministic mock
+interpreter to propose plotting choices from the question and aggregate
+metadata; users confirm or edit those choices before generation.
+Questions without an interpreted candidate retain manual selection.
 
 Persistent governed study context and broader table, listing, and figure
 support remain deferred.
@@ -99,7 +100,7 @@ does not by itself update that installed application.
 | Stage | Current implementation |
 |----|----|
 | **1. Input and snapshot — implemented; privacy assurance partial** | `.uploaded_study_data_provider()` parses and checks supported file structure, calculates file/content hashes, and creates provider metadata. [`pin_study_snapshot()`](https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference/pin_study_snapshot.md) checks membership and content identity. Direct uploads carry no classification; format checks do not establish synthetic provenance or de-identification. |
-| **2. Plot specification — implemented; interpretation integration partial** | `.create_assurance_candidate()` retains the question and builds aggregate choices. `mod_specification_server()` collects selections; `.confirmed_spec_from_fields()` creates a confirmed specification with provenance. The active path does not call [`interpret_prompt()`](https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference/interpret_prompt.md). [`ellmer_prompt_interpreter()`](https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference/ellmer_prompt_interpreter.md) is disabled. |
+| **2. Plot specification — implemented; local rule-based interpretation** | `.create_assurance_candidate()` retains the question, builds aggregate choices, and calls [`interpret_prompt()`](https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference/interpret_prompt.md) with [`mock_prompt_interpreter()`](https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference/mock_prompt_interpreter.md) to propose a candidate or retain manual selection. `mod_specification_server()` collects selections; `.confirmed_spec_from_fields()` creates a confirmed specification with provenance. BDS validation still runs after confirmation. [`ellmer_prompt_interpreter()`](https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference/ellmer_prompt_interpreter.md) is disabled. |
 | **3. Profile and compilation — implemented** | `.execute_assurance_revision()` validates the selected BDS profile before compilation. Explicit selections govern inclusion; analysis flags are not silently applied. Missing selected Y values are excluded from display statistics while retained selected records remain available for evidence. Blocking profile diagnostics stop generation. [`compile_boxplot_script()`](https://ramdhadage.github.io/ADaMViz.SubmissionSync/reference/compile_boxplot_script.md) emits application-owned R code. |
 | **4. Execution and artifacts — implemented** | Fixed-scale revisions start as `Draft`. `new_execution_service()` records an attempt and synchronously invokes a clean `callr` subprocess. The worker executes the supplied script with selected records as `analysis_data`, returning analytical output, PNG identity, environment details, and diagnostics. Passing service checks lead to artifact acceptance and `Verified`; failed verification leaves `Draft`. |
 | **5. Preview, evidence, and replay — implemented with separate paths** | Governed revisions display the accepted worker PNG and stored script; experimental free-scale revisions retain an in-process preview. Revision-context evidence retains the question, specification, selected input records, script, execution metadata, and checks. `new_reproducibility_service()` can rerun retained evidence, but replay is not wired into the normal confirmation, review, or export path. |
