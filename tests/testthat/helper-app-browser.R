@@ -10,7 +10,7 @@ local_browser_app <- function(app, name) {
     )
   }
   withr::local_envvar(environment)
-  tryCatch(
+  driver <- tryCatch(
     withCallingHandlers(
       shinytest2::AppDriver$new(
         app,
@@ -31,4 +31,13 @@ local_browser_app <- function(app, name) {
       ))
     }
   )
+  browser <- driver$get_chromote_session()$parent
+  withr::defer(
+    {
+      browser$close()
+      stopifnot(!browser$is_alive())
+    },
+    envir = testthat::teardown_env()
+  )
+  driver
 }

@@ -25,3 +25,10 @@ Use the decision date when known. For an older decision with an unknown date, la
 - Choice: Reuse the existing local deterministic interpreter to propose fields, with manual selection when no candidate is returned. Keep explicit confirmation and the existing validation before generation.
 - Constraint: No external model calls, new dependencies, or changes to execution and review policy. The interpreter supports its existing rule set, not unrestricted natural-language requests.
 - Source: User approval to implement in the current conversation; [candidate construction](R/app_server.R), [architecture map](ARCHITECTURE.md).
+
+## 2026-10-21: Require Noble curl security revision .16 for reviewed audit findings
+
+- Reason: The dependency audit now reports CVE-2026-86414 and CVE-2026-87864 in addition to the four previously reviewed curl findings. Ubuntu reports both fixed in `8.5.0-2ubuntu10.16`; require that revision before applying the existing runtime-specific review mechanism.
+- Constraint: Keep raw scan artifacts, runtime linkage and package-ownership checks, and failure on unreviewed findings. This review covers the pinned Ubuntu CI environment, not other deployments or Windows libraries.
+- Source: [Ubuntu proxy advisory](https://ubuntu.com/security/CVE-2026-86414), [Ubuntu IMAP advisory](https://ubuntu.com/security/CVE-2026-87864), accessed 2026-10-21; user request to repair both CI failures.
+- Choice: Keep development version `0.1.0.9021` and its expected CRAN incoming NOTE, as selected by the user on 2026-10-21. Exclude DECISIONS.md from the source package and close the test browser at suite teardown to address the other NOTES without weakening the check gate.

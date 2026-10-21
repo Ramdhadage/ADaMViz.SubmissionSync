@@ -9,10 +9,11 @@ read_step <- function(name) {
   paste(sub("^          ", "", lines[seq.int(run + 1L, shell - 1L)]), collapse = "\n")
 }
 
-reviewed <- c("CVE-2026-18924", "CVE-2026-3783", "CVE-2026-86410", "CVE-2026-87865")
+reviewed <- c("CVE-2026-18924", "CVE-2026-3783", "CVE-2026-86410", "CVE-2026-87865",
+              "CVE-2026-86414", "CVE-2026-87864")
 fixture <- data.frame(
   package = "curl", version = "8.1.0", oss_package = "pkg:cran/curl@8.1.0",
-  no_of_vulnerabilities = 4L
+  no_of_vulnerabilities = 6L
 )
 fixture$vulnerabilities <- list(lapply(reviewed, function(id) list(id = id)))
 checks <- 0L
@@ -46,12 +47,12 @@ for (name in c("Run oysteR scan on dependencies", "Run oysteR scan on renv.lock"
   run_scan(fixture, succeeds = TRUE, label = "must accept reviewed Noble findings")
   run_scan(fixture, verified = "", succeeds = FALSE, label = "must require runtime verification")
   changed <- fixture
-  changed$vulnerabilities[[1L]][[5L]] <- list(id = "CVE-2099-00001")
-  changed$no_of_vulnerabilities <- 5L
+  changed$vulnerabilities[[1L]][[7L]] <- list(id = "CVE-2099-00001")
+  changed$no_of_vulnerabilities <- 7L
   run_scan(changed, succeeds = FALSE, label = "must block new CVEs")
-  changed$vulnerabilities[[1L]][[5L]] <- list()
+  changed$vulnerabilities[[1L]][[7L]] <- list()
   run_scan(changed, succeeds = FALSE, label = "must block missing CVE IDs")
-  changed$no_of_vulnerabilities <- 4L
+  changed$no_of_vulnerabilities <- 6L
   run_scan(changed, succeeds = FALSE, label = "must block inconsistent vulnerability counts")
   changed <- fixture
   changed$oss_package <- "pkg:cran/other@8.1.0"
@@ -107,7 +108,8 @@ run_runtime <- function(os = c("ID=ubuntu", "VERSION_CODENAME=noble"),
       return(package_version)
     }
     if (identical(args[[1L]], "--compare-versions")) {
-      return(if (package_version == "8.5.0-2ubuntu10.14") 1L else 0L)
+      stopifnot(identical(args[[4L]], "8.5.0-2ubuntu10.16"))
+      return(if (package_version %in% c("8.5.0-2ubuntu10.14", "8.5.0-2ubuntu10.15")) 1L else 0L)
     }
     stop("Unexpected command")
   }
@@ -124,5 +126,6 @@ run_runtime(ssh = character(), succeeds = FALSE, label = "must require a reporte
 run_runtime(linkage = "statically linked", succeeds = FALSE, label = "must reject static linkage")
 run_runtime(owner = "custom-libcurl: /usr/lib/libcurl.so.4", succeeds = FALSE, label = "must require Ubuntu library ownership")
 run_runtime(package_version = "8.5.0-2ubuntu10.14", succeeds = FALSE, label = "must reject unpatched library")
+run_runtime(package_version = "8.5.0-2ubuntu10.15", succeeds = FALSE, label = "must reject library missing proxy and IMAP fixes")
 run_runtime(package_version = "9.0.0-custom", succeeds = FALSE, label = "must reject non-Noble package versions")
 cat(checks, "audit workflow checks passed\n")

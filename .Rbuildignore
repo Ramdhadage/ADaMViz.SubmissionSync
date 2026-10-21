@@ -32,3 +32,4 @@ $run_dev.*
 ^lint_output\.txt$
 ^manifest\.json$
 ^PROGRESS\.md$
+^DECISIONS\.md$

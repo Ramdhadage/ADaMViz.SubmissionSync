@@ -47,11 +47,11 @@ jobs:
         run: |
           apt-get update
           apt-get install --yes --only-upgrade curl libcurl4t64 libcurl4-openssl-dev
-          # Ubuntu Noble backports CVE-2026-18924's fix in revision .15.
-          # https://ubuntu.com/security/CVE-2026-18924
+          # https://ubuntu.com/security/CVE-2026-86414
+          # https://ubuntu.com/security/CVE-2026-87864
           for package in curl libcurl4t64 libcurl4-openssl-dev; do
             installed_version=$(dpkg-query -W -f='${Version}' "$package")
-            dpkg --compare-versions "$installed_version" ge 8.5.0-2ubuntu10.15
+            dpkg --compare-versions "$installed_version" ge 8.5.0-2ubuntu10.16
           done
         shell: bash
 
@@ -84,7 +84,7 @@ jobs:
                     identical(runtime$version, "8.5.0"), isTRUE(startsWith(runtime$libssh_version, "libssh/")),
                     length(owner) == 1L, startsWith(owner, "libcurl4t64:"),
                     length(version) == 1L, grepl("^8[.]5[.]0-2ubuntu10[.][0-9]+$", version),
-                    system2("dpkg", c("--compare-versions", version, "ge", "8.5.0-2ubuntu10.15")) == 0L)
+                    system2("dpkg", c("--compare-versions", version, "ge", "8.5.0-2ubuntu10.16")) == 0L)
           cat("CURL_NOBLE_REVIEWED=true\n", file = Sys.getenv("GITHUB_ENV"), append = TRUE)
         shell: Rscript {0}
         env:
@@ -115,8 +115,9 @@ jobs:
           }
           remaining <- dependencies_scan$no_of_vulnerabilities
           if (Sys.getenv("CURL_NOBLE_REVIEWED") == "true") {
-            # Ubuntu's CVE tracker: Noble fixes the first two in .15/.8; libssh is unaffected by the others.
-            reviewed <- c("CVE-2026-18924", "CVE-2026-3783", "CVE-2026-86410", "CVE-2026-87865")
+            # Noble .16 fixes the proxy/IMAP findings; the runtime guard also requires libssh.
+            reviewed <- c("CVE-2026-18924", "CVE-2026-3783", "CVE-2026-86410", "CVE-2026-87865",
+                          "CVE-2026-86414", "CVE-2026-87864")
             for (i in which(dependencies_scan$oss_package == "pkg:cran/curl@8.1.0")) {
               stopifnot(length(dependencies_scan$vulnerabilities[[i]]) == remaining[i])
               remaining[i] <- remaining[i] - sum(vapply(dependencies_scan$vulnerabilities[[i]],
@@ -153,8 +154,9 @@ jobs:
             }
             remaining <- renv_lock_scan$no_of_vulnerabilities
             if (Sys.getenv("CURL_NOBLE_REVIEWED") == "true") {
-              # Ubuntu's CVE tracker: Noble fixes the first two in .15/.8; libssh is unaffected by the others.
-              reviewed <- c("CVE-2026-18924", "CVE-2026-3783", "CVE-2026-86410", "CVE-2026-87865")
+              # Noble .16 fixes the proxy/IMAP findings; the runtime guard also requires libssh.
+              reviewed <- c("CVE-2026-18924", "CVE-2026-3783", "CVE-2026-86410", "CVE-2026-87865",
+                            "CVE-2026-86414", "CVE-2026-87864")
               for (i in which(renv_lock_scan$oss_package == "pkg:cran/curl@8.1.0")) {
                 stopifnot(length(renv_lock_scan$vulnerabilities[[i]]) == remaining[i])
                 remaining[i] <- remaining[i] - sum(vapply(renv_lock_scan$vulnerabilities[[i]],
