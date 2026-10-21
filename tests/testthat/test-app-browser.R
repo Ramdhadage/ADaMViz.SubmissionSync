@@ -91,6 +91,37 @@ review_standard_revision <- function(app) {
   invisible(app)
 }
 
+test_that("browser revised questions replace the Y variable in Confirm", {
+  app <- local_submission_sync_app("revised-question-y-variable")
+  app$upload_file(
+    `plot_generation-data_file` = system.file(
+      "extdata", "synthetic", "adlb-standard.csv",
+      package = "ADaMViz.SubmissionSync"
+    )
+  )
+  app$wait_for_js(
+    "document.querySelector('#plot_generation-to_ask')?.disabled === false"
+  )
+  app$click("plot_generation-to_ask")
+
+  for (y in c("AVAL", "CHG", "PCHG", "AVAL")) {
+    app$set_inputs(`plot_generation-question` = paste(
+      "Create a boxplot of ALT", y, "by visit, split by treatment.",
+      "Include all visits and treatment groups,",
+      "show the number of subjects below each box, and connect the medians"
+    ))
+    app$click("plot_generation-to_confirm")
+    app$wait_for_js(paste0(
+      "document.querySelector('#plot_generation-specification-y_variable')",
+      "?.value === '", y, "'"
+    ))
+    expect_identical(
+      app$get_value(input = "plot_generation-specification-y_variable"), y
+    )
+    app$click("plot_generation-back_to_ask")
+  }
+})
+
 test_that("browser prompt journey creates a Verified draft with evidence", {
   app <- local_submission_sync_app("prompt-to-verified")
 

@@ -84,7 +84,8 @@ app_server <- function(
     snapshot$source_metadata <- provider$source_metadata
   }
   context <- build_prompt_context(snapshot)
-  spec <- new_plot_spec(dataset_id = dataset_id)
+  interpretation <- interpret_prompt(prompt, context, mock_prompt_interpreter())
+  spec <- interpretation$candidate %||% new_plot_spec(dataset_id = dataset_id)
   choices <- .spec_choices_from_context(context)
   list(
     pending = list(
