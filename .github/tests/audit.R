@@ -9,8 +9,10 @@ read_step <- function(name) {
   paste(sub("^          ", "", lines[seq.int(run + 1L, shell - 1L)]), collapse = "\n")
 }
 
-reviewed <- c("CVE-2026-18924", "CVE-2026-3783", "CVE-2026-86410", "CVE-2026-87865",
-              "CVE-2026-86414", "CVE-2026-87864")
+reviewed <- c(
+  "CVE-2026-18924", "CVE-2026-3783", "CVE-2026-86410", "CVE-2026-87865",
+  "CVE-2026-86414", "CVE-2026-87864"
+)
 fixture <- data.frame(
   package = "curl", version = "8.1.0", oss_package = "pkg:cran/curl@8.1.0",
   no_of_vulnerabilities = 6L
