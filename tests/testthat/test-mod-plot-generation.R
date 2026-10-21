@@ -1,3 +1,61 @@
+test_that("revised questions replace the proposed Y variable before execution", {
+  current_revision <- shiny::reactiveVal(.empty_assurance_state())
+  executions <- 0L
+
+  shiny::testServer(
+    mod_plot_generation_server,
+    args = list(
+      current_revision = current_revision,
+      execute_revision = function(fields) executions <<- executions + 1L,
+      create_correction = NULL,
+      workspace_provider = NULL
+    ),
+    {
+      session$flushReact()
+      session$setInputs(data_file = data.frame(
+        name = "adlb-standard.csv",
+        datapath = system.file(
+          "extdata", "synthetic", "adlb-standard.csv",
+          package = "ADaMViz.SubmissionSync"
+        )
+      ))
+      for (y in c("AVAL", "CHG", "PCHG", "AVAL")) {
+        question <- paste(
+          "Create a boxplot of ALT", y, "by visit, split by treatment.",
+          "Include all visits and treatment groups,",
+          "show the number of subjects below each box, and connect the medians"
+        )
+        session$setInputs(question = question)
+        session$setInputs(to_confirm = which(c("AVAL", "CHG", "PCHG") == y))
+        state <- current_revision()
+        expect_identical(state$spec$fields$y_variable, y)
+        expect_identical(state$spec$fields$paramcd, "ALT")
+        expect_identical(state$spec$fields$visits, state$choices$visits)
+        expect_identical(
+          state$spec$fields$treatment_levels,
+          state$choices$treatment_levels$TRT01A
+        )
+        expect_identical(state$pending$prompt, question)
+        expect_identical(state$spec$state, "candidate")
+        expect_null(state$revision)
+        session$setInputs(back_to_ask = 1)
+      }
+      expect_identical(executions, 0L)
+    }
+  )
+})
+
+test_that("questions without an interpreted candidate retain manual selection", {
+  provider <- local_study_data_provider()
+  for (question in c("Create a boxplot", "Execute R code for ALT CHG")) {
+    state <- .create_assurance_candidate(provider, "adlb-standard", question)
+    expect_null(state$spec$fields$y_variable)
+    expect_identical(state$choices$y_variables, c("AVAL", "CHG", "PCHG"))
+    expect_identical(state$pending$prompt, question)
+    expect_null(state$revision)
+  }
+})
+
 test_that("plot generation UI gives traceability, review, and export a step", {
   html <- as.character(mod_plot_generation_ui("plot_generation"))
 

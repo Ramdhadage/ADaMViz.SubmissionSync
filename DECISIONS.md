@@ -18,3 +18,10 @@ Use the decision date when known. For an older decision with an unknown date, la
 - Reason: Future sessions need the accepted choices and their reasons without reading detailed design documents or recovering chat history.
 - Constraint: Keep current work and next actions in [PROGRESS.md](PROGRESS.md), record lasting choices here, and link existing authoritative documents instead of duplicating them. Session routines retain the existing verification and explicit commit-approval gates.
 - Source: User request on 2026-10-19; [session routines](AGENTS.md#at-session-start-clock-in) and [development workflow](docs/development/workflow.md#decision-records).
+
+## 2026-10-19: Interpret revised plot questions before confirmation
+
+- Reason: Changing ALT AVAL to ALT CHG in the question previously left the confirmation form at its AVAL default because candidate construction did not interpret the question.
+- Choice: Reuse the existing local deterministic interpreter to propose fields, with manual selection when no candidate is returned. Keep explicit confirmation and the existing validation before generation.
+- Constraint: No external model calls, new dependencies, or changes to execution and review policy. The interpreter supports its existing rule set, not unrestricted natural-language requests.
+- Source: User approval to implement in the current conversation; [candidate construction](R/app_server.R), [architecture map](ARCHITECTURE.md).

@@ -1,5 +1,42 @@
 # Progress
 
+## Current task: question Y variable (2026-10-19 21:14 IST)
+
+- Branch: `fix/question-plot-spec`; starting/current HEAD `0348dd5e7a55d03eaa287bd7fde18123fc5ffea7`. The investigation started on clean `main`; only the investigation's own PROGRESS.md edits existed before implementation. Earlier checkpoints below are historical, including their claims of uncommitted documentation. Preserve their unresolved verification handoffs.
+- Authorization: User approved implementation and background PowerShell checks without extra terminal windows. No commit, push, or publication authorized.
+- Owned paths: R/app_server.R, tests/testthat/test-mod-plot-generation.R, tests/testthat/test-app-browser.R, ARCHITECTURE.md, DECISIONS.md, PROGRESS.md. Reused the existing local interpreter in candidate construction; no dependency, external provider, execution, or approval-policy changes. See [accepted choice](DECISIONS.md#2026-10-19-interpret-revised-plot-questions-before-confirmation).
+
+### Done for question fix
+
+- Confirmed the cause: candidate construction previously stored the question without interpreting it; the form fell back to the first available Y variable, AVAL.
+- Connected `interpret_prompt()` with `mock_prompt_interpreter()`, retaining manual selection when no candidate is returned and validation after explicit confirmation.
+- Added regression coverage for successive AVAL/CHG/PCHG/AVAL questions, retained visits and groups, no automatic execution, manual fallback, and the actual browser dropdown. Updated the architecture map and decision log. All changes are uncommitted.
+
+### In progress for question fix
+
+- None. Implementation and applicable local/browser verification passed; changes remain uncommitted. Restored the formatter's unrelated line wrap in test-revision-evidence.R before final checks. Formal multi-agent review/simplification skipped for the two-line implementation; manually reviewed the complete scoped diff.
+
+### Blocked for question fix
+
+- None for implementation. Baseline package check failed because Pandoc was not visible. The initial final package-check attempt rebuilt vignettes but failed on inherited C.UTF-8 startup warnings. The retry uses the existing `C:/Program Files/Quarto/bin/tools` via process-local RSTUDIO_PANDOC and `LC_ALL`/`LANG=English_United States.utf8`; confirmed UTF-8 startup without locale warnings. No installation or persistent configuration change.
+
+### Verification for question fix
+
+- Baseline: formatter, roxygen, spelling, lint, and full source tests passed; `devtools::check(error_on = "warning")` stopped during vignette building for missing Pandoc. Restricted-shell R could not load the existing renv library; approved background checks ran with access to that library. R startup reports host locale warnings, recorded separately from test results.
+- Regression: after correcting test-session initialization, tests failed on missing candidate fields before implementation. Focused `devtools::test(filter = "^(mod-plot-generation|mod-specification|prompt-interpreter.*)$", stop_on_failure = TRUE)` passed: 107 assertions, zero failures/warnings/skips.
+- Chrome DevTools: source app launched using `print(source("dev/run_dev.R")$value)` at `http://127.0.0.1:28691/`. Used a newly generated in-memory synthetic CSV (18 records), because the MCP file uploader rejected the workspace path. Verified successive AVAL -> CHG -> PCHG -> AVAL -> CHG questions update the dropdown and specification, keeping all three visits and both treatment groups selected. Confirmed CHG generation reaches Verified with a loaded accepted plot. Shiny remains connected, no console warnings/errors, upload HTTP 200. No deployed-app or formal statistical-validation claim.
+- `git diff --check` passed. Tested code SHA256: R/app_server.R `887AFA4692CB5351E85AE2981E58BBD4D6A9AF66C5C45C78DF6BB7FCEE3E4F1D`; test-mod-plot-generation.R `3808904EB49F60164200A4F9684BC0466A3E6D1759B1828ECB9F313D9F73094E`; test-app-browser.R `0E64E7772ADF74149540C01556474D69B918AEDE90E58C3213A3F255F265E2F5`.
+- Final full source `testthat::test_local(reporter = "summary")` passed, including all 18 app-browser assertions and 53 plot-generation assertions, without skipped tests. The package-check retry `devtools::check(error_on = "warning")` passed with exit 0: 0 errors, 0 warnings, 1 NOTE for the pre-existing top-level DECISIONS.md. Installed-package tests and vignette rebuilding passed. The NOTE is outside this fix's packaging scope. Hosted CI and formal statistical validation were not run.
+- Markdownlint 0.29.0 using the extracted `.github/workflows/linter.yaml` configuration passed for ARCHITECTURE.md, DECISIONS.md, and PROGRESS.md; Node checks passed local-link targets and 800-character line limits. The linter emits a Node deprecation warning about fs.R_OK but returns zero findings and exit 0.
+- Logs: `%TEMP%/submission-sync-question-{baseline,red,green,style,final,package-check,browser}.log`. Results above identify the checked scope; logs supplement this record.
+
+### Next action for question fix
+
+1. Restart the user's existing app with `source("dev/run_dev.R")` to load the fix; the agent's source test app remains available at `http://127.0.0.1:28691/` showing the Verified CHG result.
+2. Leave changes uncommitted unless explicitly approved. Preserve the earlier tasks and verification handoffs below; this fix does not establish their historical checks.
+
+The previous checkpoint and unresolved tasks follow.
+
 Updated: 2026-10-19 10:31 IST
 Task: Add a concise decision log and explicit session start/end routines; explain their Compound Engineering roles.
 Branch: `main`
